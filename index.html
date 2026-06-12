@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chariot Panel">
+<meta name="mobile-web-app-capable" content="yes">
 <title>The Chariot Control Panel</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -31,7 +35,7 @@ tailwind.config = {
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   html { scroll-behavior: smooth; }
-  body { background: #111827; -webkit-tap-highlight-color: transparent; }
+  body { background: #111827; color: #F9FAFB; -webkit-tap-highlight-color: transparent; }
   ::selection { background: rgba(16,185,129,0.35); color: #F9FAFB; }
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: #111827; }
@@ -62,11 +66,7 @@ tailwind.config = {
   }
   .card-in { animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-  @keyframes tickerSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  .timer-ring { transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 1s linear; }
+  .timer-ring { transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 0.3s linear; }
 
   .glass {
     background: rgba(17, 24, 39, 0.72);
@@ -80,9 +80,7 @@ tailwind.config = {
   }
 
   .checkbox-shell input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .checkbox-visual {
-    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-  }
+  .checkbox-visual { transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
   .checkbox-shell input:checked ~ .checkbox-row .checkbox-visual {
     background: #10B981;
     border-color: #10B981;
@@ -90,17 +88,13 @@ tailwind.config = {
   }
   .checkbox-shell input:checked ~ .checkbox-row .checkbox-tick { opacity: 1; transform: scale(1); }
   .checkbox-tick { opacity: 0; transform: scale(0.4); transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .checkbox-shell input:checked ~ .checkbox-row .checkbox-label {
-    color: #10B981;
-  }
+  .checkbox-shell input:checked ~ .checkbox-row .checkbox-label { color: #10B981; }
   .checkbox-shell input:focus-visible ~ .checkbox-row .checkbox-visual {
     outline: 2px solid #10B981;
     outline-offset: 3px;
   }
 
-  select, input[type="date"] {
-    color-scheme: dark;
-  }
+  select, input[type="date"] { color-scheme: dark; }
   select {
     appearance: none;
     -webkit-appearance: none;
@@ -128,13 +122,22 @@ tailwind.config = {
   .toast-in { animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
   body.modal-open { overflow: hidden; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .firewall-btn, .flash-prompt { animation: none !important; }
+    .firewall-btn { box-shadow: 0 0 22px 2px rgba(239,68,68,0.35); }
+    .modal-enter, .card-in, .toast-in { animation-duration: 0.01ms !important; }
+    .timer-ring, .checkbox-visual, .checkbox-tick { transition-duration: 0.01ms !important; }
+    [class*="animate-"] { animation: none !important; }
+  }
 </style>
 </head>
 <body class="font-body text-snow min-h-screen antialiased">
 
 <div class="fixed inset-x-0 top-0 h-72 pointer-events-none bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent"></div>
 
-<main class="relative max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24 space-y-10">
+<main id="mainContent" class="relative max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24 space-y-10">
 
   <header class="text-center space-y-5 card-in">
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold tracking-widest uppercase">
@@ -173,7 +176,7 @@ tailwind.config = {
       <div class="divider-glow mx-5 sm:mx-7"></div>
       <div class="p-5 sm:p-7 space-y-4">
         <label class="checkbox-shell block cursor-pointer group">
-          <input type="checkbox" id="checkBrahma" data-shield="brahma">
+          <input type="checkbox" id="checkBrahma">
           <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
             <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
               <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -185,7 +188,7 @@ tailwind.config = {
           </div>
         </label>
         <label class="checkbox-shell block cursor-pointer group">
-          <input type="checkbox" id="checkIntention" data-shield="intention">
+          <input type="checkbox" id="checkIntention">
           <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
             <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
               <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -196,7 +199,7 @@ tailwind.config = {
             </span>
           </div>
         </label>
-        <p class="text-[0.7rem] text-gray-500 text-center pt-1">Shield state auto-saves locally and resets each new calendar day.</p>
+        <p class="text-[0.7rem] text-gray-500 text-center pt-1">Shield state auto-saves locally, resets each new calendar day, and is snapshotted into every Nightly Audit you log.</p>
       </div>
     </div>
   </section>
@@ -277,24 +280,51 @@ tailwind.config = {
         <div id="repoStats" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap"></div>
       </div>
       <div class="divider-glow mx-5 sm:mx-7"></div>
+      <div id="repoAnalytics" class="hidden px-5 sm:px-7 pt-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
+            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Current Streak</p>
+            <p class="font-display font-extrabold text-xl sm:text-2xl text-emerald-400"><span id="statCurrentStreak">0</span><span class="text-xs font-bold text-silver ml-1">days</span></p>
+          </div>
+          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
+            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Best Streak</p>
+            <p class="font-display font-extrabold text-xl sm:text-2xl text-snow"><span id="statBestStreak">0</span><span class="text-xs font-bold text-silver ml-1">days</span></p>
+          </div>
+          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
+            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Victory Rate</p>
+            <p class="font-display font-extrabold text-xl sm:text-2xl text-snow"><span id="statSuccessRate">0</span><span class="text-xs font-bold text-silver ml-1">%</span></p>
+          </div>
+          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
+            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Top Threat</p>
+            <p id="statTopTrigger" class="font-display font-extrabold text-sm sm:text-base text-crimsonx leading-tight pt-1">—</p>
+          </div>
+        </div>
+      </div>
       <div id="historyFeed" class="p-5 sm:p-7 space-y-4"></div>
-      <div class="px-5 sm:px-7 pb-7 text-center">
+      <div class="px-5 sm:px-7 pb-7 flex flex-wrap items-center justify-center gap-3">
+        <button id="exportRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/60 hover:bg-emerald-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
+          ⬇️ Export Data
+        </button>
+        <button id="importRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-silver hover:text-snow border border-gray-600 hover:border-gray-400 hover:bg-gray-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
+          ⬆️ Import Data
+        </button>
         <button id="clearRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-crimsonx/80 hover:text-crimsonx border border-red-500/30 hover:border-red-500/60 hover:bg-red-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
           🗑️ Clear Repository Data
         </button>
+        <input type="file" id="importInput" accept=".json,application/json" class="hidden">
       </div>
     </div>
   </section>
 
   <footer class="text-center text-[0.7rem] text-gray-600 pt-4 pb-2">
-    All data lives only in this browser's local storage. The observer remains sovereign.
+    All data lives only in this browser's local storage. Export regularly. The observer remains sovereign.
   </footer>
 
 </main>
 
 <div id="firewallModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="firewall-modal-title">
   <div class="glass absolute inset-0"></div>
-  <div class="relative h-full overflow-y-auto">
+  <div id="firewallScroll" class="relative h-full overflow-y-auto">
     <div class="modal-enter min-h-full flex flex-col items-center px-4 sm:px-6 py-10 sm:py-14">
       <div class="w-full max-w-2xl space-y-8">
 
@@ -353,302 +383,609 @@ tailwind.config = {
   </div>
 </div>
 
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] hidden">
-  <div id="toastBody" class="toast-in flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow whitespace-nowrap"></div>
+<div id="confirmModal" class="fixed inset-0 z-[70] hidden" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+  <div class="glass absolute inset-0"></div>
+  <div class="relative h-full flex items-center justify-center p-4">
+    <div class="modal-enter w-full max-w-sm rounded-2xl border border-gray-700 bg-obsidian p-6 sm:p-7 space-y-5 text-center shadow-2xl shadow-black/60">
+      <h3 id="confirmTitle" class="font-display font-bold text-lg text-snow"></h3>
+      <p id="confirmMessage" class="text-sm text-silver leading-relaxed"></p>
+      <div class="flex gap-3">
+        <button id="confirmCancel" type="button" class="flex-1 font-semibold text-sm text-silver hover:text-snow border border-gray-600 hover:border-gray-400 rounded-xl px-4 py-3 transition-all duration-200">Cancel</button>
+        <button id="confirmAccept" type="button" class="flex-1 font-display font-bold text-sm rounded-xl px-4 py-3 transition-all duration-200"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 inset-x-4 z-[80] flex justify-center pointer-events-none hidden" aria-live="polite">
+  <div id="toastBody" class="toast-in rounded-xl border border-emerald-500/40 bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow text-center max-w-md"></div>
 </div>
 
 <script>
-(function () {
+(() => {
   "use strict";
 
-  var STORAGE_KEYS = {
+  const STORAGE_KEYS = {
     logs: "chariot_logs_v1",
     shield: "chariot_shield_v1",
     firewall: "chariot_firewall_deploys_v1"
   };
 
-  var TIMER_TOTAL_SECONDS = 180;
-  var RING_CIRCUMFERENCE = 326.726;
+  const TIMER_TOTAL_SECONDS = 180;
+  const RING_CIRCUMFERENCE = 326.726;
+  const CLEAN_SLIP_VALUE = "None (Flawless Victory)";
+  const SHORT_TRIGGERS = {
+    "Boredom": "Boredom",
+    "Work/Life Stress": "Stress",
+    "Loneliness": "Loneliness",
+    "Fatigue/Exhaustion": "Fatigue",
+    "Environmental Cue": "Env. Cue"
+  };
 
-  var shieldBrahma = document.getElementById("checkBrahma");
-  var shieldIntention = document.getElementById("checkIntention");
-  var shieldStatus = document.getElementById("shieldStatus");
-  var deployButton = document.getElementById("deployFirewall");
-  var firewallModal = document.getElementById("firewallModal");
-  var closeFirewallButton = document.getElementById("closeFirewall");
-  var firewallCount = document.getElementById("firewallCount");
-  var timerDisplay = document.getElementById("timerDisplay");
-  var timerRing = document.getElementById("timerRing");
-  var timerComplete = document.getElementById("timerComplete");
-  var auditForm = document.getElementById("auditForm");
-  var auditDate = document.getElementById("auditDate");
-  var slipType = document.getElementById("slipType");
-  var rootTrigger = document.getElementById("rootTrigger");
-  var reactionTime = document.getElementById("reactionTime");
-  var gearNotes = document.getElementById("gearNotes");
-  var historyFeed = document.getElementById("historyFeed");
-  var repoStats = document.getElementById("repoStats");
-  var clearRepoButton = document.getElementById("clearRepo");
-  var toast = document.getElementById("toast");
-  var toastBody = document.getElementById("toastBody");
+  const elements = {
+    main: document.getElementById("mainContent"),
+    shieldBrahma: document.getElementById("checkBrahma"),
+    shieldIntention: document.getElementById("checkIntention"),
+    shieldStatus: document.getElementById("shieldStatus"),
+    deployButton: document.getElementById("deployFirewall"),
+    firewallModal: document.getElementById("firewallModal"),
+    firewallScroll: document.getElementById("firewallScroll"),
+    closeFirewallButton: document.getElementById("closeFirewall"),
+    firewallCount: document.getElementById("firewallCount"),
+    timerDisplay: document.getElementById("timerDisplay"),
+    timerRing: document.getElementById("timerRing"),
+    timerComplete: document.getElementById("timerComplete"),
+    auditForm: document.getElementById("auditForm"),
+    auditDate: document.getElementById("auditDate"),
+    slipType: document.getElementById("slipType"),
+    rootTrigger: document.getElementById("rootTrigger"),
+    reactionTime: document.getElementById("reactionTime"),
+    gearNotes: document.getElementById("gearNotes"),
+    historyFeed: document.getElementById("historyFeed"),
+    repoStats: document.getElementById("repoStats"),
+    repoAnalytics: document.getElementById("repoAnalytics"),
+    statCurrentStreak: document.getElementById("statCurrentStreak"),
+    statBestStreak: document.getElementById("statBestStreak"),
+    statSuccessRate: document.getElementById("statSuccessRate"),
+    statTopTrigger: document.getElementById("statTopTrigger"),
+    exportButton: document.getElementById("exportRepo"),
+    importButton: document.getElementById("importRepo"),
+    importInput: document.getElementById("importInput"),
+    clearButton: document.getElementById("clearRepo"),
+    confirmModal: document.getElementById("confirmModal"),
+    confirmTitle: document.getElementById("confirmTitle"),
+    confirmMessage: document.getElementById("confirmMessage"),
+    confirmAccept: document.getElementById("confirmAccept"),
+    confirmCancel: document.getElementById("confirmCancel"),
+    toast: document.getElementById("toast"),
+    toastBody: document.getElementById("toastBody")
+  };
 
-  var timerInterval = null;
-  var toastTimeout = null;
+  let timerIntervalId = null;
+  let timerEndTimestamp = null;
+  let firewallOpenedAt = null;
+  let toastTimeoutId = null;
+  let pendingConfirmAction = null;
+  let lastFocusedElement = null;
 
-  function todayISO() {
-    var now = new Date();
-    var month = String(now.getMonth() + 1).padStart(2, "0");
-    var day = String(now.getDate()).padStart(2, "0");
-    return now.getFullYear() + "-" + month + "-" + day;
-  }
+  const todayISO = () => {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${now.getFullYear()}-${month}-${day}`;
+  };
 
-  function safeParse(raw, fallback) {
+  const isoToDate = (iso) => {
+    const [year, month, day] = iso.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const dateToISO = (dateObject) => {
+    const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObject.getDate()).padStart(2, "0");
+    return `${dateObject.getFullYear()}-${month}-${day}`;
+  };
+
+  const shiftISO = (iso, deltaDays) => {
+    const dateObject = isoToDate(iso);
+    dateObject.setDate(dateObject.getDate() + deltaDays);
+    return dateToISO(dateObject);
+  };
+
+  const safeParse = (raw, fallback) => {
     if (!raw) return fallback;
     try {
-      var parsed = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
       return parsed === null || parsed === undefined ? fallback : parsed;
-    } catch (error) {
+    } catch {
       return fallback;
     }
-  }
+  };
 
-  function readLogs() {
-    var logs = safeParse(localStorage.getItem(STORAGE_KEYS.logs), []);
+  const readLogs = () => {
+    const logs = safeParse(localStorage.getItem(STORAGE_KEYS.logs), []);
     return Array.isArray(logs) ? logs : [];
-  }
+  };
 
-  function writeLogs(logs) {
+  const writeLogs = (logs) => {
     localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
-  }
+  };
 
-  function readShield() {
-    var state = safeParse(localStorage.getItem(STORAGE_KEYS.shield), null);
+  const readShield = () => {
+    const state = safeParse(localStorage.getItem(STORAGE_KEYS.shield), null);
     if (!state || state.date !== todayISO()) {
       return { date: todayISO(), brahma: false, intention: false };
     }
     return state;
-  }
+  };
 
-  function writeShield(state) {
+  const writeShield = (state) => {
     localStorage.setItem(STORAGE_KEYS.shield, JSON.stringify(state));
-  }
+  };
 
-  function readFirewallDeploys() {
-    var count = parseInt(localStorage.getItem(STORAGE_KEYS.firewall), 10);
-    return isNaN(count) ? 0 : count;
-  }
+  const readFirewallDeploys = () => {
+    const count = parseInt(localStorage.getItem(STORAGE_KEYS.firewall), 10);
+    return Number.isNaN(count) ? 0 : count;
+  };
 
-  function escapeHTML(value) {
-    var div = document.createElement("div");
+  const isCleanLog = (log) => log.slipType === CLEAN_SLIP_VALUE;
+
+  const escapeHTML = (value) => {
+    const div = document.createElement("div");
     div.textContent = value;
     return div.innerHTML;
-  }
+  };
 
-  function formatDisplayDate(isoDate) {
-    var parts = isoDate.split("-");
+  const formatDisplayDate = (isoDate) => {
+    const parts = isoDate.split("-");
     if (parts.length !== 3) return isoDate;
-    var dateObject = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    const dateObject = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
     return dateObject.toLocaleDateString(undefined, { weekday: "short", year: "numeric", month: "short", day: "numeric" });
-  }
+  };
 
-  function showToast(message, isAlert) {
-    if (toastTimeout) clearTimeout(toastTimeout);
-    toastBody.textContent = message;
-    toastBody.className = "toast-in flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow whitespace-nowrap border bg-obsidian " + (isAlert ? "border-red-500/50" : "border-emerald-500/40");
-    toast.classList.remove("hidden");
-    toastTimeout = setTimeout(function () {
-      toast.classList.add("hidden");
-    }, 2600);
-  }
+  const formatClock = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  };
 
-  function renderShield() {
-    var state = readShield();
-    shieldBrahma.checked = state.brahma;
-    shieldIntention.checked = state.intention;
-    var armed = (state.brahma ? 1 : 0) + (state.intention ? 1 : 0);
-    shieldStatus.textContent = armed + " / 2 Armed";
-    if (armed === 2) {
-      shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 text-emerald-400 whitespace-nowrap";
-      shieldStatus.textContent = "Shield Fully Armed";
-    } else {
-      shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap";
+  const anyOverlayOpen = () =>
+    !elements.firewallModal.classList.contains("hidden") ||
+    !elements.confirmModal.classList.contains("hidden");
+
+  const syncInert = () => {
+    const locked = anyOverlayOpen();
+    elements.main.inert = locked;
+    document.body.classList.toggle("modal-open", locked);
+  };
+
+  const showToast = (message, isAlert) => {
+    if (toastTimeoutId) clearTimeout(toastTimeoutId);
+    elements.toastBody.textContent = message;
+    elements.toastBody.className = `toast-in rounded-xl border bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow text-center max-w-md ${isAlert ? "border-red-500/50" : "border-emerald-500/40"}`;
+    elements.toast.classList.remove("hidden");
+    toastTimeoutId = setTimeout(() => {
+      elements.toast.classList.add("hidden");
+    }, 2800);
+  };
+
+  const showConfirm = ({ title, message, acceptLabel, danger, onAccept }) => {
+    lastFocusedElement = document.activeElement;
+    elements.confirmTitle.textContent = title;
+    elements.confirmMessage.textContent = message;
+    elements.confirmAccept.textContent = acceptLabel;
+    elements.confirmAccept.className = `flex-1 font-display font-bold text-sm rounded-xl px-4 py-3 transition-all duration-200 ${danger ? "text-snow bg-crimsonx hover:bg-red-400 shadow-lg shadow-red-500/25" : "text-canvas bg-emeraldx hover:bg-emerald-400 shadow-lg shadow-emerald-500/25"}`;
+    pendingConfirmAction = onAccept;
+    elements.confirmModal.classList.remove("hidden");
+    syncInert();
+    elements.confirmCancel.focus();
+  };
+
+  const closeConfirm = () => {
+    elements.confirmModal.classList.add("hidden");
+    pendingConfirmAction = null;
+    syncInert();
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function" && !anyOverlayOpen()) {
+      lastFocusedElement.focus();
     }
-  }
+    lastFocusedElement = null;
+  };
 
-  function handleShieldChange() {
-    var state = readShield();
-    state.date = todayISO();
-    state.brahma = shieldBrahma.checked;
-    state.intention = shieldIntention.checked;
+  const renderShield = () => {
+    const state = readShield();
+    elements.shieldBrahma.checked = state.brahma;
+    elements.shieldIntention.checked = state.intention;
+    const armed = (state.brahma ? 1 : 0) + (state.intention ? 1 : 0);
+    if (armed === 2) {
+      elements.shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 text-emerald-400 whitespace-nowrap";
+      elements.shieldStatus.textContent = "Shield Fully Armed";
+    } else {
+      elements.shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap";
+      elements.shieldStatus.textContent = `${armed} / 2 Armed`;
+    }
+  };
+
+  const handleShieldChange = () => {
+    const state = {
+      date: todayISO(),
+      brahma: elements.shieldBrahma.checked,
+      intention: elements.shieldIntention.checked
+    };
     writeShield(state);
     renderShield();
-  }
+  };
 
-  function renderFirewallCount() {
-    var deploys = readFirewallDeploys();
-    firewallCount.textContent = deploys === 0
+  const renderFirewallCount = () => {
+    const deploys = readFirewallDeploys();
+    elements.firewallCount.textContent = deploys === 0
       ? "No emergency deployments recorded yet."
-      : "Firewall deployed " + deploys + (deploys === 1 ? " time" : " times") + " — every deployment is a victory of awareness.";
-  }
+      : `Firewall deployed ${deploys} ${deploys === 1 ? "time" : "times"} — every deployment is a victory of awareness.`;
+  };
 
-  function startTimer() {
-    var remaining = TIMER_TOTAL_SECONDS;
-    timerComplete.classList.add("hidden");
+  const updateTimerVisual = (remaining) => {
+    elements.timerDisplay.textContent = formatClock(remaining);
+    const progress = remaining / TIMER_TOTAL_SECONDS;
+    elements.timerRing.setAttribute("stroke-dashoffset", String(RING_CIRCUMFERENCE * (1 - progress)));
+    elements.timerRing.setAttribute("stroke", remaining <= 30 && remaining > 0 ? "#EF4444" : "#10B981");
+  };
+
+  const tickTimer = () => {
+    const remaining = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
     updateTimerVisual(remaining);
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(function () {
-      remaining -= 1;
-      if (remaining <= 0) {
-        remaining = 0;
-        clearInterval(timerInterval);
-        timerInterval = null;
-        timerComplete.classList.remove("hidden");
-      }
-      updateTimerVisual(remaining);
-    }, 1000);
-  }
-
-  function updateTimerVisual(remaining) {
-    var minutes = Math.floor(remaining / 60);
-    var seconds = remaining % 60;
-    timerDisplay.textContent = minutes + ":" + String(seconds).padStart(2, "0");
-    var progress = remaining / TIMER_TOTAL_SECONDS;
-    timerRing.setAttribute("stroke-dashoffset", String(RING_CIRCUMFERENCE * (1 - progress)));
-    timerRing.setAttribute("stroke", remaining <= 30 && remaining > 0 ? "#EF4444" : "#10B981");
-  }
-
-  function openFirewall() {
-    var deploys = readFirewallDeploys() + 1;
-    localStorage.setItem(STORAGE_KEYS.firewall, String(deploys));
-    renderFirewallCount();
-    firewallModal.classList.remove("hidden");
-    document.body.classList.add("modal-open");
-    firewallModal.querySelector(".relative").scrollTop = 0;
-    startTimer();
-    closeFirewallButton.focus();
-  }
-
-  function closeFirewall() {
-    firewallModal.classList.add("hidden");
-    document.body.classList.remove("modal-open");
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
+    if (remaining <= 0) {
+      stopTimer();
+      elements.timerComplete.classList.remove("hidden");
     }
-    deployButton.focus();
-    showToast("🧘 Mind restored. The charioteer holds the reins.", false);
-  }
+  };
 
-  function isCleanLog(log) {
-    return log.slipType === "None (Flawless Victory)";
-  }
+  const startTimer = () => {
+    stopTimer();
+    firewallOpenedAt = Date.now();
+    timerEndTimestamp = firewallOpenedAt + TIMER_TOTAL_SECONDS * 1000;
+    elements.timerComplete.classList.add("hidden");
+    updateTimerVisual(TIMER_TOTAL_SECONDS);
+    timerIntervalId = setInterval(tickTimer, 250);
+  };
 
-  function renderRepository() {
-    var logs = readLogs().slice().sort(function (a, b) {
+  const stopTimer = () => {
+    if (timerIntervalId) {
+      clearInterval(timerIntervalId);
+      timerIntervalId = null;
+    }
+  };
+
+  const openFirewall = () => {
+    localStorage.setItem(STORAGE_KEYS.firewall, String(readFirewallDeploys() + 1));
+    renderFirewallCount();
+    elements.firewallModal.classList.remove("hidden");
+    syncInert();
+    elements.firewallScroll.scrollTop = 0;
+    startTimer();
+    elements.closeFirewallButton.focus();
+  };
+
+  const closeFirewall = () => {
+    const heldSeconds = firewallOpenedAt ? Math.round((Date.now() - firewallOpenedAt) / 1000) : 0;
+    stopTimer();
+    firewallOpenedAt = null;
+    elements.firewallModal.classList.add("hidden");
+    syncInert();
+    elements.deployButton.focus();
+    showToast(`🧘 Mind restored. You held the line for ${formatClock(heldSeconds)}.`, false);
+  };
+
+  const computeStats = (logs) => {
+    const dayMap = new Map();
+    logs.forEach((log) => {
+      const clean = isCleanLog(log);
+      dayMap.set(log.date, dayMap.has(log.date) ? dayMap.get(log.date) && clean : clean);
+    });
+
+    let currentStreak = 0;
+    let cursor = todayISO();
+    if (!dayMap.has(cursor)) cursor = shiftISO(cursor, -1);
+    while (dayMap.get(cursor) === true) {
+      currentStreak += 1;
+      cursor = shiftISO(cursor, -1);
+    }
+
+    let bestStreak = 0;
+    let run = 0;
+    let previousDate = null;
+    [...dayMap.keys()].sort().forEach((date) => {
+      if (dayMap.get(date)) {
+        run = previousDate !== null && run > 0 && shiftISO(previousDate, 1) === date ? run + 1 : 1;
+      } else {
+        run = 0;
+      }
+      bestStreak = Math.max(bestStreak, run);
+      previousDate = date;
+    });
+
+    const total = logs.length;
+    const clean = logs.filter(isCleanLog).length;
+    const successRate = total === 0 ? 0 : Math.round((clean / total) * 100);
+
+    const triggerCounts = {};
+    logs.filter((log) => !isCleanLog(log)).forEach((log) => {
+      triggerCounts[log.trigger] = (triggerCounts[log.trigger] || 0) + 1;
+    });
+    let topTrigger = null;
+    let topCount = 0;
+    Object.entries(triggerCounts).forEach(([trigger, count]) => {
+      if (count > topCount) {
+        topTrigger = trigger;
+        topCount = count;
+      }
+    });
+
+    return { currentStreak, bestStreak, successRate, topTrigger, total, clean };
+  };
+
+  const buildLogCard = (log) => {
+    const cleanDay = isCleanLog(log);
+    const badgeClasses = cleanDay
+      ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-400"
+      : "border-red-500/50 bg-red-500/15 text-red-400";
+    const edgeClass = cleanDay ? "bg-emeraldx" : "bg-crimsonx";
+    const shieldChip = typeof log.shield === "number"
+      ? `<span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${log.shield === 2 ? "border-emerald-500/40 text-emerald-400" : "border-gray-600 text-silver"}">🛡 ${log.shield}/2</span>`
+      : "";
+    const notesHTML = log.notes
+      ? `<div class="mt-3 pt-3 border-t border-gray-700/60">
+           <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1">Gear Adjustment</p>
+           <p class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">${escapeHTML(log.notes)}</p>
+         </div>`
+      : "";
+    return `<article class="relative rounded-xl border border-gray-700/70 bg-canvas/60 overflow-hidden">
+      <div class="absolute left-0 top-0 bottom-0 w-1 ${edgeClass}"></div>
+      <div class="p-4 sm:p-5 pl-5 sm:pl-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h3 class="font-display font-bold text-sm sm:text-base text-snow">${escapeHTML(formatDisplayDate(log.date))}</h3>
+          <div class="flex items-center gap-2">
+            ${shieldChip}
+            <span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${badgeClasses}">${escapeHTML(log.slipType)}</span>
+            <button type="button" data-delete-id="${escapeHTML(log.id)}" aria-label="Delete entry for ${escapeHTML(formatDisplayDate(log.date))}" class="text-gray-500 hover:text-crimsonx text-sm font-bold px-1.5 py-0.5 rounded transition-colors">✕</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+          <div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Trigger</span><span class="text-gray-300">${escapeHTML(log.trigger)}</span></div>
+          <div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Reaction</span><span class="text-gray-300">${escapeHTML(log.reaction)}</span></div>
+        </div>
+        ${notesHTML}
+      </div>
+    </article>`;
+  };
+
+  const renderRepository = () => {
+    const logs = readLogs().slice().sort((a, b) => {
       if (a.date === b.date) return (b.createdAt || 0) - (a.createdAt || 0);
       return a.date < b.date ? 1 : -1;
     });
 
-    var total = logs.length;
-    var clean = logs.filter(isCleanLog).length;
-    repoStats.textContent = total === 0 ? "Repository Empty" : clean + " clean / " + total + " logged";
+    const stats = computeStats(logs);
+    elements.repoStats.textContent = stats.total === 0
+      ? "Repository Empty"
+      : `${stats.clean} clean / ${stats.total} logged`;
 
-    if (total === 0) {
-      historyFeed.innerHTML =
-        '<div class="text-center py-10 space-y-3">' +
-          '<div class="text-4xl">📭</div>' +
-          '<p class="text-silver text-sm">The repository is empty. Complete tonight\'s Scientist Audit to mount your first data card.</p>' +
-        "</div>";
+    if (stats.total === 0) {
+      elements.repoAnalytics.classList.add("hidden");
+      elements.historyFeed.innerHTML = `<div class="text-center py-10 space-y-3">
+        <div class="text-4xl">📭</div>
+        <p class="text-silver text-sm">The repository is empty. Complete tonight's Scientist Audit to mount your first data card.</p>
+      </div>`;
       return;
     }
 
-    var cardsHTML = logs.map(function (log) {
-      var cleanDay = isCleanLog(log);
-      var badgeClasses = cleanDay
-        ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-400"
-        : "border-red-500/50 bg-red-500/15 text-red-400";
-      var edgeClass = cleanDay ? "bg-emeraldx" : "bg-crimsonx";
-      var notesHTML = log.notes
-        ? '<div class="mt-3 pt-3 border-t border-gray-700/60">' +
-            '<p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1">Gear Adjustment</p>' +
-            '<p class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">' + escapeHTML(log.notes) + "</p>" +
-          "</div>"
-        : "";
-      return (
-        '<article class="relative rounded-xl border border-gray-700/70 bg-canvas/60 overflow-hidden">' +
-          '<div class="absolute left-0 top-0 bottom-0 w-1 ' + edgeClass + '"></div>' +
-          '<div class="p-4 sm:p-5 pl-5 sm:pl-6">' +
-            '<div class="flex flex-wrap items-center justify-between gap-2 mb-3">' +
-              '<h3 class="font-display font-bold text-sm sm:text-base text-snow">' + escapeHTML(formatDisplayDate(log.date)) + "</h3>" +
-              '<span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ' + badgeClasses + '">' + escapeHTML(log.slipType) + "</span>" +
-            "</div>" +
-            '<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">' +
-              '<div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Trigger</span><span class="text-gray-300">' + escapeHTML(log.trigger) + "</span></div>" +
-              '<div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Reaction</span><span class="text-gray-300">' + escapeHTML(log.reaction) + "</span></div>" +
-            "</div>" +
-            notesHTML +
-          "</div>" +
-        "</article>"
-      );
-    }).join("");
+    elements.repoAnalytics.classList.remove("hidden");
+    elements.statCurrentStreak.textContent = String(stats.currentStreak);
+    elements.statBestStreak.textContent = String(stats.bestStreak);
+    elements.statSuccessRate.textContent = String(stats.successRate);
+    elements.statTopTrigger.textContent = stats.topTrigger ? (SHORT_TRIGGERS[stats.topTrigger] || stats.topTrigger) : "—";
 
-    historyFeed.innerHTML = cardsHTML;
-  }
+    elements.historyFeed.innerHTML = logs.map(buildLogCard).join("");
+  };
 
-  function handleAuditSubmit(event) {
+  const handleAuditSubmit = (event) => {
     event.preventDefault();
-    if (!auditDate.value) {
+    const today = todayISO();
+    elements.auditDate.max = today;
+    if (!elements.auditDate.value) {
       showToast("⚠️ Select an observation date first.", true);
-      auditDate.focus();
+      elements.auditDate.focus();
       return;
     }
-    var entry = {
+    if (elements.auditDate.value > today) {
+      showToast("⚠️ The scientist records the past, not the future.", true);
+      elements.auditDate.focus();
+      return;
+    }
+
+    const shieldState = readShield();
+    const entry = {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
-      date: auditDate.value,
-      slipType: slipType.value,
-      trigger: rootTrigger.value,
-      reaction: reactionTime.value,
-      notes: gearNotes.value.trim(),
+      date: elements.auditDate.value,
+      slipType: elements.slipType.value,
+      trigger: elements.rootTrigger.value,
+      reaction: elements.reactionTime.value,
+      notes: elements.gearNotes.value.trim(),
+      shield: (shieldState.brahma ? 1 : 0) + (shieldState.intention ? 1 : 0),
       createdAt: Date.now()
     };
-    var logs = readLogs();
-    logs.push(entry);
-    writeLogs(logs);
-    renderRepository();
-    auditForm.reset();
-    auditDate.value = todayISO();
-    showToast(isCleanLog(entry) ? "✅ Flawless victory mounted to the repository." : "📡 Data logged. The gears adjust tomorrow.", false);
-    document.getElementById("repo-heading").scrollIntoView({ behavior: "smooth", block: "center" });
-  }
 
-  function handleClearRepository() {
-    var logs = readLogs();
+    const logs = readLogs();
+    const existingIndex = logs.findIndex((log) => log.date === entry.date);
+
+    const commitEntry = () => {
+      if (existingIndex >= 0) {
+        logs[existingIndex] = entry;
+      } else {
+        logs.push(entry);
+      }
+      writeLogs(logs);
+      renderRepository();
+      elements.auditForm.reset();
+      elements.auditDate.value = todayISO();
+      showToast(isCleanLog(entry) ? "✅ Flawless victory mounted to the repository." : "📡 Data logged. The gears adjust tomorrow.", false);
+      document.getElementById("repo-heading").scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    if (existingIndex >= 0) {
+      showConfirm({
+        title: "Overwrite Existing Audit?",
+        message: `An audit for ${formatDisplayDate(entry.date)} is already mounted. Replace it with this new observation? The nightly audit keeps one record per day.`,
+        acceptLabel: "Replace Entry",
+        danger: false,
+        onAccept: commitEntry
+      });
+    } else {
+      commitEntry();
+    }
+  };
+
+  const handleFeedClick = (event) => {
+    const button = event.target.closest("[data-delete-id]");
+    if (!button) return;
+    const entryId = button.getAttribute("data-delete-id");
+    showConfirm({
+      title: "Discard This Observation?",
+      message: "This single entry will be permanently removed from the repository. The rest of your data stays intact.",
+      acceptLabel: "Delete Entry",
+      danger: true,
+      onAccept: () => {
+        writeLogs(readLogs().filter((log) => log.id !== entryId));
+        renderRepository();
+        showToast("🗑️ Entry removed from the repository.", true);
+      }
+    });
+  };
+
+  const handleClearRepository = () => {
+    const logs = readLogs();
     if (logs.length === 0) {
       showToast("📭 The repository is already empty.", true);
       return;
     }
-    var confirmed = window.confirm("Permanently erase all " + logs.length + " repository entries from this browser? This cannot be undone.");
-    if (!confirmed) return;
-    localStorage.removeItem(STORAGE_KEYS.logs);
-    renderRepository();
-    showToast("🗑️ Repository wiped. Fresh observation field ready.", true);
-  }
+    showConfirm({
+      title: "Wipe The Entire Repository?",
+      message: `All ${logs.length} ${logs.length === 1 ? "entry" : "entries"} will be permanently erased from this browser. Consider exporting your data first — this cannot be undone.`,
+      acceptLabel: "Erase Everything",
+      danger: true,
+      onAccept: () => {
+        localStorage.removeItem(STORAGE_KEYS.logs);
+        renderRepository();
+        showToast("🗑️ Repository wiped. Fresh observation field ready.", true);
+      }
+    });
+  };
 
-  function handleKeydown(event) {
-    if (event.key === "Escape" && !firewallModal.classList.contains("hidden")) {
+  const handleExport = () => {
+    const logs = readLogs();
+    if (logs.length === 0) {
+      showToast("📭 Nothing to export yet.", true);
+      return;
+    }
+    const payload = JSON.stringify({ app: "chariot-control-panel", version: 1, exportedAt: new Date().toISOString(), logs }, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `chariot-repository-${todayISO()}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast(`⬇️ ${logs.length} ${logs.length === 1 ? "entry" : "entries"} exported as JSON.`, false);
+  };
+
+  const sanitizeImportedEntry = (raw) => {
+    if (!raw || typeof raw !== "object") return null;
+    if (typeof raw.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(raw.date)) return null;
+    if (typeof raw.slipType !== "string" || raw.slipType.length === 0) return null;
+    return {
+      id: typeof raw.id === "string" && raw.id.length > 0 ? raw.id : Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      date: raw.date,
+      slipType: raw.slipType,
+      trigger: typeof raw.trigger === "string" ? raw.trigger : "Environmental Cue",
+      reaction: typeof raw.reaction === "string" ? raw.reaction : "Automatic Pilot (Slid Instantly)",
+      notes: typeof raw.notes === "string" ? raw.notes : "",
+      shield: typeof raw.shield === "number" ? Math.min(2, Math.max(0, Math.round(raw.shield))) : undefined,
+      createdAt: typeof raw.createdAt === "number" ? raw.createdAt : Date.now()
+    };
+  };
+
+  const handleImportFile = (event) => {
+    const file = event.target.files && event.target.files[0];
+    elements.importInput.value = "";
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const parsed = safeParse(String(reader.result), null);
+      const rawList = Array.isArray(parsed) ? parsed : parsed && Array.isArray(parsed.logs) ? parsed.logs : null;
+      if (!rawList) {
+        showToast("⚠️ That file is not a valid repository export.", true);
+        return;
+      }
+      const logs = readLogs();
+      const existingIds = new Set(logs.map((log) => log.id));
+      const existingDates = new Set(logs.map((log) => log.date));
+      let imported = 0;
+      let skipped = 0;
+      rawList.forEach((raw) => {
+        const entry = sanitizeImportedEntry(raw);
+        if (!entry || existingIds.has(entry.id) || existingDates.has(entry.date)) {
+          skipped += 1;
+          return;
+        }
+        logs.push(entry);
+        existingIds.add(entry.id);
+        existingDates.add(entry.date);
+        imported += 1;
+      });
+      if (imported === 0) {
+        showToast(`⚠️ Nothing imported — ${skipped} ${skipped === 1 ? "entry was a duplicate or invalid" : "entries were duplicates or invalid"}.`, true);
+        return;
+      }
+      writeLogs(logs);
+      renderRepository();
+      showToast(`⬆️ Imported ${imported} ${imported === 1 ? "entry" : "entries"}${skipped > 0 ? `, skipped ${skipped}` : ""}.`, false);
+    };
+    reader.onerror = () => showToast("⚠️ Could not read that file.", true);
+    reader.readAsText(file);
+  };
+
+  const handleKeydown = (event) => {
+    if (event.key !== "Escape") return;
+    if (!elements.confirmModal.classList.contains("hidden")) {
+      closeConfirm();
+    } else if (!elements.firewallModal.classList.contains("hidden")) {
       closeFirewall();
     }
-  }
+  };
 
-  shieldBrahma.addEventListener("change", handleShieldChange);
-  shieldIntention.addEventListener("change", handleShieldChange);
-  deployButton.addEventListener("click", openFirewall);
-  closeFirewallButton.addEventListener("click", closeFirewall);
-  auditForm.addEventListener("submit", handleAuditSubmit);
-  clearRepoButton.addEventListener("click", handleClearRepository);
+  elements.shieldBrahma.addEventListener("change", handleShieldChange);
+  elements.shieldIntention.addEventListener("change", handleShieldChange);
+  elements.deployButton.addEventListener("click", openFirewall);
+  elements.closeFirewallButton.addEventListener("click", closeFirewall);
+  elements.auditForm.addEventListener("submit", handleAuditSubmit);
+  elements.historyFeed.addEventListener("click", handleFeedClick);
+  elements.clearButton.addEventListener("click", handleClearRepository);
+  elements.exportButton.addEventListener("click", handleExport);
+  elements.importButton.addEventListener("click", () => elements.importInput.click());
+  elements.importInput.addEventListener("change", handleImportFile);
+  elements.confirmCancel.addEventListener("click", closeConfirm);
+  elements.confirmAccept.addEventListener("click", () => {
+    const action = pendingConfirmAction;
+    closeConfirm();
+    if (action) action();
+  });
   document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && timerIntervalId) tickTimer();
+  });
 
-  auditDate.value = todayISO();
+  elements.auditDate.value = todayISO();
+  elements.auditDate.max = todayISO();
   renderShield();
   renderFirewallCount();
   renderRepository();
