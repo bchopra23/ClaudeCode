@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>The Chariot Control Panel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        canvas: "#111827",
+        obsidian: "#1F2937",
+        emeraldx: "#10B981",
+        crimsonx: "#EF4444",
+        snow: "#F9FAFB",
+        silver: "#9CA3AF"
+      },
+      fontFamily: {
+        display: ["'Sora'", "system-ui", "sans-serif"],
+        body: ["'Inter'", "system-ui", "sans-serif"]
+      }
+    }
+  }
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { background: #111827; -webkit-tap-highlight-color: transparent; }
+  ::selection { background: rgba(16,185,129,0.35); color: #F9FAFB; }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #111827; }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.55), 0 0 22px 2px rgba(239,68,68,0.35); }
+    50% { box-shadow: 0 0 0 10px rgba(239,68,68,0), 0 0 34px 6px rgba(16,185,129,0.30); }
+  }
+  .firewall-btn { animation: pulseGlow 2.2s ease-in-out infinite; }
+
+  @keyframes flashPrompt {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.985); }
+  }
+  .flash-prompt { animation: flashPrompt 1.4s ease-in-out infinite; }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal-enter { animation: modalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-in { animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  @keyframes tickerSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .timer-ring { transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 1s linear; }
+
+  .glass {
+    background: rgba(17, 24, 39, 0.72);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+  }
+  .glass-card {
+    background: rgba(31, 41, 55, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .checkbox-shell input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .checkbox-visual {
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .checkbox-shell input:checked ~ .checkbox-row .checkbox-visual {
+    background: #10B981;
+    border-color: #10B981;
+    box-shadow: 0 0 14px rgba(16,185,129,0.45);
+  }
+  .checkbox-shell input:checked ~ .checkbox-row .checkbox-tick { opacity: 1; transform: scale(1); }
+  .checkbox-tick { opacity: 0; transform: scale(0.4); transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .checkbox-shell input:checked ~ .checkbox-row .checkbox-label {
+    color: #10B981;
+  }
+  .checkbox-shell input:focus-visible ~ .checkbox-row .checkbox-visual {
+    outline: 2px solid #10B981;
+    outline-offset: 3px;
+  }
+
+  select, input[type="date"] {
+    color-scheme: dark;
+  }
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+  }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #34D399, #10B981 55%, #059669);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(16,185,129,0.5), transparent);
+  }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .toast-in { animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  body.modal-open { overflow: hidden; }
+</style>
+</head>
+<body class="font-body text-snow min-h-screen antialiased">
+
+<div class="fixed inset-x-0 top-0 h-72 pointer-events-none bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent"></div>
+
+<main class="relative max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24 space-y-10">
+
+  <header class="text-center space-y-5 card-in">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold tracking-widest uppercase">
+      <span class="w-2 h-2 rounded-full bg-emeraldx animate-pulse"></span>
+      Vehicle Identity Online
+    </div>
+    <h1 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight">
+      THE <span class="gradient-text">CHARIOT</span><br class="sm:hidden"> CONTROL PANEL
+    </h1>
+    <p class="text-silver text-sm sm:text-base italic max-w-md mx-auto">
+      "The mind is a superb servant, but a terrible master."
+    </p>
+    <div class="relative text-left rounded-2xl border border-emerald-500/25 bg-obsidian/80 p-5 sm:p-6 overflow-hidden">
+      <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emeraldx to-emerald-700"></div>
+      <div class="flex items-start gap-4">
+        <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg">🔬</div>
+        <div>
+          <h2 class="font-display font-bold text-emerald-400 text-sm tracking-widest uppercase mb-1.5">The Scientist Creed</h2>
+          <p class="text-sm sm:text-[0.95rem] text-gray-300 leading-relaxed">
+            <span class="text-snow font-semibold">Scientist Mindset:</span> I am the detached observer analyzing my mental machinery. No guilt, no self-hatred. Slips are purely data to adjust the gears.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="card-in" style="animation-delay:0.08s" aria-labelledby="shield-heading">
+    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
+      <div class="px-5 sm:px-7 pt-6 pb-4 flex items-center justify-between gap-3">
+        <div>
+          <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 1 · Daily Protocol</p>
+          <h2 id="shield-heading" class="font-display font-bold text-xl sm:text-2xl">🛡️ The Morning Shield</h2>
+        </div>
+        <div id="shieldStatus" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap">0 / 2 Armed</div>
+      </div>
+      <div class="divider-glow mx-5 sm:mx-7"></div>
+      <div class="p-5 sm:p-7 space-y-4">
+        <label class="checkbox-shell block cursor-pointer group">
+          <input type="checkbox" id="checkBrahma" data-shield="brahma">
+          <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
+            <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
+              <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>
+              <span class="checkbox-label block font-semibold text-snow text-sm sm:text-base transition-colors">Brahma Muhurta Protocol</span>
+              <span class="block text-silver text-xs sm:text-sm mt-1 leading-relaxed">Grounded consciousness in stillness before digital stimulation or checking devices.</span>
+            </span>
+          </div>
+        </label>
+        <label class="checkbox-shell block cursor-pointer group">
+          <input type="checkbox" id="checkIntention" data-shield="intention">
+          <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
+            <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
+              <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>
+              <span class="checkbox-label block font-semibold text-snow text-sm sm:text-base transition-colors">Intention Activation</span>
+              <span class="block text-silver text-xs sm:text-sm mt-1 leading-relaxed">Deliberately affirming identity as an eternal spiritual soul (Atman), detached from passing chemical cravings.</span>
+            </span>
+          </div>
+        </label>
+        <p class="text-[0.7rem] text-gray-500 text-center pt-1">Shield state auto-saves locally and resets each new calendar day.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card-in" style="animation-delay:0.16s" aria-labelledby="firewall-heading">
+    <div class="rounded-2xl bg-obsidian border border-red-500/25 shadow-xl shadow-black/30 p-5 sm:p-7 text-center space-y-5">
+      <div>
+        <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-crimsonx uppercase mb-1">Section 2 · Emergency Intercept</p>
+        <h2 id="firewall-heading" class="font-display font-bold text-xl sm:text-2xl">🔥 The 3-Question Firewall</h2>
+        <p class="text-silver text-xs sm:text-sm mt-2 max-w-md mx-auto">An urge detected is an urge intercepted. Deploy the firewall the instant the wave begins to rise.</p>
+      </div>
+      <button id="deployFirewall" type="button" class="firewall-btn w-full sm:w-auto inline-flex items-center justify-center gap-3 font-display font-bold text-base sm:text-lg tracking-wide text-snow px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-emerald-600 hover:from-red-500 hover:via-red-400 hover:to-emerald-500 active:scale-[0.98] transition-all duration-200">
+        ⚠️ DEPLOY EMERGENCY FIREWALL
+      </button>
+      <p id="firewallCount" class="text-[0.7rem] text-gray-500"></p>
+    </div>
+  </section>
+
+  <section class="card-in" style="animation-delay:0.24s" aria-labelledby="audit-heading">
+    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
+      <div class="px-5 sm:px-7 pt-6 pb-4">
+        <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 3 · Data Entry</p>
+        <h2 id="audit-heading" class="font-display font-bold text-xl sm:text-2xl">🔭 The Nightly Scientist Audit</h2>
+      </div>
+      <div class="divider-glow mx-5 sm:mx-7"></div>
+      <form id="auditForm" class="p-5 sm:p-7 space-y-5" novalidate>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="auditDate" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Observation Date</label>
+            <input type="date" id="auditDate" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
+          </div>
+          <div>
+            <label for="slipType" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Slip Type</label>
+            <select id="slipType" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
+              <option value="None (Flawless Victory)">None (Flawless Victory)</option>
+              <option value="Smoking">Smoking</option>
+              <option value="Masturbation">Masturbation</option>
+              <option value="Both">Both</option>
+            </select>
+          </div>
+          <div>
+            <label for="rootTrigger" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Root Trigger</label>
+            <select id="rootTrigger" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
+              <option value="Boredom">Boredom</option>
+              <option value="Work/Life Stress">Work/Life Stress</option>
+              <option value="Loneliness">Loneliness</option>
+              <option value="Fatigue/Exhaustion">Fatigue/Exhaustion</option>
+              <option value="Environmental Cue">Environmental Cue</option>
+            </select>
+          </div>
+          <div>
+            <label for="reactionTime" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Charioteer Reaction Time</label>
+            <select id="reactionTime" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
+              <option value="Automatic Pilot (Slid Instantly)">Automatic Pilot (Slid Instantly)</option>
+              <option value="Delayed Action (Fought for a few minutes)">Delayed Action (Fought for a few minutes)</option>
+              <option value="Defended Successfully">Defended Successfully</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="gearNotes" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">The Gear Adjustment (Notes for Tomorrow)</label>
+          <textarea id="gearNotes" rows="4" placeholder="What did the data reveal? Which gear gets adjusted tomorrow?" class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 text-sm text-snow placeholder-gray-500 resize-y focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition"></textarea>
+        </div>
+        <button type="submit" class="w-full font-display font-bold tracking-wide text-canvas bg-emeraldx hover:bg-emerald-400 active:scale-[0.99] rounded-xl px-6 py-4 text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-500/25">
+          📡 LOG OBSERVATION TO REPOSITORY
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section class="card-in" style="animation-delay:0.32s" aria-labelledby="repo-heading">
+    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
+      <div class="px-5 sm:px-7 pt-6 pb-4 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 4 · Persistent Log Data</p>
+          <h2 id="repo-heading" class="font-display font-bold text-xl sm:text-2xl">🗄️ The Mounted Repository</h2>
+        </div>
+        <div id="repoStats" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap"></div>
+      </div>
+      <div class="divider-glow mx-5 sm:mx-7"></div>
+      <div id="historyFeed" class="p-5 sm:p-7 space-y-4"></div>
+      <div class="px-5 sm:px-7 pb-7 text-center">
+        <button id="clearRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-crimsonx/80 hover:text-crimsonx border border-red-500/30 hover:border-red-500/60 hover:bg-red-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
+          🗑️ Clear Repository Data
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center text-[0.7rem] text-gray-600 pt-4 pb-2">
+    All data lives only in this browser's local storage. The observer remains sovereign.
+  </footer>
+
+</main>
+
+<div id="firewallModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="firewall-modal-title">
+  <div class="glass absolute inset-0"></div>
+  <div class="relative h-full overflow-y-auto">
+    <div class="modal-enter min-h-full flex flex-col items-center px-4 sm:px-6 py-10 sm:py-14">
+      <div class="w-full max-w-2xl space-y-8">
+
+        <div class="text-center space-y-3">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/40 bg-red-500/15 text-red-400 text-xs font-bold tracking-[0.25em] uppercase">
+            <span class="w-2 h-2 rounded-full bg-crimsonx animate-ping"></span>
+            Firewall Engaged · Interface Locked
+          </div>
+          <h2 id="firewall-modal-title" class="font-display font-extrabold text-2xl sm:text-4xl text-snow tracking-tight">NEURAL LOOP <span class="text-crimsonx">INTERCEPTED</span></h2>
+          <p class="text-silver text-sm">Breathe. Read every word slowly. The wave cannot survive observation.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
+          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 01</span>
+          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">WHO WANTS THIS—THE SOUL OR THE MIND?</h3>
+          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">The soul is already complete and peaceful. This urge is a temporary, restless chemical wave passing through the physical midbrain (Manas).</p>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
+          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 02</span>
+          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">WHAT IS THE EXACT END-RESULT OF THIS ACTION?</h3>
+          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">A 5-minute illusionary escape followed immediately by hours of brain fog, physical fatigue, lost vital energy (Ojas), and deep spiritual guilt.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
+          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 03</span>
+          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">DOES THIS ACTION TAKE ME CLOSER TO GOLOKA VAIKUNTHA OR PULL ME DOWN?</h3>
+          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">It anchors consciousness to raw material impulses. True freedom means prioritizing my eternal destination over a passing physical itch.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl border border-red-500/30 p-6 sm:p-8 text-center space-y-6">
+          <div class="flex flex-col items-center gap-4">
+            <div class="relative w-32 h-32 sm:w-36 sm:h-36">
+              <svg class="w-full h-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#374151" stroke-width="8"></circle>
+                <circle id="timerRing" class="timer-ring" cx="60" cy="60" r="52" fill="none" stroke="#10B981" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.726" stroke-dashoffset="0"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="timerDisplay" class="font-display font-extrabold text-3xl sm:text-4xl text-snow">3:00</span>
+                <span class="text-[0.6rem] tracking-[0.25em] uppercase text-silver">Hold the line</span>
+              </div>
+            </div>
+            <p id="timerComplete" class="hidden font-display font-bold text-emerald-400 text-sm tracking-widest uppercase">⚔️ The wave has broken. You outlasted it.</p>
+          </div>
+          <p class="flash-prompt font-display font-bold text-base sm:text-xl text-snow leading-relaxed">
+            ACTION: Drop the phone/vape. Change your physical room right now.<br class="hidden sm:block">
+            Drink ice-cold water or chant the Maha-Mantra out loud.
+          </p>
+          <button id="closeFirewall" type="button" class="w-full sm:w-auto font-display font-bold tracking-wide text-canvas bg-emeraldx hover:bg-emerald-400 active:scale-[0.98] rounded-xl px-8 py-4 text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-500/30">
+            🧘 Close Firewall (Mind Restored)
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] hidden">
+  <div id="toastBody" class="toast-in flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow whitespace-nowrap"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEYS = {
+    logs: "chariot_logs_v1",
+    shield: "chariot_shield_v1",
+    firewall: "chariot_firewall_deploys_v1"
+  };
+
+  var TIMER_TOTAL_SECONDS = 180;
+  var RING_CIRCUMFERENCE = 326.726;
+
+  var shieldBrahma = document.getElementById("checkBrahma");
+  var shieldIntention = document.getElementById("checkIntention");
+  var shieldStatus = document.getElementById("shieldStatus");
+  var deployButton = document.getElementById("deployFirewall");
+  var firewallModal = document.getElementById("firewallModal");
+  var closeFirewallButton = document.getElementById("closeFirewall");
+  var firewallCount = document.getElementById("firewallCount");
+  var timerDisplay = document.getElementById("timerDisplay");
+  var timerRing = document.getElementById("timerRing");
+  var timerComplete = document.getElementById("timerComplete");
+  var auditForm = document.getElementById("auditForm");
+  var auditDate = document.getElementById("auditDate");
+  var slipType = document.getElementById("slipType");
+  var rootTrigger = document.getElementById("rootTrigger");
+  var reactionTime = document.getElementById("reactionTime");
+  var gearNotes = document.getElementById("gearNotes");
+  var historyFeed = document.getElementById("historyFeed");
+  var repoStats = document.getElementById("repoStats");
+  var clearRepoButton = document.getElementById("clearRepo");
+  var toast = document.getElementById("toast");
+  var toastBody = document.getElementById("toastBody");
+
+  var timerInterval = null;
+  var toastTimeout = null;
+
+  function todayISO() {
+    var now = new Date();
+    var month = String(now.getMonth() + 1).padStart(2, "0");
+    var day = String(now.getDate()).padStart(2, "0");
+    return now.getFullYear() + "-" + month + "-" + day;
+  }
+
+  function safeParse(raw, fallback) {
+    if (!raw) return fallback;
+    try {
+      var parsed = JSON.parse(raw);
+      return parsed === null || parsed === undefined ? fallback : parsed;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function readLogs() {
+    var logs = safeParse(localStorage.getItem(STORAGE_KEYS.logs), []);
+    return Array.isArray(logs) ? logs : [];
+  }
+
+  function writeLogs(logs) {
+    localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
+  }
+
+  function readShield() {
+    var state = safeParse(localStorage.getItem(STORAGE_KEYS.shield), null);
+    if (!state || state.date !== todayISO()) {
+      return { date: todayISO(), brahma: false, intention: false };
+    }
+    return state;
+  }
+
+  function writeShield(state) {
+    localStorage.setItem(STORAGE_KEYS.shield, JSON.stringify(state));
+  }
+
+  function readFirewallDeploys() {
+    var count = parseInt(localStorage.getItem(STORAGE_KEYS.firewall), 10);
+    return isNaN(count) ? 0 : count;
+  }
+
+  function escapeHTML(value) {
+    var div = document.createElement("div");
+    div.textContent = value;
+    return div.innerHTML;
+  }
+
+  function formatDisplayDate(isoDate) {
+    var parts = isoDate.split("-");
+    if (parts.length !== 3) return isoDate;
+    var dateObject = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    return dateObject.toLocaleDateString(undefined, { weekday: "short", year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function showToast(message, isAlert) {
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastBody.textContent = message;
+    toastBody.className = "toast-in flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow whitespace-nowrap border bg-obsidian " + (isAlert ? "border-red-500/50" : "border-emerald-500/40");
+    toast.classList.remove("hidden");
+    toastTimeout = setTimeout(function () {
+      toast.classList.add("hidden");
+    }, 2600);
+  }
+
+  function renderShield() {
+    var state = readShield();
+    shieldBrahma.checked = state.brahma;
+    shieldIntention.checked = state.intention;
+    var armed = (state.brahma ? 1 : 0) + (state.intention ? 1 : 0);
+    shieldStatus.textContent = armed + " / 2 Armed";
+    if (armed === 2) {
+      shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 text-emerald-400 whitespace-nowrap";
+      shieldStatus.textContent = "Shield Fully Armed";
+    } else {
+      shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap";
+    }
+  }
+
+  function handleShieldChange() {
+    var state = readShield();
+    state.date = todayISO();
+    state.brahma = shieldBrahma.checked;
+    state.intention = shieldIntention.checked;
+    writeShield(state);
+    renderShield();
+  }
+
+  function renderFirewallCount() {
+    var deploys = readFirewallDeploys();
+    firewallCount.textContent = deploys === 0
+      ? "No emergency deployments recorded yet."
+      : "Firewall deployed " + deploys + (deploys === 1 ? " time" : " times") + " — every deployment is a victory of awareness.";
+  }
+
+  function startTimer() {
+    var remaining = TIMER_TOTAL_SECONDS;
+    timerComplete.classList.add("hidden");
+    updateTimerVisual(remaining);
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(function () {
+      remaining -= 1;
+      if (remaining <= 0) {
+        remaining = 0;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerComplete.classList.remove("hidden");
+      }
+      updateTimerVisual(remaining);
+    }, 1000);
+  }
+
+  function updateTimerVisual(remaining) {
+    var minutes = Math.floor(remaining / 60);
+    var seconds = remaining % 60;
+    timerDisplay.textContent = minutes + ":" + String(seconds).padStart(2, "0");
+    var progress = remaining / TIMER_TOTAL_SECONDS;
+    timerRing.setAttribute("stroke-dashoffset", String(RING_CIRCUMFERENCE * (1 - progress)));
+    timerRing.setAttribute("stroke", remaining <= 30 && remaining > 0 ? "#EF4444" : "#10B981");
+  }
+
+  function openFirewall() {
+    var deploys = readFirewallDeploys() + 1;
+    localStorage.setItem(STORAGE_KEYS.firewall, String(deploys));
+    renderFirewallCount();
+    firewallModal.classList.remove("hidden");
+    document.body.classList.add("modal-open");
+    firewallModal.querySelector(".relative").scrollTop = 0;
+    startTimer();
+    closeFirewallButton.focus();
+  }
+
+  function closeFirewall() {
+    firewallModal.classList.add("hidden");
+    document.body.classList.remove("modal-open");
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    deployButton.focus();
+    showToast("🧘 Mind restored. The charioteer holds the reins.", false);
+  }
+
+  function isCleanLog(log) {
+    return log.slipType === "None (Flawless Victory)";
+  }
+
+  function renderRepository() {
+    var logs = readLogs().slice().sort(function (a, b) {
+      if (a.date === b.date) return (b.createdAt || 0) - (a.createdAt || 0);
+      return a.date < b.date ? 1 : -1;
+    });
+
+    var total = logs.length;
+    var clean = logs.filter(isCleanLog).length;
+    repoStats.textContent = total === 0 ? "Repository Empty" : clean + " clean / " + total + " logged";
+
+    if (total === 0) {
+      historyFeed.innerHTML =
+        '<div class="text-center py-10 space-y-3">' +
+          '<div class="text-4xl">📭</div>' +
+          '<p class="text-silver text-sm">The repository is empty. Complete tonight\'s Scientist Audit to mount your first data card.</p>' +
+        "</div>";
+      return;
+    }
+
+    var cardsHTML = logs.map(function (log) {
+      var cleanDay = isCleanLog(log);
+      var badgeClasses = cleanDay
+        ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-400"
+        : "border-red-500/50 bg-red-500/15 text-red-400";
+      var edgeClass = cleanDay ? "bg-emeraldx" : "bg-crimsonx";
+      var notesHTML = log.notes
+        ? '<div class="mt-3 pt-3 border-t border-gray-700/60">' +
+            '<p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1">Gear Adjustment</p>' +
+            '<p class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">' + escapeHTML(log.notes) + "</p>" +
+          "</div>"
+        : "";
+      return (
+        '<article class="relative rounded-xl border border-gray-700/70 bg-canvas/60 overflow-hidden">' +
+          '<div class="absolute left-0 top-0 bottom-0 w-1 ' + edgeClass + '"></div>' +
+          '<div class="p-4 sm:p-5 pl-5 sm:pl-6">' +
+            '<div class="flex flex-wrap items-center justify-between gap-2 mb-3">' +
+              '<h3 class="font-display font-bold text-sm sm:text-base text-snow">' + escapeHTML(formatDisplayDate(log.date)) + "</h3>" +
+              '<span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ' + badgeClasses + '">' + escapeHTML(log.slipType) + "</span>" +
+            "</div>" +
+            '<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">' +
+              '<div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Trigger</span><span class="text-gray-300">' + escapeHTML(log.trigger) + "</span></div>" +
+              '<div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Reaction</span><span class="text-gray-300">' + escapeHTML(log.reaction) + "</span></div>" +
+            "</div>" +
+            notesHTML +
+          "</div>" +
+        "</article>"
+      );
+    }).join("");
+
+    historyFeed.innerHTML = cardsHTML;
+  }
+
+  function handleAuditSubmit(event) {
+    event.preventDefault();
+    if (!auditDate.value) {
+      showToast("⚠️ Select an observation date first.", true);
+      auditDate.focus();
+      return;
+    }
+    var entry = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      date: auditDate.value,
+      slipType: slipType.value,
+      trigger: rootTrigger.value,
+      reaction: reactionTime.value,
+      notes: gearNotes.value.trim(),
+      createdAt: Date.now()
+    };
+    var logs = readLogs();
+    logs.push(entry);
+    writeLogs(logs);
+    renderRepository();
+    auditForm.reset();
+    auditDate.value = todayISO();
+    showToast(isCleanLog(entry) ? "✅ Flawless victory mounted to the repository." : "📡 Data logged. The gears adjust tomorrow.", false);
+    document.getElementById("repo-heading").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function handleClearRepository() {
+    var logs = readLogs();
+    if (logs.length === 0) {
+      showToast("📭 The repository is already empty.", true);
+      return;
+    }
+    var confirmed = window.confirm("Permanently erase all " + logs.length + " repository entries from this browser? This cannot be undone.");
+    if (!confirmed) return;
+    localStorage.removeItem(STORAGE_KEYS.logs);
+    renderRepository();
+    showToast("🗑️ Repository wiped. Fresh observation field ready.", true);
+  }
+
+  function handleKeydown(event) {
+    if (event.key === "Escape" && !firewallModal.classList.contains("hidden")) {
+      closeFirewall();
+    }
+  }
+
+  shieldBrahma.addEventListener("change", handleShieldChange);
+  shieldIntention.addEventListener("change", handleShieldChange);
+  deployButton.addEventListener("click", openFirewall);
+  closeFirewallButton.addEventListener("click", closeFirewall);
+  auditForm.addEventListener("submit", handleAuditSubmit);
+  clearRepoButton.addEventListener("click", handleClearRepository);
+  document.addEventListener("keydown", handleKeydown);
+
+  auditDate.value = todayISO();
+  renderShield();
+  renderFirewallCount();
+  renderRepository();
+})();
+</script>
+</body>
+</html>
