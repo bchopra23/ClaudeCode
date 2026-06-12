@@ -9,30 +9,10 @@
 <meta name="apple-mobile-web-app-title" content="Chariot Panel">
 <meta name="mobile-web-app-capable" content="yes">
 <title>The Chariot Control Panel</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        canvas: "#111827",
-        obsidian: "#1F2937",
-        emeraldx: "#10B981",
-        crimsonx: "#EF4444",
-        snow: "#F9FAFB",
-        silver: "#9CA3AF"
-      },
-      fontFamily: {
-        display: ["'Sora'", "system-ui", "sans-serif"],
-        body: ["'Inter'", "system-ui", "sans-serif"]
-      }
-    }
-  }
-};
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="tailwind.css">
 <style>
   html { scroll-behavior: smooth; }
   body { background: #111827; color: #F9FAFB; -webkit-tap-highlight-color: transparent; }
@@ -67,6 +47,22 @@ tailwind.config = {
   .card-in { animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
   .timer-ring { transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 0.3s linear; }
+
+  @keyframes boxBreath {
+    0% { transform: scale(0.55); }
+    25% { transform: scale(1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(0.55); }
+    100% { transform: scale(0.55); }
+  }
+  .pacer-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 30% 30%, #34D399, #059669);
+    box-shadow: 0 0 30px rgba(16,185,129,0.45);
+    animation: boxBreath 16s ease-in-out infinite;
+  }
 
   .glass {
     background: rgba(17, 24, 39, 0.72);
@@ -125,7 +121,7 @@ tailwind.config = {
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .firewall-btn, .flash-prompt { animation: none !important; }
+    .firewall-btn, .flash-prompt, .pacer-circle { animation: none !important; }
     .firewall-btn { box-shadow: 0 0 22px 2px rgba(239,68,68,0.35); }
     .modal-enter, .card-in, .toast-in { animation-duration: 0.01ms !important; }
     .timer-ring, .checkbox-visual, .checkbox-tick { transition-duration: 0.01ms !important; }
@@ -280,7 +276,7 @@ tailwind.config = {
         <div id="repoStats" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap"></div>
       </div>
       <div class="divider-glow mx-5 sm:mx-7"></div>
-      <div id="repoAnalytics" class="hidden px-5 sm:px-7 pt-6">
+      <div id="repoAnalytics" class="hidden px-5 sm:px-7 pt-6 space-y-5">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
             <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Current Streak</p>
@@ -299,8 +295,22 @@ tailwind.config = {
             <p id="statTopTrigger" class="font-display font-extrabold text-sm sm:text-base text-crimsonx leading-tight pt-1">—</p>
           </div>
         </div>
+        <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver">Battle Map · Last 35 Days</p>
+            <div class="flex items-center gap-3 text-[0.6rem] text-silver">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emeraldx inline-block"></span>Clean</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-crimsonx inline-block"></span>Slip</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-gray-700 inline-block"></span>No Data</span>
+            </div>
+          </div>
+          <div id="heatmapGrid" class="grid grid-cols-7 gap-1.5"></div>
+        </div>
       </div>
       <div id="historyFeed" class="p-5 sm:p-7 space-y-4"></div>
+      <div id="loadMoreWrap" class="hidden px-5 sm:px-7 pb-4 text-center">
+        <button id="loadMoreButton" type="button" class="text-xs font-semibold tracking-wider uppercase text-silver hover:text-snow border border-gray-600 hover:border-gray-400 hover:bg-gray-500/10 rounded-xl px-5 py-2.5 transition-all duration-200"></button>
+      </div>
       <div class="px-5 sm:px-7 pb-7 flex flex-wrap items-center justify-center gap-3">
         <button id="exportRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/60 hover:bg-emerald-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
           ⬇️ Export Data
@@ -317,7 +327,7 @@ tailwind.config = {
   </section>
 
   <footer class="text-center text-[0.7rem] text-gray-600 pt-4 pb-2">
-    All data lives only in this browser's local storage. Export regularly. The observer remains sovereign.
+    All data lives only on this device. No network. No telemetry. Export regularly. The observer remains sovereign.
   </footer>
 
 </main>
@@ -369,6 +379,10 @@ tailwind.config = {
             </div>
             <p id="timerComplete" class="hidden font-display font-bold text-emerald-400 text-sm tracking-widest uppercase">⚔️ The wave has broken. You outlasted it.</p>
           </div>
+          <div class="flex flex-col items-center gap-3">
+            <div class="h-24 flex items-center justify-center"><div id="pacerCircle" class="pacer-circle"></div></div>
+            <p class="text-[0.65rem] tracking-[0.3em] uppercase text-silver">Box Breathing · <span id="pacerLabel" class="text-emerald-400 font-bold">Inhale</span></p>
+          </div>
           <p class="flash-prompt font-display font-bold text-base sm:text-xl text-snow leading-relaxed">
             ACTION: Drop the phone/vape. Change your physical room right now.<br class="hidden sm:block">
             Drink ice-cold water or chant the Maha-Mantra out loud.
@@ -408,12 +422,18 @@ tailwind.config = {
   const STORAGE_KEYS = {
     logs: "chariot_logs_v1",
     shield: "chariot_shield_v1",
-    firewall: "chariot_firewall_deploys_v1"
+    firewall: "chariot_firewall_deploys_v1",
+    sessions: "chariot_firewall_sessions_v1"
   };
 
   const TIMER_TOTAL_SECONDS = 180;
   const RING_CIRCUMFERENCE = 326.726;
   const CLEAN_SLIP_VALUE = "None (Flawless Victory)";
+  const LOGS_PER_PAGE = 14;
+  const HEATMAP_DAYS = 35;
+  const MAX_STORED_SESSIONS = 200;
+  const BREATH_PHASES = ["Inhale", "Hold", "Exhale", "Hold"];
+  const BREATH_PHASE_MS = 4000;
   const SHORT_TRIGGERS = {
     "Boredom": "Boredom",
     "Work/Life Stress": "Stress",
@@ -435,6 +455,8 @@ tailwind.config = {
     timerDisplay: document.getElementById("timerDisplay"),
     timerRing: document.getElementById("timerRing"),
     timerComplete: document.getElementById("timerComplete"),
+    pacerCircle: document.getElementById("pacerCircle"),
+    pacerLabel: document.getElementById("pacerLabel"),
     auditForm: document.getElementById("auditForm"),
     auditDate: document.getElementById("auditDate"),
     slipType: document.getElementById("slipType"),
@@ -448,6 +470,9 @@ tailwind.config = {
     statBestStreak: document.getElementById("statBestStreak"),
     statSuccessRate: document.getElementById("statSuccessRate"),
     statTopTrigger: document.getElementById("statTopTrigger"),
+    heatmapGrid: document.getElementById("heatmapGrid"),
+    loadMoreWrap: document.getElementById("loadMoreWrap"),
+    loadMoreButton: document.getElementById("loadMoreButton"),
     exportButton: document.getElementById("exportRepo"),
     importButton: document.getElementById("importRepo"),
     importInput: document.getElementById("importInput"),
@@ -467,6 +492,7 @@ tailwind.config = {
   let toastTimeoutId = null;
   let pendingConfirmAction = null;
   let lastFocusedElement = null;
+  let visibleLogCount = LOGS_PER_PAGE;
 
   const todayISO = () => {
     const now = new Date();
@@ -528,6 +554,15 @@ tailwind.config = {
     return Number.isNaN(count) ? 0 : count;
   };
 
+  const readSessions = () => {
+    const sessions = safeParse(localStorage.getItem(STORAGE_KEYS.sessions), []);
+    return Array.isArray(sessions) ? sessions : [];
+  };
+
+  const writeSessions = (sessions) => {
+    localStorage.setItem(STORAGE_KEYS.sessions, JSON.stringify(sessions.slice(-MAX_STORED_SESSIONS)));
+  };
+
   const isCleanLog = (log) => log.slipType === CLEAN_SLIP_VALUE;
 
   const escapeHTML = (value) => {
@@ -547,6 +582,15 @@ tailwind.config = {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  };
+
+  const formatRelative = (timestamp) => {
+    const minutes = Math.floor((Date.now() - timestamp) / 60000);
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
   };
 
   const anyOverlayOpen = () =>
@@ -606,20 +650,28 @@ tailwind.config = {
   };
 
   const handleShieldChange = () => {
-    const state = {
+    writeShield({
       date: todayISO(),
       brahma: elements.shieldBrahma.checked,
       intention: elements.shieldIntention.checked
-    };
-    writeShield(state);
+    });
     renderShield();
   };
 
   const renderFirewallCount = () => {
     const deploys = readFirewallDeploys();
-    elements.firewallCount.textContent = deploys === 0
-      ? "No emergency deployments recorded yet."
-      : `Firewall deployed ${deploys} ${deploys === 1 ? "time" : "times"} — every deployment is a victory of awareness.`;
+    if (deploys === 0) {
+      elements.firewallCount.textContent = "No emergency deployments recorded yet.";
+      return;
+    }
+    let text = `Firewall deployed ${deploys} ${deploys === 1 ? "time" : "times"} — every deployment is a victory of awareness.`;
+    const sessions = readSessions();
+    if (sessions.length > 0) {
+      const averageHold = Math.round(sessions.reduce((sum, session) => sum + (session.heldSeconds || 0), 0) / sessions.length);
+      const lastSession = sessions[sessions.length - 1];
+      text += ` Avg hold ${formatClock(averageHold)} · last intercept ${formatRelative(lastSession.at)}.`;
+    }
+    elements.firewallCount.textContent = text;
   };
 
   const updateTimerVisual = (remaining) => {
@@ -629,12 +681,26 @@ tailwind.config = {
     elements.timerRing.setAttribute("stroke", remaining <= 30 && remaining > 0 ? "#EF4444" : "#10B981");
   };
 
+  const updatePacer = () => {
+    if (!firewallOpenedAt) return;
+    const elapsed = Date.now() - firewallOpenedAt;
+    const phaseIndex = Math.floor((elapsed % (BREATH_PHASES.length * BREATH_PHASE_MS)) / BREATH_PHASE_MS);
+    elements.pacerLabel.textContent = BREATH_PHASES[phaseIndex];
+  };
+
   const tickTimer = () => {
+    updatePacer();
     const remaining = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
     updateTimerVisual(remaining);
     if (remaining <= 0) {
-      stopTimer();
       elements.timerComplete.classList.remove("hidden");
+    }
+  };
+
+  const stopTimer = () => {
+    if (timerIntervalId) {
+      clearInterval(timerIntervalId);
+      timerIntervalId = null;
     }
   };
 
@@ -644,14 +710,11 @@ tailwind.config = {
     timerEndTimestamp = firewallOpenedAt + TIMER_TOTAL_SECONDS * 1000;
     elements.timerComplete.classList.add("hidden");
     updateTimerVisual(TIMER_TOTAL_SECONDS);
+    elements.pacerLabel.textContent = BREATH_PHASES[0];
+    elements.pacerCircle.style.animation = "none";
+    void elements.pacerCircle.offsetWidth;
+    elements.pacerCircle.style.animation = "";
     timerIntervalId = setInterval(tickTimer, 250);
-  };
-
-  const stopTimer = () => {
-    if (timerIntervalId) {
-      clearInterval(timerIntervalId);
-      timerIntervalId = null;
-    }
   };
 
   const openFirewall = () => {
@@ -668,6 +731,10 @@ tailwind.config = {
     const heldSeconds = firewallOpenedAt ? Math.round((Date.now() - firewallOpenedAt) / 1000) : 0;
     stopTimer();
     firewallOpenedAt = null;
+    const sessions = readSessions();
+    sessions.push({ at: Date.now(), heldSeconds });
+    writeSessions(sessions);
+    renderFirewallCount();
     elements.firewallModal.classList.add("hidden");
     syncInert();
     elements.deployButton.focus();
@@ -719,7 +786,22 @@ tailwind.config = {
       }
     });
 
-    return { currentStreak, bestStreak, successRate, topTrigger, total, clean };
+    return { currentStreak, bestStreak, successRate, topTrigger, total, clean, dayMap };
+  };
+
+  const renderHeatmap = (dayMap) => {
+    const today = todayISO();
+    const cells = [];
+    for (let offset = HEATMAP_DAYS - 1; offset >= 0; offset--) {
+      const date = shiftISO(today, -offset);
+      const hasData = dayMap.has(date);
+      const clean = dayMap.get(date) === true;
+      const colorClass = !hasData ? "bg-gray-700/70" : clean ? "bg-emeraldx" : "bg-crimsonx";
+      const todayClass = date === today ? " ring-2 ring-emerald-300/80" : "";
+      const statusLabel = !hasData ? "No data" : clean ? "Clean" : "Slip";
+      cells.push(`<div class="aspect-square rounded-md ${colorClass}${todayClass}" title="${escapeHTML(formatDisplayDate(date))} — ${statusLabel}" role="img" aria-label="${escapeHTML(formatDisplayDate(date))}: ${statusLabel}"></div>`);
+    }
+    elements.heatmapGrid.innerHTML = cells.join("");
   };
 
   const buildLogCard = (log) => {
@@ -770,6 +852,7 @@ tailwind.config = {
 
     if (stats.total === 0) {
       elements.repoAnalytics.classList.add("hidden");
+      elements.loadMoreWrap.classList.add("hidden");
       elements.historyFeed.innerHTML = `<div class="text-center py-10 space-y-3">
         <div class="text-4xl">📭</div>
         <p class="text-silver text-sm">The repository is empty. Complete tonight's Scientist Audit to mount your first data card.</p>
@@ -782,8 +865,23 @@ tailwind.config = {
     elements.statBestStreak.textContent = String(stats.bestStreak);
     elements.statSuccessRate.textContent = String(stats.successRate);
     elements.statTopTrigger.textContent = stats.topTrigger ? (SHORT_TRIGGERS[stats.topTrigger] || stats.topTrigger) : "—";
+    renderHeatmap(stats.dayMap);
 
-    elements.historyFeed.innerHTML = logs.map(buildLogCard).join("");
+    const visibleLogs = logs.slice(0, visibleLogCount);
+    elements.historyFeed.innerHTML = visibleLogs.map(buildLogCard).join("");
+
+    const remaining = logs.length - visibleLogs.length;
+    if (remaining > 0) {
+      elements.loadMoreWrap.classList.remove("hidden");
+      elements.loadMoreButton.textContent = `Reveal ${Math.min(LOGS_PER_PAGE, remaining)} older ${remaining === 1 ? "entry" : "entries"} (${remaining} archived)`;
+    } else {
+      elements.loadMoreWrap.classList.add("hidden");
+    }
+  };
+
+  const handleLoadMore = () => {
+    visibleLogCount += LOGS_PER_PAGE;
+    renderRepository();
   };
 
   const handleAuditSubmit = (event) => {
@@ -868,11 +966,12 @@ tailwind.config = {
     }
     showConfirm({
       title: "Wipe The Entire Repository?",
-      message: `All ${logs.length} ${logs.length === 1 ? "entry" : "entries"} will be permanently erased from this browser. Consider exporting your data first — this cannot be undone.`,
+      message: `All ${logs.length} ${logs.length === 1 ? "entry" : "entries"} will be permanently erased from this device. Consider exporting your data first — this cannot be undone.`,
       acceptLabel: "Erase Everything",
       danger: true,
       onAccept: () => {
         localStorage.removeItem(STORAGE_KEYS.logs);
+        visibleLogCount = LOGS_PER_PAGE;
         renderRepository();
         showToast("🗑️ Repository wiped. Fresh observation field ready.", true);
       }
@@ -969,6 +1068,7 @@ tailwind.config = {
   elements.closeFirewallButton.addEventListener("click", closeFirewall);
   elements.auditForm.addEventListener("submit", handleAuditSubmit);
   elements.historyFeed.addEventListener("click", handleFeedClick);
+  elements.loadMoreButton.addEventListener("click", handleLoadMore);
   elements.clearButton.addEventListener("click", handleClearRepository);
   elements.exportButton.addEventListener("click", handleExport);
   elements.importButton.addEventListener("click", () => elements.importInput.click());
@@ -983,6 +1083,10 @@ tailwind.config = {
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden && timerIntervalId) tickTimer();
   });
+
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
 
   elements.auditDate.value = todayISO();
   elements.auditDate.max = todayISO();
