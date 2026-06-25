@@ -37,6 +37,39 @@ html,body{width:100%;min-height:100vh;background:radial-gradient(ellipse at 50% 
 @media(max-width:860px){.book{height:480px}}
 @media(max-width:540px){.book{height:390px}}
 
+/* ─ MOBILE: SINGLE COLUMN, NO CUTOFF ─ */
+@media(max-width:640px){
+  .book{height:auto!important;flex-direction:column;border-radius:6px}
+  .pa{width:100%!important;overflow:visible!important;height:auto!important}
+  .pa.L{border-radius:6px 6px 0 0;box-shadow:inset 0 -4px 14px rgba(0,0,0,.07)}
+  .pa.R{border-radius:0 0 6px 6px;box-shadow:inset 0 4px 14px rgba(0,0,0,.04)}
+  .pc{overflow:visible!important;height:auto!important}
+  .p{padding:20px 16px 22px;min-height:0!important}
+  .p.dk,.p.dm{min-height:260px!important;height:auto!important}
+  .spine{display:none}
+  #fl{display:none!important}
+  .rdeco{font-size:72px;top:10px;right:10px}
+  h1.bt{font-size:32px}
+  h2.ct{font-size:17px}
+  h3.pt{font-size:22px}
+  p.b{font-size:13.5px;line-height:1.75}
+  p.b.sm{font-size:12px}
+  .cn{font-size:40px}
+  .vt{font-size:12px}
+  .vi{font-size:10.5px}
+  .kd{font-size:11px}
+  .cf p{font-size:11px}
+  .pb li{font-size:11.5px}
+  .ab p{font-size:11px}
+  .tbl{font-size:11px;padding:8px 10px}
+  .pn{display:none}
+  .controls{gap:14px;margin-top:14px}
+  .nbtn{width:48px;height:48px;font-size:18px}
+  .progbar{width:100%}
+  .hint{font-size:8px;letter-spacing:2px}
+  .book-shadow-wrap{border-radius:6px}
+}
+
 /* ─ PAGE AREAS ─ */
 .pa{width:50%;height:100%;overflow:hidden;position:relative;background:var(--parch)}
 .pa.L{border-radius:3px 0 0 3px;box-shadow:inset -6px 0 18px rgba(0,0,0,.08)}
@@ -942,6 +975,7 @@ const fl=document.getElementById('fl'),ffr=document.getElementById('ffr'),fbk=do
 const pb=document.getElementById('pb'),nb=document.getElementById('nb'),ctr=document.getElementById('ctr'),pf=document.getElementById('pf');
 let cur=0,busy=false;
 const N=S.length;
+const mob=()=>window.innerWidth<=640;
 
 function render(i){
   lp.innerHTML=S[i].l;
@@ -958,6 +992,7 @@ function upd(i){
 
 function goNext(){
   if(cur>=N-1||busy)return;
+  if(mob()){cur++;render(cur);window.scrollTo({top:0,behavior:'smooth'});return;}
   busy=true;
   ffr.innerHTML=S[cur].r;
   fbk.innerHTML=S[cur+1].l;
@@ -982,6 +1017,7 @@ function goNext(){
 
 function goBack(){
   if(cur<=0||busy)return;
+  if(mob()){cur--;render(cur);window.scrollTo({top:0,behavior:'smooth'});return;}
   busy=true;
   ffr.innerHTML=S[cur-1].r;
   fbk.innerHTML=S[cur].l;
@@ -1012,6 +1048,17 @@ document.addEventListener('keydown',e=>{
 
 document.getElementById('lp').closest('.pa').addEventListener('click',goBack);
 document.getElementById('rp').closest('.pa').addEventListener('click',goNext);
+
+// Swipe support for mobile
+let _tx=0,_ty=0;
+document.addEventListener('touchstart',e=>{_tx=e.touches[0].clientX;_ty=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-_tx;
+  const dy=e.changedTouches[0].clientY-_ty;
+  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>44){
+    dx<0?goNext():goBack();
+  }
+},{passive:true});
 
 render(0);
 </script>
