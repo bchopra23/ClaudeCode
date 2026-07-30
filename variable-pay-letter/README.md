@@ -57,7 +57,7 @@ engine are all embedded in the file, and every letter is built in the browser.
 A4, one page, on the supplied letterhead: the date, a block of the seven employee
 fields, a subject line, a congratulatory message for **FY 2025-26**, the amount in
 figures and in words (Indian numbering — lakh and crore), a confidentiality
-paragraph, the signature block, and the company seal to the right of it.
+paragraph, and the signature block with the company seal struck across it.
 
 Any employee field that is blank in the database is dropped from the block rather
 than printed as an empty row.
@@ -191,9 +191,13 @@ from. It refuses to run if the middle of the new artwork is not uniform.
   tab-separated rows on the clipboard as `text/plain`, which would otherwise land
   entirely in one cell, so the paste is intercepted and spread across the grid.
 - The signature and the seal are placed from one shared baseline in `drawSignOff()`,
-  so they stay in line with each other and with the text column whatever the body
-  above did. The signature sits flush to the text margin and the seal's right edge
-  lines up with the right edge of the body column.
+  so they stay in line with each other whatever the body above did. The signature
+  sits flush to the text margin, and the seal is positioned off the signature's own
+  box rather than the page margin, landing across the last quarter of it the way a
+  seal falls on a document that is signed and then stamped. It is drawn last so the
+  ink sits over the signature, and it is a ring with an open centre, so the strokes
+  it crosses stay legible. `STAMP_WIDTH` and `STAMP_OVERLAP` control the size and
+  how far along the signature it starts.
 
 ## Third-party components
 

@@ -422,15 +422,47 @@
 
   .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
 
-  .paste-tip {
-    margin: 0 0 16px;
-    padding: 11px 14px;
+  .steps {
+    margin: 0 0 20px;
+    padding: 14px 18px 14px 0;
     background: #f2f9fd;
     border: 1px solid #d7e9f5;
     border-radius: 7px;
     font-size: 13px;
+    line-height: 1.55;
     color: #33566b;
+    counter-reset: step;
+    list-style: none;
   }
+
+  .steps li {
+    position: relative;
+    padding-left: 52px;
+    counter-increment: step;
+  }
+
+  .steps li + li { margin-top: 9px; }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--euler-blue-dark);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .steps strong { color: #17384c; }
+
+  .steps em { font-style: normal; font-weight: 600; color: var(--euler-blue-dark); }
 
   footer { text-align: center; font-size: 12px; color: var(--muted); padding-bottom: 28px; }
 
@@ -523,11 +555,29 @@
     <section class="card">
       <h2>Bulk letters</h2>
 
-      <p class="paste-tip">
-        Copy the Employee ID and Variable Pay columns straight out of your spreadsheet and
-        paste them anywhere in the table &mdash; rows are added as needed, and a pasted
-        header row is ignored. Every letter carries the date set below.
-      </p>
+      <ol class="steps">
+        <li>
+          <strong>Set the letter date.</strong>
+          Every letter in the batch carries this date.
+        </li>
+        <li>
+          <strong>Paste your two columns into the table.</strong>
+          Copy Employee ID and Variable Pay straight out of your spreadsheet and paste
+          anywhere in the grid. Rows are added as needed, and a copied header row is
+          ignored, so selecting the headings too is fine.
+        </li>
+        <li>
+          <strong>Check the Status column.</strong>
+          Each row shows the employee it matched and the amount. Rows highlighted in red
+          need fixing &mdash; the zip stays locked until every row is clean, so nobody is
+          quietly left out of the run.
+        </li>
+        <li>
+          <strong>Download.</strong>
+          <em>Preview</em> or <em>Download</em> on a row handles that one letter.
+          <em>Download all Letters (Zip)</em> at the bottom builds the whole batch.
+        </li>
+      </ol>
 
       <div class="bulk-toolbar">
         <div class="field">
@@ -1069,6 +1119,14 @@ const ART = { x: 0, y: 0, w: 210, h: 297 };
 const SAFE = { top: 26.58, bottom: 270.42 };
 const CONTENT_TOP = 44;
 const MARGIN = { left: 24, right: 185 };
+
+/* The seal, sized and placed to cross the tail of the signature. STAMP_OVERLAP is
+ * how far along the signature it starts, as a fraction of the signature's width:
+ * 0.72 clips the last quarter or so, enough to read as one act of signing and
+ * stamping without burying the name under it. The width is what lets the ring
+ * clear the title line beneath. */
+const STAMP_WIDTH = 34;
+const STAMP_OVERLAP = 0.72;
 const COLUMN = MARGIN.right - MARGIN.left;
 const LABEL_WIDTH = 38;
 
@@ -1392,13 +1450,16 @@ function drawSignOff(doc, y) {
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
   doc.text(SIGNATORY.title, MARGIN.left, titleY);
 
-  // Centre the seal on the signature block rather than on the text baselines,
-  // so it reads as stamped alongside the signature.
+  // Land the seal across the tail of the signature, the way it falls on a
+  // document that is signed and then stamped. It is drawn last so the ink sits
+  // over the signature, and it is a ring with an open centre, so the strokes it
+  // crosses stay legible. Placed off the signature's own box rather than the
+  // page margin, so the two stay related however the block moves.
   const blockBottom = titleY + 2;
-  const stampWidth = 38;
+  const stampWidth = STAMP_WIDTH;
   const stampHeight = stampWidth * ASSET_ASPECTS.stamp;
-  const stampX = MARGIN.right - stampWidth;
-  const stampY = (blockTop + blockBottom) / 2 - stampHeight / 2;
+  const stampX = MARGIN.left + signatureWidth * STAMP_OVERLAP;
+  const stampY = blockTop + signatureHeight / 2 - stampHeight / 2;
   doc.addImage(STAMP, "PNG", stampX, stampY, stampWidth, stampHeight);
 
   const lowest = Math.max(blockBottom, stampY + stampHeight);
