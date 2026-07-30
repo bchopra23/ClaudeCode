@@ -422,15 +422,50 @@
 
   .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
 
-  .steps {
+  .help {
     margin: 0 0 20px;
-    padding: 14px 18px 14px 0;
     background: #f2f9fd;
     border: 1px solid #d7e9f5;
     border-radius: 7px;
+    color: #33566b;
+  }
+
+  .help > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #17384c;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    border-radius: 6px;
+  }
+
+  /* Safari draws its own triangle unless this is turned off explicitly. */
+  .help > summary::-webkit-details-marker { display: none; }
+
+  .help > summary:hover { background: #e8f4fc; }
+
+  .help > summary::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--euler-blue-dark);
+    border-bottom: 2px solid var(--euler-blue-dark);
+    transform: rotate(-45deg) translate(-1px, -1px);
+    transition: transform .15s ease;
+  }
+
+  .help[open] > summary::before { transform: rotate(45deg) translate(-2px, -2px); }
+
+  .steps {
+    margin: 0;
+    padding: 0 18px 15px 0;
     font-size: 13px;
     line-height: 1.55;
-    color: #33566b;
     counter-reset: step;
     list-style: none;
   }
@@ -555,7 +590,9 @@
     <section class="card">
       <h2>Bulk letters</h2>
 
-      <ol class="steps">
+      <details class="help" open>
+        <summary>How this works</summary>
+        <ol class="steps">
         <li>
           <strong>Set the letter date.</strong>
           Every letter in the batch carries this date.
@@ -577,7 +614,8 @@
           <em>Preview</em> or <em>Download</em> on a row handles that one letter.
           <em>Download all Letters (Zip)</em> at the bottom builds the whole batch.
         </li>
-      </ol>
+        </ol>
+      </details>
 
       <div class="bulk-toolbar">
         <div class="field">
