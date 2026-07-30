@@ -99,6 +99,19 @@
     align-items: start;
   }
 
+  /* Bulk puts the table first and the preview beside it: the grid needs the
+     width far more than the preview does. */
+  .split-bulk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+    gap: 26px;
+    align-items: start;
+  }
+
+  @media (max-width: 1100px) {
+    .split-bulk { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 900px) {
     .split { grid-template-columns: 1fr; }
   }
@@ -352,9 +365,30 @@
 
   tr.bad input { background: #fef7f6; }
 
-  .col-id { width: 20%; }
-  .col-amount { width: 20%; }
-  .col-date { width: 20%; }
+  .col-id { width: 24%; }
+  .col-amount { width: 22%; }
+
+  .peek { width: 168px; text-align: center; white-space: nowrap; }
+
+  .peek button {
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--euler-blue-dark);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 5px 9px;
+    cursor: pointer;
+  }
+
+  .peek button:hover:not(:disabled) { background: #eaf5fc; border-color: #a9c7da; }
+
+  .peek button:disabled { color: #c2cdd7; cursor: default; }
+
+  /* The row currently showing in the preview pane. */
+  tr.previewing td { background: #f2f9fd; }
+  tr.previewing .rownum { background: #e3f1fa; color: var(--euler-blue-dark); font-weight: 700; }
 
   .drop {
     width: 40px;
@@ -485,20 +519,19 @@
   </div>
 
   <!-- ---------------- Bulk ---------------- -->
-  <div id="panelBulk" role="tabpanel" hidden>
+  <div class="split-bulk" id="panelBulk" role="tabpanel" hidden>
     <section class="card">
       <h2>Bulk letters</h2>
 
       <p class="paste-tip">
         Copy the Employee ID and Variable Pay columns straight out of your spreadsheet and
         paste them anywhere in the table &mdash; rows are added as needed, and a pasted
-        header row is ignored. The Date column is optional; rows left blank use the letter
-        date below.
+        header row is ignored. Every letter carries the date set below.
       </p>
 
       <div class="bulk-toolbar">
         <div class="field">
-          <label for="bulkDate">Letter date <span class="hint">applies to rows with no date</span></label>
+          <label for="bulkDate">Letter date <span class="hint">applies to every letter</span></label>
           <input type="date" id="bulkDate">
         </div>
         <div class="spacer"></div>
@@ -513,8 +546,8 @@
               <th class="rownum"></th>
               <th class="col-id">Employee ID</th>
               <th class="col-amount">Variable Pay</th>
-              <th class="col-date">Date <span style="text-transform:none;letter-spacing:0">(optional)</span></th>
               <th>Status</th>
+              <th class="peek"></th>
               <th class="drop"></th>
             </tr>
           </thead>
@@ -524,7 +557,18 @@
 
       <div class="bulk-footer">
         <div class="summary" id="bulkSummary"></div>
-        <button id="downloadZip" class="action btn-primary" disabled>Download Letters (Zip)</button>
+        <button id="downloadZip" class="action btn-primary" disabled>Download all Letters (Zip)</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="preview-head">
+        <h2>Letter preview</h2>
+        <span class="filename" id="bulkFilename"></span>
+      </div>
+      <div class="viewer" id="bulkViewer">
+        <canvas id="bulkCanvas" aria-label="Variable pay letter preview" hidden></canvas>
+        <div class="empty" id="bulkViewerEmpty">Choose Preview on any row to see that letter.</div>
       </div>
     </section>
   </div>
@@ -598,8 +642,6 @@ const COLORS = {
 const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 
-const MONTH_PREFIXES = MONTHS.map((month) => month.slice(0, 3).toLowerCase());
-
 /** "2018-07-01" -> "01 July 2018". Returns "" for anything unparseable. */
 function formatDate(iso) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
@@ -612,53 +654,6 @@ function todayISO() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   return `${now.getFullYear()}-${month}-${String(now.getDate()).padStart(2, "0")}`;
-}
-
-function isRealDate(year, month, day) {
-  if (month < 1 || month > 12 || day < 1) return false;
-  return day <= new Date(year, month, 0).getDate();
-}
-
-function toISO(year, month, day) {
-  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-}
-
-/**
- * Parses a date typed or pasted into the bulk table, returning ISO or null.
- *
- * Day-first throughout, as written in India: 03/04/2026 is 3 April, never
- * 4 March. Two-digit years are read as 20xx.
- */
-function parseDateInput(text) {
-  const value = String(text || "").trim();
-  if (!value) return null;
-
-  let match = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(value);
-  if (match) {
-    const [, year, month, day] = match.map(Number);
-    return isRealDate(year, month, day) ? toISO(year, month, day) : null;
-  }
-
-  match = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2}|\d{4})$/.exec(value);
-  if (match) {
-    const day = Number(match[1]);
-    const month = Number(match[2]);
-    let year = Number(match[3]);
-    if (year < 100) year += 2000;
-    return isRealDate(year, month, day) ? toISO(year, month, day) : null;
-  }
-
-  // "3 Apr 2026", "03-April-2026", "3 April 26"
-  match = /^(\d{1,2})[\s-]+([A-Za-z]+)[\s-]+(\d{2}|\d{4})$/.exec(value);
-  if (match) {
-    const day = Number(match[1]);
-    const month = MONTH_PREFIXES.indexOf(match[2].slice(0, 3).toLowerCase()) + 1;
-    let year = Number(match[3]);
-    if (year < 100) year += 2000;
-    if (month && isRealDate(year, month, day)) return toISO(year, month, day);
-  }
-
-  return null;
 }
 
 /** Indian digit grouping: 2500000 -> "25,00,000". */
@@ -1010,16 +1005,10 @@ const detailsPlaceholder = el("detailsPlaceholder");
 const amountRow = el("amountRow");
 const previewButton = el("preview");
 const downloadButton = el("download");
-const viewer = el("viewer");
-const pdfCanvas = el("pdfCanvas");
-const viewerEmpty = el("viewerEmpty");
-const filenameLabel = el("filename");
 
 let currentEmployee = null;
 let currentAmount = null;
 let currentDate = null;
-let previewBytes = null;
-let renderToken = 0;
 
 function readEmployee() {
   const raw = empIdInput.value.trim();
@@ -1076,13 +1065,81 @@ function paintDetails(employee, amount) {
   }
 }
 
-function clearPreview() {
-  previewBytes = null;
-  renderToken += 1; // abandon any render still in flight
-  pdfCanvas.hidden = true;
-  viewerEmpty.hidden = false;
-  filenameLabel.textContent = "";
+/**
+ * A pane that renders a generated letter onto a canvas, scaled to fit its box.
+ *
+ * Letters are drawn with PDF.js rather than handed to the browser's own PDF
+ * viewer in an iframe: that viewer ignores the view/zoom fragment hints often
+ * enough to open the letter at some arbitrary zoom, scrolled away from the page.
+ *
+ * Both modes get their own pane, so previewing a bulk row does not disturb the
+ * letter already on screen in Individual.
+ */
+function createPreviewPane(viewerId, canvasId, emptyId, filenameId) {
+  const box = el(viewerId);
+  const canvas = el(canvasId);
+  const empty = el(emptyId);
+  const filename = el(filenameId);
+  let bytes = null;
+  let token = 0;
+
+  async function paint() {
+    if (!bytes) return;
+    const mine = ++token;
+
+    // getDocument takes ownership of the buffer it is given, so pass a copy and
+    // keep ours intact for later repaints.
+    const pdf = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
+    const page = await pdf.getPage(1);
+
+    const unscaled = page.getViewport({ scale: 1 });
+    const rect = box.getBoundingClientRect();
+    const fit = Math.min(rect.width / unscaled.width, rect.height / unscaled.height);
+    // Render at device resolution so the letter stays sharp on HiDPI screens.
+    const ratio = window.devicePixelRatio || 1;
+    const viewport = page.getViewport({ scale: fit * ratio });
+
+    if (mine !== token) return; // superseded while awaiting
+    canvas.width = Math.round(viewport.width);
+    canvas.height = Math.round(viewport.height);
+    canvas.style.width = `${Math.round(unscaled.width * fit)}px`;
+    canvas.style.height = `${Math.round(unscaled.height * fit)}px`;
+
+    await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+  }
+
+  return {
+    get hasContent() { return bytes !== null; },
+
+    clear() {
+      bytes = null;
+      token += 1; // abandon any render still in flight
+      canvas.hidden = true;
+      empty.hidden = false;
+      filename.textContent = "";
+    },
+
+    /** @returns true if the letter was rendered. */
+    show(doc, name, onError) {
+      bytes = doc.output("arraybuffer");
+      empty.hidden = true;
+      canvas.hidden = false;
+      filename.textContent = name;
+      paint().catch((error) => {
+        console.error(error);
+        this.clear();
+        if (onError) onError();
+      });
+      return true;
+    },
+
+    repaint() {
+      if (bytes) paint().catch(console.error);
+    },
+  };
 }
+
+const individualPane = createPreviewPane("viewer", "pdfCanvas", "viewerEmpty", "filename");
 
 /** Builds the letter, reporting failure against the Employee ID field. */
 function tryBuild() {
@@ -1095,51 +1152,11 @@ function tryBuild() {
   }
 }
 
-/**
- * Draws page 1 of the previewed PDF into the canvas, scaled to fit the viewer.
- *
- * The letter is rendered with PDF.js rather than handed to the browser's own PDF
- * viewer in an iframe: that viewer ignores the view/zoom fragment hints often
- * enough to open the letter at some arbitrary zoom, scrolled away from the page.
- */
-async function paintPreview() {
-  if (!previewBytes) return;
-  const token = ++renderToken;
-
-  // getDocument takes ownership of the buffer it is given, so pass a copy and
-  // keep previewBytes intact for later repaints.
-  const pdf = await pdfjsLib.getDocument({ data: previewBytes.slice(0) }).promise;
-  const page = await pdf.getPage(1);
-
-  const unscaled = page.getViewport({ scale: 1 });
-  const box = viewer.getBoundingClientRect();
-  const fit = Math.min(box.width / unscaled.width, box.height / unscaled.height);
-  // Render at device resolution so the letter stays sharp on HiDPI screens.
-  const ratio = window.devicePixelRatio || 1;
-  const viewport = page.getViewport({ scale: fit * ratio });
-
-  if (token !== renderToken) return; // superseded while awaiting
-  pdfCanvas.width = Math.round(viewport.width);
-  pdfCanvas.height = Math.round(viewport.height);
-  pdfCanvas.style.width = `${Math.round(unscaled.width * fit)}px`;
-  pdfCanvas.style.height = `${Math.round(unscaled.height * fit)}px`;
-
-  await page.render({ canvasContext: pdfCanvas.getContext("2d"), viewport }).promise;
-}
-
 function showPreview() {
   if (!individualReady()) return;
   const doc = tryBuild();
-  if (!doc) return clearPreview();
-
-  previewBytes = doc.output("arraybuffer");
-  viewerEmpty.hidden = true;
-  pdfCanvas.hidden = false;
-  filenameLabel.textContent = fileNameFor(currentEmployee);
-
-  paintPreview().catch((error) => {
-    console.error(error);
-    clearPreview();
+  if (!doc) return individualPane.clear();
+  individualPane.show(doc, fileNameFor(currentEmployee), () => {
     setError(empError, empIdInput, "Could not render the preview. See the browser console for details.");
   });
 }
@@ -1160,7 +1177,7 @@ function refreshIndividual() {
 
   // Any edit makes an on-screen preview stale, so drop it rather than leave a
   // letter showing figures the inputs no longer agree with.
-  clearPreview();
+  individualPane.clear();
 }
 
 empIdInput.addEventListener("input", refreshIndividual);
@@ -1179,9 +1196,11 @@ downloadButton.addEventListener("click", () => {
 // Keep the preview crisp and correctly sized when the window changes.
 let resizeTimer = null;
 window.addEventListener("resize", () => {
-  if (!previewBytes) return;
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => paintPreview().catch(console.error), 150);
+  resizeTimer = setTimeout(() => {
+    individualPane.repaint();
+    bulkPane.repaint();
+  }, 150);
 });
 
 /* ------------------------------------------------------------------ *
@@ -1192,6 +1211,13 @@ const grid = el("grid");
 const bulkDate = el("bulkDate");
 const bulkSummary = el("bulkSummary");
 const downloadZipButton = el("downloadZip");
+const bulkPane = createPreviewPane("bulkViewer", "bulkCanvas", "bulkViewerEmpty", "bulkFilename");
+
+/* The row currently shown in the bulk preview, and what it said at the time. A
+ * preview that no longer matches its row would be quietly misleading, so it is
+ * dropped as soon as the row's values change. */
+let previewedRow = null;
+let previewedSignature = "";
 
 const STARTING_ROWS = 12;
 const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "amount", "date"];
@@ -1202,14 +1228,20 @@ function makeRow() {
     '<td class="rownum"></td>'
     + '<td><input type="text" data-col="0" autocomplete="off" spellcheck="false"></td>'
     + '<td><input type="text" data-col="1" autocomplete="off" inputmode="decimal"></td>'
-    + '<td><input type="text" data-col="2" autocomplete="off" placeholder="dd/mm/yyyy"></td>'
     + '<td class="status"></td>'
+    + '<td class="peek">'
+    +   '<button type="button" data-act="preview" disabled>Preview</button>'
+    +   '<button type="button" data-act="download" disabled>Download</button>'
+    + '</td>'
     + '<td class="drop"><button type="button" title="Remove row" aria-label="Remove row">&times;</button></td>';
   tr.querySelector(".drop button").addEventListener("click", () => {
+    if (previewedRow === tr) clearBulkPreview();
     tr.remove();
     ensureTrailingRow();
     refreshBulk();
   });
+  tr.querySelector('[data-act="preview"]').addEventListener("click", () => previewRow(tr));
+  tr.querySelector('[data-act="download"]').addEventListener("click", () => downloadRow(tr));
   for (const input of tr.querySelectorAll("input")) {
     input.addEventListener("input", refreshBulk);
     input.addEventListener("paste", onGridPaste);
@@ -1285,7 +1317,7 @@ function readBulkRows() {
   let errors = 0;
 
   for (const tr of Array.from(grid.rows)) {
-    const [idCell, amountCell, dateCell] = rowCells(tr);
+    const [idCell, amountCell] = rowCells(tr);
     const status = tr.querySelector(".status");
     tr.classList.remove("bad");
     status.className = "status";
@@ -1312,16 +1344,8 @@ function readBulkRows() {
       continue;
     }
 
-    let dateISO = fallback;
-    if (dateCell.value.trim()) {
-      dateISO = parseDateInput(dateCell.value);
-      if (!dateISO) {
-        fail(`"${dateCell.value.trim()}" is not a date the app understands.`);
-        continue;
-      }
-    }
-    if (!dateISO) {
-      fail("No date on this row and no letter date set.");
+    if (!fallback) {
+      fail("Set the letter date above.");
       continue;
     }
 
@@ -1333,9 +1357,9 @@ function readBulkRows() {
     }
     seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
 
-    status.textContent = `${employee.name} · INR ${formatINR(amount.value)} · ${formatDate(dateISO)}`;
+    status.textContent = `${employee.name} · INR ${formatINR(amount.value)}`;
     status.classList.add("ok");
-    jobs.push({ employee, amount: amount.value, dateISO });
+    jobs.push({ employee, amount: amount.value, dateISO: fallback, row: tr });
   }
 
   return { jobs, errors };
@@ -1343,12 +1367,67 @@ function readBulkRows() {
 
 let bulkBusy = false;
 
+/** Identifies what a row would produce, so a stale preview can be spotted. */
+function jobSignature(job) {
+  return `${job.employee.code}|${job.amount}|${job.dateISO}`;
+}
+
+function clearBulkPreview() {
+  if (previewedRow) previewedRow.classList.remove("previewing");
+  previewedRow = null;
+  previewedSignature = "";
+  bulkPane.clear();
+}
+
+function previewRow(tr) {
+  const job = readBulkRows().jobs.find((candidate) => candidate.row === tr);
+  if (!job) return; // the row is not valid, so there is nothing to draw
+
+  if (previewedRow) previewedRow.classList.remove("previewing");
+  previewedRow = tr;
+  previewedSignature = jobSignature(job);
+  tr.classList.add("previewing");
+
+  let doc;
+  try {
+    doc = buildLetter(job.employee, job.amount, job.dateISO);
+  } catch (error) {
+    console.error(error);
+    clearBulkPreview();
+    return;
+  }
+  bulkPane.show(doc, fileNameFor(job.employee), clearBulkPreview);
+}
+
+/** Saves just this row's letter, without touching the preview or the batch. */
+function downloadRow(tr) {
+  const job = readBulkRows().jobs.find((candidate) => candidate.row === tr);
+  if (!job) return;
+  try {
+    buildLetter(job.employee, job.amount, job.dateISO).save(fileNameFor(job.employee));
+  } catch (error) {
+    console.error(error);
+    bulkSummary.innerHTML = '<span class="bad">Could not build that letter. See the browser console for details.</span>';
+  }
+}
+
 function refreshBulk() {
   Array.from(grid.rows).forEach((tr, index) => {
     tr.querySelector(".rownum").textContent = index + 1;
   });
 
   const { jobs, errors } = readBulkRows();
+
+  const byRow = new Map(jobs.map((job) => [job.row, job]));
+  let previewStillValid = false;
+  for (const tr of Array.from(grid.rows)) {
+    const job = byRow.get(tr);
+    for (const button of tr.querySelectorAll(".peek button")) button.disabled = !job;
+    if (tr === previewedRow && job && jobSignature(job) === previewedSignature) {
+      previewStillValid = true;
+    }
+  }
+  if (previewedRow && !previewStillValid) clearBulkPreview();
 
   if (!jobs.length && !errors) {
     bulkSummary.textContent = "Paste or type rows above to get started.";
@@ -1364,14 +1443,15 @@ function refreshBulk() {
   downloadZipButton.disabled = bulkBusy || errors > 0 || jobs.length === 0;
   if (!bulkBusy) {
     downloadZipButton.textContent = jobs.length && !errors
-      ? `Download ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
-      : "Download Letters (Zip)";
+      ? `Download all ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
+      : "Download all Letters (Zip)";
   }
 }
 
 el("addRows").addEventListener("click", () => { addRows(10); refreshBulk(); });
 
 el("clearRows").addEventListener("click", () => {
+  clearBulkPreview();
   grid.textContent = "";
   addRows(STARTING_ROWS);
   refreshBulk();
@@ -1425,7 +1505,7 @@ function setMode(mode) {
   el("panelBulk").hidden = individual;
   // The preview is laid out against the viewer's measured size, which is zero
   // while the panel is hidden, so redraw it once the panel is back on screen.
-  if (individual && previewBytes) paintPreview().catch(console.error);
+  (individual ? individualPane : bulkPane).repaint();
 }
 
 tabIndividual.addEventListener("click", () => setMode("individual"));

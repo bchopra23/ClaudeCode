@@ -25,23 +25,25 @@ One letter at a time, with an on-screen preview.
 
 A whole payout run in one zip.
 
-1. Set the letter date for the batch.
+1. Set the letter date. It applies to every letter in the batch.
 2. Copy the Employee ID and Variable Pay columns out of your spreadsheet and
    paste them anywhere in the table. Rows are added as needed and a pasted header
    row is ignored, so selecting the headings too is harmless.
-3. Each row shows the resolved employee, amount and date, or what is wrong with it.
-4. **Download Letters (Zip)** produces `Variable_Pay_Letters_<date>.zip` containing
-   one `Variable_Pay_Letter_<EmployeeID>.pdf` per row.
+3. Each row shows the resolved employee and amount, or what is wrong with it.
+4. **Preview** on any valid row draws that letter in the pane beside the table,
+   and **Download** saves that one letter on its own.
+5. **Download all Letters (Zip)** produces `Variable_Pay_Letters_<date>.zip`
+   containing one `Variable_Pay_Letter_<EmployeeID>.pdf` per row.
 
-The per-row **Date** column is optional; rows left blank use the batch date. It
-accepts `15/04/2026`, `2026-04-15` and `15 Apr 2026`, and reads day-first as
-written in India, so `03/04/2026` is 3 April.
+A preview is tied to the row that produced it. Change that row's ID or amount, or
+the batch date, and the preview is dropped rather than left showing figures the
+table no longer agrees with; editing any other row leaves it alone.
 
-The download stays disabled until every row is valid. A batch is refused rather
+The zip download stays disabled until every row is valid. A batch is refused rather
 than quietly built minus the broken rows — silently dropping someone from a payout
 run is worse than making the typo obvious first. Rows are flagged for an unknown
-ID, a non-numeric or non-positive amount, an unparseable date, or an employee
-listed twice (two letters for one person would collide inside the zip).
+ID, a non-numeric or non-positive amount, or an employee listed twice (two
+letters for one person would collide inside the zip).
 
 Reckon on roughly a quarter of a megabyte per letter and about a tenth of a second
 to build each one: 200 letters is a 50 MB zip that takes around 20 seconds. Very
