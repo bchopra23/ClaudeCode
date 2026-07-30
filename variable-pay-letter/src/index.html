@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Euler Variable Pay Letter Generator</title>
+<style>
+  :root {
+    --euler-blue: #95d2f1;
+    --euler-blue-dark: #2b7fae;
+    --ink: #16202a;
+    --muted: #63798a;
+    --line: #dde5ec;
+    --panel: #ffffff;
+    --bg: #eef3f7;
+    --danger: #b3261e;
+    --danger-bg: #fdecea;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.5 "Segoe UI", Roboto, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    background: var(--panel);
+    border-bottom: 3px solid var(--euler-blue);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  header .mark {
+    height: 26px;
+    width: auto;
+    flex: none;
+  }
+
+  header .divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--line);
+    margin: 0 4px;
+  }
+
+  header h1 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: .01em;
+  }
+
+  header p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 26px 28px 48px;
+    display: grid;
+    grid-template-columns: minmax(340px, 430px) 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  .card + .card { margin-top: 20px; }
+
+  .card h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--muted);
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .field + .field { margin-top: 18px; }
+
+  .hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 11px 13px;
+    font: inherit;
+    border: 1px solid #c6d2dc;
+    border-radius: 7px;
+    background: #fff;
+    color: inherit;
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+    border-color: var(--euler-blue-dark);
+    box-shadow: 0 0 0 3px rgba(43, 127, 174, .16);
+  }
+
+  input.invalid { border-color: var(--danger); }
+
+  .error {
+    display: none;
+    margin-top: 8px;
+    padding: 9px 12px;
+    background: var(--danger-bg);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 5px 5px 0;
+    color: var(--danger);
+    font-size: 13px;
+  }
+
+  .error.show { display: block; }
+
+  #details[hidden] { display: none; }
+
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    row-gap: 9px;
+    column-gap: 12px;
+    font-size: 14px;
+  }
+
+  dt { color: var(--muted); }
+  dd { margin: 0; font-weight: 600; }
+
+  .amount-row {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .amount-row .figure {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+
+  .amount-row .words {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .placeholder {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .actions {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button {
+    width: 100%;
+    padding: 13px 18px;
+    font: inherit;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background: var(--euler-blue-dark);
+  }
+
+  .btn-primary:hover:not(:disabled) { background: #24709b; }
+
+  .btn-secondary {
+    color: var(--euler-blue-dark);
+    background: #fff;
+    border-color: #a9c7da;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: #f2f9fd;
+    border-color: var(--euler-blue-dark);
+  }
+
+  button:disabled {
+    color: #8497a5;
+    background: #e7edf2;
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .preview-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .preview-head h2 { margin: 0; }
+
+  .preview-head .filename {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  .viewer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 210 / 297;
+    background: #dbe3ea;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .viewer canvas {
+    display: block;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(22, 32, 42, .22);
+  }
+
+  .viewer .empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* These two carry display rules that would otherwise beat the UA stylesheet's
+     [hidden] { display: none }, leaving the placeholder painted over the letter. */
+  .viewer canvas[hidden],
+  .viewer .empty[hidden] { display: none; }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding-bottom: 28px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="mark" src="__LOGO__" alt="Euler">
+  <span class="divider"></span>
+  <div>
+    <h1>Variable Pay Letter Generator</h1>
+    <p>Euler Motors Pvt. Ltd. &middot; Human Resources</p>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+      <h2>Letter inputs</h2>
+
+      <div class="field">
+        <label for="empId">Employee ID</label>
+        <input type="text" id="empId" placeholder="e.g. EUR1796" autocomplete="off" spellcheck="false">
+        <div class="error" id="empError"></div>
+      </div>
+
+      <div class="field">
+        <label for="amount">Total Variable Pay <span class="hint">in INR</span></label>
+        <input type="text" id="amount" placeholder="e.g. 250000" autocomplete="off" inputmode="decimal">
+        <div class="error" id="amountError"></div>
+      </div>
+
+      <div class="actions">
+        <button id="preview" class="btn-primary" disabled>Preview Letter</button>
+        <button id="download" class="btn-secondary" disabled>Download Letter PDF</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Employee details</h2>
+      <p class="placeholder" id="detailsPlaceholder">Enter an Employee ID to pull details from the master database.</p>
+      <div id="details" hidden>
+        <dl>
+          <dt>Employee ID</dt><dd id="dCode"></dd>
+          <dt>Name</dt><dd id="dName"></dd>
+          <dt>Designation</dt><dd id="dDesignation"></dd>
+          <dt>Department</dt><dd id="dDepartment"></dd>
+          <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
+          <dt>Date of Joining</dt><dd id="dDoj"></dd>
+          <dt>Location</dt><dd id="dLocation"></dd>
+        </dl>
+        <div class="amount-row" id="amountRow" hidden>
+          <div class="figure" id="dAmount"></div>
+          <div class="words" id="dAmountWords"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="preview-head">
+      <h2>Letter preview</h2>
+      <span class="filename" id="filename"></span>
+    </div>
+    <div class="viewer" id="viewer">
+      <canvas id="pdfCanvas" aria-label="Variable pay letter preview" hidden></canvas>
+      <div class="empty" id="viewerEmpty">Enter an Employee ID and variable pay amount, then choose Preview Letter.</div>
+    </div>
+  </section>
+</main>
+
+<footer id="footerNote"></footer>
+
+<!--BUILD:STRIP-->
+<p style="margin:0 0 24px;text-align:center;color:#b3261e;font-size:13px">
+  This is the build source and will not run on its own. Run <code>python tools/build.py</code>
+  and open <code>dist/Variable_Pay_Letter_Generator.html</code>.
+</p>
+<!--/BUILD:STRIP-->
+
+<script>/*__PDFJS_WORKER__*/</script>
+<script>/*__PDFJS__*/</script>
+<script>/*__JSPDF__*/</script>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ *
+ * Embedded assets. build.py replaces each placeholder with real data. *
+ * ------------------------------------------------------------------ */
+const EMPLOYEES = "__EMPLOYEES__";
+const FONTS = "__FONTS__";
+const LETTERHEAD = "__LETTERHEAD__";
+const SIGNATURE = "__SIGNATURE__";
+
+const SIGNATORY = { name: "Priyanka Singh", title: "Vice President – Human Resources" };
+const COMPANY = "Euler Motors Pvt. Ltd.";
+const COMPANY_SHORT = "Euler Motors";
+const FINANCIAL_YEAR = "2025-26";
+
+/* ------------------------------------------------------------------ *
+ * Page geometry, in millimetres on A4.                                *
+ *                                                                     *
+ * The artwork is assets/letterhead_a4.jpg, rebuilt to A4 proportions by *
+ * tools/make_a4_letterhead.py, and is laid down full bleed so the blue  *
+ * border runs to all four page edges.                                   *
+ * ------------------------------------------------------------------ */
+const PT = 25.4 / 72;
+const ART = { x: 0, y: 0, w: 210, h: 297 };
+
+/* Reported by tools/make_a4_letterhead.py for the artwork above. The white
+ * panel spans x 9.82-199.16mm. The blue header band cuts into it from the right
+ * down to y 26.58mm, and the blue footer band cuts in from the left above
+ * y 270.42mm, so text must stay between those two to clear both notches. */
+const SAFE = { top: 26.58, bottom: 270.42 };
+const CONTENT_TOP = 44;
+const MARGIN = { left: 24, right: 185 };
+const COLUMN = MARGIN.right - MARGIN.left;
+const LABEL_WIDTH = 38;
+
+const COLORS = {
+  ink: [22, 32, 42],
+  muted: [90, 116, 136],
+  rule: [214, 226, 235],
+  boxFill: [242, 250, 254],
+  accent: [149, 210, 241],
+};
+
+/* ------------------------------------------------------------------ *
+ * Formatting helpers                                                  *
+ * ------------------------------------------------------------------ */
+
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+
+/** "2018-07-01" -> "01 July 2018". Returns "" for anything unparseable. */
+function formatDate(iso) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  if (!match) return "";
+  const month = MONTHS[Number(match[2]) - 1];
+  return month ? `${match[3]} ${month} ${match[1]}` : "";
+}
+
+function today() {
+  const now = new Date();
+  return `${String(now.getDate()).padStart(2, "0")} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+/** Indian digit grouping: 2500000 -> "25,00,000". */
+function formatINR(value) {
+  const [whole, fraction] = value.toFixed(2).split(".");
+  const last3 = whole.slice(-3);
+  const rest = whole.slice(0, -3);
+  const grouped = rest
+    ? rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + last3
+    : last3;
+  return fraction === "00" ? grouped : `${grouped}.${fraction}`;
+}
+
+const ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+  "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+  "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+const TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy",
+  "Eighty", "Ninety"];
+
+function underHundred(n) {
+  if (n < 20) return ONES[n];
+  const tens = TENS[Math.floor(n / 10)];
+  return n % 10 ? `${tens} ${ONES[n % 10]}` : tens;
+}
+
+/** Indian numbering: crore / lakh / thousand / hundred. */
+function wordsForInteger(n) {
+  if (n === 0) return "Zero";
+  const parts = [];
+  const crore = Math.floor(n / 1e7); n %= 1e7;
+  const lakh = Math.floor(n / 1e5); n %= 1e5;
+  const thousand = Math.floor(n / 1e3); n %= 1e3;
+  const hundred = Math.floor(n / 100); n %= 100;
+
+  // Recurse on crores so values above 99 crore still read correctly.
+  if (crore) parts.push(`${wordsForInteger(crore)} Crore`);
+  if (lakh) parts.push(`${underHundred(lakh)} Lakh`);
+  if (thousand) parts.push(`${underHundred(thousand)} Thousand`);
+  if (hundred) parts.push(`${ONES[hundred]} Hundred`);
+  if (n) parts.push(`${parts.length ? "and " : ""}${underHundred(n)}`);
+  return parts.join(" ");
+}
+
+/**
+ * "Rupees Two Lakh Fifty Thousand Only", with paise when present.
+ * Paise are written as "and Paise Fifty" rather than "and Fifty Paise" so the
+ * figure cannot be misread as part of the rupee amount that precedes it.
+ */
+function amountInWords(value) {
+  const rupees = Math.floor(value + 1e-9);
+  const paise = Math.round((value - rupees) * 100);
+  let text = `Rupees ${wordsForInteger(rupees)}`;
+  if (paise) text += ` and Paise ${underHundred(paise)}`;
+  return `${text} Only`;
+}
+
+/* ------------------------------------------------------------------ *
+ * Employee lookup                                                     *
+ * ------------------------------------------------------------------ */
+
+const BY_CODE = new Map(EMPLOYEES.map((employee) => [employee.code, employee]));
+
+/**
+ * Accepts "EUR1796", "eur1796", " EUR1796 " and bare "1796", so a number read
+ * off a spreadsheet still resolves without the user retyping the prefix.
+ */
+function findEmployee(input) {
+  const cleaned = String(input || "").trim().toUpperCase().replace(/\s+/g, "");
+  if (!cleaned) return null;
+  if (BY_CODE.has(cleaned)) return BY_CODE.get(cleaned);
+  if (/^\d+$/.test(cleaned)) {
+    return BY_CODE.get("EUR" + cleaned.padStart(4, "0")) || null;
+  }
+  return null;
+}
+
+/* ------------------------------------------------------------------ *
+ * PDF generation                                                      *
+ * ------------------------------------------------------------------ */
+
+const { jsPDF } = window.jspdf;
+
+function newDocument() {
+  const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  doc.addFileToVFS("Poppins-Regular.ttf", FONTS.normal);
+  doc.addFont("Poppins-Regular.ttf", "Poppins", "normal");
+  doc.addFileToVFS("Poppins-SemiBold.ttf", FONTS.semibold);
+  doc.addFont("Poppins-SemiBold.ttf", "Poppins", "semibold");
+  doc.addFileToVFS("Poppins-Bold.ttf", FONTS.bold);
+  doc.addFont("Poppins-Bold.ttf", "Poppins", "bold");
+  return doc;
+}
+
+/** Millimetre leading for a given point size. */
+function leading(points, factor = 1.42) {
+  return points * factor * PT;
+}
+
+function buildLetter(employee, amount) {
+  const doc = newDocument();
+  doc.addImage(LETTERHEAD, "JPEG", ART.x, ART.y, ART.w, ART.h, undefined, "FAST");
+
+  let y = CONTENT_TOP;
+
+  const use = (style, points, color = COLORS.ink) => {
+    doc.setFont("Poppins", style);
+    doc.setFontSize(points);
+    doc.setTextColor(color[0], color[1], color[2]);
+  };
+
+  // --- Date -----------------------------------------------------------
+  use("normal", 9.5, COLORS.muted);
+  doc.text(`Date: ${today()}`, MARGIN.left, y);
+  y += 8;
+
+  // --- Employee detail block -----------------------------------------
+  const rows = [
+    ["Employee ID", employee.code],
+    ["Name", employee.name],
+    ["Designation", employee.designation],
+    ["Department", employee.department],
+    ["Sub-department", employee.subDepartment],
+    ["Date of Joining", formatDate(employee.doj)],
+    ["Location", employee.location],
+  ].filter(([, value]) => value);
+
+  const rowStep = leading(9.5, 1.42);
+  for (const [label, value] of rows) {
+    use("normal", 9.5, COLORS.muted);
+    doc.text(label, MARGIN.left, y);
+    doc.text(":", MARGIN.left + LABEL_WIDTH - 3, y);
+    use("semibold", 9.5);
+    // Wrap rather than overrun: the longest designation on file fits on one
+    // line, but a longer one added later must not collide with the next row.
+    const valueLines = doc.splitTextToSize(value, COLUMN - LABEL_WIDTH);
+    for (const line of valueLines) {
+      doc.text(line, MARGIN.left + LABEL_WIDTH, y);
+      y += rowStep;
+    }
+  }
+
+  y += 1.5;
+  doc.setDrawColor(COLORS.rule[0], COLORS.rule[1], COLORS.rule[2]);
+  doc.setLineWidth(0.3);
+  doc.line(MARGIN.left, y, MARGIN.right, y);
+  y += 7.5;
+
+  // --- Salutation and subject ----------------------------------------
+  use("normal", 10.5);
+  doc.text(`Dear ${employee.name},`, MARGIN.left, y);
+  y += 8;
+
+  use("semibold", 10.5);
+  doc.text(`Subject: Variable Pay for FY ${FINANCIAL_YEAR}`, MARGIN.left, y);
+  y += 9;
+
+  use("bold", 13, [43, 127, 174]);
+  doc.text("Congratulations!", MARGIN.left, y);
+  y += 7.5;
+
+  // --- Body -----------------------------------------------------------
+  const paragraph = (text, gapAfter = 4.6) => {
+    use("normal", 10);
+    const step = leading(10);
+    for (const line of doc.splitTextToSize(text, COLUMN)) {
+      doc.text(line, MARGIN.left, y);
+      y += step;
+    }
+    y += gapAfter;
+  };
+
+  paragraph(
+    `We are pleased to inform you that, in recognition of your performance and `
+    + `contribution during the financial year ${FINANCIAL_YEAR}, you have been `
+    + `awarded a variable pay as set out below.`
+  );
+
+  y = drawAmountBox(doc, y, amount);
+
+  paragraph(
+    "Your ownership, consistency and commitment have contributed meaningfully to "
+    + `${COMPANY_SHORT}' progress through the year. We look forward to your continued `
+    + "contribution as we build the future of commercial electric mobility."
+  );
+
+  paragraph(
+    "This letter and its contents are strictly confidential and are intended solely "
+    + "for you. You are requested not to disclose the same to any other person."
+  );
+
+  paragraph(
+    "Once again, congratulations, and thank you for being an important part of the "
+    + `${COMPANY_SHORT} journey.`
+  );
+
+  // --- Signature block -------------------------------------------------
+  use("normal", 10);
+  doc.text("Warm regards,", MARGIN.left, y);
+  y += leading(10);
+  use("semibold", 10);
+  doc.text(`For ${COMPANY}`, MARGIN.left, y);
+  y += 4;
+
+  const signatureWidth = 40;
+  const signatureHeight = signatureWidth * (269 / 536); // intrinsic aspect of the asset
+  doc.addImage(SIGNATURE, "PNG", MARGIN.left - 1.5, y, signatureWidth, signatureHeight);
+  y += signatureHeight + 3.5;
+
+  use("semibold", 10);
+  doc.text(SIGNATORY.name, MARGIN.left, y);
+  y += leading(9.5);
+  use("normal", 9.5, COLORS.muted);
+  doc.text(SIGNATORY.title, MARGIN.left, y);
+
+  if (y > SAFE.bottom) {
+    console.warn(`Letter content ends at ${y.toFixed(1)}mm, past the safe area at ${SAFE.bottom}mm.`);
+  }
+  return doc;
+}
+
+/** The highlighted variable pay callout. Returns the cursor below it. */
+function drawAmountBox(doc, y, amount) {
+  const height = 23;
+  const radius = 2;
+
+  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
+  doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
+  doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
+
+  const textX = MARGIN.left + 8;
+
+  doc.setFont("Poppins", "semibold");
+  doc.setFontSize(7.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.setCharSpace(0.4);
+  doc.text("TOTAL VARIABLE PAY", textX, y + 7);
+  doc.setCharSpace(0);
+
+  doc.setFont("Poppins", "bold");
+  doc.setFontSize(15);
+  doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
+  doc.text(`INR ${formatINR(amount)}`, textX, y + 14.4);
+
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.text(`(${amountInWords(amount)})`, textX, y + 19.8, {
+    maxWidth: COLUMN - 16,
+  });
+
+  return y + height + 6;
+}
+
+function fileNameFor(employee) {
+  return `Variable_Pay_Letter_${employee.code}.pdf`;
+}
+
+/* ------------------------------------------------------------------ *
+ * UI wiring                                                           *
+ * ------------------------------------------------------------------ */
+
+const el = (id) => document.getElementById(id);
+const empIdInput = el("empId");
+const amountInput = el("amount");
+const empError = el("empError");
+const amountError = el("amountError");
+const detailsBox = el("details");
+const detailsPlaceholder = el("detailsPlaceholder");
+const amountRow = el("amountRow");
+const previewButton = el("preview");
+const downloadButton = el("download");
+const viewer = el("viewer");
+const pdfCanvas = el("pdfCanvas");
+const viewerEmpty = el("viewerEmpty");
+const filenameLabel = el("filename");
+
+const MAX_AMOUNT = 1e9; // A billion rupees; anything larger is a typo, not a bonus.
+
+let currentEmployee = null;
+let currentAmount = null;
+let previewBytes = null;
+let renderToken = 0;
+
+function setError(node, input, message) {
+  node.textContent = message || "";
+  node.classList.toggle("show", Boolean(message));
+  input.classList.toggle("invalid", Boolean(message));
+}
+
+function readEmployee() {
+  const raw = empIdInput.value.trim();
+  if (!raw) {
+    setError(empError, empIdInput, "");
+    return null;
+  }
+  const employee = findEmployee(raw);
+  setError(empError, empIdInput, employee ? "" : `No employee found with ID "${raw}".`);
+  return employee;
+}
+
+function readAmount() {
+  const raw = amountInput.value.trim().replace(/[,\s]/g, "").replace(/^(?:INR|RS\.?|₹)/i, "");
+  if (!raw) {
+    setError(amountError, amountInput, "");
+    return null;
+  }
+  const value = Number(raw);
+  if (!Number.isFinite(value) || !/^\d*\.?\d*$/.test(raw)) {
+    setError(amountError, amountInput, "Enter the amount in numbers, for example 250000.");
+    return null;
+  }
+  if (value <= 0) {
+    setError(amountError, amountInput, "Variable pay must be greater than zero.");
+    return null;
+  }
+  if (value > MAX_AMOUNT) {
+    setError(amountError, amountInput, "That amount looks too large. Please check the figure.");
+    return null;
+  }
+  setError(amountError, amountInput, "");
+  return Math.round(value * 100) / 100;
+}
+
+function paintDetails(employee, amount) {
+  if (!employee) {
+    detailsBox.hidden = true;
+    detailsPlaceholder.hidden = false;
+    return;
+  }
+  detailsBox.hidden = false;
+  detailsPlaceholder.hidden = true;
+
+  el("dCode").textContent = employee.code;
+  el("dName").textContent = employee.name;
+  el("dDesignation").textContent = employee.designation || "—";
+  el("dDepartment").textContent = employee.department || "—";
+  el("dSubDepartment").textContent = employee.subDepartment || "—";
+  el("dDoj").textContent = formatDate(employee.doj) || "—";
+  el("dLocation").textContent = employee.location || "—";
+
+  amountRow.hidden = amount === null;
+  if (amount !== null) {
+    el("dAmount").textContent = `INR ${formatINR(amount)}`;
+    el("dAmountWords").textContent = amountInWords(amount);
+  }
+}
+
+function clearPreview() {
+  previewBytes = null;
+  renderToken += 1; // abandon any render still in flight
+  pdfCanvas.hidden = true;
+  viewerEmpty.hidden = false;
+  filenameLabel.textContent = "";
+}
+
+/** Builds the letter, reporting failure against the Employee ID field. */
+function tryBuild() {
+  try {
+    return buildLetter(currentEmployee, currentAmount);
+  } catch (error) {
+    console.error(error);
+    setError(empError, empIdInput, "Could not build the letter. See the browser console for details.");
+    return null;
+  }
+}
+
+/**
+ * Draws page 1 of the previewed PDF into the canvas, scaled to fit the viewer.
+ *
+ * The letter is rendered with PDF.js rather than handed to the browser's own PDF
+ * viewer in an iframe: that viewer ignores the view/zoom fragment hints often
+ * enough to open the letter at some arbitrary zoom, scrolled away from the page.
+ */
+async function paintPreview() {
+  if (!previewBytes) return;
+  const token = ++renderToken;
+
+  // getDocument takes ownership of the buffer it is given, so pass a copy and
+  // keep previewBytes intact for later repaints.
+  const pdf = await pdfjsLib.getDocument({ data: previewBytes.slice(0) }).promise;
+  const page = await pdf.getPage(1);
+
+  const unscaled = page.getViewport({ scale: 1 });
+  const box = viewer.getBoundingClientRect();
+  const fit = Math.min(box.width / unscaled.width, box.height / unscaled.height);
+  // Render at device resolution so the letter stays sharp on HiDPI screens.
+  const ratio = window.devicePixelRatio || 1;
+  const viewport = page.getViewport({ scale: fit * ratio });
+
+  if (token !== renderToken) return; // superseded while awaiting
+  pdfCanvas.width = Math.round(viewport.width);
+  pdfCanvas.height = Math.round(viewport.height);
+  pdfCanvas.style.width = `${Math.round(unscaled.width * fit)}px`;
+  pdfCanvas.style.height = `${Math.round(unscaled.height * fit)}px`;
+
+  await page.render({ canvasContext: pdfCanvas.getContext("2d"), viewport }).promise;
+}
+
+function showPreview() {
+  if (!currentEmployee || currentAmount === null) return;
+  const doc = tryBuild();
+  if (!doc) return clearPreview();
+
+  previewBytes = doc.output("arraybuffer");
+  viewerEmpty.hidden = true;
+  pdfCanvas.hidden = false;
+  filenameLabel.textContent = fileNameFor(currentEmployee);
+
+  paintPreview().catch((error) => {
+    console.error(error);
+    clearPreview();
+    setError(empError, empIdInput, "Could not render the preview. See the browser console for details.");
+  });
+}
+
+function refresh() {
+  currentEmployee = readEmployee();
+  currentAmount = readAmount();
+  paintDetails(currentEmployee, currentAmount);
+
+  const ready = Boolean(currentEmployee) && currentAmount !== null;
+  previewButton.disabled = !ready;
+  downloadButton.disabled = !ready;
+
+  // Any edit makes an on-screen preview stale, so drop it rather than leave a
+  // letter showing figures the inputs no longer agree with.
+  clearPreview();
+}
+
+empIdInput.addEventListener("input", refresh);
+amountInput.addEventListener("input", refresh);
+
+previewButton.addEventListener("click", showPreview);
+
+downloadButton.addEventListener("click", () => {
+  if (!currentEmployee || currentAmount === null) return;
+  // Build a fresh document: a jsPDF instance is spent once its output is taken.
+  const doc = tryBuild();
+  if (doc) doc.save(fileNameFor(currentEmployee));
+});
+
+// Keep the preview crisp and correctly sized when the window changes.
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  if (!previewBytes) return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => paintPreview().catch(console.error), 150);
+});
+
+el("footerNote").textContent =
+  `${EMPLOYEES.length.toLocaleString("en-IN")} active employees loaded · `
+  + "runs entirely offline · no data leaves this device";
+
+empIdInput.focus();
+</script>
+</body>
+</html>
