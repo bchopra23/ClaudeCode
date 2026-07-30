@@ -24,11 +24,17 @@ from pathlib import Path
 import pypdf
 from PIL import Image
 
+from pngutil import save_flat_colour_png
+
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 
 LETTERHEAD_PAGE = 0
 SIGNATURE_PAGE = 1
+
+# The signature prints 40mm wide, so 480px is a shade over 300dpi.
+SIGNATURE_MAX_WIDTH = 480
+SIGNATURE_ALPHA_LEVELS = 64
 
 
 def only_image(page, label):
@@ -58,10 +64,12 @@ def main(source):
     alpha = alpha.crop(box)
 
     # Ink is black; alpha carries the stroke coverage and its antialiasing.
-    black = Image.new("L", alpha.size, 0)
     target = ASSETS / "signature.png"
-    Image.merge("RGBA", (black, black, black, alpha)).save(target, optimize=True)
-    print(f"Wrote {target.relative_to(ROOT)} ({alpha.width} x {alpha.height}px)")
+    alpha = save_flat_colour_png(alpha, (0, 0, 0), target,
+                                 max_width=SIGNATURE_MAX_WIDTH,
+                                 levels=SIGNATURE_ALPHA_LEVELS)
+    print(f"Wrote {target.relative_to(ROOT)} ({alpha.width} x {alpha.height}px, "
+          f"{target.stat().st_size:,} bytes)")
 
 
 if __name__ == "__main__":

@@ -8,3 +8,5 @@ android/app/src/main/assets/
 *.apk
 *.aab
 .DS_Store
+__pycache__/
+*.pyc

@@ -15,6 +15,7 @@
     --bg: #eef3f7;
     --danger: #b3261e;
     --danger-bg: #fdecea;
+    --ok: #1c7c46;
   }
 
   * { box-sizing: border-box; }
@@ -30,17 +31,18 @@
   header {
     background: var(--panel);
     border-bottom: 3px solid var(--euler-blue);
-    padding: 18px 28px;
+    padding: 18px 28px 0;
+  }
+
+  .header-top {
     display: flex;
     align-items: center;
     gap: 14px;
+    max-width: 1240px;
+    margin: 0 auto;
   }
 
-  header .mark {
-    height: 26px;
-    width: auto;
-    flex: none;
-  }
+  header .mark { height: 26px; width: auto; flex: none; }
 
   header .divider {
     width: 1px;
@@ -56,16 +58,41 @@
     letter-spacing: .01em;
   }
 
-  header p {
-    margin: 2px 0 0;
-    font-size: 13px;
-    color: var(--muted);
+  header p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+
+  /* Mode switch */
+  .modes {
+    max-width: 1240px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 4px;
   }
 
-  main {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 26px 28px 48px;
+  .modes button {
+    appearance: none;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--muted);
+    padding: 10px 18px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .modes button:hover { color: var(--ink); background: #f4f8fb; }
+
+  .modes button[aria-selected="true"] {
+    color: var(--euler-blue-dark);
+    border-bottom-color: var(--euler-blue-dark);
+  }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 26px 28px 48px; }
+
+  .split {
     display: grid;
     grid-template-columns: minmax(340px, 430px) 1fr;
     gap: 26px;
@@ -73,7 +100,7 @@
   }
 
   @media (max-width: 900px) {
-    main { grid-template-columns: 1fr; }
+    .split { grid-template-columns: 1fr; }
   }
 
   .card {
@@ -94,23 +121,13 @@
     font-weight: 600;
   }
 
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
 
   .field + .field { margin-top: 18px; }
 
-  .hint {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 400;
-    margin-left: 6px;
-  }
+  .hint { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; }
 
-  input[type="text"] {
+  input[type="text"], input[type="date"] {
     width: 100%;
     padding: 11px 13px;
     font: inherit;
@@ -120,7 +137,7 @@
     color: inherit;
   }
 
-  input[type="text"]:focus {
+  input:focus {
     outline: none;
     border-color: var(--euler-blue-dark);
     box-shadow: 0 0 0 3px rgba(43, 127, 174, .16);
@@ -141,8 +158,6 @@
 
   .error.show { display: block; }
 
-  #details[hidden] { display: none; }
-
   dl {
     margin: 0;
     display: grid;
@@ -161,32 +176,14 @@
     border-top: 1px solid var(--line);
   }
 
-  .amount-row .figure {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -.01em;
-  }
+  .amount-row .figure { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+  .amount-row .words { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
-  .amount-row .words {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
+  .placeholder { color: var(--muted); font-size: 14px; margin: 0; }
 
-  .placeholder {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0;
-  }
+  .actions { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
 
-  .actions {
-    margin-top: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  button {
+  button.action {
     width: 100%;
     padding: 13px 18px;
     font: inherit;
@@ -196,25 +193,13 @@
     border: 1px solid transparent;
   }
 
-  .btn-primary {
-    color: #fff;
-    background: var(--euler-blue-dark);
-  }
-
+  .btn-primary { color: #fff; background: var(--euler-blue-dark); }
   .btn-primary:hover:not(:disabled) { background: #24709b; }
 
-  .btn-secondary {
-    color: var(--euler-blue-dark);
-    background: #fff;
-    border-color: #a9c7da;
-  }
+  .btn-secondary { color: var(--euler-blue-dark); background: #fff; border-color: #a9c7da; }
+  .btn-secondary:hover:not(:disabled) { background: #f2f9fd; border-color: var(--euler-blue-dark); }
 
-  .btn-secondary:hover:not(:disabled) {
-    background: #f2f9fd;
-    border-color: var(--euler-blue-dark);
-  }
-
-  button:disabled {
+  button.action:disabled {
     color: #8497a5;
     background: #e7edf2;
     border-color: transparent;
@@ -250,11 +235,7 @@
     justify-content: center;
   }
 
-  .viewer canvas {
-    display: block;
-    background: #fff;
-    box-shadow: 0 1px 6px rgba(22, 32, 42, .22);
-  }
+  .viewer canvas { display: block; background: #fff; box-shadow: 0 1px 6px rgba(22, 32, 42, .22); }
 
   .viewer .empty {
     position: absolute;
@@ -273,79 +254,280 @@
   .viewer canvas[hidden],
   .viewer .empty[hidden] { display: none; }
 
-  footer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-    padding-bottom: 28px;
+  /* ---- Bulk mode ---- */
+
+  .bulk-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 18px;
   }
+
+  .bulk-toolbar .field { margin: 0; min-width: 190px; }
+
+  .bulk-toolbar .spacer { flex: 1; }
+
+  button.minor {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--euler-blue-dark);
+    background: #fff;
+    border: 1px solid #c6d2dc;
+    border-radius: 7px;
+    padding: 9px 14px;
+    cursor: pointer;
+  }
+
+  button.minor:hover { background: #f2f9fd; border-color: var(--euler-blue-dark); }
+
+  .grid-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: auto;
+    max-height: 56vh;
+  }
+
+  table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 14px; }
+
+  table.grid th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f4f8fb;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  table.grid td { border-bottom: 1px solid #eef2f6; padding: 0; }
+
+  table.grid tr:last-child td { border-bottom: 0; }
+
+  table.grid .rownum {
+    width: 44px;
+    text-align: right;
+    padding: 0 10px;
+    color: #9bacba;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    background: #fafcfd;
+  }
+
+  table.grid input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 10px 12px;
+    font: inherit;
+    color: inherit;
+    border-radius: 0;
+  }
+
+  table.grid input:focus {
+    outline: 2px solid var(--euler-blue-dark);
+    outline-offset: -2px;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  table.grid td.status {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  td.status.ok { color: var(--ok); }
+  td.status.bad { color: var(--danger); }
+
+  tr.bad input { background: #fef7f6; }
+
+  .col-id { width: 20%; }
+  .col-amount { width: 20%; }
+  .col-date { width: 20%; }
+
+  .drop {
+    width: 40px;
+    text-align: center;
+  }
+
+  .drop button {
+    border: 0;
+    background: none;
+    color: #b3becb;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 5px;
+  }
+
+  .drop button:hover { color: var(--danger); background: var(--danger-bg); }
+
+  .bulk-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .summary { font-size: 14px; color: var(--muted); }
+  .summary strong { color: var(--ink); }
+  .summary .bad { color: var(--danger); }
+
+  .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
+
+  .paste-tip {
+    margin: 0 0 16px;
+    padding: 11px 14px;
+    background: #f2f9fd;
+    border: 1px solid #d7e9f5;
+    border-radius: 7px;
+    font-size: 13px;
+    color: #33566b;
+  }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding-bottom: 28px; }
+
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
 
 <header>
-  <img class="mark" src="__LOGO__" alt="Euler">
-  <span class="divider"></span>
-  <div>
-    <h1>Variable Pay Letter Generator</h1>
-    <p>Euler Motors Pvt. Ltd. &middot; Human Resources</p>
+  <div class="header-top">
+    <img class="mark" src="__LOGO__" alt="Euler">
+    <span class="divider"></span>
+    <div>
+      <h1>Variable Pay Letter Generator</h1>
+      <p>Euler Motors Pvt. Ltd. &middot; Human Resources</p>
+    </div>
+  </div>
+  <div class="modes" role="tablist">
+    <button id="tabIndividual" role="tab" aria-selected="true">Individual</button>
+    <button id="tabBulk" role="tab" aria-selected="false">Bulk Letters</button>
   </div>
 </header>
 
 <main>
-  <section>
-    <div class="card">
-      <h2>Letter inputs</h2>
+  <!-- ---------------- Individual ---------------- -->
+  <div class="split" id="panelIndividual" role="tabpanel">
+    <section>
+      <div class="card">
+        <h2>Letter inputs</h2>
 
-      <div class="field">
-        <label for="empId">Employee ID</label>
-        <input type="text" id="empId" placeholder="e.g. EUR1796" autocomplete="off" spellcheck="false">
-        <div class="error" id="empError"></div>
-      </div>
+        <div class="field">
+          <label for="empId">Employee ID</label>
+          <input type="text" id="empId" placeholder="e.g. EUR1796" autocomplete="off" spellcheck="false">
+          <div class="error" id="empError"></div>
+        </div>
 
-      <div class="field">
-        <label for="amount">Total Variable Pay <span class="hint">in INR</span></label>
-        <input type="text" id="amount" placeholder="e.g. 250000" autocomplete="off" inputmode="decimal">
-        <div class="error" id="amountError"></div>
-      </div>
+        <div class="field">
+          <label for="amount">Total Variable Pay <span class="hint">in INR</span></label>
+          <input type="text" id="amount" placeholder="e.g. 250000" autocomplete="off" inputmode="decimal">
+          <div class="error" id="amountError"></div>
+        </div>
 
-      <div class="actions">
-        <button id="preview" class="btn-primary" disabled>Preview Letter</button>
-        <button id="download" class="btn-secondary" disabled>Download Letter PDF</button>
-      </div>
-    </div>
+        <div class="field">
+          <label for="letterDate">Letter date</label>
+          <input type="date" id="letterDate">
+          <div class="error" id="dateError"></div>
+        </div>
 
-    <div class="card">
-      <h2>Employee details</h2>
-      <p class="placeholder" id="detailsPlaceholder">Enter an Employee ID to pull details from the master database.</p>
-      <div id="details" hidden>
-        <dl>
-          <dt>Employee ID</dt><dd id="dCode"></dd>
-          <dt>Name</dt><dd id="dName"></dd>
-          <dt>Designation</dt><dd id="dDesignation"></dd>
-          <dt>Department</dt><dd id="dDepartment"></dd>
-          <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
-          <dt>Date of Joining</dt><dd id="dDoj"></dd>
-          <dt>Location</dt><dd id="dLocation"></dd>
-        </dl>
-        <div class="amount-row" id="amountRow" hidden>
-          <div class="figure" id="dAmount"></div>
-          <div class="words" id="dAmountWords"></div>
+        <div class="actions">
+          <button id="preview" class="action btn-primary" disabled>Preview Letter</button>
+          <button id="download" class="action btn-secondary" disabled>Download Letter PDF</button>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="card">
-    <div class="preview-head">
-      <h2>Letter preview</h2>
-      <span class="filename" id="filename"></span>
-    </div>
-    <div class="viewer" id="viewer">
-      <canvas id="pdfCanvas" aria-label="Variable pay letter preview" hidden></canvas>
-      <div class="empty" id="viewerEmpty">Enter an Employee ID and variable pay amount, then choose Preview Letter.</div>
-    </div>
-  </section>
+      <div class="card">
+        <h2>Employee details</h2>
+        <p class="placeholder" id="detailsPlaceholder">Enter an Employee ID to pull details from the master database.</p>
+        <div id="details" hidden>
+          <dl>
+            <dt>Employee ID</dt><dd id="dCode"></dd>
+            <dt>Name</dt><dd id="dName"></dd>
+            <dt>Designation</dt><dd id="dDesignation"></dd>
+            <dt>Department</dt><dd id="dDepartment"></dd>
+            <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
+            <dt>Date of Joining</dt><dd id="dDoj"></dd>
+            <dt>Location</dt><dd id="dLocation"></dd>
+          </dl>
+          <div class="amount-row" id="amountRow" hidden>
+            <div class="figure" id="dAmount"></div>
+            <div class="words" id="dAmountWords"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="preview-head">
+        <h2>Letter preview</h2>
+        <span class="filename" id="filename"></span>
+      </div>
+      <div class="viewer" id="viewer">
+        <canvas id="pdfCanvas" aria-label="Variable pay letter preview" hidden></canvas>
+        <div class="empty" id="viewerEmpty">Enter an Employee ID and variable pay amount, then choose Preview Letter.</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ---------------- Bulk ---------------- -->
+  <div id="panelBulk" role="tabpanel" hidden>
+    <section class="card">
+      <h2>Bulk letters</h2>
+
+      <p class="paste-tip">
+        Copy the Employee ID and Variable Pay columns straight out of your spreadsheet and
+        paste them anywhere in the table &mdash; rows are added as needed, and a pasted
+        header row is ignored. The Date column is optional; rows left blank use the letter
+        date below.
+      </p>
+
+      <div class="bulk-toolbar">
+        <div class="field">
+          <label for="bulkDate">Letter date <span class="hint">applies to rows with no date</span></label>
+          <input type="date" id="bulkDate">
+        </div>
+        <div class="spacer"></div>
+        <button class="minor" id="addRows">Add 10 rows</button>
+        <button class="minor" id="clearRows">Clear table</button>
+      </div>
+
+      <div class="grid-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th class="rownum"></th>
+              <th class="col-id">Employee ID</th>
+              <th class="col-amount">Variable Pay</th>
+              <th class="col-date">Date <span style="text-transform:none;letter-spacing:0">(optional)</span></th>
+              <th>Status</th>
+              <th class="drop"></th>
+            </tr>
+          </thead>
+          <tbody id="grid"></tbody>
+        </table>
+      </div>
+
+      <div class="bulk-footer">
+        <div class="summary" id="bulkSummary"></div>
+        <button id="downloadZip" class="action btn-primary" disabled>Download Letters (Zip)</button>
+      </div>
+    </section>
+  </div>
 </main>
 
 <footer id="footerNote"></footer>
@@ -360,6 +542,7 @@
 <script>/*__PDFJS_WORKER__*/</script>
 <script>/*__PDFJS__*/</script>
 <script>/*__JSPDF__*/</script>
+<script>/*__JSZIP__*/</script>
 
 <script>
 "use strict";
@@ -371,6 +554,9 @@ const EMPLOYEES = "__EMPLOYEES__";
 const FONTS = "__FONTS__";
 const LETTERHEAD = "__LETTERHEAD__";
 const SIGNATURE = "__SIGNATURE__";
+const STAMP = "__STAMP__";
+/* height / width of the two overlay assets, measured at build time. */
+const ASSET_ASPECTS = "__ASSET_ASPECTS__";
 
 const SIGNATORY = { name: "Priyanka Singh", title: "Vice President – Human Resources" };
 const COMPANY = "Euler Motors Pvt. Ltd.";
@@ -412,6 +598,8 @@ const COLORS = {
 const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 
+const MONTH_PREFIXES = MONTHS.map((month) => month.slice(0, 3).toLowerCase());
+
 /** "2018-07-01" -> "01 July 2018". Returns "" for anything unparseable. */
 function formatDate(iso) {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
@@ -420,9 +608,57 @@ function formatDate(iso) {
   return month ? `${match[3]} ${month} ${match[1]}` : "";
 }
 
-function today() {
+function todayISO() {
   const now = new Date();
-  return `${String(now.getDate()).padStart(2, "0")} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+function isRealDate(year, month, day) {
+  if (month < 1 || month > 12 || day < 1) return false;
+  return day <= new Date(year, month, 0).getDate();
+}
+
+function toISO(year, month, day) {
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+/**
+ * Parses a date typed or pasted into the bulk table, returning ISO or null.
+ *
+ * Day-first throughout, as written in India: 03/04/2026 is 3 April, never
+ * 4 March. Two-digit years are read as 20xx.
+ */
+function parseDateInput(text) {
+  const value = String(text || "").trim();
+  if (!value) return null;
+
+  let match = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(value);
+  if (match) {
+    const [, year, month, day] = match.map(Number);
+    return isRealDate(year, month, day) ? toISO(year, month, day) : null;
+  }
+
+  match = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2}|\d{4})$/.exec(value);
+  if (match) {
+    const day = Number(match[1]);
+    const month = Number(match[2]);
+    let year = Number(match[3]);
+    if (year < 100) year += 2000;
+    return isRealDate(year, month, day) ? toISO(year, month, day) : null;
+  }
+
+  // "3 Apr 2026", "03-April-2026", "3 April 26"
+  match = /^(\d{1,2})[\s-]+([A-Za-z]+)[\s-]+(\d{2}|\d{4})$/.exec(value);
+  if (match) {
+    const day = Number(match[1]);
+    const month = MONTH_PREFIXES.indexOf(match[2].slice(0, 3).toLowerCase()) + 1;
+    let year = Number(match[3]);
+    if (year < 100) year += 2000;
+    if (month && isRealDate(year, month, day)) return toISO(year, month, day);
+  }
+
+  return null;
 }
 
 /** Indian digit grouping: 2500000 -> "25,00,000". */
@@ -479,6 +715,25 @@ function amountInWords(value) {
   return `${text} Only`;
 }
 
+const MAX_AMOUNT = 1e9; // A billion rupees; anything larger is a typo, not a bonus.
+
+/**
+ * Reads a rupee figure written any of the ways a spreadsheet might hold it.
+ * Returns { value } or { error }.
+ */
+function parseAmount(text) {
+  const raw = String(text || "").trim()
+    .replace(/^(?:INR|RS\.?|₹)\s*/i, "")
+    .replace(/[,\s]/g, "");
+  if (!raw) return { error: "Variable pay is missing." };
+  if (!/^\d*\.?\d+$/.test(raw)) return { error: "Variable pay must be a number." };
+  const value = Number(raw);
+  if (!Number.isFinite(value)) return { error: "Variable pay must be a number." };
+  if (value <= 0) return { error: "Variable pay must be greater than zero." };
+  if (value > MAX_AMOUNT) return { error: "Variable pay looks too large." };
+  return { value: Math.round(value * 100) / 100 };
+}
+
 /* ------------------------------------------------------------------ *
  * Employee lookup                                                     *
  * ------------------------------------------------------------------ */
@@ -521,7 +776,13 @@ function leading(points, factor = 1.42) {
   return points * factor * PT;
 }
 
-function buildLetter(employee, amount) {
+/**
+ * Builds the letter.
+ * @param employee record from the master database
+ * @param amount   rupees, already validated
+ * @param dateISO  the letter date the user entered, as YYYY-MM-DD
+ */
+function buildLetter(employee, amount, dateISO) {
   const doc = newDocument();
   doc.addImage(LETTERHEAD, "JPEG", ART.x, ART.y, ART.w, ART.h, undefined, "FAST");
 
@@ -535,7 +796,7 @@ function buildLetter(employee, amount) {
 
   // --- Date -----------------------------------------------------------
   use("normal", 9.5, COLORS.muted);
-  doc.text(`Date: ${today()}`, MARGIN.left, y);
+  doc.text(`Date: ${formatDate(dateISO)}`, MARGIN.left, y);
   y += 8;
 
   // --- Employee detail block -----------------------------------------
@@ -557,8 +818,7 @@ function buildLetter(employee, amount) {
     use("semibold", 9.5);
     // Wrap rather than overrun: the longest designation on file fits on one
     // line, but a longer one added later must not collide with the next row.
-    const valueLines = doc.splitTextToSize(value, COLUMN - LABEL_WIDTH);
-    for (const line of valueLines) {
+    for (const line of doc.splitTextToSize(value, COLUMN - LABEL_WIDTH)) {
       doc.text(line, MARGIN.left + LABEL_WIDTH, y);
       y += rowStep;
     }
@@ -618,28 +878,7 @@ function buildLetter(employee, amount) {
     + `${COMPANY_SHORT} journey.`
   );
 
-  // --- Signature block -------------------------------------------------
-  use("normal", 10);
-  doc.text("Warm regards,", MARGIN.left, y);
-  y += leading(10);
-  use("semibold", 10);
-  doc.text(`For ${COMPANY}`, MARGIN.left, y);
-  y += 4;
-
-  const signatureWidth = 40;
-  const signatureHeight = signatureWidth * (269 / 536); // intrinsic aspect of the asset
-  doc.addImage(SIGNATURE, "PNG", MARGIN.left - 1.5, y, signatureWidth, signatureHeight);
-  y += signatureHeight + 3.5;
-
-  use("semibold", 10);
-  doc.text(SIGNATORY.name, MARGIN.left, y);
-  y += leading(9.5);
-  use("normal", 9.5, COLORS.muted);
-  doc.text(SIGNATORY.title, MARGIN.left, y);
-
-  if (y > SAFE.bottom) {
-    console.warn(`Letter content ends at ${y.toFixed(1)}mm, past the safe area at ${SAFE.bottom}mm.`);
-  }
+  drawSignOff(doc, y);
   return doc;
 }
 
@@ -670,11 +909,62 @@ function drawAmountBox(doc, y, amount) {
   doc.setFont("Poppins", "normal");
   doc.setFontSize(9);
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.text(`(${amountInWords(amount)})`, textX, y + 19.8, {
-    maxWidth: COLUMN - 16,
-  });
+  doc.text(`(${amountInWords(amount)})`, textX, y + 19.8, { maxWidth: COLUMN - 16 });
 
   return y + height + 6;
+}
+
+/**
+ * Closing, signature and company seal.
+ *
+ * The seal sits at the right of the same band as the signature, centred on it,
+ * which is where it goes on a hand-signed letter and which uses up the empty
+ * right-hand half of the sign-off. Both are placed from one shared baseline so
+ * they stay in line regardless of how the body above happened to wrap.
+ */
+function drawSignOff(doc, y) {
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
+  doc.text("Warm regards,", MARGIN.left, y);
+  y += leading(10);
+
+  doc.setFont("Poppins", "semibold");
+  doc.text(`For ${COMPANY}`, MARGIN.left, y);
+
+  const blockTop = y + 4;
+  const signatureWidth = 40;
+  const signatureHeight = signatureWidth * ASSET_ASPECTS.signature;
+
+  // Flush with the text column: the asset is cropped tight to the ink, so any
+  // offset here shows up as the signature hanging off the margin.
+  doc.addImage(SIGNATURE, "PNG", MARGIN.left, blockTop, signatureWidth, signatureHeight);
+
+  // 5.5mm clears the signature's descenders; at 3.5 the ink touched the name.
+  const nameY = blockTop + signatureHeight + 5.5;
+  doc.setFont("Poppins", "semibold");
+  doc.setFontSize(10);
+  doc.text(SIGNATORY.name, MARGIN.left, nameY);
+
+  const titleY = nameY + leading(9.5);
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(9.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.text(SIGNATORY.title, MARGIN.left, titleY);
+
+  // Centre the seal on the signature block rather than on the text baselines,
+  // so it reads as stamped alongside the signature.
+  const blockBottom = titleY + 2;
+  const stampWidth = 38;
+  const stampHeight = stampWidth * ASSET_ASPECTS.stamp;
+  const stampX = MARGIN.right - stampWidth;
+  const stampY = (blockTop + blockBottom) / 2 - stampHeight / 2;
+  doc.addImage(STAMP, "PNG", stampX, stampY, stampWidth, stampHeight);
+
+  const lowest = Math.max(blockBottom, stampY + stampHeight);
+  if (lowest > SAFE.bottom) {
+    console.warn(`Letter content ends at ${lowest.toFixed(1)}mm, past the safe area at ${SAFE.bottom}mm.`);
+  }
 }
 
 function fileNameFor(employee) {
@@ -682,14 +972,39 @@ function fileNameFor(employee) {
 }
 
 /* ------------------------------------------------------------------ *
- * UI wiring                                                           *
+ * Shared UI helpers                                                   *
  * ------------------------------------------------------------------ */
 
 const el = (id) => document.getElementById(id);
+
+function setError(node, input, message) {
+  node.textContent = message || "";
+  node.classList.toggle("show", Boolean(message));
+  if (input) input.classList.toggle("invalid", Boolean(message));
+}
+
+function saveBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  // Revoking immediately can cancel the download in some browsers.
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+/* ------------------------------------------------------------------ *
+ * Individual mode                                                     *
+ * ------------------------------------------------------------------ */
+
 const empIdInput = el("empId");
 const amountInput = el("amount");
+const dateInput = el("letterDate");
 const empError = el("empError");
 const amountError = el("amountError");
+const dateError = el("dateError");
 const detailsBox = el("details");
 const detailsPlaceholder = el("detailsPlaceholder");
 const amountRow = el("amountRow");
@@ -700,18 +1015,11 @@ const pdfCanvas = el("pdfCanvas");
 const viewerEmpty = el("viewerEmpty");
 const filenameLabel = el("filename");
 
-const MAX_AMOUNT = 1e9; // A billion rupees; anything larger is a typo, not a bonus.
-
 let currentEmployee = null;
 let currentAmount = null;
+let currentDate = null;
 let previewBytes = null;
 let renderToken = 0;
-
-function setError(node, input, message) {
-  node.textContent = message || "";
-  node.classList.toggle("show", Boolean(message));
-  input.classList.toggle("invalid", Boolean(message));
-}
 
 function readEmployee() {
   const raw = empIdInput.value.trim();
@@ -725,26 +1033,23 @@ function readEmployee() {
 }
 
 function readAmount() {
-  const raw = amountInput.value.trim().replace(/[,\s]/g, "").replace(/^(?:INR|RS\.?|₹)/i, "");
-  if (!raw) {
+  if (!amountInput.value.trim()) {
     setError(amountError, amountInput, "");
     return null;
   }
-  const value = Number(raw);
-  if (!Number.isFinite(value) || !/^\d*\.?\d*$/.test(raw)) {
-    setError(amountError, amountInput, "Enter the amount in numbers, for example 250000.");
+  const result = parseAmount(amountInput.value);
+  setError(amountError, amountInput, result.error || "");
+  return result.error ? null : result.value;
+}
+
+function readDate() {
+  const value = dateInput.value;
+  if (!value) {
+    setError(dateError, dateInput, "Choose the date the letter should carry.");
     return null;
   }
-  if (value <= 0) {
-    setError(amountError, amountInput, "Variable pay must be greater than zero.");
-    return null;
-  }
-  if (value > MAX_AMOUNT) {
-    setError(amountError, amountInput, "That amount looks too large. Please check the figure.");
-    return null;
-  }
-  setError(amountError, amountInput, "");
-  return Math.round(value * 100) / 100;
+  setError(dateError, dateInput, "");
+  return value;
 }
 
 function paintDetails(employee, amount) {
@@ -782,7 +1087,7 @@ function clearPreview() {
 /** Builds the letter, reporting failure against the Employee ID field. */
 function tryBuild() {
   try {
-    return buildLetter(currentEmployee, currentAmount);
+    return buildLetter(currentEmployee, currentAmount, currentDate);
   } catch (error) {
     console.error(error);
     setError(empError, empIdInput, "Could not build the letter. See the browser console for details.");
@@ -823,7 +1128,7 @@ async function paintPreview() {
 }
 
 function showPreview() {
-  if (!currentEmployee || currentAmount === null) return;
+  if (!individualReady()) return;
   const doc = tryBuild();
   if (!doc) return clearPreview();
 
@@ -839,12 +1144,17 @@ function showPreview() {
   });
 }
 
-function refresh() {
+function individualReady() {
+  return Boolean(currentEmployee) && currentAmount !== null && Boolean(currentDate);
+}
+
+function refreshIndividual() {
   currentEmployee = readEmployee();
   currentAmount = readAmount();
+  currentDate = readDate();
   paintDetails(currentEmployee, currentAmount);
 
-  const ready = Boolean(currentEmployee) && currentAmount !== null;
+  const ready = individualReady();
   previewButton.disabled = !ready;
   downloadButton.disabled = !ready;
 
@@ -853,13 +1163,14 @@ function refresh() {
   clearPreview();
 }
 
-empIdInput.addEventListener("input", refresh);
-amountInput.addEventListener("input", refresh);
+empIdInput.addEventListener("input", refreshIndividual);
+amountInput.addEventListener("input", refreshIndividual);
+dateInput.addEventListener("input", refreshIndividual);
 
 previewButton.addEventListener("click", showPreview);
 
 downloadButton.addEventListener("click", () => {
-  if (!currentEmployee || currentAmount === null) return;
+  if (!individualReady()) return;
   // Build a fresh document: a jsPDF instance is spent once its output is taken.
   const doc = tryBuild();
   if (doc) doc.save(fileNameFor(currentEmployee));
@@ -872,6 +1183,263 @@ window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => paintPreview().catch(console.error), 150);
 });
+
+/* ------------------------------------------------------------------ *
+ * Bulk mode                                                           *
+ * ------------------------------------------------------------------ */
+
+const grid = el("grid");
+const bulkDate = el("bulkDate");
+const bulkSummary = el("bulkSummary");
+const downloadZipButton = el("downloadZip");
+
+const STARTING_ROWS = 12;
+const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "amount", "date"];
+
+function makeRow() {
+  const tr = document.createElement("tr");
+  tr.innerHTML =
+    '<td class="rownum"></td>'
+    + '<td><input type="text" data-col="0" autocomplete="off" spellcheck="false"></td>'
+    + '<td><input type="text" data-col="1" autocomplete="off" inputmode="decimal"></td>'
+    + '<td><input type="text" data-col="2" autocomplete="off" placeholder="dd/mm/yyyy"></td>'
+    + '<td class="status"></td>'
+    + '<td class="drop"><button type="button" title="Remove row" aria-label="Remove row">&times;</button></td>';
+  tr.querySelector(".drop button").addEventListener("click", () => {
+    tr.remove();
+    ensureTrailingRow();
+    refreshBulk();
+  });
+  for (const input of tr.querySelectorAll("input")) {
+    input.addEventListener("input", refreshBulk);
+    input.addEventListener("paste", onGridPaste);
+  }
+  return tr;
+}
+
+function addRows(count) {
+  for (let i = 0; i < count; i += 1) grid.appendChild(makeRow());
+}
+
+function rowCells(tr) {
+  return Array.from(tr.querySelectorAll("input"));
+}
+
+function rowIsBlank(tr) {
+  return rowCells(tr).every((input) => !input.value.trim());
+}
+
+/** Always leave one empty row at the bottom to type into. */
+function ensureTrailingRow() {
+  const rows = Array.from(grid.rows);
+  if (!rows.length || !rowIsBlank(rows[rows.length - 1])) addRows(1);
+}
+
+/**
+ * Distributes a spreadsheet paste across the grid.
+ *
+ * Excel and Sheets put tab-separated rows on the clipboard as text/plain, so a
+ * multi-cell paste arrives in a single cell unless it is split out by hand.
+ */
+function onGridPaste(event) {
+  const text = (event.clipboardData || window.clipboardData).getData("text");
+  if (!text || !/[\t\n\r]/.test(text)) return; // single value: let the browser handle it
+  event.preventDefault();
+
+  let lines = text.replace(/\r\n?/g, "\n").split("\n");
+  while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+  if (!lines.length) return;
+
+  // Drop a pasted header row so "Employee ID" does not land in a cell.
+  const first = lines[0].toLowerCase();
+  if (HEADER_WORDS.some((word) => first.includes(word)) && !/\d/.test(first)) {
+    lines.shift();
+  }
+  if (!lines.length) return;
+
+  const startCol = Number(event.target.dataset.col);
+  const startRow = Array.from(grid.rows).indexOf(event.target.closest("tr"));
+
+  lines.forEach((line, rowOffset) => {
+    const index = startRow + rowOffset;
+    while (grid.rows.length <= index) addRows(1);
+    const cells = rowCells(grid.rows[index]);
+    line.split("\t").forEach((value, colOffset) => {
+      const target = cells[startCol + colOffset];
+      if (target) target.value = value.trim();
+    });
+  });
+
+  ensureTrailingRow();
+  refreshBulk();
+}
+
+/**
+ * Validates every non-blank row.
+ * Returns the rows that would produce a letter, plus how many are in error.
+ */
+function readBulkRows() {
+  const fallback = bulkDate.value;
+  const jobs = [];
+  const seen = new Map();
+  let errors = 0;
+
+  for (const tr of Array.from(grid.rows)) {
+    const [idCell, amountCell, dateCell] = rowCells(tr);
+    const status = tr.querySelector(".status");
+    tr.classList.remove("bad");
+    status.className = "status";
+    status.textContent = "";
+
+    if (rowIsBlank(tr)) continue;
+
+    const fail = (message) => {
+      status.textContent = message;
+      status.classList.add("bad");
+      tr.classList.add("bad");
+      errors += 1;
+    };
+
+    const employee = findEmployee(idCell.value);
+    if (!employee) {
+      fail(idCell.value.trim() ? `No employee with ID "${idCell.value.trim()}".` : "Employee ID is missing.");
+      continue;
+    }
+
+    const amount = parseAmount(amountCell.value);
+    if (amount.error) {
+      fail(amount.error);
+      continue;
+    }
+
+    let dateISO = fallback;
+    if (dateCell.value.trim()) {
+      dateISO = parseDateInput(dateCell.value);
+      if (!dateISO) {
+        fail(`"${dateCell.value.trim()}" is not a date the app understands.`);
+        continue;
+      }
+    }
+    if (!dateISO) {
+      fail("No date on this row and no letter date set.");
+      continue;
+    }
+
+    // Two letters for one employee would collide inside the zip.
+    const previous = seen.get(employee.code);
+    if (previous !== undefined) {
+      fail(`${employee.code} is already on row ${previous}.`);
+      continue;
+    }
+    seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
+
+    status.textContent = `${employee.name} · INR ${formatINR(amount.value)} · ${formatDate(dateISO)}`;
+    status.classList.add("ok");
+    jobs.push({ employee, amount: amount.value, dateISO });
+  }
+
+  return { jobs, errors };
+}
+
+let bulkBusy = false;
+
+function refreshBulk() {
+  Array.from(grid.rows).forEach((tr, index) => {
+    tr.querySelector(".rownum").textContent = index + 1;
+  });
+
+  const { jobs, errors } = readBulkRows();
+
+  if (!jobs.length && !errors) {
+    bulkSummary.textContent = "Paste or type rows above to get started.";
+  } else if (errors) {
+    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ready · `
+      + `<span class="bad"><strong>${errors}</strong> ${errors === 1 ? "row needs" : "rows need"} attention</span>`;
+  } else {
+    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`;
+  }
+
+  // Refuse to build a partial batch: silently skipping a row in a payroll run is
+  // worse than making someone fix the typo first.
+  downloadZipButton.disabled = bulkBusy || errors > 0 || jobs.length === 0;
+  if (!bulkBusy) {
+    downloadZipButton.textContent = jobs.length && !errors
+      ? `Download ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
+      : "Download Letters (Zip)";
+  }
+}
+
+el("addRows").addEventListener("click", () => { addRows(10); refreshBulk(); });
+
+el("clearRows").addEventListener("click", () => {
+  grid.textContent = "";
+  addRows(STARTING_ROWS);
+  refreshBulk();
+});
+
+bulkDate.addEventListener("input", refreshBulk);
+
+downloadZipButton.addEventListener("click", async () => {
+  const { jobs, errors } = readBulkRows();
+  if (errors || !jobs.length) return;
+
+  bulkBusy = true;
+  downloadZipButton.disabled = true;
+
+  try {
+    const zip = new JSZip();
+    for (let i = 0; i < jobs.length; i += 1) {
+      const { employee, amount, dateISO } = jobs[i];
+      downloadZipButton.textContent = `Building ${i + 1} of ${jobs.length}…`;
+      zip.file(fileNameFor(employee), buildLetter(employee, amount, dateISO).output("arraybuffer"));
+      // Hand the frame back so the label repaints instead of freezing the tab.
+      if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
+    downloadZipButton.textContent = "Packaging zip…";
+    // The PDFs are already deflated internally, so re-compressing them in the
+    // zip costs time and saves almost nothing.
+    const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
+    saveBlob(blob, `Variable_Pay_Letters_${bulkDate.value || todayISO()}.zip`);
+  } catch (error) {
+    console.error(error);
+    bulkSummary.innerHTML = '<span class="bad">Could not build the letters. See the browser console for details.</span>';
+  } finally {
+    bulkBusy = false;
+    refreshBulk();
+  }
+});
+
+/* ------------------------------------------------------------------ *
+ * Mode switching                                                      *
+ * ------------------------------------------------------------------ */
+
+const tabIndividual = el("tabIndividual");
+const tabBulk = el("tabBulk");
+
+function setMode(mode) {
+  const individual = mode === "individual";
+  tabIndividual.setAttribute("aria-selected", String(individual));
+  tabBulk.setAttribute("aria-selected", String(!individual));
+  el("panelIndividual").hidden = !individual;
+  el("panelBulk").hidden = individual;
+  // The preview is laid out against the viewer's measured size, which is zero
+  // while the panel is hidden, so redraw it once the panel is back on screen.
+  if (individual && previewBytes) paintPreview().catch(console.error);
+}
+
+tabIndividual.addEventListener("click", () => setMode("individual"));
+tabBulk.addEventListener("click", () => setMode("bulk"));
+
+/* ------------------------------------------------------------------ *
+ * Start-up                                                            *
+ * ------------------------------------------------------------------ */
+
+dateInput.value = todayISO();
+bulkDate.value = todayISO();
+addRows(STARTING_ROWS);
+refreshIndividual();
+refreshBulk();
 
 el("footerNote").textContent =
   `${EMPLOYEES.length.toLocaleString("en-IN")} active employees loaded · `

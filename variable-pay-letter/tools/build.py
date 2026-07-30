@@ -13,6 +13,8 @@ import re
 import sys
 from pathlib import Path
 
+from PIL import Image
+
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src" / "index.html"
 OUT = ROOT / "dist" / "Variable_Pay_Letter_Generator.html"
@@ -66,6 +68,20 @@ def main():
     html = substitute(html, '"__SIGNATURE__"', json.dumps(data_uri(signature)))
     print(f"Signature:  assets/{signature.name} ({signature.stat().st_size:,} bytes)")
 
+    stamp = require_asset("stamp.png", "stamp.jpg", "stamp.jpeg")
+    html = substitute(html, '"__STAMP__"', json.dumps(data_uri(stamp)))
+    print(f"Stamp:      assets/{stamp.name} ({stamp.stat().st_size:,} bytes)")
+
+    # The letter places the signature and seal by width, so it needs their
+    # proportions. Measured here rather than written into the source by hand,
+    # which would silently go stale the next time the assets are regenerated.
+    aspects = {}
+    for name, path in (("signature", signature), ("stamp", stamp)):
+        with Image.open(path) as image:
+            aspects[name] = round(image.height / image.width, 6)
+    html = substitute(html, '"__ASSET_ASPECTS__"', json.dumps(aspects))
+    print(f"Aspects:    {aspects}")
+
     # Sits in an HTML src attribute, so the quotes json.dumps adds are the ones
     # the attribute needs. Same token shape as the rest, no special casing.
     logo = require_asset("logo.png", "logo.jpg")
@@ -74,6 +90,7 @@ def main():
 
     for token, name in (
         ("/*__JSPDF__*/", "jspdf.umd.min.js"),
+        ("/*__JSZIP__*/", "jszip.min.js"),
         # The worker must be inlined ahead of pdf.min.js: that registers
         # window.pdfjsWorker, letting PDF.js parse on the main thread. Spawning a
         # real Worker is not an option, since browsers refuse to create one from

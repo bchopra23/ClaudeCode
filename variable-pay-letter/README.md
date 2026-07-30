@@ -1,31 +1,61 @@
 # Euler Variable Pay Letter Generator
 
-Generates a variable pay letter on the Euler Motors letterhead from two inputs:
-an Employee ID and a variable pay amount. Everything else — name, designation,
-date of joining, department, sub-department and location — is looked up from the
-HR master database, and the letter is signed with Priyanka Singh's signature.
-
-## Using it
+Generates variable pay letters on the Euler Motors letterhead from an Employee ID,
+an amount and a date. Everything else — name, designation, date of joining,
+department, sub-department and location — is looked up from the HR master
+database, and the letter carries Priyanka Singh's signature and the company seal.
 
 Open **`dist/Variable_Pay_Letter_Generator.html`** in a browser. That is the whole
 application: one file, no install, no server, no network. Double-clicking it works.
+It has two modes.
+
+## Individual
+
+One letter at a time, with an on-screen preview.
 
 1. Enter the Employee ID (`EUR1796`; `eur1796` and a bare `1796` also resolve).
 2. Enter the total variable pay in rupees (`250000`, or `2,50,000`).
-3. The employee's details appear as soon as the ID matches. An ID that is not in
+3. Set the letter date. It starts on today's date and can be changed.
+4. The employee's details appear as soon as the ID matches. An ID that is not in
    the database shows an error and both buttons stay disabled.
-4. **Preview Letter** renders the finished letter on screen.
-5. **Download Letter PDF** saves it as `Variable_Pay_Letter_<EmployeeID>.pdf`.
+5. **Preview Letter** renders the finished letter on screen.
+6. **Download Letter PDF** saves it as `Variable_Pay_Letter_<EmployeeID>.pdf`.
 
-Nothing is uploaded anywhere. The database, the fonts and the PDF engine are all
-embedded in the file, and the letter is built in the browser.
+## Bulk Letters
+
+A whole payout run in one zip.
+
+1. Set the letter date for the batch.
+2. Copy the Employee ID and Variable Pay columns out of your spreadsheet and
+   paste them anywhere in the table. Rows are added as needed and a pasted header
+   row is ignored, so selecting the headings too is harmless.
+3. Each row shows the resolved employee, amount and date, or what is wrong with it.
+4. **Download Letters (Zip)** produces `Variable_Pay_Letters_<date>.zip` containing
+   one `Variable_Pay_Letter_<EmployeeID>.pdf` per row.
+
+The per-row **Date** column is optional; rows left blank use the batch date. It
+accepts `15/04/2026`, `2026-04-15` and `15 Apr 2026`, and reads day-first as
+written in India, so `03/04/2026` is 3 April.
+
+The download stays disabled until every row is valid. A batch is refused rather
+than quietly built minus the broken rows — silently dropping someone from a payout
+run is worse than making the typo obvious first. Rows are flagged for an unknown
+ID, a non-numeric or non-positive amount, an unparseable date, or an employee
+listed twice (two letters for one person would collide inside the zip).
+
+Reckon on roughly a quarter of a megabyte per letter and about a tenth of a second
+to build each one: 200 letters is a 50 MB zip that takes around 20 seconds. Very
+large runs are better split into a few batches.
+
+Nothing is uploaded anywhere, in either mode. The database, the fonts and the PDF
+engine are all embedded in the file, and every letter is built in the browser.
 
 ## What the letter contains
 
 A4, one page, on the supplied letterhead: the date, a block of the seven employee
 fields, a subject line, a congratulatory message for **FY 2025-26**, the amount in
 figures and in words (Indian numbering — lakh and crore), a confidentiality
-paragraph, and the signature block.
+paragraph, the signature block, and the company seal to the right of it.
 
 Any employee field that is blank in the database is dropped from the block rather
 than printed as an empty row.
@@ -33,11 +63,11 @@ than printed as an empty row.
 ## Repository layout
 
 ```
-assets/     Letterhead, signature and logo (see "Assets" below)
+assets/     Letterhead, signature, seal and logo (see "Assets" below)
 data/       employees.json — the seven fields the letter needs, nothing more
 src/        index.html — the application source, with placeholders for assets
 tools/      The extraction and build scripts
-vendor/     jsPDF, PDF.js and Poppins, all vendored for offline use
+vendor/     jsPDF, PDF.js, JSZip and Poppins, all vendored for offline use
 dist/       The built single-file application. This is the deliverable.
 ```
 
@@ -54,7 +84,10 @@ python tools/build.py
 ```
 
 `tools/build.py` inlines the employee data, the fonts, the letterhead, the
-signature, the logo, jsPDF and PDF.js into `dist/Variable_Pay_Letter_Generator.html`.
+signature, the seal, the logo, jsPDF, PDF.js and JSZip into
+`dist/Variable_Pay_Letter_Generator.html`. It also measures the signature and seal
+and injects their proportions, so regenerating those assets at a different size
+cannot leave a stale aspect ratio behind in the source.
 
 ### Refreshing the employee database
 
@@ -86,12 +119,14 @@ The body text is in `buildLetter()`. Re-run `python tools/build.py` after editin
 
 ## Assets
 
-`assets/Euler_Motors_Letterhead_source.pdf` is the file Euler supplied: page 1 is
-the blank letterhead, page 2 is the signature. Everything else in `assets/` is
-derived from it, and can be regenerated:
+Euler supplied two PDFs, both kept here: `Euler_Motors_Letterhead_source.pdf`
+(page 1 the blank letterhead, page 2 the signature) and
+`Euler_Motors_Stamp_source.pdf` (the company seal). Everything else in `assets/`
+is derived from them, and can be regenerated:
 
 ```sh
 python tools/extract_from_pdf.py assets/Euler_Motors_Letterhead_source.pdf
+python tools/extract_stamp.py assets/Euler_Motors_Stamp_source.pdf
 python tools/make_a4_letterhead.py
 python tools/extract_logo.py
 python tools/build.py
@@ -101,8 +136,19 @@ python tools/build.py
 | --- | --- | --- |
 | `letterhead.jpg` | `extract_from_pdf.py` | The artwork as supplied, 1240 x 1604 |
 | `signature.png` | `extract_from_pdf.py` | Cropped to the ink, transparent background |
+| `stamp.png` | `extract_stamp.py` | The seal in its own ink colour, transparent |
 | `letterhead_a4.jpg` | `make_a4_letterhead.py` | Rebuilt at A4 proportions, used in the letter |
 | `logo.png` | `extract_logo.py` | Cut from the header band, used in the app header |
+
+The seal's ink colour is not sampled or guessed. Its PDF stores a 1x1 pixel
+holding just that colour with the artwork in a soft mask, so `extract_stamp.py`
+reads `#212B7D` straight out of that pixel and uses the mask as the alpha channel.
+
+The signature and the seal are each a single flat colour whose only real content
+is the alpha channel, so both are stored as indexed PNGs whose palette is that one
+colour at 64 opacities. That is a third to a fifth of the size of the equivalent
+RGBA files, which matters because a copy of each is embedded in every letter a
+bulk run produces.
 
 ### Why the letterhead is rebuilt
 
@@ -137,8 +183,15 @@ from. It refuses to run if the middle of the new artwork is not uniform.
   app is meant to be opened by double-clicking.
 - **Poppins is embedded** as a subset TTF so the letter matches the letterhead's
   own typeface without depending on the machine having the font installed.
-- Editing either input clears an on-screen preview, so a stale letter is never
-  left showing figures the inputs no longer agree with.
+- Editing any input clears an on-screen preview, so a stale letter is never left
+  showing figures the inputs no longer agree with.
+- **The bulk table takes a real spreadsheet paste.** Excel and Sheets put
+  tab-separated rows on the clipboard as `text/plain`, which would otherwise land
+  entirely in one cell, so the paste is intercepted and spread across the grid.
+- The signature and the seal are placed from one shared baseline in `drawSignOff()`,
+  so they stay in line with each other and with the text column whatever the body
+  above did. The signature sits flush to the text margin and the seal's right edge
+  lines up with the right edge of the body column.
 
 ## Third-party components
 
@@ -146,4 +199,5 @@ from. It refuses to run if the middle of the new artwork is not uniform.
 | --- | --- | --- |
 | [jsPDF](https://github.com/parallax/jsPDF) | 3.0.1 | MIT (`vendor/jspdf-LICENSE.txt`) |
 | [PDF.js](https://mozilla.github.io/pdf.js/) | 3.11.174 | Apache-2.0 (`vendor/pdfjs-LICENSE.txt`) |
+| [JSZip](https://stuk.github.io/jszip/) | 3.10.1 | MIT (`vendor/jszip-LICENSE.txt`) |
 | [Poppins](https://fonts.google.com/specimen/Poppins) | 5.2.5 subset | SIL OFL 1.1 (`vendor/fonts/Poppins-OFL.txt`) |
