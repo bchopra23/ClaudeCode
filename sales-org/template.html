@@ -1,0 +1,423 @@
+<title>Euler Sales — Org Structure FY 2025–26</title>
+
+<style>
+/*FONTS*/
+
+/* ── tokens ─────────────────────────────────────────────────────────── */
+:root{
+  --ground:#F3F6FA; --surface:#FFF; --surface-2:#E9EFF6; --sunk:#DEE7F1;
+  --line:#D2DDEA; --line-2:#B0C1D4; --rail:#A9BDD3;
+  --text:#0D1B2E; --text-2:#475971; --text-3:#74879E;
+  --accent:#B26A0A; --accent-ink:#8A5108; --accent-bg:#FBF0DC;
+  --intern:#136F69; --intern-bg:#DDF0EE;
+  --alert:#B23A2C; --alert-bg:#FAE7E4;
+  --navy:#0A1526;
+  --shadow:0 1px 2px rgba(13,27,46,.06),0 6px 18px -10px rgba(13,27,46,.22);
+  --t-xs:.6875rem; --t-sm:.8125rem; --t-base:.9375rem; --t-md:1.0625rem;
+  --r:9px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0C1A2E; --surface:#12213A; --surface-2:#182B46; --sunk:#0A1526;
+    --line:#1F3252; --line-2:#2E4869; --rail:#2B4364;
+    --text:#E9EFF7; --text-2:#A5B6CB; --text-3:#6F849D;
+    --accent:#F2A33C; --accent-ink:#F7BC6B; --accent-bg:#2B1F0D;
+    --intern:#54C3BA; --intern-bg:#0D2B2A;
+    --alert:#EA7063; --alert-bg:#301513;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#F3F6FA; --surface:#FFF; --surface-2:#E9EFF6; --sunk:#DEE7F1;
+  --line:#D2DDEA; --line-2:#B0C1D4; --rail:#A9BDD3;
+  --text:#0D1B2E; --text-2:#475971; --text-3:#74879E;
+  --accent:#B26A0A; --accent-ink:#8A5108; --accent-bg:#FBF0DC;
+  --intern:#136F69; --intern-bg:#DDF0EE;
+  --alert:#B23A2C; --alert-bg:#FAE7E4;
+  --shadow:0 1px 2px rgba(13,27,46,.06),0 6px 18px -10px rgba(13,27,46,.22);
+}
+:root[data-theme="dark"]{
+  --ground:#0C1A2E; --surface:#12213A; --surface-2:#182B46; --sunk:#0A1526;
+  --line:#1F3252; --line-2:#2E4869; --rail:#2B4364;
+  --text:#E9EFF7; --text-2:#A5B6CB; --text-3:#6F849D;
+  --accent:#F2A33C; --accent-ink:#F7BC6B; --accent-bg:#2B1F0D;
+  --intern:#54C3BA; --intern-bg:#0D2B2A;
+  --alert:#EA7063; --alert-bg:#301513;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--text);
+  font:400 var(--t-base)/1.5 "WorkSans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:0 clamp(16px,4vw,40px)}
+h1,h2,h3{margin:0; text-wrap:balance; font-family:"BigShoulders",system-ui,sans-serif; font-weight:700}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+/* ── masthead: committed dark in both themes (brand band) ───────────── */
+.mast{background:var(--navy); color:#E9EFF7; padding:clamp(28px,5vw,52px) 0 0;
+  border-bottom:1px solid #1F3252}
+.mast .wrap{display:flex; flex-direction:column; gap:26px}
+.mast-top{display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap}
+.eyebrow{font-family:"JetBrainsMono",monospace; font-size:var(--t-xs);
+  letter-spacing:.14em; text-transform:uppercase; color:#F2A33C; margin:0 0 10px}
+h1{font-size:clamp(3.2rem,11vw,6.5rem); line-height:.82; letter-spacing:-.02em; color:#FFF}
+.sub{margin:12px 0 0; color:#A5B6CB; font-size:var(--t-md); max-width:46ch}
+.mark{display:flex; align-items:center; gap:9px; font-family:"BigShoulders",sans-serif;
+  font-weight:700; font-size:1.5rem; letter-spacing:.06em; color:#FFF; white-space:nowrap}
+.mark svg{width:26px; height:26px; flex:none}
+
+.stats{display:flex; flex-wrap:wrap; gap:0; border-top:1px solid #1F3252;
+  margin-top:6px; list-style:none; padding:0}
+.stat{flex:1 1 150px; padding:16px 20px 20px; border-right:1px solid #1F3252}
+.stat:last-child{border-right:0}
+.stat b{display:block; font-family:"BigShoulders",sans-serif; font-size:2.5rem;
+  line-height:1; color:#FFF; font-variant-numeric:tabular-nums}
+.stat span{display:block; margin-top:5px; font-size:var(--t-xs); letter-spacing:.1em;
+  text-transform:uppercase; color:#8598B0; font-family:"JetBrainsMono",monospace}
+.stat:nth-child(2) b{color:#54C3BA}
+.stat:last-child b{color:#EA7063}
+
+/* ── section furniture ──────────────────────────────────────────────── */
+section{padding:clamp(36px,6vw,60px) 0}
+.head{display:flex; align-items:baseline; gap:14px; margin-bottom:22px; flex-wrap:wrap}
+.head h2{font-size:clamp(1.5rem,3.4vw,2.1rem); letter-spacing:-.01em}
+.head p{margin:0; color:var(--text-3); font-size:var(--t-sm); max-width:60ch}
+.rule{height:1px; background:var(--line); border:0; margin:0}
+
+/* ── leadership band ────────────────────────────────────────────────── */
+.grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(226px,1fr))}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px 16px 14px; box-shadow:var(--shadow); cursor:pointer;
+  transition:border-color .15s, transform .15s}
+.card:hover,.card:focus-visible{border-color:var(--accent); transform:translateY(-2px)}
+.card-dotted{border-style:dashed; background:var(--sunk); box-shadow:none}
+.card h3{font-size:1.3rem; line-height:1.1; letter-spacing:-.005em}
+.c-t{margin:3px 0 0; font-size:var(--t-sm); color:var(--text-2)}
+.c-s{margin:9px 0 0; font-size:var(--t-xs); font-family:"JetBrainsMono",monospace;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--text-3);
+  display:flex; gap:7px; align-items:center; flex-wrap:wrap}
+.c-n{margin:14px 0 8px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap}
+.c-n b{font-family:"BigShoulders",sans-serif; font-size:2rem; line-height:1;
+  font-variant-numeric:tabular-nums}
+.c-n span{font-size:var(--t-xs); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+.c-i{color:var(--intern) !important}
+.meter{height:3px; background:var(--surface-2); border-radius:2px; overflow:hidden}
+.meter i{display:block; height:100%; background:var(--accent)}
+.c-line{display:block; margin-top:10px; font-size:var(--t-xs); color:var(--alert);
+  font-family:"JetBrainsMono",monospace}
+
+/* ── controls ───────────────────────────────────────────────────────── */
+.bar{display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  position:sticky; top:0; z-index:9; padding:12px 0;
+  background:color-mix(in srgb, var(--ground) 92%, transparent);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.search{flex:1 1 240px; position:relative; min-width:200px}
+.search input{width:100%; padding:9px 12px 9px 34px; border-radius:var(--r);
+  border:1px solid var(--line-2); background:var(--surface); color:var(--text);
+  font:400 var(--t-sm)/1.4 "WorkSans",sans-serif}
+.search input::placeholder{color:var(--text-3)}
+.search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%);
+  width:14px; height:14px; stroke:var(--text-3); fill:none; stroke-width:2}
+.btn{padding:9px 13px; border-radius:var(--r); border:1px solid var(--line-2);
+  background:var(--surface); color:var(--text-2); cursor:pointer;
+  font:400 var(--t-xs)/1 "JetBrainsMono",monospace; letter-spacing:.05em; white-space:nowrap}
+.btn:hover{border-color:var(--accent); color:var(--accent)}
+.count{font:400 var(--t-xs)/1 "JetBrainsMono",monospace; color:var(--text-3);
+  font-variant-numeric:tabular-nums; margin-left:auto; padding:9px 0}
+
+/* ── tree ───────────────────────────────────────────────────────────── */
+.tree{margin-top:20px}
+.node{position:relative; scroll-margin-top:78px}
+.node.hide{display:none}
+.row{display:flex; align-items:baseline; gap:9px; padding:5px 8px 5px 0;
+  border-radius:7px; flex-wrap:wrap}
+.node > .row:hover{background:var(--surface-2)}
+.node.hit > .row{background:var(--accent-bg); box-shadow:inset 2px 0 0 var(--accent)}
+
+.twist{flex:none; width:19px; height:19px; padding:0; border:1px solid var(--line-2);
+  background:var(--surface); border-radius:5px; cursor:pointer;
+  display:grid; place-items:center; align-self:center}
+.twist svg{width:9px; height:9px; fill:none; stroke:var(--text-2); stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round; transform:rotate(90deg); transition:transform .18s}
+.twist[aria-expanded="false"] svg{transform:rotate(0deg)}
+.twist:hover{border-color:var(--accent)} .twist:hover svg{stroke:var(--accent)}
+.twist-none{border:0; background:none; width:19px; height:19px; position:relative}
+.twist-none::after{content:""; position:absolute; inset:50% auto auto 6px;
+  width:6px; height:1px; background:var(--rail)}
+
+.who{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; flex:1 1 0; min-width:0}
+.nm{font-weight:700; letter-spacing:-.005em}
+.ttl{font-size:var(--t-sm); color:var(--text-3)}
+
+.t-vp > .row .nm{font-family:"BigShoulders",sans-serif; font-size:1.9rem; font-weight:700; line-height:1.05}
+.t-lead > .row .nm{font-family:"BigShoulders",sans-serif; font-size:1.45rem; line-height:1.1}
+.t-mgr > .row .nm{font-size:var(--t-md)}
+.t-ic  > .row .nm{font-weight:400; color:var(--text-2)}
+.t-ic  > .row{padding-top:3px; padding-bottom:3px}
+
+.tags{display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-left:auto}
+.chip{font:400 var(--t-xs)/1 "JetBrainsMono",monospace; padding:4px 7px; border-radius:5px;
+  white-space:nowrap; font-variant-numeric:tabular-nums}
+.chip-s{background:var(--surface-2); color:var(--text-3); letter-spacing:.03em}
+.chip-n{background:var(--accent-bg); color:var(--accent-ink); font-weight:700; min-width:30px; text-align:center}
+.chip-i{background:var(--intern-bg); color:var(--intern); font-weight:700}
+.chip-i .u{opacity:.65; margin-left:1px}
+.flag{font:400 var(--t-xs)/1 "JetBrainsMono",monospace; padding:4px 7px; border-radius:5px;
+  letter-spacing:.04em; white-space:nowrap}
+.flag-vac{background:var(--alert-bg); color:var(--alert); font-weight:700}
+.flag-dot{background:var(--surface-2); color:var(--text-2); border:1px dashed var(--line-2)}
+
+.kids{margin-left:9px; padding-left:19px; border-left:1px solid var(--rail)}
+.note{margin:2px 0 8px 28px; padding:8px 11px; border-radius:7px; max-width:58ch;
+  background:var(--alert-bg); color:var(--alert); font-size:var(--t-sm); line-height:1.45}
+
+/* the tally and the team swap: exactly one is shown */
+.rollup{display:none; width:calc(100% - 28px); margin:3px 0 9px 28px; padding:8px 12px;
+  border:1px solid var(--line); border-radius:7px; background:var(--sunk); cursor:pointer;
+  color:var(--text-3); font:400 var(--t-xs)/1.7 "JetBrainsMono",monospace; text-align:left}
+.rollup b{color:var(--text); font-variant-numeric:tabular-nums}
+.rollup .sep{opacity:.4; margin:0 2px}
+.rollup .more{float:right; color:var(--accent); letter-spacing:.06em; text-transform:uppercase}
+.rollup:hover{border-color:var(--accent); color:var(--text-2)}
+.node[data-open="false"] > .rollup{display:block}
+.node[data-open="false"] > .kids{display:none}
+
+.is-vacant > .row{background:var(--alert-bg); border:1px dashed var(--alert); padding-left:8px}
+.is-vacant > .row .nm{color:var(--alert)}
+.is-dotted{border-left:2px dashed var(--line-2); padding-left:12px; margin-top:14px}
+.is-intern > .row .nm{color:var(--intern)}
+
+/* ── distribution ───────────────────────────────────────────────────── */
+.two{display:grid; gap:clamp(24px,5vw,48px); grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.bars{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px}
+.bars li{display:grid; grid-template-columns:1fr 96px 42px; gap:12px; align-items:center}
+.b-l{font-size:var(--t-sm); color:var(--text-2)}
+.b-l em{display:block; font-style:normal; font-size:var(--t-xs); color:var(--text-3);
+  font-family:"JetBrainsMono",monospace; letter-spacing:.03em; margin-top:1px}
+.b-t{height:6px; background:var(--surface-2); border-radius:3px; overflow:hidden}
+.b-t i{display:block; height:100%; background:var(--accent); border-radius:3px}
+.b-v{font:400 var(--t-sm)/1 "JetBrainsMono",monospace; text-align:right;
+  font-variant-numeric:tabular-nums; color:var(--text)}
+h3.sh{font-size:1.15rem; margin-bottom:16px; letter-spacing:.02em}
+
+/* ── notes ──────────────────────────────────────────────────────────── */
+.foot{background:var(--sunk); border-top:1px solid var(--line); margin-top:20px}
+.foot dl{margin:0; display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.foot dt{font:400 var(--t-xs)/1 "JetBrainsMono",monospace; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:7px}
+.foot dd{margin:0; font-size:var(--t-sm); color:var(--text-2); line-height:1.55}
+.legend{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; padding-bottom:20px;
+  border-bottom:1px solid var(--line)}
+.lg{display:flex; align-items:center; gap:7px; font-size:var(--t-xs); color:var(--text-3);
+  font-family:"JetBrainsMono",monospace}
+
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+@media (max-width:640px){
+  .tags{margin-left:0; width:100%}
+  .bars li{grid-template-columns:1fr 60px 38px}
+  .kids{padding-left:13px}
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-top">
+      <div>
+        <p class="eyebrow">Field Organisation · FY 2025–26</p>
+        <h1>Sales</h1>
+        <p class="sub">Every reporting line from the Vice President down to
+          territory, as recorded in the July 2026 roster.</p>
+      </div>
+      <div class="mark" aria-label="Euler">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <g fill="#F2A33C"><rect x="3" y="5" width="18" height="2.6" rx="1.3"/>
+          <rect x="7" y="10.7" width="14" height="2.6" rx="1.3"/>
+          <rect x="11" y="16.4" width="10" height="2.6" rx="1.3"/></g>
+        </svg>EULER
+      </div>
+    </div>
+    <div class="stats"><!--STATS--></div>
+  </div>
+</header>
+
+<main>
+<section class="wrap">
+  <div class="head">
+    <h2>Reporting into the VP</h2>
+    <p>Eight direct reports — four operating lines and four programme managers.
+       Bars are scaled to the largest line. Select a card to find it in the tree.</p>
+  </div>
+  <div class="grid"><!--BAND--></div>
+
+  <div class="head" style="margin-top:34px">
+    <h2>Adjacent lines</h2>
+    <p>Sales sub-functions whose reporting runs outside Sales leadership in the roster.</p>
+  </div>
+  <div class="grid"><!--BANDDOTTED--></div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap">
+  <div class="head">
+    <h2>Full structure</h2>
+    <p>Teams of individual contributors are folded by default — open any row to see
+       every name.</p>
+  </div>
+
+  <div class="legend">
+    <span class="lg"><span class="chip chip-n">42</span> people in line</span>
+    <span class="lg"><span class="chip chip-i">8<span class="u">i</span></span> interns in line</span>
+    <span class="lg"><span class="flag flag-vac">Position open</span></span>
+    <span class="lg"><span class="flag flag-dot">Reports outside Sales</span></span>
+  </div>
+
+  <div class="bar">
+    <div class="search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.5 10.5 14 14"/></svg>
+      <label class="sr" for="q" hidden>Search people</label>
+      <input id="q" type="search" placeholder="Search a name, title, or sub-department…" autocomplete="off">
+    </div>
+    <button class="btn" type="button" data-act="expand">Expand all</button>
+    <button class="btn" type="button" data-act="collapse">Collapse to leads</button>
+    <button class="btn" type="button" data-act="reset">Reset</button>
+    <span class="count" id="count">__TOTAL__ people</span>
+  </div>
+
+  <div class="tree" id="tree"><!--TREE--></div>
+</section>
+
+<hr class="rule">
+
+<section class="wrap">
+  <div class="two">
+    <div>
+      <h3 class="sh">Where the 367 sit</h3>
+      <ul class="bars"><!--SUBBARS--></ul>
+    </div>
+    <div>
+      <h3 class="sh">Grade distribution</h3>
+      <ul class="bars"><!--GBARS--></ul>
+
+      <h3 class="sh" style="margin-top:34px">Widest spans of control</h3>
+      <ul class="bars"><!--SPANBARS--></ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap" style="padding-top:36px; padding-bottom:44px">
+    <dl>
+      <div>
+        <dt>Source</dt>
+        <dd>Two roster extracts — 367 employees and 54 interns, all in the Sales
+          department. Every reporting line was rebuilt from the Reporting Manager
+          column; all 421 people resolve into the tree with none orphaned.</dd>
+      </div>
+      <div>
+        <dt>The open position</dt>
+        <dd>South Regional Manager is vacant following Amitabh Singh's resignation.
+          His 37-person line is shown intact under the open role, which
+          Ratanmani Mohit is covering directly until a replacement joins.</dd>
+      </div>
+      <div>
+        <dt>Adjacent lines</dt>
+        <dd>Euler Assured (19) and Institutional Sales (4) report to Ashish Tandon,
+          and one 3W Retail Sales role reports to Abhishek Malik — outside Sales
+          leadership. They are drawn dashed rather than folded into the VP's line.</dd>
+      </div>
+      <div>
+        <dt>Counting</dt>
+        <dd>The number on each row counts everyone in that line including the person
+          named. Interns are counted separately and never fold into the employee
+          figure. Seven employees share a name with a colleague; each is a distinct
+          record keyed by employee code.</dd>
+      </div>
+    </dl>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tree=document.getElementById('tree'),
+      q=document.getElementById('q'),
+      count=document.getElementById('count'),
+      nodes=[].slice.call(tree.querySelectorAll('.node')),
+      TOTAL=__TOTAL__;
+
+  function setOpen(node,open){
+    var t=node.querySelector(':scope > .row > .twist');
+    if(!t) return;
+    t.setAttribute('aria-expanded',open?'true':'false');
+    node.dataset.open=open?'true':'false';
+  }
+  function defaults(node){
+    var k=node.querySelector(':scope > .kids');
+    if(!k) return;
+    var kids=[].slice.call(k.children).filter(function(c){return c.classList.contains('node')}),
+        leafOnly=kids.length>0&&kids.every(function(c){return !c.querySelector(':scope > .kids')});
+    setOpen(node,!(leafOnly&&kids.length>=3));
+  }
+
+  tree.addEventListener('click',function(ev){
+    var t=ev.target.closest('.twist, .rollup'); if(!t) return;
+    var node=t.closest('.node');
+    setOpen(node, node.dataset.open==='false');
+  });
+
+  document.querySelector('.bar').addEventListener('click',function(ev){
+    var b=ev.target.closest('[data-act]'); if(!b) return;
+    var a=b.dataset.act;
+    nodes.forEach(function(n){
+      if(a==='expand') setOpen(n,true);
+      else if(a==='collapse') setOpen(n, +n.dataset.depth<2);
+      else defaults(n);
+    });
+    if(a==='reset'){ q.value=''; filter(''); }
+  });
+
+  function filter(term){
+    term=term.trim().toLowerCase();
+    nodes.forEach(function(n){ n.classList.remove('hide','hit'); });
+    if(!term){
+      nodes.forEach(defaults);
+      count.textContent=TOTAL+' people';
+      return;
+    }
+    var hits=0;
+    nodes.forEach(function(n){
+      if(n.dataset.search.indexOf(term)>-1){
+        hits++; n.classList.add('hit');
+        for(var p=n;p&&p!==tree;p=p.parentElement)
+          if(p.classList.contains('node')){ p.dataset.keep='1'; setOpen(p,true); }
+      }
+    });
+    nodes.forEach(function(n){
+      if(!n.classList.contains('hit')&&n.dataset.keep!=='1') n.classList.add('hide');
+      delete n.dataset.keep;
+    });
+    count.textContent=hits+(hits===1?' match':' matches');
+  }
+
+  var timer;
+  q.addEventListener('input',function(){
+    clearTimeout(timer); timer=setTimeout(function(){ filter(q.value); },110);
+  });
+
+  function goto(name){
+    q.value=name; filter(name);
+    var hit=tree.querySelector('.hit');
+    if(hit) hit.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  document.querySelectorAll('[data-goto]').forEach(function(c){
+    c.addEventListener('click',function(){ goto(c.dataset.goto); });
+    c.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); goto(c.dataset.goto); }
+    });
+  });
+})();
+</script>
