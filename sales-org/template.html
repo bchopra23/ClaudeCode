@@ -5,46 +5,48 @@
 
 :root{
   --paper:#F1F4F8; --card:#FFF; --soft:#F6F8FB; --sunk:#E6ECF4;
-  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#BCCBDC;
+  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#C0CEDE;
   --ink:#0B1727; --ink-2:#4C5F78; --ink-3:#8194A9;
   --gold:#A9640B; --gold-fill:#E2A040; --gold-soft:#FBF1E0;
   --teal:#0E6A65; --teal-soft:#DFF1EF;
   --red:#A93425; --red-soft:#FAE7E4;
   --navy:#0B1727;
-  --sh:0 1px 2px rgba(11,23,39,.05), 0 8px 20px -14px rgba(11,23,39,.4);
-  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 18px 40px -20px rgba(11,23,39,.45);
+  --sh:0 1px 2px rgba(11,23,39,.05), 0 6px 16px -12px rgba(11,23,39,.4);
+  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 16px 36px -18px rgba(11,23,39,.45);
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --paper:#0B1727; --card:#152540; --soft:#111F36; --sunk:#0A1524;
-    --line:#22385A; --line-2:#324F79; --rail:#2F4B74;
-    --ink:#EDF2F9; --ink-2:#AABCD1; --ink-3:#7589A2;
-    --gold:#F0A544; --gold-fill:#E2A040; --gold-soft:#33240F;
-    --teal:#5DCAC1; --teal-soft:#0C2E2C;
-    --red:#F07C6E; --red-soft:#341714;
-    --sh:0 1px 2px rgba(0,0,0,.35), 0 8px 20px -14px rgba(0,0,0,.8);
-    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 18px 40px -20px rgba(0,0,0,.9);
+    --paper:#18263E; --card:#213353; --soft:#27395B; --sunk:#131F33;
+    --line:#33507D; --line-2:#43608F; --rail:#41608F;
+    --ink:#F2F6FB; --ink-2:#BDCDE0; --ink-3:#93A8C0;
+    --gold:#F7B25C; --gold-fill:#E2A040; --gold-soft:#40301A;
+    --teal:#6FD6CD; --teal-soft:#173D3A;
+    --red:#F79184; --red-soft:#45231F;
+    --navy:#101C30;
+    --sh:0 1px 2px rgba(0,0,0,.35), 0 6px 16px -12px rgba(0,0,0,.8);
+    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 16px 36px -18px rgba(0,0,0,.9);
   }
 }
 :root[data-theme="light"]{
   --paper:#F1F4F8; --card:#FFF; --soft:#F6F8FB; --sunk:#E6ECF4;
-  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#BCCBDC;
+  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#C0CEDE;
   --ink:#0B1727; --ink-2:#4C5F78; --ink-3:#8194A9;
   --gold:#A9640B; --gold-fill:#E2A040; --gold-soft:#FBF1E0;
   --teal:#0E6A65; --teal-soft:#DFF1EF;
   --red:#A93425; --red-soft:#FAE7E4;
-  --sh:0 1px 2px rgba(11,23,39,.05), 0 8px 20px -14px rgba(11,23,39,.4);
-  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 18px 40px -20px rgba(11,23,39,.45);
+  --sh:0 1px 2px rgba(11,23,39,.05), 0 6px 16px -12px rgba(11,23,39,.4);
+  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 16px 36px -18px rgba(11,23,39,.45);
 }
 :root[data-theme="dark"]{
-  --paper:#0B1727; --card:#152540; --soft:#111F36; --sunk:#0A1524;
-  --line:#22385A; --line-2:#324F79; --rail:#2F4B74;
-  --ink:#EDF2F9; --ink-2:#AABCD1; --ink-3:#7589A2;
-  --gold:#F0A544; --gold-fill:#E2A040; --gold-soft:#33240F;
-  --teal:#5DCAC1; --teal-soft:#0C2E2C;
-  --red:#F07C6E; --red-soft:#341714;
-  --sh:0 1px 2px rgba(0,0,0,.35), 0 8px 20px -14px rgba(0,0,0,.8);
-  --sh-2:0 2px 6px rgba(0,0,0,.45), 0 18px 40px -20px rgba(0,0,0,.9);
+  --paper:#18263E; --card:#213353; --soft:#27395B; --sunk:#131F33;
+  --line:#33507D; --line-2:#43608F; --rail:#41608F;
+  --ink:#F2F6FB; --ink-2:#BDCDE0; --ink-3:#93A8C0;
+  --gold:#F7B25C; --gold-fill:#E2A040; --gold-soft:#40301A;
+  --teal:#6FD6CD; --teal-soft:#173D3A;
+  --red:#F79184; --red-soft:#45231F;
+  --navy:#101C30;
+  --sh:0 1px 2px rgba(0,0,0,.35), 0 6px 16px -12px rgba(0,0,0,.8);
+  --sh-2:0 2px 6px rgba(0,0,0,.45), 0 16px 36px -18px rgba(0,0,0,.9);
 }
 
 *{box-sizing:border-box}
@@ -54,42 +56,41 @@ h1,h2,h3{margin:0; font-family:"BigShoulders",system-ui,sans-serif; font-weight:
   text-wrap:balance; letter-spacing:.005em}
 button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 :focus-visible{outline:2px solid var(--gold-fill); outline-offset:3px; border-radius:8px}
-.wrap{max-width:880px; margin:0 auto; padding:0 20px}
+.wrap{max-width:940px; margin:0 auto; padding:0 20px}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
-.num{font-family:"JetBrainsMono",monospace; font-variant-numeric:tabular-nums}
 
 /* ── header ─────────────────────────────────────────────────────────── */
-.top{background:var(--navy); color:#EDF2F9}
-.top .wrap{display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  padding-top:18px; padding-bottom:18px}
-.logo{height:24px; width:auto; color:#FFF; flex:none}
-.top .bar{width:1px; height:22px; background:#2A4166}
-.top h1{font-size:1.35rem; line-height:1; color:#FFF}
-.top .fy{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.7rem;
-  letter-spacing:.14em; text-transform:uppercase; color:#F0A544}
-
-.stats{display:flex; flex-wrap:wrap; max-width:880px; margin:0 auto;
-  padding:0 20px; border-top:1px solid #1D3153}
-.stat{flex:1 1 110px; padding:14px 0 17px; border-right:1px solid #1D3153}
+.brand{background:var(--navy); color:#EDF2F9}
+.brand .wrap{display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  padding-top:15px; padding-bottom:15px}
+.logo{height:23px; width:auto; color:#FFF; flex:none}
+.brand .bar{width:1px; height:21px; background:#33507D}
+.brand h1{font-size:1.3rem; line-height:1; color:#FFF}
+.brand .fy{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.7rem;
+  letter-spacing:.14em; text-transform:uppercase; color:#F7B25C}
+.band{background:var(--card); border-bottom:1px solid var(--line)}
+.stats{display:flex; flex-wrap:wrap; max-width:940px; margin:0 auto; padding:0 20px}
+.stat{flex:1 1 110px; padding:14px 0 16px; border-right:1px solid var(--line)}
 .stat:last-child{border-right:0}
-.stat b{display:block; font-family:"BigShoulders",sans-serif; font-size:2.2rem;
-  line-height:1; color:#FFF; font-variant-numeric:tabular-nums}
+.stat b{display:block; font-family:"BigShoulders",sans-serif; font-size:2.1rem;
+  line-height:1; color:var(--ink); font-variant-numeric:tabular-nums}
 .stat span{display:block; margin-top:3px; font-family:"JetBrainsMono",monospace;
-  font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:#8296B0}
-.stat:nth-child(2) b{color:#5DCAC1}
-.stat:last-child b{color:#F07C6E}
+  font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3)}
+.stat:nth-child(2) b{color:var(--teal)}
+.stat:last-child b{color:var(--red)}
 
-/* ── search ─────────────────────────────────────────────────────────── */
-.seek{position:relative; margin:26px 0 22px}
-.seek input{width:100%; padding:14px 16px 14px 44px; border-radius:12px;
+/* ── controls ───────────────────────────────────────────────────────── */
+.tools{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:24px 0 20px}
+.seek{position:relative; flex:1 1 260px; min-width:200px}
+.seek input{width:100%; padding:13px 15px 13px 42px; border-radius:11px;
   border:1px solid var(--line-2); background:var(--card); color:var(--ink);
-  font:400 1rem/1.4 "WorkSans",sans-serif; box-shadow:var(--sh)}
+  font:400 .98rem/1.4 "WorkSans",sans-serif; box-shadow:var(--sh)}
 .seek input::placeholder{color:var(--ink-3)}
-.seek > svg{position:absolute; left:16px; top:50%; transform:translateY(-50%);
-  width:17px; height:17px; stroke:var(--ink-3); fill:none; stroke-width:2}
+.seek > svg{position:absolute; left:15px; top:50%; transform:translateY(-50%);
+  width:16px; height:16px; stroke:var(--ink-3); fill:none; stroke-width:2}
 .res{position:absolute; z-index:20; top:calc(100% + 7px); left:0; right:0;
   background:var(--card); border:1px solid var(--line-2); border-radius:12px;
-  box-shadow:var(--sh-2); max-height:340px; overflow-y:auto; padding:5px}
+  box-shadow:var(--sh-2); max-height:330px; overflow-y:auto; padding:5px}
 .res[hidden]{display:none}
 .res button{display:flex; align-items:baseline; gap:10px; width:100%; padding:9px 12px;
   border:0; background:none; border-radius:8px}
@@ -99,100 +100,99 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .res .rl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.72rem;
   color:var(--ink-3); white-space:nowrap}
 .res .none{padding:13px; color:var(--ink-3); font-size:.9rem}
+.act{padding:11px 14px; border-radius:11px; border:1px solid var(--line-2);
+  background:var(--card); color:var(--ink-2); box-shadow:var(--sh);
+  font-family:"JetBrainsMono",monospace; font-size:.72rem; letter-spacing:.05em;
+  white-space:nowrap}
+.act:hover{border-color:var(--gold-fill); color:var(--gold)}
 
-/* ── breadcrumb ─────────────────────────────────────────────────────── */
-.path{display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:16px;
-  font-size:.85rem}
-.path button{border:0; background:none; padding:3px 5px; border-radius:6px;
-  color:var(--gold); font-weight:700}
-.path button:hover{background:var(--gold-soft)}
-.path span{color:var(--ink-3)}
-.path .here{color:var(--ink-3); font-weight:400; padding:3px 5px}
+/* ── the tree ───────────────────────────────────────────────────────── */
+.tree ul{list-style:none; margin:0; padding:0}
+.node{position:relative}
+.node > .kids{margin-left:15px; padding-left:21px; border-left:2px solid var(--rail);
+  padding-bottom:2px}
+.node.shut > .kids{display:none}
+/* the tick that joins a card to its parent's rail */
+.node > .kids > ul > .node > .row::before{content:""; position:absolute;
+  left:-21px; top:50%; width:21px; height:2px; background:var(--rail)}
+.node > .kids > .direct::before{content:""; position:absolute; left:-21px; top:26px;
+  width:21px; height:2px; background:var(--rail)}
 
-/* ── focus card ─────────────────────────────────────────────────────── */
-.focus{background:var(--card); border:1px solid var(--line); border-radius:16px;
-  box-shadow:var(--sh); padding:24px 26px; position:relative; overflow:hidden}
-.focus::before{content:""; position:absolute; inset:0 0 auto 0; height:4px;
-  background:var(--gold-fill)}
-.focus h2{font-size:2.1rem; line-height:1.05; margin-top:4px}
-.focus .role{margin:7px 0 0; color:var(--ink-2); font-size:1rem}
-.focus.vac{border-color:var(--red); background:var(--red-soft)}
-.focus.vac::before{background:var(--red)}
-.focus.vac h2{color:var(--red)}
-.note{margin:16px 0 0; padding:12px 14px; border-radius:10px; background:var(--red-soft);
-  color:var(--red); font-size:.9rem; line-height:1.55; border:1px solid var(--red)}
+.row{position:relative; display:flex; align-items:center; gap:13px; width:100%;
+  margin-top:9px; padding:14px 16px; background:var(--card);
+  border:1px solid var(--line); border-radius:13px; box-shadow:var(--sh);
+  transition:border-color .13s, box-shadow .13s}
+.row:hover{border-color:var(--gold-fill); box-shadow:var(--sh-2)}
+.row.flat{cursor:default}
+.row.flat:hover{border-color:var(--line); box-shadow:var(--sh)}
 
-.tally{display:flex; gap:9px; flex-wrap:wrap; margin-top:18px}
-.t-item{background:var(--soft); border:1px solid var(--line); border-radius:10px;
-  padding:9px 13px; min-width:96px}
-.t-item b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.7rem;
+.chev{flex:none; width:26px; height:26px; border-radius:8px; display:grid;
+  place-items:center; background:var(--soft); color:var(--ink-3);
+  border:1px solid var(--line)}
+.chev svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2.5;
+  stroke-linecap:round; stroke-linejoin:round; transition:transform .16s}
+.node:not(.shut) > .row .chev svg{transform:rotate(90deg)}
+.row:hover .chev{background:var(--gold-soft); color:var(--gold); border-color:var(--gold-fill)}
+.chev.blank{background:none; border:0; color:var(--rail)}
+.chev.blank::after{content:""; width:6px; height:6px; border-radius:50%;
+  background:currentColor}
+
+.who{min-width:0; flex:1}
+.nm{display:block; font-weight:700; font-size:1rem; line-height:1.3}
+.rl{display:block; font-size:.84rem; color:var(--ink-3); line-height:1.4}
+.cnt{flex:none; text-align:right}
+.cnt b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.45rem;
   line-height:1; font-variant-numeric:tabular-nums}
-.t-item span{display:block; margin-top:2px; font-size:.72rem; color:var(--ink-3);
-  letter-spacing:.05em; text-transform:uppercase; font-family:"JetBrainsMono",monospace}
-.t-int b{color:var(--teal)}
+.cnt span{display:block; font-family:"JetBrainsMono",monospace; font-size:.66rem;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--ink-3)}
+.cnt .ki{color:var(--teal); margin-top:2px}
 
-/* ── the branch rail ────────────────────────────────────────────────── */
-.branch{margin:0; padding:0 0 0 26px; list-style:none; position:relative}
-.branch::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px;
-  background:var(--rail)}
-.branch > li{position:relative; padding-top:14px}
-/* elbow from the rail into each card */
-.branch > li::before{content:""; position:absolute; left:-26px; top:50%;
-  width:26px; height:2px; background:var(--rail)}
-.branch > li:last-child::after{content:""; position:absolute; left:-27px; top:calc(50% + 2px);
-  bottom:-2px; width:4px; background:var(--paper)}
-.lead-in{height:20px; margin-left:0; width:2px; background:var(--rail)}
-
-.kid{display:flex; align-items:center; gap:14px; width:100%; padding:15px 17px;
-  background:var(--card); border:1px solid var(--line); border-radius:13px;
-  box-shadow:var(--sh); transition:border-color .14s, transform .14s, box-shadow .14s}
-.kid:hover{border-color:var(--gold-fill); transform:translateX(3px); box-shadow:var(--sh-2)}
-.kid .who{min-width:0; flex:1}
-.kid .kn{display:block; font-weight:700; font-size:1.02rem; line-height:1.3}
-.kid .kt{display:block; font-size:.85rem; color:var(--ink-3); line-height:1.4}
-.kid .kc{text-align:right; flex:none}
-.kid .kc b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.5rem;
-  line-height:1; font-variant-numeric:tabular-nums}
-.kid .kc span{display:block; font-size:.68rem; color:var(--ink-3);
-  letter-spacing:.05em; text-transform:uppercase; font-family:"JetBrainsMono",monospace}
-.kid .kc .ki{color:var(--teal); margin-top:2px}
-.kid .go{flex:none; width:26px; height:26px; border-radius:50%; display:grid;
-  place-items:center; background:var(--soft); color:var(--ink-3)}
-.kid:hover .go{background:var(--gold-soft); color:var(--gold)}
-.kid .go svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2.4;
-  stroke-linecap:round; stroke-linejoin:round}
-.tag{display:inline-block; font-family:"JetBrainsMono",monospace; font-size:.63rem;
+.tag{display:inline-block; font-family:"JetBrainsMono",monospace; font-size:.62rem;
   letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:5px;
-  background:var(--gold-soft); color:var(--gold); vertical-align:middle; margin-left:8px}
-.field{display:flex; gap:8px; margin-top:7px; flex-wrap:wrap}
-.field span{font-family:"JetBrainsMono",monospace; font-size:.7rem; color:var(--ink-2);
-  background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:3px 7px}
+  background:var(--gold-soft); color:var(--gold); vertical-align:middle; margin-left:7px}
+.field{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap}
+.field span{font-family:"JetBrainsMono",monospace; font-size:.69rem; color:var(--ink-2);
+  background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:2px 7px}
 .field b{font-variant-numeric:tabular-nums; color:var(--ink)}
-.kid.vac{border-color:var(--red); border-style:dashed; background:var(--red-soft)}
-.kid.vac .kn{color:var(--red)}
-.kid.flat{cursor:default}
-.kid.flat:hover{border-color:var(--line); transform:none; box-shadow:var(--sh)}
 
-/* ── direct reports list ────────────────────────────────────────────── */
-.direct{margin-top:22px}
-.d-head{display:flex; align-items:baseline; gap:10px; margin-bottom:11px; flex-wrap:wrap}
-.d-head h3{font-size:1.15rem}
-.d-head p{margin:0; font-size:.85rem; color:var(--ink-3)}
+.row.vac{border-color:var(--red); border-style:dashed; background:var(--red-soft)}
+.row.vac .nm{color:var(--red)}
+.note{margin:9px 0 0 15px; padding:11px 13px; border-radius:10px;
+  background:var(--red-soft); color:var(--red); font-size:.87rem; line-height:1.55;
+  border:1px solid var(--red)}
+
+/* root card sits above the tree as the department header */
+.node.root > .row{margin-top:0; padding:22px 24px; border-radius:16px; align-items:flex-start}
+.node.root > .row::before{display:none}
+.node.root > .row .nm{font-family:"BigShoulders",sans-serif; font-size:2rem; line-height:1.05}
+.node.root > .row .rl{font-size:.95rem; color:var(--ink-2); margin-top:4px}
+.node.root > .row .cnt b{font-size:2rem}
+.node.root > .kids{margin-top:4px}
+
+/* ── people who report straight in ──────────────────────────────────── */
+.direct{position:relative; margin-top:9px}
+.d-lab{font-family:"JetBrainsMono",monospace; font-size:.68rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); padding:5px 2px 7px}
 .people{list-style:none; margin:0; padding:0; border:1px solid var(--line);
-  border-radius:13px; overflow:hidden; background:var(--card)}
-.people li{display:flex; align-items:baseline; gap:11px; padding:11px 16px;
-  border-bottom:1px solid var(--line)}
+  border-radius:12px; overflow:hidden; background:var(--card)}
+.people li{display:flex; align-items:baseline; gap:11px; padding:9px 15px;
+  border-bottom:1px solid var(--line); font-size:.92rem}
 .people li:last-child{border-bottom:0}
 .people li:nth-child(even){background:var(--soft)}
-.people .pn{font-weight:700; font-size:.94rem}
-.people .pt{font-size:.83rem; color:var(--ink-3)}
-.people .pl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.74rem;
+.people .pn{font-weight:700}
+.people .pt{font-size:.82rem; color:var(--ink-3)}
+.people .pl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.72rem;
   color:var(--ink-3); white-space:nowrap}
 .people li.int .pn{color:var(--teal)}
-.people li.int .pn::after{content:"intern"; margin-left:7px; font-family:"JetBrainsMono",monospace;
-  font-size:.63rem; letter-spacing:.07em; text-transform:uppercase; background:var(--teal-soft);
-  color:var(--teal); padding:2px 5px; border-radius:4px; vertical-align:middle}
-.hl{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill)}
+.people li.int .pn::after{content:"intern"; margin-left:7px;
+  font-family:"JetBrainsMono",monospace; font-size:.61rem; letter-spacing:.07em;
+  text-transform:uppercase; background:var(--teal-soft); color:var(--teal);
+  padding:2px 5px; border-radius:4px; vertical-align:middle}
+
+.hit{border-color:var(--gold-fill) !important;
+  box-shadow:0 0 0 3px var(--gold-soft), var(--sh-2) !important}
+.people li.hit{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill) !important;
+  border-color:var(--line) !important}
 
 /* ── panels ─────────────────────────────────────────────────────────── */
 .split{border-top:1px solid var(--line); margin-top:46px; padding-top:34px}
@@ -216,41 +216,45 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .foot dd{margin:0; font-size:.88rem; color:var(--ink-2); line-height:1.6}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
-@media (max-width:560px){
-  .focus{padding:20px}
-  .focus h2{font-size:1.7rem}
-  .kid{padding:13px 14px; gap:11px}
-  .kid .kc b{font-size:1.25rem}
-  .branch{padding-left:18px}
-  .branch > li::before{left:-18px; width:18px}
-  .branch > li:last-child::after{left:-19px}
-  .lead-in{margin-left:0}
-  .people li{flex-wrap:wrap; gap:4px 10px}
+@media (max-width:600px){
+  .node > .kids{margin-left:7px; padding-left:13px}
+  .node > .kids > ul > .node > .row::before,
+  .node > .kids > .direct::before{left:-13px; width:13px}
+  .row{padding:12px 13px; gap:10px}
+  .node.root > .row{padding:18px; flex-direction:column}
+  .node.root > .row .nm{font-size:1.6rem}
+  .cnt{text-align:left}
+  .people li{flex-wrap:wrap; gap:3px 10px}
   .people .pl{margin-left:0; width:100%}
 }
 </style>
 
-<header class="top">
-  <div class="wrap">
-    <!--LOGO-->
-    <span class="bar" aria-hidden="true"></span>
-    <h1>Sales</h1>
-    <span class="fy">Org structure · FY 2025–26</span>
+<header>
+  <div class="brand">
+    <div class="wrap">
+      <!--LOGO-->
+      <span class="bar" aria-hidden="true"></span>
+      <h1>Sales</h1>
+      <span class="fy">Org structure · FY 2025–26</span>
+    </div>
   </div>
-  <div class="stats"><!--STATS--></div>
+  <div class="band"><div class="stats"><!--STATS--></div></div>
 </header>
 
 <main class="wrap">
-  <div class="seek">
-    <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><path d="M11.8 11.8 16 16"/></svg>
-    <label class="sr" for="q">Search anyone in Sales</label>
-    <input id="q" type="search" placeholder="Search anyone by name, role, or state…"
-           autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res">
-    <div class="res" id="res" role="listbox" hidden></div>
+  <div class="tools">
+    <div class="seek">
+      <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><path d="M11.8 11.8 16 16"/></svg>
+      <label class="sr" for="q">Search anyone in Sales</label>
+      <input id="q" type="search" placeholder="Search anyone by name, role, or state…"
+             autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res">
+      <div class="res" id="res" role="listbox" hidden></div>
+    </div>
+    <button class="act" type="button" data-act="open">Open all</button>
+    <button class="act" type="button" data-act="shut">Close all</button>
   </div>
 
-  <nav class="path" id="path" aria-label="You are here"></nav>
-  <div id="view"></div>
+  <div class="tree" id="tree"></div>
 
   <section class="split">
     <h2>The department at a glance</h2>
@@ -268,9 +272,9 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     <dl>
       <div>
         <dt>How to read this</dt>
-        <dd>You are looking at one manager at a time. The cards below them are the
-          teams that branch further — select one to go down a level. Anyone
-          reporting straight to that manager is listed underneath by name.</dd>
+        <dd>One tree, top to bottom. Selecting a manager opens their branch in
+          place — everything above and around it stays where it was, so you keep
+          the whole line in view. Select again to close it.</dd>
       </div>
       <div>
         <dt>What the numbers mean</dt>
@@ -298,9 +302,8 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 <script>
 (function(){
   var NODES=/*NODES*/, INDEX=/*INDEX*/, ROOT=__ROOT__;
-  var view=document.getElementById('view'), path=document.getElementById('path'),
-      q=document.getElementById('q'), res=document.getElementById('res');
-  var here=ROOT, spotlight=null;
+  var tree=document.getElementById('tree'), q=document.getElementById('q'),
+      res=document.getElementById('res');
 
   function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g,function(c){
@@ -308,110 +311,109 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     });
   }
   function plural(n,w){ return n+' '+w+(n===1?'':'s'); }
+  function people(n){ return plural(n,'person').replace('persons','people'); }
 
-  /* ── breadcrumb ───────────────────────────────────────────────────── */
-  function drawPath(){
-    var chain=[], id=here;
-    while(id){ chain.unshift(NODES[id]); id=NODES[id].parent; }
-    path.innerHTML=chain.map(function(n,i){
-      var last=i===chain.length-1;
-      var label=esc(i===0?'Sales':n.name);
-      return (last ? '<span class="here">'+label+'</span>'
-                   : '<button type="button" data-go="'+n.id+'">'+label+'</button>')
-             + (last?'':'<span aria-hidden="true">›</span>');
-    }).join('');
-  }
+  var CHEV='<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>';
 
-  /* ── main view ────────────────────────────────────────────────────── */
-  function draw(){
-    var n=NODES[here];
-    var bits=[];
+  /* ── build the whole tree once; opening a branch never removes another ── */
+  function card(n,depth){
+    var open=depth<1;                       // department head starts open
+    var has=n.kids.length||n.team.length;
 
-    var role=[n.title, n.sub!=='Leadership'?n.sub:'', n.loc].filter(Boolean).map(esc).join(' · ');
-    if(n.rm && n.rosterTitle && n.rosterTitle!=='Regional Manager')
-      role+=' <span style="color:var(--ink-3)">(on the roster as '+esc(n.rosterTitle)+')</span>';
-    var fieldRow = (n.tsm||n.tse)
-      ? '<div class="field">'+
-        (n.tsm?'<span><b>'+n.tsm+'</b> territory sales managers</span>':'')+
-        (n.tse?'<span><b>'+n.tse+'</b> territory sales executives</span>':'')+'</div>'
+    var role=[n.title, (n.sub&&n.sub!=='Leadership'&&n.sub!=='Retail Sales')?n.sub:'', n.loc]
+             .filter(Boolean).map(esc).join(' · ');
+    var under=[];
+    if(n.kids.length) under.push(plural(n.kids.length,'team'));
+    if(n.team.length) under.push(people(n.team.length));
+    if(under.length) role+=(role?' — ':'')+under.join(', ')+' below';
+
+    var field=(n.tsm||n.tse)
+      ? '<span class="field">'+
+        (n.tsm?'<span><b>'+n.tsm+'</b> TSM</span>':'')+
+        (n.tse?'<span><b>'+n.tse+'</b> TSE</span>':'')+'</span>'
       : '';
-    bits.push('<div class="focus'+(n.vacant?' vac':'')+'">'+
-      '<h2>'+esc(n.name)+(n.rm?'<span class="tag">Regional Manager</span>':'')+'</h2>'+
-      '<p class="role">'+role+'</p>'+fieldRow+
-      (n.note?'<p class="note">'+esc(n.note)+'</p>':'')+
-      '<div class="tally">'+
-        '<div class="t-item"><b>'+n.emp+'</b><span>in this line</span></div>'+
-        (n.interns?'<div class="t-item t-int"><b>'+n.interns+'</b><span>interns</span></div>':'')+
-        (n.kids.length?'<div class="t-item"><b>'+n.kids.length+'</b><span>'+(n.kids.length===1?'team':'teams')+'</span></div>':'')+
-      '</div></div>');
 
-    if(n.kids.length){
-      bits.push('<div class="lead-in"></div><ul class="branch">'+
-        n.kids.map(function(k){
-          var sub=[k.title, k.loc].filter(Boolean).map(esc).join(' · ');
-          var under=[];
-          if(k.branches) under.push(plural(k.branches,'team'));
-          if(k.direct) under.push(plural(k.direct,'person').replace('persons','people'));
-          var fld=(k.tsm||k.tse)
-            ? '<span class="field">'+
-              (k.tsm?'<span><b>'+k.tsm+'</b> TSM</span>':'')+
-              (k.tse?'<span><b>'+k.tse+'</b> TSE</span>':'')+'</span>'
-            : '';
-          return '<li><button class="kid'+(k.vacant?' vac':'')+'" type="button" data-go="'+k.id+'">'+
-            '<span class="who"><span class="kn">'+esc(k.name)+
-              (k.rm?'<span class="tag">RM</span>':'')+'</span>'+
-            '<span class="kt">'+sub+(under.length?' — '+under.join(', ')+' below':'')+'</span>'+
-            fld+'</span>'+
-            '<span class="kc"><b>'+k.emp+'</b><span>people</span>'+
-              (k.interns?'<span class="ki">+'+k.interns+' interns</span>':'')+'</span>'+
-            '<span class="go" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4 2l4 4-4 4"/></svg></span>'+
-            '</button></li>';
-        }).join('')+'</ul>');
-    }
+    var h=['<li class="node'+(depth===0?' root':'')+(open||!has?'':' shut')+
+           '" id="n-'+esc(n.id)+'">'];
+    h.push('<'+(has?'button':'div')+' class="row'+(n.vacant?' vac':'')+(has?'':' flat')+'"'+
+      (has?' type="button" aria-expanded="'+(open?'true':'false')+'" data-tog="'+esc(n.id)+'"':'')+'>');
+    h.push('<span class="chev'+(has?'':' blank')+'">'+(has?CHEV:'')+'</span>');
+    h.push('<span class="who"><span class="nm">'+esc(n.name)+
+      (n.rm?'<span class="tag">'+(depth===0?'Regional Manager':'RM')+'</span>':'')+'</span>'+
+      '<span class="rl">'+role+'</span>'+field+'</span>');
+    h.push('<span class="cnt"><b>'+n.emp+'</b><span>people</span>'+
+      (n.interns?'<span class="ki">+'+n.interns+' interns</span>':'')+'</span>');
+    h.push('</'+(has?'button':'div')+'>');
 
-    if(n.team.length){
-      bits.push('<div class="direct"><div class="d-head">'+
-        '<h3>Reporting straight to '+esc(n.name.split(' ')[0])+'</h3>'+
-        '<p>'+plural(n.team.length,'person').replace('persons','people')+
-        ', no team of their own</p></div><ul class="people">'+
-        n.team.map(function(m){
-          return '<li'+(m.intern?' class="int"':'')+' data-who="'+esc(m.name)+'">'+
-            '<span class="pn">'+esc(m.name)+'</span>'+
-            '<span class="pt">'+esc(m.title)+'</span>'+
-            (m.loc?'<span class="pl">'+esc(m.loc)+'</span>':'')+'</li>';
-        }).join('')+'</ul></div>');
-    }
+    if(n.note) h.push('<p class="note">'+esc(n.note)+'</p>');
 
-    if(!n.kids.length && !n.team.length){
-      bits.push('<div class="direct"><p style="color:var(--ink-3)">No one reports to '+
-        esc(n.name)+'.</p></div>');
-    }
-
-    view.innerHTML=bits.join('');
-    drawPath();
-
-    if(spotlight){
-      var row=view.querySelector('[data-who="'+CSS.escape(spotlight)+'"]');
-      if(row){
-        row.classList.add('hl');
-        row.scrollIntoView({block:'center',behavior:'smooth'});
+    if(has){
+      h.push('<div class="kids">');
+      if(n.kids.length){
+        h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');
       }
-      spotlight=null;
+      if(n.team.length){
+        h.push('<div class="direct"><p class="d-lab">'+
+          people(n.team.length)+' reporting straight to '+esc(n.name.split(' ')[0])+
+          '</p><ul class="people">'+
+          n.team.map(function(m){
+            return '<li'+(m.intern?' class="int"':'')+' id="p-'+esc(m.name.replace(/\s+/g,'_'))+'">'+
+              '<span class="pn">'+esc(m.name)+'</span>'+
+              '<span class="pt">'+esc(m.title)+'</span>'+
+              (m.loc?'<span class="pl">'+esc(m.loc)+'</span>':'')+'</li>';
+          }).join('')+'</ul></div>');
+      }
+      h.push('</div>');
     }
+    h.push('</li>');
+    return h.join('');
   }
 
-  function go(id,who){
-    if(!NODES[id]) return;
-    here=id; spotlight=who||null;
-    draw();
-    if(!who) window.scrollTo({top:0,behavior:'smooth'});
+  tree.innerHTML='<ul>'+card(NODES[ROOT],0)+'</ul>';
+
+  /* ── open / close in place ────────────────────────────────────────── */
+  function setOpen(li,open){
+    li.classList.toggle('shut',!open);
+    var b=li.querySelector(':scope > .row[data-tog]');
+    if(b) b.setAttribute('aria-expanded',open?'true':'false');
   }
-  document.addEventListener('click',function(ev){
-    var b=ev.target.closest('[data-go]');
-    if(b) go(b.dataset.go);
+  tree.addEventListener('click',function(ev){
+    var b=ev.target.closest('.row[data-tog]'); if(!b) return;
+    var li=b.closest('.node');
+    setOpen(li,li.classList.contains('shut'));
+  });
+  document.querySelector('.tools').addEventListener('click',function(ev){
+    var a=ev.target.closest('[data-act]'); if(!a) return;
+    var open=a.dataset.act==='open';
+    tree.querySelectorAll('.node').forEach(function(li){
+      setOpen(li, open || li.classList.contains('root'));
+    });
   });
 
-  /* ── search ───────────────────────────────────────────────────────── */
+  /* ── search: reveal in place, never hide anything ─────────────────── */
+  function clearHits(){
+    tree.querySelectorAll('.hit').forEach(function(el){ el.classList.remove('hit'); });
+  }
+  function reveal(el){
+    for(var p=el.closest('.node');p;p=p.parentElement.closest('.node')) setOpen(p,true);
+  }
+  function jump(id,who){
+    clearHits();
+    var target;
+    if(who){
+      var host=document.getElementById('n-'+CSS.escape(id));
+      target=host&&host.querySelector('#p-'+CSS.escape(who.replace(/\s+/g,'_')));
+    }
+    if(!target){
+      var n=document.getElementById('n-'+CSS.escape(id));
+      target=n&&n.querySelector(':scope > .row');
+    }
+    if(!target) return;
+    reveal(target);
+    target.classList.add('hit');
+    target.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+
   function find(term){
     term=term.trim().toLowerCase();
     if(term.length<2){ res.hidden=true; q.setAttribute('aria-expanded','false'); return; }
@@ -434,9 +436,8 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   });
   res.addEventListener('click',function(ev){
     var b=ev.target.closest('[data-id]'); if(!b) return;
-    /* a manager opens their own view; anyone else opens their manager's, highlighted */
-    go(b.dataset.id, b.dataset.mgr==='1'?null:b.dataset.name);
-    res.hidden=true; q.setAttribute('aria-expanded','false'); q.value='';
+    jump(b.dataset.id, b.dataset.mgr==='1'?null:b.dataset.name);
+    res.hidden=true; q.setAttribute('aria-expanded','false');
   });
   document.addEventListener('click',function(ev){
     if(!ev.target.closest('.seek')){ res.hidden=true; q.setAttribute('aria-expanded','false'); }
@@ -445,7 +446,5 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     if(ev.key==='Escape'){ res.hidden=true; q.value=''; q.setAttribute('aria-expanded','false'); }
     if(ev.key==='Enter'){ var f=res.querySelector('[data-id]'); if(f&&!res.hidden) f.click(); }
   });
-
-  draw();
 })();
 </script>

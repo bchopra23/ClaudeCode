@@ -3,10 +3,11 @@
 An interactive org chart for the Sales department: 343 employees and 54 interns.
 Every reporting line is rebuilt from the roster's Reporting Manager column.
 
-The page shows **one manager at a time** — their card, the branches beneath
-them on a tree rail, and everyone reporting to them directly, listed by name.
-A breadcrumb tracks the path back up. Nothing zooms and nothing scrolls
-sideways, so it reads the same on a phone as on a desktop.
+The page is **one continuous tree**. Selecting a manager opens their branch in
+place — the lines above and around it stay exactly where they were, so the
+whole hierarchy remains in view. Individual contributors are listed by name
+under the manager they report to. Nothing zooms and nothing scrolls sideways,
+so it reads the same on a phone as on a desktop.
 
 ## Build
 
@@ -39,9 +40,9 @@ variants (`Naitik Srivastav` → `Naitik Srivastava`, `Arup Choudhary` →
 `Arup Roy Chowdhury`, `Vikas singh bisht` → `Vikas Singh Bisht`). All 397 people
 resolve into the tree with none orphaned.
 
-Search covers all 397 people. Picking a manager opens their view; picking
-anyone else opens their manager's view with that person highlighted in the
-list.
+Search covers all 397 people. Picking a result opens whatever branches are
+needed to reach that person and highlights them, without closing anything
+already open.
 
 Seven employees share a name with a colleague. None of them is a manager, so
 name-based manager lookup stays unambiguous; each is still a distinct node keyed

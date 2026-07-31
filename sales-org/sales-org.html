@@ -5,46 +5,48 @@
 
 :root{
   --paper:#F1F4F8; --card:#FFF; --soft:#F6F8FB; --sunk:#E6ECF4;
-  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#BCCBDC;
+  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#C0CEDE;
   --ink:#0B1727; --ink-2:#4C5F78; --ink-3:#8194A9;
   --gold:#A9640B; --gold-fill:#E2A040; --gold-soft:#FBF1E0;
   --teal:#0E6A65; --teal-soft:#DFF1EF;
   --red:#A93425; --red-soft:#FAE7E4;
   --navy:#0B1727;
-  --sh:0 1px 2px rgba(11,23,39,.05), 0 8px 20px -14px rgba(11,23,39,.4);
-  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 18px 40px -20px rgba(11,23,39,.45);
+  --sh:0 1px 2px rgba(11,23,39,.05), 0 6px 16px -12px rgba(11,23,39,.4);
+  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 16px 36px -18px rgba(11,23,39,.45);
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --paper:#0B1727; --card:#152540; --soft:#111F36; --sunk:#0A1524;
-    --line:#22385A; --line-2:#324F79; --rail:#2F4B74;
-    --ink:#EDF2F9; --ink-2:#AABCD1; --ink-3:#7589A2;
-    --gold:#F0A544; --gold-fill:#E2A040; --gold-soft:#33240F;
-    --teal:#5DCAC1; --teal-soft:#0C2E2C;
-    --red:#F07C6E; --red-soft:#341714;
-    --sh:0 1px 2px rgba(0,0,0,.35), 0 8px 20px -14px rgba(0,0,0,.8);
-    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 18px 40px -20px rgba(0,0,0,.9);
+    --paper:#18263E; --card:#213353; --soft:#27395B; --sunk:#131F33;
+    --line:#33507D; --line-2:#43608F; --rail:#41608F;
+    --ink:#F2F6FB; --ink-2:#BDCDE0; --ink-3:#93A8C0;
+    --gold:#F7B25C; --gold-fill:#E2A040; --gold-soft:#40301A;
+    --teal:#6FD6CD; --teal-soft:#173D3A;
+    --red:#F79184; --red-soft:#45231F;
+    --navy:#101C30;
+    --sh:0 1px 2px rgba(0,0,0,.35), 0 6px 16px -12px rgba(0,0,0,.8);
+    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 16px 36px -18px rgba(0,0,0,.9);
   }
 }
 :root[data-theme="light"]{
   --paper:#F1F4F8; --card:#FFF; --soft:#F6F8FB; --sunk:#E6ECF4;
-  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#BCCBDC;
+  --line:#DCE4EE; --line-2:#C4D0DF; --rail:#C0CEDE;
   --ink:#0B1727; --ink-2:#4C5F78; --ink-3:#8194A9;
   --gold:#A9640B; --gold-fill:#E2A040; --gold-soft:#FBF1E0;
   --teal:#0E6A65; --teal-soft:#DFF1EF;
   --red:#A93425; --red-soft:#FAE7E4;
-  --sh:0 1px 2px rgba(11,23,39,.05), 0 8px 20px -14px rgba(11,23,39,.4);
-  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 18px 40px -20px rgba(11,23,39,.45);
+  --sh:0 1px 2px rgba(11,23,39,.05), 0 6px 16px -12px rgba(11,23,39,.4);
+  --sh-2:0 2px 6px rgba(11,23,39,.07), 0 16px 36px -18px rgba(11,23,39,.45);
 }
 :root[data-theme="dark"]{
-  --paper:#0B1727; --card:#152540; --soft:#111F36; --sunk:#0A1524;
-  --line:#22385A; --line-2:#324F79; --rail:#2F4B74;
-  --ink:#EDF2F9; --ink-2:#AABCD1; --ink-3:#7589A2;
-  --gold:#F0A544; --gold-fill:#E2A040; --gold-soft:#33240F;
-  --teal:#5DCAC1; --teal-soft:#0C2E2C;
-  --red:#F07C6E; --red-soft:#341714;
-  --sh:0 1px 2px rgba(0,0,0,.35), 0 8px 20px -14px rgba(0,0,0,.8);
-  --sh-2:0 2px 6px rgba(0,0,0,.45), 0 18px 40px -20px rgba(0,0,0,.9);
+  --paper:#18263E; --card:#213353; --soft:#27395B; --sunk:#131F33;
+  --line:#33507D; --line-2:#43608F; --rail:#41608F;
+  --ink:#F2F6FB; --ink-2:#BDCDE0; --ink-3:#93A8C0;
+  --gold:#F7B25C; --gold-fill:#E2A040; --gold-soft:#40301A;
+  --teal:#6FD6CD; --teal-soft:#173D3A;
+  --red:#F79184; --red-soft:#45231F;
+  --navy:#101C30;
+  --sh:0 1px 2px rgba(0,0,0,.35), 0 6px 16px -12px rgba(0,0,0,.8);
+  --sh-2:0 2px 6px rgba(0,0,0,.45), 0 16px 36px -18px rgba(0,0,0,.9);
 }
 
 *{box-sizing:border-box}
@@ -54,42 +56,41 @@ h1,h2,h3{margin:0; font-family:"BigShoulders",system-ui,sans-serif; font-weight:
   text-wrap:balance; letter-spacing:.005em}
 button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 :focus-visible{outline:2px solid var(--gold-fill); outline-offset:3px; border-radius:8px}
-.wrap{max-width:880px; margin:0 auto; padding:0 20px}
+.wrap{max-width:940px; margin:0 auto; padding:0 20px}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
-.num{font-family:"JetBrainsMono",monospace; font-variant-numeric:tabular-nums}
 
 /* ── header ─────────────────────────────────────────────────────────── */
-.top{background:var(--navy); color:#EDF2F9}
-.top .wrap{display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  padding-top:18px; padding-bottom:18px}
-.logo{height:24px; width:auto; color:#FFF; flex:none}
-.top .bar{width:1px; height:22px; background:#2A4166}
-.top h1{font-size:1.35rem; line-height:1; color:#FFF}
-.top .fy{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.7rem;
-  letter-spacing:.14em; text-transform:uppercase; color:#F0A544}
-
-.stats{display:flex; flex-wrap:wrap; max-width:880px; margin:0 auto;
-  padding:0 20px; border-top:1px solid #1D3153}
-.stat{flex:1 1 110px; padding:14px 0 17px; border-right:1px solid #1D3153}
+.brand{background:var(--navy); color:#EDF2F9}
+.brand .wrap{display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  padding-top:15px; padding-bottom:15px}
+.logo{height:23px; width:auto; color:#FFF; flex:none}
+.brand .bar{width:1px; height:21px; background:#33507D}
+.brand h1{font-size:1.3rem; line-height:1; color:#FFF}
+.brand .fy{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.7rem;
+  letter-spacing:.14em; text-transform:uppercase; color:#F7B25C}
+.band{background:var(--card); border-bottom:1px solid var(--line)}
+.stats{display:flex; flex-wrap:wrap; max-width:940px; margin:0 auto; padding:0 20px}
+.stat{flex:1 1 110px; padding:14px 0 16px; border-right:1px solid var(--line)}
 .stat:last-child{border-right:0}
-.stat b{display:block; font-family:"BigShoulders",sans-serif; font-size:2.2rem;
-  line-height:1; color:#FFF; font-variant-numeric:tabular-nums}
+.stat b{display:block; font-family:"BigShoulders",sans-serif; font-size:2.1rem;
+  line-height:1; color:var(--ink); font-variant-numeric:tabular-nums}
 .stat span{display:block; margin-top:3px; font-family:"JetBrainsMono",monospace;
-  font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:#8296B0}
-.stat:nth-child(2) b{color:#5DCAC1}
-.stat:last-child b{color:#F07C6E}
+  font-size:.66rem; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3)}
+.stat:nth-child(2) b{color:var(--teal)}
+.stat:last-child b{color:var(--red)}
 
-/* ── search ─────────────────────────────────────────────────────────── */
-.seek{position:relative; margin:26px 0 22px}
-.seek input{width:100%; padding:14px 16px 14px 44px; border-radius:12px;
+/* ── controls ───────────────────────────────────────────────────────── */
+.tools{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:24px 0 20px}
+.seek{position:relative; flex:1 1 260px; min-width:200px}
+.seek input{width:100%; padding:13px 15px 13px 42px; border-radius:11px;
   border:1px solid var(--line-2); background:var(--card); color:var(--ink);
-  font:400 1rem/1.4 "WorkSans",sans-serif; box-shadow:var(--sh)}
+  font:400 .98rem/1.4 "WorkSans",sans-serif; box-shadow:var(--sh)}
 .seek input::placeholder{color:var(--ink-3)}
-.seek > svg{position:absolute; left:16px; top:50%; transform:translateY(-50%);
-  width:17px; height:17px; stroke:var(--ink-3); fill:none; stroke-width:2}
+.seek > svg{position:absolute; left:15px; top:50%; transform:translateY(-50%);
+  width:16px; height:16px; stroke:var(--ink-3); fill:none; stroke-width:2}
 .res{position:absolute; z-index:20; top:calc(100% + 7px); left:0; right:0;
   background:var(--card); border:1px solid var(--line-2); border-radius:12px;
-  box-shadow:var(--sh-2); max-height:340px; overflow-y:auto; padding:5px}
+  box-shadow:var(--sh-2); max-height:330px; overflow-y:auto; padding:5px}
 .res[hidden]{display:none}
 .res button{display:flex; align-items:baseline; gap:10px; width:100%; padding:9px 12px;
   border:0; background:none; border-radius:8px}
@@ -99,100 +100,99 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .res .rl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.72rem;
   color:var(--ink-3); white-space:nowrap}
 .res .none{padding:13px; color:var(--ink-3); font-size:.9rem}
+.act{padding:11px 14px; border-radius:11px; border:1px solid var(--line-2);
+  background:var(--card); color:var(--ink-2); box-shadow:var(--sh);
+  font-family:"JetBrainsMono",monospace; font-size:.72rem; letter-spacing:.05em;
+  white-space:nowrap}
+.act:hover{border-color:var(--gold-fill); color:var(--gold)}
 
-/* ── breadcrumb ─────────────────────────────────────────────────────── */
-.path{display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:16px;
-  font-size:.85rem}
-.path button{border:0; background:none; padding:3px 5px; border-radius:6px;
-  color:var(--gold); font-weight:700}
-.path button:hover{background:var(--gold-soft)}
-.path span{color:var(--ink-3)}
-.path .here{color:var(--ink-3); font-weight:400; padding:3px 5px}
+/* ── the tree ───────────────────────────────────────────────────────── */
+.tree ul{list-style:none; margin:0; padding:0}
+.node{position:relative}
+.node > .kids{margin-left:15px; padding-left:21px; border-left:2px solid var(--rail);
+  padding-bottom:2px}
+.node.shut > .kids{display:none}
+/* the tick that joins a card to its parent's rail */
+.node > .kids > ul > .node > .row::before{content:""; position:absolute;
+  left:-21px; top:50%; width:21px; height:2px; background:var(--rail)}
+.node > .kids > .direct::before{content:""; position:absolute; left:-21px; top:26px;
+  width:21px; height:2px; background:var(--rail)}
 
-/* ── focus card ─────────────────────────────────────────────────────── */
-.focus{background:var(--card); border:1px solid var(--line); border-radius:16px;
-  box-shadow:var(--sh); padding:24px 26px; position:relative; overflow:hidden}
-.focus::before{content:""; position:absolute; inset:0 0 auto 0; height:4px;
-  background:var(--gold-fill)}
-.focus h2{font-size:2.1rem; line-height:1.05; margin-top:4px}
-.focus .role{margin:7px 0 0; color:var(--ink-2); font-size:1rem}
-.focus.vac{border-color:var(--red); background:var(--red-soft)}
-.focus.vac::before{background:var(--red)}
-.focus.vac h2{color:var(--red)}
-.note{margin:16px 0 0; padding:12px 14px; border-radius:10px; background:var(--red-soft);
-  color:var(--red); font-size:.9rem; line-height:1.55; border:1px solid var(--red)}
+.row{position:relative; display:flex; align-items:center; gap:13px; width:100%;
+  margin-top:9px; padding:14px 16px; background:var(--card);
+  border:1px solid var(--line); border-radius:13px; box-shadow:var(--sh);
+  transition:border-color .13s, box-shadow .13s}
+.row:hover{border-color:var(--gold-fill); box-shadow:var(--sh-2)}
+.row.flat{cursor:default}
+.row.flat:hover{border-color:var(--line); box-shadow:var(--sh)}
 
-.tally{display:flex; gap:9px; flex-wrap:wrap; margin-top:18px}
-.t-item{background:var(--soft); border:1px solid var(--line); border-radius:10px;
-  padding:9px 13px; min-width:96px}
-.t-item b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.7rem;
+.chev{flex:none; width:26px; height:26px; border-radius:8px; display:grid;
+  place-items:center; background:var(--soft); color:var(--ink-3);
+  border:1px solid var(--line)}
+.chev svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2.5;
+  stroke-linecap:round; stroke-linejoin:round; transition:transform .16s}
+.node:not(.shut) > .row .chev svg{transform:rotate(90deg)}
+.row:hover .chev{background:var(--gold-soft); color:var(--gold); border-color:var(--gold-fill)}
+.chev.blank{background:none; border:0; color:var(--rail)}
+.chev.blank::after{content:""; width:6px; height:6px; border-radius:50%;
+  background:currentColor}
+
+.who{min-width:0; flex:1}
+.nm{display:block; font-weight:700; font-size:1rem; line-height:1.3}
+.rl{display:block; font-size:.84rem; color:var(--ink-3); line-height:1.4}
+.cnt{flex:none; text-align:right}
+.cnt b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.45rem;
   line-height:1; font-variant-numeric:tabular-nums}
-.t-item span{display:block; margin-top:2px; font-size:.72rem; color:var(--ink-3);
-  letter-spacing:.05em; text-transform:uppercase; font-family:"JetBrainsMono",monospace}
-.t-int b{color:var(--teal)}
+.cnt span{display:block; font-family:"JetBrainsMono",monospace; font-size:.66rem;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--ink-3)}
+.cnt .ki{color:var(--teal); margin-top:2px}
 
-/* ── the branch rail ────────────────────────────────────────────────── */
-.branch{margin:0; padding:0 0 0 26px; list-style:none; position:relative}
-.branch::before{content:""; position:absolute; left:0; top:0; bottom:0; width:2px;
-  background:var(--rail)}
-.branch > li{position:relative; padding-top:14px}
-/* elbow from the rail into each card */
-.branch > li::before{content:""; position:absolute; left:-26px; top:50%;
-  width:26px; height:2px; background:var(--rail)}
-.branch > li:last-child::after{content:""; position:absolute; left:-27px; top:calc(50% + 2px);
-  bottom:-2px; width:4px; background:var(--paper)}
-.lead-in{height:20px; margin-left:0; width:2px; background:var(--rail)}
-
-.kid{display:flex; align-items:center; gap:14px; width:100%; padding:15px 17px;
-  background:var(--card); border:1px solid var(--line); border-radius:13px;
-  box-shadow:var(--sh); transition:border-color .14s, transform .14s, box-shadow .14s}
-.kid:hover{border-color:var(--gold-fill); transform:translateX(3px); box-shadow:var(--sh-2)}
-.kid .who{min-width:0; flex:1}
-.kid .kn{display:block; font-weight:700; font-size:1.02rem; line-height:1.3}
-.kid .kt{display:block; font-size:.85rem; color:var(--ink-3); line-height:1.4}
-.kid .kc{text-align:right; flex:none}
-.kid .kc b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.5rem;
-  line-height:1; font-variant-numeric:tabular-nums}
-.kid .kc span{display:block; font-size:.68rem; color:var(--ink-3);
-  letter-spacing:.05em; text-transform:uppercase; font-family:"JetBrainsMono",monospace}
-.kid .kc .ki{color:var(--teal); margin-top:2px}
-.kid .go{flex:none; width:26px; height:26px; border-radius:50%; display:grid;
-  place-items:center; background:var(--soft); color:var(--ink-3)}
-.kid:hover .go{background:var(--gold-soft); color:var(--gold)}
-.kid .go svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2.4;
-  stroke-linecap:round; stroke-linejoin:round}
-.tag{display:inline-block; font-family:"JetBrainsMono",monospace; font-size:.63rem;
+.tag{display:inline-block; font-family:"JetBrainsMono",monospace; font-size:.62rem;
   letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:5px;
-  background:var(--gold-soft); color:var(--gold); vertical-align:middle; margin-left:8px}
-.field{display:flex; gap:8px; margin-top:7px; flex-wrap:wrap}
-.field span{font-family:"JetBrainsMono",monospace; font-size:.7rem; color:var(--ink-2);
-  background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:3px 7px}
+  background:var(--gold-soft); color:var(--gold); vertical-align:middle; margin-left:7px}
+.field{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap}
+.field span{font-family:"JetBrainsMono",monospace; font-size:.69rem; color:var(--ink-2);
+  background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:2px 7px}
 .field b{font-variant-numeric:tabular-nums; color:var(--ink)}
-.kid.vac{border-color:var(--red); border-style:dashed; background:var(--red-soft)}
-.kid.vac .kn{color:var(--red)}
-.kid.flat{cursor:default}
-.kid.flat:hover{border-color:var(--line); transform:none; box-shadow:var(--sh)}
 
-/* ── direct reports list ────────────────────────────────────────────── */
-.direct{margin-top:22px}
-.d-head{display:flex; align-items:baseline; gap:10px; margin-bottom:11px; flex-wrap:wrap}
-.d-head h3{font-size:1.15rem}
-.d-head p{margin:0; font-size:.85rem; color:var(--ink-3)}
+.row.vac{border-color:var(--red); border-style:dashed; background:var(--red-soft)}
+.row.vac .nm{color:var(--red)}
+.note{margin:9px 0 0 15px; padding:11px 13px; border-radius:10px;
+  background:var(--red-soft); color:var(--red); font-size:.87rem; line-height:1.55;
+  border:1px solid var(--red)}
+
+/* root card sits above the tree as the department header */
+.node.root > .row{margin-top:0; padding:22px 24px; border-radius:16px; align-items:flex-start}
+.node.root > .row::before{display:none}
+.node.root > .row .nm{font-family:"BigShoulders",sans-serif; font-size:2rem; line-height:1.05}
+.node.root > .row .rl{font-size:.95rem; color:var(--ink-2); margin-top:4px}
+.node.root > .row .cnt b{font-size:2rem}
+.node.root > .kids{margin-top:4px}
+
+/* ── people who report straight in ──────────────────────────────────── */
+.direct{position:relative; margin-top:9px}
+.d-lab{font-family:"JetBrainsMono",monospace; font-size:.68rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); padding:5px 2px 7px}
 .people{list-style:none; margin:0; padding:0; border:1px solid var(--line);
-  border-radius:13px; overflow:hidden; background:var(--card)}
-.people li{display:flex; align-items:baseline; gap:11px; padding:11px 16px;
-  border-bottom:1px solid var(--line)}
+  border-radius:12px; overflow:hidden; background:var(--card)}
+.people li{display:flex; align-items:baseline; gap:11px; padding:9px 15px;
+  border-bottom:1px solid var(--line); font-size:.92rem}
 .people li:last-child{border-bottom:0}
 .people li:nth-child(even){background:var(--soft)}
-.people .pn{font-weight:700; font-size:.94rem}
-.people .pt{font-size:.83rem; color:var(--ink-3)}
-.people .pl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.74rem;
+.people .pn{font-weight:700}
+.people .pt{font-size:.82rem; color:var(--ink-3)}
+.people .pl{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.72rem;
   color:var(--ink-3); white-space:nowrap}
 .people li.int .pn{color:var(--teal)}
-.people li.int .pn::after{content:"intern"; margin-left:7px; font-family:"JetBrainsMono",monospace;
-  font-size:.63rem; letter-spacing:.07em; text-transform:uppercase; background:var(--teal-soft);
-  color:var(--teal); padding:2px 5px; border-radius:4px; vertical-align:middle}
-.hl{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill)}
+.people li.int .pn::after{content:"intern"; margin-left:7px;
+  font-family:"JetBrainsMono",monospace; font-size:.61rem; letter-spacing:.07em;
+  text-transform:uppercase; background:var(--teal-soft); color:var(--teal);
+  padding:2px 5px; border-radius:4px; vertical-align:middle}
+
+.hit{border-color:var(--gold-fill) !important;
+  box-shadow:0 0 0 3px var(--gold-soft), var(--sh-2) !important}
+.people li.hit{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill) !important;
+  border-color:var(--line) !important}
 
 /* ── panels ─────────────────────────────────────────────────────────── */
 .split{border-top:1px solid var(--line); margin-top:46px; padding-top:34px}
@@ -216,41 +216,45 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .foot dd{margin:0; font-size:.88rem; color:var(--ink-2); line-height:1.6}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important}}
-@media (max-width:560px){
-  .focus{padding:20px}
-  .focus h2{font-size:1.7rem}
-  .kid{padding:13px 14px; gap:11px}
-  .kid .kc b{font-size:1.25rem}
-  .branch{padding-left:18px}
-  .branch > li::before{left:-18px; width:18px}
-  .branch > li:last-child::after{left:-19px}
-  .lead-in{margin-left:0}
-  .people li{flex-wrap:wrap; gap:4px 10px}
+@media (max-width:600px){
+  .node > .kids{margin-left:7px; padding-left:13px}
+  .node > .kids > ul > .node > .row::before,
+  .node > .kids > .direct::before{left:-13px; width:13px}
+  .row{padding:12px 13px; gap:10px}
+  .node.root > .row{padding:18px; flex-direction:column}
+  .node.root > .row .nm{font-size:1.6rem}
+  .cnt{text-align:left}
+  .people li{flex-wrap:wrap; gap:3px 10px}
   .people .pl{margin-left:0; width:100%}
 }
 </style>
 
-<header class="top">
-  <div class="wrap">
-    <svg class="logo" viewBox="0 0 2025 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Euler"><g fill="currentColor"><polygon points="66,78 453,0 418,78"/><polygon points="33,195 398,118 363,195"/><polygon points="0,310 363,235 308,310"/><g transform="translate(668,0)"><path d="M29.9 310V0H98.8V310ZM82.5 310V250.3H252.5V310ZM82.5 180.5V122.9H237.1V180.5ZM82.5 59.3V0H250.3V59.3Z"/><path d="M418.6 314.8Q380.4 314.8 351.2 298.6Q322 282.3 305.5 253.6Q289.1 224.8 289.1 187.9V0H358.4V191.9Q358.4 210.3 366.4 223.9Q374.3 237.5 388.1 244.8Q401.9 252 418.6 252Q436.2 252 449.3 244.8Q462.5 237.5 470.2 224.2Q477.9 210.8 477.9 192.3V0H547.3V188.4Q547.3 225.3 531 253.8Q514.8 282.3 485.8 298.6Q456.8 314.8 418.6 314.8Z"/><path d="M596.1 310V0H665.1V310ZM649.3 310V249.4H802.5V310Z"/><path d="M836.5 310V0H905.4V310ZM889.2 310V250.3H1059.1V310ZM889.2 180.5V122.9H1043.7V180.5ZM889.2 59.3V0H1056.9V59.3Z"/><path d="M1153.2 182.2V131.3H1218.6Q1239.3 131.3 1250.5 120.8Q1261.7 110.2 1261.7 92.2Q1261.7 75.5 1250.7 64.5Q1239.7 53.6 1219.1 53.6H1153.2V0H1227Q1257.7 0 1281 11.6Q1304.3 23.3 1317.4 43.9Q1330.6 64.5 1330.6 91.3Q1330.6 118.6 1317.4 139Q1304.3 159.4 1280.5 170.8Q1256.8 182.2 1224.8 182.2ZM1100.5 310V0H1169.5V310ZM1269.1 310 1172.5 176.5 1235.8 159.4 1350.8 310Z"/></g></g></svg>
-    <span class="bar" aria-hidden="true"></span>
-    <h1>Sales</h1>
-    <span class="fy">Org structure · FY 2025–26</span>
+<header>
+  <div class="brand">
+    <div class="wrap">
+      <svg class="logo" viewBox="0 0 2025 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Euler"><g fill="currentColor"><polygon points="66,78 453,0 418,78"/><polygon points="33,195 398,118 363,195"/><polygon points="0,310 363,235 308,310"/><g transform="translate(668,0)"><path d="M29.9 310V0H98.8V310ZM82.5 310V250.3H252.5V310ZM82.5 180.5V122.9H237.1V180.5ZM82.5 59.3V0H250.3V59.3Z"/><path d="M418.6 314.8Q380.4 314.8 351.2 298.6Q322 282.3 305.5 253.6Q289.1 224.8 289.1 187.9V0H358.4V191.9Q358.4 210.3 366.4 223.9Q374.3 237.5 388.1 244.8Q401.9 252 418.6 252Q436.2 252 449.3 244.8Q462.5 237.5 470.2 224.2Q477.9 210.8 477.9 192.3V0H547.3V188.4Q547.3 225.3 531 253.8Q514.8 282.3 485.8 298.6Q456.8 314.8 418.6 314.8Z"/><path d="M596.1 310V0H665.1V310ZM649.3 310V249.4H802.5V310Z"/><path d="M836.5 310V0H905.4V310ZM889.2 310V250.3H1059.1V310ZM889.2 180.5V122.9H1043.7V180.5ZM889.2 59.3V0H1056.9V59.3Z"/><path d="M1153.2 182.2V131.3H1218.6Q1239.3 131.3 1250.5 120.8Q1261.7 110.2 1261.7 92.2Q1261.7 75.5 1250.7 64.5Q1239.7 53.6 1219.1 53.6H1153.2V0H1227Q1257.7 0 1281 11.6Q1304.3 23.3 1317.4 43.9Q1330.6 64.5 1330.6 91.3Q1330.6 118.6 1317.4 139Q1304.3 159.4 1280.5 170.8Q1256.8 182.2 1224.8 182.2ZM1100.5 310V0H1169.5V310ZM1269.1 310 1172.5 176.5 1235.8 159.4 1350.8 310Z"/></g></g></svg>
+      <span class="bar" aria-hidden="true"></span>
+      <h1>Sales</h1>
+      <span class="fy">Org structure · FY 2025–26</span>
+    </div>
   </div>
-  <div class="stats"><div class="stat"><b>343</b><span>Employees</span></div><div class="stat"><b>54</b><span>Interns</span></div><div class="stat"><b>397</b><span>People in all</span></div><div class="stat"><b>1</b><span>Open seat</span></div></div>
+  <div class="band"><div class="stats"><div class="stat"><b>343</b><span>Employees</span></div><div class="stat"><b>54</b><span>Interns</span></div><div class="stat"><b>397</b><span>People in all</span></div><div class="stat"><b>1</b><span>Open seat</span></div></div></div>
 </header>
 
 <main class="wrap">
-  <div class="seek">
-    <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><path d="M11.8 11.8 16 16"/></svg>
-    <label class="sr" for="q">Search anyone in Sales</label>
-    <input id="q" type="search" placeholder="Search anyone by name, role, or state…"
-           autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res">
-    <div class="res" id="res" role="listbox" hidden></div>
+  <div class="tools">
+    <div class="seek">
+      <svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="8" cy="8" r="5.2"/><path d="M11.8 11.8 16 16"/></svg>
+      <label class="sr" for="q">Search anyone in Sales</label>
+      <input id="q" type="search" placeholder="Search anyone by name, role, or state…"
+             autocomplete="off" role="combobox" aria-expanded="false" aria-controls="res">
+      <div class="res" id="res" role="listbox" hidden></div>
+    </div>
+    <button class="act" type="button" data-act="open">Open all</button>
+    <button class="act" type="button" data-act="shut">Close all</button>
   </div>
 
-  <nav class="path" id="path" aria-label="You are here"></nav>
-  <div id="view"></div>
+  <div class="tree" id="tree"></div>
 
   <section class="split">
     <h2>The department at a glance</h2>
@@ -268,9 +272,9 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     <dl>
       <div>
         <dt>How to read this</dt>
-        <dd>You are looking at one manager at a time. The cards below them are the
-          teams that branch further — select one to go down a level. Anyone
-          reporting straight to that manager is listed underneath by name.</dd>
+        <dd>One tree, top to bottom. Selecting a manager opens their branch in
+          place — everything above and around it stays where it was, so you keep
+          the whole line in view. Select again to close it.</dd>
       </div>
       <div>
         <dt>What the numbers mean</dt>
@@ -298,9 +302,8 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 <script>
 (function(){
   var NODES={"EUR0005":{"id":"EUR0005","name":"Vani Rikhy Mehra","title":"Vice President","sub":"Leadership","loc":"","grade":"C","emp":343,"interns":54,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":145,"tse":80,"parent":null,"kids":[{"id":"EUR1285","name":"Ratanmani Mohit","title":"Assistant Vice President - Sales","loc":"","emp":278,"interns":41,"branches":9,"direct":9,"rm":false,"tsm":129,"tse":62,"vacant":false},{"id":"EUR0757","name":"Gaurav Bhardwaj","title":"Regional Manager","loc":"Delhi","emp":39,"interns":8,"branches":1,"direct":9,"rm":true,"tsm":16,"tse":18,"vacant":false},{"id":"EUR0870","name":"Ritesh Roy","title":"General Manager","loc":"Delhi","emp":11,"interns":5,"branches":3,"direct":5,"rm":false,"tsm":0,"tse":0,"vacant":false},{"id":"EUR0940","name":"Shashank","title":"Assistant General Manager","loc":"Delhi","emp":7,"interns":0,"branches":1,"direct":4,"rm":false,"tsm":0,"tse":0,"vacant":false},{"id":"EUR1887","name":"Rachit Jain","title":"Program Manager - Sales","loc":"Delhi","emp":4,"interns":0,"branches":0,"direct":3,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Akshay Dua","title":"Program Manager- Sales","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ashutosh","title":"Program Manager","loc":"Karnataka","intern":false,"grade":"B"},{"name":"Yash Dwivedi","title":"Program Manager","loc":"Delhi","intern":false,"grade":"B"}]},"EUR1285":{"id":"EUR1285","name":"Ratanmani Mohit","title":"Assistant Vice President - Sales","sub":"Retail Sales","loc":"","grade":"C","emp":278,"interns":41,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":129,"tse":62,"parent":"EUR0005","kids":[{"id":"EUR1338","name":"Vinay Binu","title":"Regional Manager","loc":"Maharashtra","emp":77,"interns":8,"branches":5,"direct":10,"rm":true,"tsm":48,"tse":21,"vacant":false},{"id":"EUR1450","name":"Rachit Sharma","title":"Regional Manager","loc":"Delhi","emp":42,"interns":15,"branches":4,"direct":7,"rm":true,"tsm":7,"tse":1,"vacant":false},{"id":"EUR0530","name":"Vikas Singh Bisht","title":"Regional Manager","loc":"Delhi","emp":32,"interns":11,"branches":5,"direct":7,"rm":true,"tsm":15,"tse":8,"vacant":false},{"id":"VACANT-SOUTH-RM","name":"Vacant \u2014 South Regional Manager","title":"Regional Manager","loc":"Telangana","emp":37,"interns":0,"branches":4,"direct":6,"rm":true,"tsm":24,"tse":7,"vacant":true},{"id":"EUR0793","name":"Arup Roy Chowdhury","title":"Regional Manager","loc":"Tamil Nadu","emp":32,"interns":4,"branches":5,"direct":5,"rm":true,"tsm":15,"tse":10,"vacant":false},{"id":"EUR1327","name":"Subesh Mukherjee","title":"Regional Manager","loc":"Uttar Pradesh","emp":27,"interns":2,"branches":3,"direct":7,"rm":true,"tsm":13,"tse":10,"vacant":false},{"id":"EUR1692","name":"Siddhartha Sharma","title":"Regional Manager","loc":"Delhi","emp":18,"interns":0,"branches":0,"direct":17,"rm":true,"tsm":6,"tse":5,"vacant":false},{"id":"EUR1011","name":"Amit Vishwakarma","title":"Assistant General Manager","loc":"Delhi","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":1,"tse":0,"vacant":false},{"id":"EUR1911","name":"Siddharth Dubey","title":"Assistant General Manager","loc":"Rajasthan","emp":1,"interns":1,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Abidali Hussain Shaikh","title":"Assistant General Manager","loc":"Maharashtra","intern":false,"grade":"C"},{"name":"Akash Kumar","title":"Program Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Amit Jaiswal","title":"Assistant General Manager","loc":"Maharashtra","intern":false,"grade":"C"},{"name":"Apurv Bhushan","title":"Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Dinesh Modi","title":"Assistant General Manager","loc":"West Bengal","intern":false,"grade":"C"},{"name":"Neha Anurdhwaj Rangari","title":"Program Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Nikhil Kumar Chandrakar","title":"Senior Pogram Manager","loc":"West Bengal","intern":false,"grade":"B"},{"name":"Nitish Goyal","title":"Program Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Vibhav Tyagi","title":"Assistant General Manager","loc":"Delhi","intern":false,"grade":"B"}]},"EUR1338":{"id":"EUR1338","name":"Vinay Binu","title":"Regional Manager","sub":"Retail Sales","loc":"Maharashtra","grade":"C","emp":77,"interns":8,"vacant":false,"note":"","rm":true,"rosterTitle":"Regional Manager","tsm":48,"tse":21,"parent":"EUR1285","kids":[{"id":"EUR1466","name":"Vijay Rameshchandra Biswas","title":"Area Sales Manager","loc":"Maharashtra","emp":27,"interns":0,"branches":0,"direct":26,"rm":false,"tsm":17,"tse":9,"vacant":false},{"id":"EUR1554","name":"Jitender Premnath Duggal","title":"Area Sales Manager","loc":"Maharashtra","emp":17,"interns":0,"branches":0,"direct":16,"rm":false,"tsm":13,"tse":3,"vacant":false},{"id":"EUR1829","name":"Sachin Ashok Nawale","title":"Assistant General Manager","loc":"Maharashtra","emp":16,"interns":0,"branches":0,"direct":15,"rm":false,"tsm":13,"tse":2,"vacant":false},{"id":"EUR0983","name":"Ashutosh Pant","title":"Area Sales Manager","loc":"Gujarat","emp":7,"interns":0,"branches":0,"direct":6,"rm":false,"tsm":3,"tse":3,"vacant":false},{"id":"EUR1858","name":"Dhiraj Krishnarao Akotkar","title":"Area Sales Manager","loc":"Maharashtra","emp":7,"interns":0,"branches":0,"direct":6,"rm":false,"tsm":2,"tse":4,"vacant":false}],"team":[{"name":"Bhushan Ashok Aochar","title":"Key Accounts Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"More Tukaram Shrikant","title":"Senior Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Chaitanya Savata Ghuge","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Harshvardhan Ulhas Yewankar","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Pranav Dilip Patil","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Rohit Sanjay Kumbhar","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Sanket Suryakant Jadhav","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Shivraj Satish Bhosale","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Swapnil Sunil Mhetre","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Udayraj Prabhakar Wagh","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1466":{"id":"EUR1466","name":"Vijay Rameshchandra Biswas","title":"Area Sales Manager","sub":"Retail Sales","loc":"Maharashtra","grade":"B","emp":27,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":17,"tse":9,"parent":"EUR1338","kids":[],"team":[{"name":"Aakash Balu Limbole","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Aasif Fakruddin Shaikh","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Aditya Shivaji Dhongade","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Ajay Pandurang Gunjal","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Ajit Vishwnath Lokhande","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Asim Nawab Baig","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Baliram Rajebhau Kale","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Hanmant Dagdu Salunke","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Juberahamad Khatib","title":"Senior Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Manoj Madhukar Bargaje","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Naeem Shahajhan Mulani","title":"Senior Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Omkar Nandkumar Karhe","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Prakash Dattatray Chate","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Pramod Sampat Lohate","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Pranit Prakash Sanade","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Prashant Subhash Patil","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Prathamesh Pramod Deshpande","title":"Senior Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Rohit Ramesh Patil","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sanket Rajkumar Yadav","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Santosh Keshav Bhartal","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Santosh Popat Honmane","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Suvek Vivek Kulkarni","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Tukaram Vaijnath Ghaytidak","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Tushar Ravindra Nevse","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Vicky Lalu Gaware","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Vishnu Bhausaheb Thete","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"}]},"EUR1554":{"id":"EUR1554","name":"Jitender Premnath Duggal","title":"Area Sales Manager","sub":"Retail Sales","loc":"Maharashtra","grade":"B","emp":17,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":13,"tse":3,"parent":"EUR1338","kids":[],"team":[{"name":"Alhad Anil Mayekar","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Amol Bharatsing Chavhan","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Ismail Habibkhan Pathan","title":"Senior Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Kachave Prashant Shivajirao","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Kundan Kumar","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Mohd Niyaz Shaikh","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Pawan Narayan Jain","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Rahul Ramashankar Dubey","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Rahul Somnath Munde","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Rajendra Hemraj Meshram","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sandip Gangaram Gundaye","title":"Senior Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Shubham Rajendra Tawde","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Shyamu Tiwari","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Syed Asfhan Usman","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Uday Uttam Sharma","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Vaseem Akhtar Khan","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"B"}]},"EUR1829":{"id":"EUR1829","name":"Sachin Ashok Nawale","title":"Assistant General Manager","sub":"Retail Sales","loc":"Maharashtra","grade":"C","emp":16,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":13,"tse":2,"parent":"EUR1338","kids":[],"team":[{"name":"Adarsh","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Akash Pandurang Rangari","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Aniket Sanjay Haldankar","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Anubhav Tiwari","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Arpit Ashokarao Arvikar","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Dhanaji Niwas Jadhav","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Ganesh Sanjay Kapure","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Kiran Dilip Ghorpade","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Mayur Sanjay Khaire","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Mustkim Siddique Shaikh","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Pravin Balaso Chandane","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sachin Shankar Jadhav","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sandeep Anandrao Bhole","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sanket Prakash Patil","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Somanth Vilas Gaikwad","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"}]},"EUR0983":{"id":"EUR0983","name":"Ashutosh Pant","title":"Area Sales Manager","sub":"Retail Sales","loc":"Gujarat","grade":"B","emp":7,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":3,"tse":3,"parent":"EUR1338","kids":[],"team":[{"name":"Barot Nikunjkumar Harnishchandra","title":"Territory Sales Manager","loc":"Gujarat","intern":false,"grade":"A"},{"name":"Jitendrasinh Tomar","title":"Territory Sales Manager","loc":"Gujarat","intern":false,"grade":"A"},{"name":"Kedar Vijaykumar Ganpatbhai","title":"Territory Sales Executive","loc":"Gujarat","intern":false,"grade":"A"},{"name":"Mukesh Indravadan Gohil","title":"Territory Sales Executive","loc":"Gujarat","intern":false,"grade":"A"},{"name":"Patel Kaushik Kumar","title":"Senior Territory Sales Manager","loc":"Gujarat","intern":false,"grade":"B"},{"name":"Saindane Bhatu Prabhakar","title":"Territory Sales Executive","loc":"Gujarat","intern":false,"grade":"A"}]},"EUR1858":{"id":"EUR1858","name":"Dhiraj Krishnarao Akotkar","title":"Area Sales Manager","sub":"Retail Sales","loc":"Maharashtra","grade":"B","emp":7,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":4,"parent":"EUR1338","kids":[],"team":[{"name":"Danish Arif Sheikh","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Fahim Hamid Sheikh","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sachin Rameshrao Andhare","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sagar Ghanshyam Dhavangale","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sandeep Babarao Pawar","title":"Territory Sales Manager","loc":"Maharashtra","intern":false,"grade":"A"},{"name":"Sushil Sheshrao Shirke","title":"Territory Sales Executive","loc":"Maharashtra","intern":false,"grade":"A"}]},"EUR1450":{"id":"EUR1450","name":"Rachit Sharma","title":"Regional Manager","sub":"Retail Sales","loc":"Delhi","grade":"C","emp":42,"interns":15,"vacant":false,"note":"","rm":true,"rosterTitle":"Regional Manager","tsm":7,"tse":1,"parent":"EUR1285","kids":[{"id":"EUR1291","name":"Ikbal Mohammad","title":"Senior Manager- Inside Sales","loc":"Delhi","emp":24,"interns":11,"branches":0,"direct":34,"rm":false,"tsm":0,"tse":0,"vacant":false},{"id":"EUR1639","name":"Deepak Malik","title":"Area Sales Manager","loc":"Chandigarh","emp":5,"interns":4,"branches":0,"direct":8,"rm":false,"tsm":3,"tse":1,"vacant":false},{"id":"EUR1029","name":"Owais Aslam Lone","title":"Area Sales Manager","loc":"Delhi","emp":3,"interns":0,"branches":0,"direct":2,"rm":false,"tsm":2,"tse":0,"vacant":false},{"id":"EUR1667","name":"Rajesh Kumar Sharma","title":"Area Sales Manager","loc":"Uttar Pradesh","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Adarsh Chauhan","title":"Assistant Manager - New Product Sales","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ijaz Ahmed","title":"Key Accounts Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Mohammad Aamir Ahmad","title":"Senior Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Pankaj Kumar Gautam","title":"Area Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"B"},{"name":"Parminder Singh","title":"Senior Territory Sales Manager","loc":"Chandigarh","intern":false,"grade":"B"},{"name":"Sandeep Kumar","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sandip Kumar","title":"Manager","loc":"Delhi","intern":false,"grade":"B"}]},"EUR1291":{"id":"EUR1291","name":"Ikbal Mohammad","title":"Senior Manager- Inside Sales","sub":"Inside Sales","loc":"Delhi","grade":"B","emp":24,"interns":11,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR1450","kids":[],"team":[{"name":"Aakash Luthra","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Abhishek Kumar Mishra","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Amit Kumar","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Amjath K Mohan","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Amu Tun Noor","title":"Assistant Manager","loc":"Telangana","intern":false,"grade":"B"},{"name":"Aritra Kar","title":"Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Arshak Yaseen V A","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Ayoja Sharma","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Ayush Chauhan","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Bhumika Mestry","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Chowdary Teja","title":"Senior Sales Executive","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Deepu Kumar","title":"Senior Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Dimple Kumari","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Hemant","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Hemant Kumar","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Himanshu Bhardwaj","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Jiya","title":"Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Manjeet Singh","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Pankaj Kumar","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Parveen Kumar","title":"Assistant Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Priya Ghosh","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Samriti Sethi","title":"Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Subhadip Dey","title":"Senior Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Aastha Rai","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Farzeen Ajmal","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Ishan Rai","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Kanika Digra","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Mayank Arora","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Neeraja P N","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Promit Chakraborty","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Sandeep Chand","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Shabnam","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Shubham Thakur","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Soni Kumari","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1639":{"id":"EUR1639","name":"Deepak Malik","title":"Area Sales Manager","sub":"Retail Sales","loc":"Chandigarh","grade":"B","emp":5,"interns":4,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":3,"tse":1,"parent":"EUR1450","kids":[],"team":[{"name":"Jaspal Singh","title":"Senior Territory Sales Manager","loc":"Chandigarh","intern":false,"grade":"B"},{"name":"Narinder Singh","title":"Territory Sales Executive","loc":"Chandigarh","intern":false,"grade":"A"},{"name":"Rahul Kumar","title":"Territory Sales Manager","loc":"Chandigarh","intern":false,"grade":"A"},{"name":"Rajinder Singh","title":"Territory Sales Manager","loc":"Chandigarh","intern":false,"grade":"A"},{"name":"Abhay Rana","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Harsh Wardhan Thakur","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Jaspreet Singh","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Manish Choudhary","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1029":{"id":"EUR1029","name":"Owais Aslam Lone","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":3,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":0,"parent":"EUR1450","kids":[],"team":[{"name":"Ishfaq Ahmad Mir","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Mushtaq Ahmad Rather","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1667":{"id":"EUR1667","name":"Rajesh Kumar Sharma","title":"Area Sales Manager","sub":"Retail Sales","loc":"Uttar Pradesh","grade":"B","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR1450","kids":[],"team":[{"name":"Saurabh","title":"Manager","loc":"Uttar Pradesh","intern":false,"grade":"B"}]},"EUR0530":{"id":"EUR0530","name":"Vikas Singh Bisht","title":"Regional Manager","sub":"Retail Sales","loc":"Delhi","grade":"C","emp":32,"interns":11,"vacant":false,"note":"","rm":true,"rosterTitle":"General Manager","tsm":15,"tse":8,"parent":"EUR1285","kids":[{"id":"EUR0867","name":"Gaurav Wadhwa","title":"Area Sales Manager","loc":"Delhi","emp":19,"interns":0,"branches":0,"direct":18,"rm":false,"tsm":11,"tse":7,"vacant":false},{"id":"EUR1836","name":"Prahar Verma","title":"State Head-Sales","loc":"Delhi","emp":3,"interns":6,"branches":0,"direct":8,"rm":false,"tsm":2,"tse":0,"vacant":false},{"id":"EUR1178","name":"Vivek Singh","title":"Area Sales Manager","loc":"Delhi","emp":3,"interns":0,"branches":0,"direct":2,"rm":false,"tsm":1,"tse":1,"vacant":false},{"id":"EUR1607","name":"Prateek Arora","title":"Area Sales Manager","loc":"Delhi","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":1,"tse":0,"vacant":false},{"id":"EUR1729","name":"Pulkit Bakshi","title":"Area Sales Manager","loc":"Delhi","emp":1,"interns":1,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Devyani Raman Jha","title":"Program Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Puneet Verma","title":"Key Account Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Vikash","title":"Senior Executive","loc":"Delhi","intern":false,"grade":"B"},{"name":"Muskaan Oberoi","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Muskan","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Ridhima Singh","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Shweta Shyam","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0867":{"id":"EUR0867","name":"Gaurav Wadhwa","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":19,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":11,"tse":7,"parent":"EUR0530","kids":[],"team":[{"name":"Abhishek","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Azad Singh","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Balram","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Chandan Mishra","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Deepak Sharma","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Krishna","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Monu Kumar","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Narender Rawat","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Prince Vishwakarma","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Rahul Pandey","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Ranjit Kumar Mishra","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ravi Kumar","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Rohit Kumar","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Sorav Kumar","title":"Senior Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"B"},{"name":"Sushil Kumar Pathak","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Swayamber Prasad","title":"Territory Sales Executive","loc":"Haryana","intern":false,"grade":"A"},{"name":"Tufail Ansari","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Vishal Pathak","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1836":{"id":"EUR1836","name":"Prahar Verma","title":"State Head-Sales","sub":"Retail Sales","loc":"Delhi","grade":"C","emp":3,"interns":6,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":0,"parent":"EUR0530","kids":[],"team":[{"name":"Adarsh Singh","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Pankaj","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Amritpal Singh Uppal","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Isham","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Ishan Singh","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Mejar Chouragade","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Mridul Guleria","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Sourav Mukherjee","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1178":{"id":"EUR1178","name":"Vivek Singh","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":3,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":1,"tse":1,"parent":"EUR0530","kids":[],"team":[{"name":"Ankit Mishra","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Nitin Pal","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1607":{"id":"EUR1607","name":"Prateek Arora","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":1,"tse":0,"parent":"EUR0530","kids":[],"team":[{"name":"Sachin Kumar","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1729":{"id":"EUR1729","name":"Pulkit Bakshi","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":1,"interns":1,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0530","kids":[],"team":[{"name":"Ankit Soni","title":"Intern","loc":"","intern":true,"grade":""}]},"VACANT-SOUTH-RM":{"id":"VACANT-SOUTH-RM","name":"Vacant \u2014 South Regional Manager","title":"Regional Manager","sub":"Retail Sales","loc":"","grade":"","emp":37,"interns":0,"vacant":true,"note":"Open following Amitabh Singh\u2019s resignation. The team reports to Ratanmani Mohit directly until a replacement joins.","rm":true,"rosterTitle":"Regional Manager","tsm":24,"tse":7,"parent":"EUR1285","kids":[{"id":"EUR1249","name":"Mohammed Abdul Wadood","title":"Area Sales Manager","loc":"Telangana","emp":10,"interns":0,"branches":0,"direct":9,"rm":false,"tsm":4,"tse":5,"vacant":false},{"id":"EUR1003","name":"Kashaveni Rajesh","title":"Area Sales Manager","loc":"Telangana","emp":9,"interns":0,"branches":0,"direct":8,"rm":false,"tsm":7,"tse":1,"vacant":false},{"id":"EUR1451","name":"Ravi Prakash","title":"Senior Area Sales Manager","loc":"Karnataka","emp":9,"interns":0,"branches":0,"direct":8,"rm":false,"tsm":7,"tse":1,"vacant":false},{"id":"EUR1217","name":"Sumanth G","title":"Area Sales Manager","loc":"Delhi","emp":3,"interns":0,"branches":0,"direct":2,"rm":false,"tsm":2,"tse":0,"vacant":false}],"team":[{"name":"Badisha Kumaraswamy","title":"Area Sales Manager","loc":"Telangana","intern":false,"grade":"B"},{"name":"Bharani Morum","title":"Key Accounts Manager","loc":"Karnataka","intern":false,"grade":"B"},{"name":"K Shankar","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Muchanapalli Srikanth","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Sanjay B","title":"Senior Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"B"},{"name":"Vijay Bharath S","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"}]},"EUR1249":{"id":"EUR1249","name":"Mohammed Abdul Wadood","title":"Area Sales Manager","sub":"Retail Sales","loc":"Telangana","grade":"B","emp":10,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":4,"tse":5,"parent":"VACANT-SOUTH-RM","kids":[],"team":[{"name":"Donthi Ashok Kumar","title":"Senior Territory Sales Manager","loc":"Telangana","intern":false,"grade":"B"},{"name":"Goda Sai Prasad","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Madanu Naveen Kumar","title":"Territory Sales Executive","loc":"Telangana","intern":false,"grade":"A"},{"name":"Mohammed Mohinuddin","title":"Territory Sales Executive","loc":"Telangana","intern":false,"grade":"A"},{"name":"Mohammed Nabeel Pasha","title":"Territory Sales Executive","loc":"Telangana","intern":false,"grade":"A"},{"name":"Pathangi Manikantan","title":"Territory Sales Executive","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Shaik Mujahed","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Shaik Rasheed","title":"Senior Territory Sales Manager","loc":"Telangana","intern":false,"grade":"B"},{"name":"Vunyala Pranay Kumar","title":"Territory Sales Executive","loc":"Telangana","intern":false,"grade":"A"}]},"EUR1003":{"id":"EUR1003","name":"Kashaveni Rajesh","title":"Area Sales Manager","sub":"Retail Sales","loc":"Telangana","grade":"B","emp":9,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":7,"tse":1,"parent":"VACANT-SOUTH-RM","kids":[],"team":[{"name":"Chinta Adinarayana","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"G Anil Kumar","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Janagani Prashanth Kumar","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Kotta Venkatesham","title":"Territory Sales Executive","loc":"Telangana","intern":false,"grade":"A"},{"name":"Krishna Chaitanya Vaddiparthi","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Mirza Ghayaz Baig","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Rajesh Rachamalla","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"A"},{"name":"Vaddiparthi Kishore","title":"Territory Sales Manager","loc":"Telangana","intern":false,"grade":"B"}]},"EUR1451":{"id":"EUR1451","name":"Ravi Prakash","title":"Senior Area Sales Manager","sub":"Retail Sales","loc":"Karnataka","grade":"B","emp":9,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":7,"tse":1,"parent":"VACANT-SOUTH-RM","kids":[],"team":[{"name":"Aftab Ahmed Ulla Khan","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Karthik","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"M Almohin","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Madival Sandeep","title":"Territory Sales Executive","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Mohammed Ahmed","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Shaikh Abdul Raqib Pasha","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Somashekar B","title":"Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"A"},{"name":"Zabiulla Khan","title":"Senior Territory Sales Manager","loc":"Karnataka","intern":false,"grade":"B"}]},"EUR1217":{"id":"EUR1217","name":"Sumanth G","title":"Area Sales Manager","sub":"Retail Sales","loc":"Karnataka","grade":"B","emp":3,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":0,"parent":"VACANT-SOUTH-RM","kids":[],"team":[{"name":"Riyasudheen M M","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sajil V S","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR0793":{"id":"EUR0793","name":"Arup Roy Chowdhury","title":"Regional Manager","sub":"Retail Sales","loc":"West Bengal","grade":"C","emp":32,"interns":4,"vacant":false,"note":"","rm":true,"rosterTitle":"General Manager","tsm":15,"tse":10,"parent":"EUR1285","kids":[{"id":"EUR1563","name":"Vikash Kumar","title":"Area Sales Manager","loc":"Bihar","emp":9,"interns":2,"branches":0,"direct":10,"rm":false,"tsm":2,"tse":6,"vacant":false},{"id":"EUR1274","name":"Jai Kumar C J","title":"Area Sales Manager","loc":"Tamil Nadu","emp":7,"interns":1,"branches":0,"direct":7,"rm":false,"tsm":5,"tse":1,"vacant":false},{"id":"EUR0930","name":"Snehasis Ganguly","title":"Area Sales Manager","loc":"West Bengal","emp":5,"interns":1,"branches":0,"direct":5,"rm":false,"tsm":2,"tse":2,"vacant":false},{"id":"EUR1516","name":"C P Balakrishnan","title":"Area Sales Manager","loc":"Tamil Nadu","emp":3,"interns":0,"branches":0,"direct":2,"rm":false,"tsm":2,"tse":0,"vacant":false},{"id":"EUR1425","name":"K Asen Basha","title":"Area Sales Manager","loc":"Tamil Nadu","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":1,"tse":0,"vacant":false}],"team":[{"name":"Kalaivanan M","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Pradip Kumar Dutta","title":"Territory Sales Executive","loc":"West Bengal","intern":false,"grade":"A"},{"name":"Ranjeet Kumar Singh","title":"Territory Sales Manager","loc":"Bihar","intern":false,"grade":"A"},{"name":"Shanmugam Ramachandran","title":"Senior Executive- Accounts","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Subha Raha","title":"Territory Sales Manager","loc":"West Bengal","intern":false,"grade":"A"}]},"EUR1563":{"id":"EUR1563","name":"Vikash Kumar","title":"Area Sales Manager","sub":"Retail Sales","loc":"Bihar","grade":"B","emp":9,"interns":2,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":6,"parent":"EUR0793","kids":[],"team":[{"name":"Akhileshwar Jha","title":"Territory Sales Manager","loc":"Bihar","intern":false,"grade":"A"},{"name":"Amardeep Kumar Singh","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Deepak Kumar Singh","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Manish Tiwari","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Nitesh Kumar","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Pankaj Kumar","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Rohit Kumar","title":"Territory Sales Manager","loc":"Bihar","intern":false,"grade":"A"},{"name":"Sunil Kumar","title":"Territory Sales Executive","loc":"Bihar","intern":false,"grade":"A"},{"name":"Anand Kumar","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Bhawesh Raj","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1274":{"id":"EUR1274","name":"Jai Kumar C J","title":"Area Sales Manager","sub":"Retail Sales","loc":"Tamil Nadu","grade":"B","emp":7,"interns":1,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":5,"tse":1,"parent":"EUR0793","kids":[],"team":[{"name":"Anandhan A","title":"Senior Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"B"},{"name":"D S Immanuel","title":"Senior Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"B"},{"name":"M Karthick","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Mohambari","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Palanivel Ramakrishanan","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Pradeep Immanuel","title":"Territory Sales Executive","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Madhusudhan Madhukumar","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0930":{"id":"EUR0930","name":"Snehasis Ganguly","title":"Area Sales Manager","sub":"Retail Sales","loc":"West Bengal","grade":"B","emp":5,"interns":1,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":2,"parent":"EUR0793","kids":[],"team":[{"name":"Abir Chakraborty","title":"Territory Sales Manager","loc":"West Bengal","intern":false,"grade":"A"},{"name":"Debarpito Mondal","title":"Senior Territory Sales Manager","loc":"West Bengal","intern":false,"grade":"B"},{"name":"Dibyendu Saha","title":"Territory Sales Executive","loc":"West Bengal","intern":false,"grade":"A"},{"name":"Shubhrungsu Barui","title":"Territory Sales Executive","loc":"West Bengal","intern":false,"grade":"A"},{"name":"Priyobrata Mukherjee","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1516":{"id":"EUR1516","name":"C P Balakrishnan","title":"Area Sales Manager","sub":"Retail Sales","loc":"Tamil Nadu","grade":"B","emp":3,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":0,"parent":"EUR0793","kids":[],"team":[{"name":"R Ashokkumar","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"},{"name":"Samiullah Babulal","title":"Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"A"}]},"EUR1425":{"id":"EUR1425","name":"K Asen Basha","title":"Area Sales Manager","sub":"Retail Sales","loc":"Tamil Nadu","grade":"B","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":1,"tse":0,"parent":"EUR0793","kids":[],"team":[{"name":"V P Sreenath","title":"Senior Territory Sales Manager","loc":"Tamil Nadu","intern":false,"grade":"B"}]},"EUR1327":{"id":"EUR1327","name":"Subesh Mukherjee","title":"Regional Manager","sub":"Retail Sales","loc":"West Bengal","grade":"C","emp":27,"interns":2,"vacant":false,"note":"","rm":true,"rosterTitle":"Regional Manager","tsm":13,"tse":10,"parent":"EUR1285","kids":[{"id":"EUR1146","name":"Naitik Srivastava","title":"Area Sales Manager","loc":"Uttar Pradesh","emp":10,"interns":2,"branches":0,"direct":11,"rm":false,"tsm":5,"tse":4,"vacant":false},{"id":"EUR0945","name":"Anupam Guin","title":"Territory Sales Manager","loc":"Delhi","emp":6,"interns":0,"branches":0,"direct":5,"rm":false,"tsm":3,"tse":3,"vacant":false},{"id":"EUR1779","name":"Vivek Upadhyay","title":"Area Sales Manager","loc":"Uttar Pradesh","emp":3,"interns":0,"branches":0,"direct":2,"rm":false,"tsm":2,"tse":0,"vacant":false}],"team":[{"name":"Abhijeet Bhattacharjee","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Harendar Kumar","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Mohammad Ansar","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Rahul Kumar Trivedi","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Sandeep Patel","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Swatantra Kumar Mishra","title":"Area Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"B"},{"name":"Vikash Singh","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"}]},"EUR1146":{"id":"EUR1146","name":"Naitik Srivastava","title":"Area Sales Manager","sub":"Retail Sales","loc":"Uttar Pradesh","grade":"B","emp":10,"interns":2,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":5,"tse":4,"parent":"EUR1327","kids":[],"team":[{"name":"Ayush Yadav","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Dhannjay Kumar","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Dhruvendra Kumar Singh","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Guruditta Singh","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Jitendra Pandey","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Pramod Kumar Pandey","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Shobhit Singh","title":"Senior Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"B"},{"name":"Uday Pratap Singh","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Vibhav Kumar","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Abhishek Kumar","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Aniket Shrivastava","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0945":{"id":"EUR0945","name":"Anupam Guin","title":"Territory Sales Manager","sub":"Retail Sales","loc":"West Bengal","grade":"A","emp":6,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":3,"tse":3,"parent":"EUR1327","kids":[],"team":[{"name":"Debansupritam Mishra","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Dhananjoy Patgiri","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Dilkash Alam","title":"Territory Sales Executive","loc":"Jharkhand","intern":false,"grade":"A"},{"name":"Rupesh Kumar Singh","title":"Territory Sales Executive","loc":"Jharkhand","intern":false,"grade":"A"},{"name":"Subrata Kumar Sahu","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"}]},"EUR1779":{"id":"EUR1779","name":"Vivek Upadhyay","title":"Area Sales Manager","sub":"Retail Sales","loc":"Uttar Pradesh","grade":"B","emp":3,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":2,"tse":0,"parent":"EUR1327","kids":[],"team":[{"name":"Amir Ali","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Deependra Singh","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"}]},"EUR1692":{"id":"EUR1692","name":"Siddhartha Sharma","title":"Regional Manager","sub":"Retail Sales","loc":"Delhi","grade":"C","emp":18,"interns":0,"vacant":false,"note":"","rm":true,"rosterTitle":"General Manager","tsm":6,"tse":5,"parent":"EUR1285","kids":[],"team":[{"name":"Aalam Ahmad Khan","title":"Assistant General Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Akhil Gupta","title":"Area Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Arpit Raj","title":"Area Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ashish","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Dharmendra Kumar Chejara","title":"Territory Sales Manager","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Ganesh Gehlot","title":"Territory Sales Manager","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Harprit Singh","title":"Senior Executive- Accounts","loc":"Delhi","intern":false,"grade":"A"},{"name":"Naveen Gaur","title":"Area Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Parsun Jaliwal","title":"Territory Sales Executive","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Prashant Kumar","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Rahul Mishra","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Rajpal Singh Aswal","title":"Territory Sales Executive","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Ravi Malviya","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sandeep Patale","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sooraj","title":"Key Accounts Manager","loc":"Rajasthan","intern":false,"grade":"B"},{"name":"Sudeep","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Syed Salauddin","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1011":{"id":"EUR1011","name":"Amit Vishwakarma","title":"Assistant General Manager","sub":"Retail Sales","loc":"Delhi","grade":"C","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":1,"tse":0,"parent":"EUR1285","kids":[],"team":[{"name":"Sachin","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1911":{"id":"EUR1911","name":"Siddharth Dubey","title":"Assistant General Manager","sub":"Retail Sales","loc":"Rajasthan","grade":"C","emp":1,"interns":1,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR1285","kids":[],"team":[{"name":"Abid Khan Kayamkhani","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0757":{"id":"EUR0757","name":"Gaurav Bhardwaj","title":"Regional Manager","sub":"Sales Central","loc":"Delhi","grade":"C","emp":39,"interns":8,"vacant":false,"note":"","rm":true,"rosterTitle":"General Manager","tsm":16,"tse":18,"parent":"EUR0005","kids":[{"id":"EUR1190","name":"Ankit Kumar Jain","title":"Area Sales Manager","loc":"Delhi","emp":33,"interns":4,"branches":0,"direct":36,"rm":false,"tsm":16,"tse":16,"vacant":false}],"team":[{"name":"Deepak","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Mantu Kumar Singh","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Naman Arora","title":"Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Rajesh Arya","title":"Area Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Siddharth Ranka","title":"Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Aryan Maggon","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Rachit","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Sagar","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Souma Chowdhury","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1190":{"id":"EUR1190","name":"Ankit Kumar Jain","title":"Area Sales Manager","sub":"Retail Sales","loc":"Delhi","grade":"B","emp":33,"interns":4,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":16,"tse":16,"parent":"EUR0757","kids":[],"team":[{"name":"Akash","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Alok Kumar","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Amit Choudhary","title":"Territory Sales Manager","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Ankit Mishra","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Arun Gupta","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Arvind Kumar Singh","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Gaurav Pathak","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Harshdeep Singh","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Jagdamba Prasad","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Kamal","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Krishan Kant Sharma","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Lalit Kumar","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Lokesh Kumar Jain","title":"Territory Sales Executive","loc":"Rajasthan","intern":false,"grade":"A"},{"name":"Luxmi Kant Panday","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Manjit Kumar","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Pintu Nagar","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Pradeep Kumar","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Prashant Pandey","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Rajeev Kumar","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Rajesh Kumar","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sachin","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sandip Kumar","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Saurabh Verma","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Shahanawaz Warsi","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Shivam Bajpai","title":"Territory Sales Manager","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Shivam Tiwari","title":"Territory Sales Executive","loc":"Uttar Pradesh","intern":false,"grade":"A"},{"name":"Somnath Samanta","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sonu Sharma","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Sunny Kumar","title":"Territory Sales Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Syed Saqib Ali","title":"Territory Sales Manager","loc":"Delhi","intern":false,"grade":"A"},{"name":"Varun Sharma","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Vimal Barua","title":"Senior Territory Sales Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Abhinesh Mishra","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Abhishek Kumar Tiwari","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Aditya Singh","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Kumar Manas","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0870":{"id":"EUR0870","name":"Ritesh Roy","title":"General Manager","sub":"Expansion","loc":"Delhi","grade":"C","emp":11,"interns":5,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0005","kids":[{"id":"EUR1746","name":"Mridul Tiwari","title":"Assistant General Manager","loc":"Delhi","emp":2,"interns":4,"branches":0,"direct":5,"rm":false,"tsm":0,"tse":0,"vacant":false},{"id":"EUR1100","name":"Sudhir Yadav","title":"Senior Manager","loc":"Delhi","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false},{"id":"EUR1910","name":"Karan Singh Chauhan","title":"Assistant General Manager","loc":"Delhi","emp":1,"interns":1,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Abhay Lal","title":"Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ankit Sharma","title":"Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Anshuman Malviya","title":"Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Harshit Agrawal","title":"Manager-Network Expansion","loc":"Delhi","intern":false,"grade":"B"},{"name":"Vidhi Pathak","title":"Executive","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1746":{"id":"EUR1746","name":"Mridul Tiwari","title":"Assistant General Manager","sub":"Network Expansion","loc":"Delhi","grade":"C","emp":2,"interns":4,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0870","kids":[],"team":[{"name":"Nakshita Shaktawat","title":"Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Anand Kumar Singh","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Anish Pandey","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Kartik Chauhan","title":"Intern","loc":"","intern":true,"grade":""},{"name":"Sachin","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR1100":{"id":"EUR1100","name":"Sudhir Yadav","title":"Senior Manager","sub":"Expansion","loc":"Delhi","grade":"B","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0870","kids":[],"team":[{"name":"Manuel Praveen Kumar T","title":"Regional Trainer","loc":"Tamil Nadu","intern":false,"grade":"B"}]},"EUR1910":{"id":"EUR1910","name":"Karan Singh Chauhan","title":"Assistant General Manager","sub":"Network Expansion","loc":"Delhi","grade":"C","emp":1,"interns":1,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0870","kids":[],"team":[{"name":"Prerna Sharma","title":"Intern","loc":"","intern":true,"grade":""}]},"EUR0940":{"id":"EUR0940","name":"Shashank","title":"Assistant General Manager","sub":"Sales Ops","loc":"Delhi","grade":"C","emp":7,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0005","kids":[{"id":"EUR0817","name":"Raj Shekhawat","title":"Assistant Manager","loc":"Delhi","emp":2,"interns":0,"branches":0,"direct":1,"rm":false,"tsm":0,"tse":0,"vacant":false}],"team":[{"name":"Amresh Kumar Jha","title":"Data Analyst Executive","loc":"Delhi","intern":false,"grade":"A"},{"name":"Hemant Kumar","title":"Assistant Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Shivanshu Tandon","title":"Assistant Manager","loc":"Delhi","intern":false,"grade":"B"},{"name":"Varun Kapoor","title":"Manager","loc":"Delhi","intern":false,"grade":"B"}]},"EUR0817":{"id":"EUR0817","name":"Raj Shekhawat","title":"Assistant Manager","sub":"Sales Ops","loc":"Delhi","grade":"B","emp":2,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0940","kids":[],"team":[{"name":"Sandeep Kumar","title":"Senior Executive","loc":"Delhi","intern":false,"grade":"A"}]},"EUR1887":{"id":"EUR1887","name":"Rachit Jain","title":"Program Manager - Sales","sub":"Sales and Marketing","loc":"Delhi","grade":"C","emp":4,"interns":0,"vacant":false,"note":"","rm":false,"rosterTitle":"","tsm":0,"tse":0,"parent":"EUR0005","kids":[],"team":[{"name":"Abhijit Prakash Poddar","title":"Manager","loc":"Maharashtra","intern":false,"grade":"B"},{"name":"Amit Kumar Upadhyay","title":"Manager- BTL Marketing","loc":"Delhi","intern":false,"grade":"B"},{"name":"Ravi Rawat","title":"Assistant Manager","loc":"Delhi","intern":false,"grade":"B"}]}}, INDEX=[{"n":"Vani Rikhy Mehra","t":"Vice President","l":"","g":"EUR0005","m":1},{"n":"Akshay Dua","t":"Program Manager- Sales","l":"Delhi","g":"EUR0005","m":0},{"n":"Ashutosh","t":"Program Manager","l":"Karnataka","g":"EUR0005","m":0},{"n":"Yash Dwivedi","t":"Program Manager","l":"Delhi","g":"EUR0005","m":0},{"n":"Ratanmani Mohit","t":"Assistant Vice President - Sales","l":"","g":"EUR1285","m":1},{"n":"Abidali Hussain Shaikh","t":"Assistant General Manager","l":"Maharashtra","g":"EUR1285","m":0},{"n":"Akash Kumar","t":"Program Manager","l":"Delhi","g":"EUR1285","m":0},{"n":"Amit Jaiswal","t":"Assistant General Manager","l":"Maharashtra","g":"EUR1285","m":0},{"n":"Apurv Bhushan","t":"Manager","l":"Delhi","g":"EUR1285","m":0},{"n":"Dinesh Modi","t":"Assistant General Manager","l":"West Bengal","g":"EUR1285","m":0},{"n":"Neha Anurdhwaj Rangari","t":"Program Manager","l":"Delhi","g":"EUR1285","m":0},{"n":"Nikhil Kumar Chandrakar","t":"Senior Pogram Manager","l":"West Bengal","g":"EUR1285","m":0},{"n":"Nitish Goyal","t":"Program Manager","l":"Delhi","g":"EUR1285","m":0},{"n":"Vibhav Tyagi","t":"Assistant General Manager","l":"Delhi","g":"EUR1285","m":0},{"n":"Vinay Binu","t":"Regional Manager","l":"Maharashtra","g":"EUR1338","m":1},{"n":"Bhushan Ashok Aochar","t":"Key Accounts Manager","l":"Maharashtra","g":"EUR1338","m":0},{"n":"More Tukaram Shrikant","t":"Senior Executive","l":"Maharashtra","g":"EUR1338","m":0},{"n":"Chaitanya Savata Ghuge","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Harshvardhan Ulhas Yewankar","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Pranav Dilip Patil","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Rohit Sanjay Kumbhar","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Sanket Suryakant Jadhav","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Shivraj Satish Bhosale","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Swapnil Sunil Mhetre","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Udayraj Prabhakar Wagh","t":"Intern","l":"","g":"EUR1338","m":0},{"n":"Vijay Rameshchandra Biswas","t":"Area Sales Manager","l":"Maharashtra","g":"EUR1466","m":1},{"n":"Aakash Balu Limbole","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Aasif Fakruddin Shaikh","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Aditya Shivaji Dhongade","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Ajay Pandurang Gunjal","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Ajit Vishwnath Lokhande","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Asim Nawab Baig","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Baliram Rajebhau Kale","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Hanmant Dagdu Salunke","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Juberahamad Khatib","t":"Senior Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Manoj Madhukar Bargaje","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Naeem Shahajhan Mulani","t":"Senior Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Omkar Nandkumar Karhe","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Prakash Dattatray Chate","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Pramod Sampat Lohate","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Pranit Prakash Sanade","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Prashant Subhash Patil","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Prathamesh Pramod Deshpande","t":"Senior Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Rohit Ramesh Patil","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Sanket Rajkumar Yadav","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Santosh Keshav Bhartal","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Santosh Popat Honmane","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Suvek Vivek Kulkarni","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Tukaram Vaijnath Ghaytidak","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Tushar Ravindra Nevse","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Vicky Lalu Gaware","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Vishnu Bhausaheb Thete","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1466","m":0},{"n":"Jitender Premnath Duggal","t":"Area Sales Manager","l":"Maharashtra","g":"EUR1554","m":1},{"n":"Alhad Anil Mayekar","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Amol Bharatsing Chavhan","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Ismail Habibkhan Pathan","t":"Senior Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Kachave Prashant Shivajirao","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Kundan Kumar","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Mohd Niyaz Shaikh","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Pawan Narayan Jain","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Rahul Ramashankar Dubey","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Rahul Somnath Munde","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Rajendra Hemraj Meshram","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Sandip Gangaram Gundaye","t":"Senior Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Shubham Rajendra Tawde","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Shyamu Tiwari","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Syed Asfhan Usman","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Uday Uttam Sharma","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Vaseem Akhtar Khan","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1554","m":0},{"n":"Sachin Ashok Nawale","t":"Assistant General Manager","l":"Maharashtra","g":"EUR1829","m":1},{"n":"Adarsh","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Akash Pandurang Rangari","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Aniket Sanjay Haldankar","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Anubhav Tiwari","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Arpit Ashokarao Arvikar","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Dhanaji Niwas Jadhav","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Ganesh Sanjay Kapure","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Kiran Dilip Ghorpade","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Mayur Sanjay Khaire","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Mustkim Siddique Shaikh","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Pravin Balaso Chandane","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Sachin Shankar Jadhav","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Sandeep Anandrao Bhole","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Sanket Prakash Patil","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Somanth Vilas Gaikwad","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1829","m":0},{"n":"Ashutosh Pant","t":"Area Sales Manager","l":"Gujarat","g":"EUR0983","m":1},{"n":"Barot Nikunjkumar Harnishchandra","t":"Territory Sales Manager","l":"Gujarat","g":"EUR0983","m":0},{"n":"Jitendrasinh Tomar","t":"Territory Sales Manager","l":"Gujarat","g":"EUR0983","m":0},{"n":"Kedar Vijaykumar Ganpatbhai","t":"Territory Sales Executive","l":"Gujarat","g":"EUR0983","m":0},{"n":"Mukesh Indravadan Gohil","t":"Territory Sales Executive","l":"Gujarat","g":"EUR0983","m":0},{"n":"Patel Kaushik Kumar","t":"Senior Territory Sales Manager","l":"Gujarat","g":"EUR0983","m":0},{"n":"Saindane Bhatu Prabhakar","t":"Territory Sales Executive","l":"Gujarat","g":"EUR0983","m":0},{"n":"Dhiraj Krishnarao Akotkar","t":"Area Sales Manager","l":"Maharashtra","g":"EUR1858","m":1},{"n":"Danish Arif Sheikh","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Fahim Hamid Sheikh","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Sachin Rameshrao Andhare","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Sagar Ghanshyam Dhavangale","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Sandeep Babarao Pawar","t":"Territory Sales Manager","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Sushil Sheshrao Shirke","t":"Territory Sales Executive","l":"Maharashtra","g":"EUR1858","m":0},{"n":"Rachit Sharma","t":"Regional Manager","l":"Delhi","g":"EUR1450","m":1},{"n":"Adarsh Chauhan","t":"Assistant Manager - New Product Sales","l":"Delhi","g":"EUR1450","m":0},{"n":"Ijaz Ahmed","t":"Key Accounts Manager","l":"Delhi","g":"EUR1450","m":0},{"n":"Mohammad Aamir Ahmad","t":"Senior Manager","l":"Delhi","g":"EUR1450","m":0},{"n":"Pankaj Kumar Gautam","t":"Area Sales Manager","l":"Uttar Pradesh","g":"EUR1450","m":0},{"n":"Parminder Singh","t":"Senior Territory Sales Manager","l":"Chandigarh","g":"EUR1450","m":0},{"n":"Sandeep Kumar","t":"Territory Sales Manager","l":"Delhi","g":"EUR1450","m":0},{"n":"Sandip Kumar","t":"Manager","l":"Delhi","g":"EUR1450","m":0},{"n":"Ikbal Mohammad","t":"Senior Manager- Inside Sales","l":"Delhi","g":"EUR1291","m":1},{"n":"Aakash Luthra","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Abhishek Kumar Mishra","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Amit Kumar","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Amjath K Mohan","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Amu Tun Noor","t":"Assistant Manager","l":"Telangana","g":"EUR1291","m":0},{"n":"Aritra Kar","t":"Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Arshak Yaseen V A","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Ayoja Sharma","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Ayush Chauhan","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Bhumika Mestry","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Chowdary Teja","t":"Senior Sales Executive","l":"Karnataka","g":"EUR1291","m":0},{"n":"Deepu Kumar","t":"Senior Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Dimple Kumari","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Hemant","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Hemant Kumar","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Himanshu Bhardwaj","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Jiya","t":"Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Manjeet Singh","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Pankaj Kumar","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Parveen Kumar","t":"Assistant Manager","l":"Delhi","g":"EUR1291","m":0},{"n":"Priya Ghosh","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Samriti Sethi","t":"Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Subhadip Dey","t":"Senior Sales Executive","l":"Delhi","g":"EUR1291","m":0},{"n":"Aastha Rai","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Farzeen Ajmal","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Ishan Rai","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Kanika Digra","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Mayank Arora","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Neeraja P N","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Promit Chakraborty","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Sandeep Chand","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Shabnam","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Shubham Thakur","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Soni Kumari","t":"Intern","l":"","g":"EUR1291","m":0},{"n":"Deepak Malik","t":"Area Sales Manager","l":"Chandigarh","g":"EUR1639","m":1},{"n":"Jaspal Singh","t":"Senior Territory Sales Manager","l":"Chandigarh","g":"EUR1639","m":0},{"n":"Narinder Singh","t":"Territory Sales Executive","l":"Chandigarh","g":"EUR1639","m":0},{"n":"Rahul Kumar","t":"Territory Sales Manager","l":"Chandigarh","g":"EUR1639","m":0},{"n":"Rajinder Singh","t":"Territory Sales Manager","l":"Chandigarh","g":"EUR1639","m":0},{"n":"Abhay Rana","t":"Intern","l":"","g":"EUR1639","m":0},{"n":"Harsh Wardhan Thakur","t":"Intern","l":"","g":"EUR1639","m":0},{"n":"Jaspreet Singh","t":"Intern","l":"","g":"EUR1639","m":0},{"n":"Manish Choudhary","t":"Intern","l":"","g":"EUR1639","m":0},{"n":"Owais Aslam Lone","t":"Area Sales Manager","l":"Delhi","g":"EUR1029","m":1},{"n":"Ishfaq Ahmad Mir","t":"Territory Sales Manager","l":"Delhi","g":"EUR1029","m":0},{"n":"Mushtaq Ahmad Rather","t":"Territory Sales Manager","l":"Delhi","g":"EUR1029","m":0},{"n":"Rajesh Kumar Sharma","t":"Area Sales Manager","l":"Uttar Pradesh","g":"EUR1667","m":1},{"n":"Saurabh","t":"Manager","l":"Uttar Pradesh","g":"EUR1667","m":0},{"n":"Vikas Singh Bisht","t":"Regional Manager","l":"Delhi","g":"EUR0530","m":1},{"n":"Devyani Raman Jha","t":"Program Manager","l":"Delhi","g":"EUR0530","m":0},{"n":"Puneet Verma","t":"Key Account Manager","l":"Delhi","g":"EUR0530","m":0},{"n":"Vikash","t":"Senior Executive","l":"Delhi","g":"EUR0530","m":0},{"n":"Muskaan Oberoi","t":"Intern","l":"","g":"EUR0530","m":0},{"n":"Muskan","t":"Intern","l":"","g":"EUR0530","m":0},{"n":"Ridhima Singh","t":"Intern","l":"","g":"EUR0530","m":0},{"n":"Shweta Shyam","t":"Intern","l":"","g":"EUR0530","m":0},{"n":"Gaurav Wadhwa","t":"Area Sales Manager","l":"Delhi","g":"EUR0867","m":1},{"n":"Abhishek","t":"Territory Sales Executive","l":"Delhi","g":"EUR0867","m":0},{"n":"Azad Singh","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Balram","t":"Territory Sales Executive","l":"Delhi","g":"EUR0867","m":0},{"n":"Chandan Mishra","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR0867","m":0},{"n":"Deepak Sharma","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Krishna","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Monu Kumar","t":"Territory Sales Executive","l":"Delhi","g":"EUR0867","m":0},{"n":"Narender Rawat","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Prince Vishwakarma","t":"Territory Sales Executive","l":"Delhi","g":"EUR0867","m":0},{"n":"Rahul Pandey","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Ranjit Kumar Mishra","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Ravi Kumar","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Rohit Kumar","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Sorav Kumar","t":"Senior Territory Sales Manager","l":"Uttar Pradesh","g":"EUR0867","m":0},{"n":"Sushil Kumar Pathak","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Swayamber Prasad","t":"Territory Sales Executive","l":"Haryana","g":"EUR0867","m":0},{"n":"Tufail Ansari","t":"Territory Sales Executive","l":"Delhi","g":"EUR0867","m":0},{"n":"Vishal Pathak","t":"Territory Sales Manager","l":"Delhi","g":"EUR0867","m":0},{"n":"Prahar Verma","t":"State Head-Sales","l":"Delhi","g":"EUR1836","m":1},{"n":"Adarsh Singh","t":"Territory Sales Manager","l":"Delhi","g":"EUR1836","m":0},{"n":"Pankaj","t":"Territory Sales Manager","l":"Delhi","g":"EUR1836","m":0},{"n":"Amritpal Singh Uppal","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Isham","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Ishan Singh","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Mejar Chouragade","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Mridul Guleria","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Sourav Mukherjee","t":"Intern","l":"","g":"EUR1836","m":0},{"n":"Vivek Singh","t":"Area Sales Manager","l":"Delhi","g":"EUR1178","m":1},{"n":"Ankit Mishra","t":"Territory Sales Executive","l":"Delhi","g":"EUR1178","m":0},{"n":"Nitin Pal","t":"Territory Sales Manager","l":"Delhi","g":"EUR1178","m":0},{"n":"Prateek Arora","t":"Area Sales Manager","l":"Delhi","g":"EUR1607","m":1},{"n":"Sachin Kumar","t":"Territory Sales Manager","l":"Delhi","g":"EUR1607","m":0},{"n":"Pulkit Bakshi","t":"Area Sales Manager","l":"Delhi","g":"EUR1729","m":1},{"n":"Ankit Soni","t":"Intern","l":"","g":"EUR1729","m":0},{"n":"Vacant \u2014 South Regional Manager","t":"Regional Manager","l":"","g":"VACANT-SOUTH-RM","m":1},{"n":"Badisha Kumaraswamy","t":"Area Sales Manager","l":"Telangana","g":"VACANT-SOUTH-RM","m":0},{"n":"Bharani Morum","t":"Key Accounts Manager","l":"Karnataka","g":"VACANT-SOUTH-RM","m":0},{"n":"K Shankar","t":"Territory Sales Manager","l":"Karnataka","g":"VACANT-SOUTH-RM","m":0},{"n":"Muchanapalli Srikanth","t":"Territory Sales Manager","l":"Telangana","g":"VACANT-SOUTH-RM","m":0},{"n":"Sanjay B","t":"Senior Territory Sales Manager","l":"Karnataka","g":"VACANT-SOUTH-RM","m":0},{"n":"Vijay Bharath S","t":"Territory Sales Manager","l":"Karnataka","g":"VACANT-SOUTH-RM","m":0},{"n":"Mohammed Abdul Wadood","t":"Area Sales Manager","l":"Telangana","g":"EUR1249","m":1},{"n":"Donthi Ashok Kumar","t":"Senior Territory Sales Manager","l":"Telangana","g":"EUR1249","m":0},{"n":"Goda Sai Prasad","t":"Territory Sales Manager","l":"Telangana","g":"EUR1249","m":0},{"n":"Madanu Naveen Kumar","t":"Territory Sales Executive","l":"Telangana","g":"EUR1249","m":0},{"n":"Mohammed Mohinuddin","t":"Territory Sales Executive","l":"Telangana","g":"EUR1249","m":0},{"n":"Mohammed Nabeel Pasha","t":"Territory Sales Executive","l":"Telangana","g":"EUR1249","m":0},{"n":"Pathangi Manikantan","t":"Territory Sales Executive","l":"Karnataka","g":"EUR1249","m":0},{"n":"Shaik Mujahed","t":"Territory Sales Manager","l":"Telangana","g":"EUR1249","m":0},{"n":"Shaik Rasheed","t":"Senior Territory Sales Manager","l":"Telangana","g":"EUR1249","m":0},{"n":"Vunyala Pranay Kumar","t":"Territory Sales Executive","l":"Telangana","g":"EUR1249","m":0},{"n":"Kashaveni Rajesh","t":"Area Sales Manager","l":"Telangana","g":"EUR1003","m":1},{"n":"Chinta Adinarayana","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"G Anil Kumar","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Janagani Prashanth Kumar","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Kotta Venkatesham","t":"Territory Sales Executive","l":"Telangana","g":"EUR1003","m":0},{"n":"Krishna Chaitanya Vaddiparthi","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Mirza Ghayaz Baig","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Rajesh Rachamalla","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Vaddiparthi Kishore","t":"Territory Sales Manager","l":"Telangana","g":"EUR1003","m":0},{"n":"Ravi Prakash","t":"Senior Area Sales Manager","l":"Karnataka","g":"EUR1451","m":1},{"n":"Aftab Ahmed Ulla Khan","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Karthik","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"M Almohin","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Madival Sandeep","t":"Territory Sales Executive","l":"Karnataka","g":"EUR1451","m":0},{"n":"Mohammed Ahmed","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Shaikh Abdul Raqib Pasha","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Somashekar B","t":"Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Zabiulla Khan","t":"Senior Territory Sales Manager","l":"Karnataka","g":"EUR1451","m":0},{"n":"Sumanth G","t":"Area Sales Manager","l":"Karnataka","g":"EUR1217","m":1},{"n":"Riyasudheen M M","t":"Territory Sales Manager","l":"Delhi","g":"EUR1217","m":0},{"n":"Sajil V S","t":"Territory Sales Manager","l":"Delhi","g":"EUR1217","m":0},{"n":"Arup Roy Chowdhury","t":"Regional Manager","l":"West Bengal","g":"EUR0793","m":1},{"n":"Kalaivanan M","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR0793","m":0},{"n":"Pradip Kumar Dutta","t":"Territory Sales Executive","l":"West Bengal","g":"EUR0793","m":0},{"n":"Ranjeet Kumar Singh","t":"Territory Sales Manager","l":"Bihar","g":"EUR0793","m":0},{"n":"Shanmugam Ramachandran","t":"Senior Executive- Accounts","l":"Tamil Nadu","g":"EUR0793","m":0},{"n":"Subha Raha","t":"Territory Sales Manager","l":"West Bengal","g":"EUR0793","m":0},{"n":"Vikash Kumar","t":"Area Sales Manager","l":"Bihar","g":"EUR1563","m":1},{"n":"Akhileshwar Jha","t":"Territory Sales Manager","l":"Bihar","g":"EUR1563","m":0},{"n":"Amardeep Kumar Singh","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Deepak Kumar Singh","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Manish Tiwari","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Nitesh Kumar","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Pankaj Kumar","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Rohit Kumar","t":"Territory Sales Manager","l":"Bihar","g":"EUR1563","m":0},{"n":"Sunil Kumar","t":"Territory Sales Executive","l":"Bihar","g":"EUR1563","m":0},{"n":"Anand Kumar","t":"Intern","l":"","g":"EUR1563","m":0},{"n":"Bhawesh Raj","t":"Intern","l":"","g":"EUR1563","m":0},{"n":"Jai Kumar C J","t":"Area Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":1},{"n":"Anandhan A","t":"Senior Territory Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"D S Immanuel","t":"Senior Territory Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"M Karthick","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"Mohambari","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"Palanivel Ramakrishanan","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"Pradeep Immanuel","t":"Territory Sales Executive","l":"Tamil Nadu","g":"EUR1274","m":0},{"n":"Madhusudhan Madhukumar","t":"Intern","l":"","g":"EUR1274","m":0},{"n":"Snehasis Ganguly","t":"Area Sales Manager","l":"West Bengal","g":"EUR0930","m":1},{"n":"Abir Chakraborty","t":"Territory Sales Manager","l":"West Bengal","g":"EUR0930","m":0},{"n":"Debarpito Mondal","t":"Senior Territory Sales Manager","l":"West Bengal","g":"EUR0930","m":0},{"n":"Dibyendu Saha","t":"Territory Sales Executive","l":"West Bengal","g":"EUR0930","m":0},{"n":"Shubhrungsu Barui","t":"Territory Sales Executive","l":"West Bengal","g":"EUR0930","m":0},{"n":"Priyobrata Mukherjee","t":"Intern","l":"","g":"EUR0930","m":0},{"n":"C P Balakrishnan","t":"Area Sales Manager","l":"Tamil Nadu","g":"EUR1516","m":1},{"n":"R Ashokkumar","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR1516","m":0},{"n":"Samiullah Babulal","t":"Territory Sales Manager","l":"Tamil Nadu","g":"EUR1516","m":0},{"n":"K Asen Basha","t":"Area Sales Manager","l":"Tamil Nadu","g":"EUR1425","m":1},{"n":"V P Sreenath","t":"Senior Territory Sales Manager","l":"Tamil Nadu","g":"EUR1425","m":0},{"n":"Subesh Mukherjee","t":"Regional Manager","l":"West Bengal","g":"EUR1327","m":1},{"n":"Abhijeet Bhattacharjee","t":"Territory Sales Manager","l":"Delhi","g":"EUR1327","m":0},{"n":"Harendar Kumar","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Mohammad Ansar","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Rahul Kumar Trivedi","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Sandeep Patel","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Swatantra Kumar Mishra","t":"Area Sales Manager","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Vikash Singh","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1327","m":0},{"n":"Naitik Srivastava","t":"Area Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":1},{"n":"Ayush Yadav","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Dhannjay Kumar","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Dhruvendra Kumar Singh","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Guruditta Singh","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Jitendra Pandey","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Pramod Kumar Pandey","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Shobhit Singh","t":"Senior Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Uday Pratap Singh","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Vibhav Kumar","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1146","m":0},{"n":"Abhishek Kumar","t":"Intern","l":"","g":"EUR1146","m":0},{"n":"Aniket Shrivastava","t":"Intern","l":"","g":"EUR1146","m":0},{"n":"Anupam Guin","t":"Territory Sales Manager","l":"West Bengal","g":"EUR0945","m":1},{"n":"Debansupritam Mishra","t":"Territory Sales Manager","l":"Delhi","g":"EUR0945","m":0},{"n":"Dhananjoy Patgiri","t":"Territory Sales Executive","l":"Delhi","g":"EUR0945","m":0},{"n":"Dilkash Alam","t":"Territory Sales Executive","l":"Jharkhand","g":"EUR0945","m":0},{"n":"Rupesh Kumar Singh","t":"Territory Sales Executive","l":"Jharkhand","g":"EUR0945","m":0},{"n":"Subrata Kumar Sahu","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR0945","m":0},{"n":"Vivek Upadhyay","t":"Area Sales Manager","l":"Uttar Pradesh","g":"EUR1779","m":1},{"n":"Amir Ali","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1779","m":0},{"n":"Deependra Singh","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1779","m":0},{"n":"Siddhartha Sharma","t":"Regional Manager","l":"Delhi","g":"EUR1692","m":1},{"n":"Aalam Ahmad Khan","t":"Assistant General Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Akhil Gupta","t":"Area Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Arpit Raj","t":"Area Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Ashish","t":"Territory Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Dharmendra Kumar Chejara","t":"Territory Sales Manager","l":"Rajasthan","g":"EUR1692","m":0},{"n":"Ganesh Gehlot","t":"Territory Sales Manager","l":"Rajasthan","g":"EUR1692","m":0},{"n":"Harprit Singh","t":"Senior Executive- Accounts","l":"Delhi","g":"EUR1692","m":0},{"n":"Naveen Gaur","t":"Area Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Parsun Jaliwal","t":"Territory Sales Executive","l":"Rajasthan","g":"EUR1692","m":0},{"n":"Prashant Kumar","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1692","m":0},{"n":"Rahul Mishra","t":"Territory Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Rajpal Singh Aswal","t":"Territory Sales Executive","l":"Rajasthan","g":"EUR1692","m":0},{"n":"Ravi Malviya","t":"Territory Sales Executive","l":"Delhi","g":"EUR1692","m":0},{"n":"Sandeep Patale","t":"Territory Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Sooraj","t":"Key Accounts Manager","l":"Rajasthan","g":"EUR1692","m":0},{"n":"Sudeep","t":"Territory Sales Manager","l":"Delhi","g":"EUR1692","m":0},{"n":"Syed Salauddin","t":"Territory Sales Executive","l":"Delhi","g":"EUR1692","m":0},{"n":"Amit Vishwakarma","t":"Assistant General Manager","l":"Delhi","g":"EUR1011","m":1},{"n":"Sachin","t":"Territory Sales Manager","l":"Delhi","g":"EUR1011","m":0},{"n":"Siddharth Dubey","t":"Assistant General Manager","l":"Rajasthan","g":"EUR1911","m":1},{"n":"Abid Khan Kayamkhani","t":"Intern","l":"","g":"EUR1911","m":0},{"n":"Gaurav Bhardwaj","t":"Regional Manager","l":"Delhi","g":"EUR0757","m":1},{"n":"Deepak","t":"Territory Sales Executive","l":"Delhi","g":"EUR0757","m":0},{"n":"Mantu Kumar Singh","t":"Territory Sales Executive","l":"Delhi","g":"EUR0757","m":0},{"n":"Naman Arora","t":"Manager","l":"Delhi","g":"EUR0757","m":0},{"n":"Rajesh Arya","t":"Area Sales Manager","l":"Delhi","g":"EUR0757","m":0},{"n":"Siddharth Ranka","t":"Manager","l":"Delhi","g":"EUR0757","m":0},{"n":"Aryan Maggon","t":"Intern","l":"","g":"EUR0757","m":0},{"n":"Rachit","t":"Intern","l":"","g":"EUR0757","m":0},{"n":"Sagar","t":"Intern","l":"","g":"EUR0757","m":0},{"n":"Souma Chowdhury","t":"Intern","l":"","g":"EUR0757","m":0},{"n":"Ankit Kumar Jain","t":"Area Sales Manager","l":"Delhi","g":"EUR1190","m":1},{"n":"Akash","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Alok Kumar","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Amit Choudhary","t":"Territory Sales Manager","l":"Rajasthan","g":"EUR1190","m":0},{"n":"Ankit Mishra","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Arun Gupta","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Arvind Kumar Singh","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Gaurav Pathak","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Harshdeep Singh","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Jagdamba Prasad","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Kamal","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Krishan Kant Sharma","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Lalit Kumar","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Lokesh Kumar Jain","t":"Territory Sales Executive","l":"Rajasthan","g":"EUR1190","m":0},{"n":"Luxmi Kant Panday","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Manjit Kumar","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Pintu Nagar","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Pradeep Kumar","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Prashant Pandey","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Rajeev Kumar","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Rajesh Kumar","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Sachin","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Sandip Kumar","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Saurabh Verma","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Shahanawaz Warsi","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Shivam Bajpai","t":"Territory Sales Manager","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Shivam Tiwari","t":"Territory Sales Executive","l":"Uttar Pradesh","g":"EUR1190","m":0},{"n":"Somnath Samanta","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Sonu Sharma","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Sunny Kumar","t":"Territory Sales Executive","l":"Delhi","g":"EUR1190","m":0},{"n":"Syed Saqib Ali","t":"Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Varun Sharma","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Vimal Barua","t":"Senior Territory Sales Manager","l":"Delhi","g":"EUR1190","m":0},{"n":"Abhinesh Mishra","t":"Intern","l":"","g":"EUR1190","m":0},{"n":"Abhishek Kumar Tiwari","t":"Intern","l":"","g":"EUR1190","m":0},{"n":"Aditya Singh","t":"Intern","l":"","g":"EUR1190","m":0},{"n":"Kumar Manas","t":"Intern","l":"","g":"EUR1190","m":0},{"n":"Ritesh Roy","t":"General Manager","l":"Delhi","g":"EUR0870","m":1},{"n":"Abhay Lal","t":"Manager","l":"Delhi","g":"EUR0870","m":0},{"n":"Ankit Sharma","t":"Executive","l":"Delhi","g":"EUR0870","m":0},{"n":"Anshuman Malviya","t":"Manager","l":"Delhi","g":"EUR0870","m":0},{"n":"Harshit Agrawal","t":"Manager-Network Expansion","l":"Delhi","g":"EUR0870","m":0},{"n":"Vidhi Pathak","t":"Executive","l":"Delhi","g":"EUR0870","m":0},{"n":"Mridul Tiwari","t":"Assistant General Manager","l":"Delhi","g":"EUR1746","m":1},{"n":"Nakshita Shaktawat","t":"Executive","l":"Delhi","g":"EUR1746","m":0},{"n":"Anand Kumar Singh","t":"Intern","l":"","g":"EUR1746","m":0},{"n":"Anish Pandey","t":"Intern","l":"","g":"EUR1746","m":0},{"n":"Kartik Chauhan","t":"Intern","l":"","g":"EUR1746","m":0},{"n":"Sachin","t":"Intern","l":"","g":"EUR1746","m":0},{"n":"Sudhir Yadav","t":"Senior Manager","l":"Delhi","g":"EUR1100","m":1},{"n":"Manuel Praveen Kumar T","t":"Regional Trainer","l":"Tamil Nadu","g":"EUR1100","m":0},{"n":"Karan Singh Chauhan","t":"Assistant General Manager","l":"Delhi","g":"EUR1910","m":1},{"n":"Prerna Sharma","t":"Intern","l":"","g":"EUR1910","m":0},{"n":"Shashank","t":"Assistant General Manager","l":"Delhi","g":"EUR0940","m":1},{"n":"Amresh Kumar Jha","t":"Data Analyst Executive","l":"Delhi","g":"EUR0940","m":0},{"n":"Hemant Kumar","t":"Assistant Manager","l":"Delhi","g":"EUR0940","m":0},{"n":"Shivanshu Tandon","t":"Assistant Manager","l":"Delhi","g":"EUR0940","m":0},{"n":"Varun Kapoor","t":"Manager","l":"Delhi","g":"EUR0940","m":0},{"n":"Raj Shekhawat","t":"Assistant Manager","l":"Delhi","g":"EUR0817","m":1},{"n":"Sandeep Kumar","t":"Senior Executive","l":"Delhi","g":"EUR0817","m":0},{"n":"Rachit Jain","t":"Program Manager - Sales","l":"Delhi","g":"EUR1887","m":1},{"n":"Abhijit Prakash Poddar","t":"Manager","l":"Maharashtra","g":"EUR1887","m":0},{"n":"Amit Kumar Upadhyay","t":"Manager- BTL Marketing","l":"Delhi","g":"EUR1887","m":0},{"n":"Ravi Rawat","t":"Assistant Manager","l":"Delhi","g":"EUR1887","m":0}], ROOT="EUR0005";
-  var view=document.getElementById('view'), path=document.getElementById('path'),
-      q=document.getElementById('q'), res=document.getElementById('res');
-  var here=ROOT, spotlight=null;
+  var tree=document.getElementById('tree'), q=document.getElementById('q'),
+      res=document.getElementById('res');
 
   function esc(s){
     return String(s==null?'':s).replace(/[&<>"']/g,function(c){
@@ -308,110 +311,109 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     });
   }
   function plural(n,w){ return n+' '+w+(n===1?'':'s'); }
+  function people(n){ return plural(n,'person').replace('persons','people'); }
 
-  /* ── breadcrumb ───────────────────────────────────────────────────── */
-  function drawPath(){
-    var chain=[], id=here;
-    while(id){ chain.unshift(NODES[id]); id=NODES[id].parent; }
-    path.innerHTML=chain.map(function(n,i){
-      var last=i===chain.length-1;
-      var label=esc(i===0?'Sales':n.name);
-      return (last ? '<span class="here">'+label+'</span>'
-                   : '<button type="button" data-go="'+n.id+'">'+label+'</button>')
-             + (last?'':'<span aria-hidden="true">›</span>');
-    }).join('');
-  }
+  var CHEV='<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4"/></svg>';
 
-  /* ── main view ────────────────────────────────────────────────────── */
-  function draw(){
-    var n=NODES[here];
-    var bits=[];
+  /* ── build the whole tree once; opening a branch never removes another ── */
+  function card(n,depth){
+    var open=depth<1;                       // department head starts open
+    var has=n.kids.length||n.team.length;
 
-    var role=[n.title, n.sub!=='Leadership'?n.sub:'', n.loc].filter(Boolean).map(esc).join(' · ');
-    if(n.rm && n.rosterTitle && n.rosterTitle!=='Regional Manager')
-      role+=' <span style="color:var(--ink-3)">(on the roster as '+esc(n.rosterTitle)+')</span>';
-    var fieldRow = (n.tsm||n.tse)
-      ? '<div class="field">'+
-        (n.tsm?'<span><b>'+n.tsm+'</b> territory sales managers</span>':'')+
-        (n.tse?'<span><b>'+n.tse+'</b> territory sales executives</span>':'')+'</div>'
+    var role=[n.title, (n.sub&&n.sub!=='Leadership'&&n.sub!=='Retail Sales')?n.sub:'', n.loc]
+             .filter(Boolean).map(esc).join(' · ');
+    var under=[];
+    if(n.kids.length) under.push(plural(n.kids.length,'team'));
+    if(n.team.length) under.push(people(n.team.length));
+    if(under.length) role+=(role?' — ':'')+under.join(', ')+' below';
+
+    var field=(n.tsm||n.tse)
+      ? '<span class="field">'+
+        (n.tsm?'<span><b>'+n.tsm+'</b> TSM</span>':'')+
+        (n.tse?'<span><b>'+n.tse+'</b> TSE</span>':'')+'</span>'
       : '';
-    bits.push('<div class="focus'+(n.vacant?' vac':'')+'">'+
-      '<h2>'+esc(n.name)+(n.rm?'<span class="tag">Regional Manager</span>':'')+'</h2>'+
-      '<p class="role">'+role+'</p>'+fieldRow+
-      (n.note?'<p class="note">'+esc(n.note)+'</p>':'')+
-      '<div class="tally">'+
-        '<div class="t-item"><b>'+n.emp+'</b><span>in this line</span></div>'+
-        (n.interns?'<div class="t-item t-int"><b>'+n.interns+'</b><span>interns</span></div>':'')+
-        (n.kids.length?'<div class="t-item"><b>'+n.kids.length+'</b><span>'+(n.kids.length===1?'team':'teams')+'</span></div>':'')+
-      '</div></div>');
 
-    if(n.kids.length){
-      bits.push('<div class="lead-in"></div><ul class="branch">'+
-        n.kids.map(function(k){
-          var sub=[k.title, k.loc].filter(Boolean).map(esc).join(' · ');
-          var under=[];
-          if(k.branches) under.push(plural(k.branches,'team'));
-          if(k.direct) under.push(plural(k.direct,'person').replace('persons','people'));
-          var fld=(k.tsm||k.tse)
-            ? '<span class="field">'+
-              (k.tsm?'<span><b>'+k.tsm+'</b> TSM</span>':'')+
-              (k.tse?'<span><b>'+k.tse+'</b> TSE</span>':'')+'</span>'
-            : '';
-          return '<li><button class="kid'+(k.vacant?' vac':'')+'" type="button" data-go="'+k.id+'">'+
-            '<span class="who"><span class="kn">'+esc(k.name)+
-              (k.rm?'<span class="tag">RM</span>':'')+'</span>'+
-            '<span class="kt">'+sub+(under.length?' — '+under.join(', ')+' below':'')+'</span>'+
-            fld+'</span>'+
-            '<span class="kc"><b>'+k.emp+'</b><span>people</span>'+
-              (k.interns?'<span class="ki">+'+k.interns+' interns</span>':'')+'</span>'+
-            '<span class="go" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4 2l4 4-4 4"/></svg></span>'+
-            '</button></li>';
-        }).join('')+'</ul>');
-    }
+    var h=['<li class="node'+(depth===0?' root':'')+(open||!has?'':' shut')+
+           '" id="n-'+esc(n.id)+'">'];
+    h.push('<'+(has?'button':'div')+' class="row'+(n.vacant?' vac':'')+(has?'':' flat')+'"'+
+      (has?' type="button" aria-expanded="'+(open?'true':'false')+'" data-tog="'+esc(n.id)+'"':'')+'>');
+    h.push('<span class="chev'+(has?'':' blank')+'">'+(has?CHEV:'')+'</span>');
+    h.push('<span class="who"><span class="nm">'+esc(n.name)+
+      (n.rm?'<span class="tag">'+(depth===0?'Regional Manager':'RM')+'</span>':'')+'</span>'+
+      '<span class="rl">'+role+'</span>'+field+'</span>');
+    h.push('<span class="cnt"><b>'+n.emp+'</b><span>people</span>'+
+      (n.interns?'<span class="ki">+'+n.interns+' interns</span>':'')+'</span>');
+    h.push('</'+(has?'button':'div')+'>');
 
-    if(n.team.length){
-      bits.push('<div class="direct"><div class="d-head">'+
-        '<h3>Reporting straight to '+esc(n.name.split(' ')[0])+'</h3>'+
-        '<p>'+plural(n.team.length,'person').replace('persons','people')+
-        ', no team of their own</p></div><ul class="people">'+
-        n.team.map(function(m){
-          return '<li'+(m.intern?' class="int"':'')+' data-who="'+esc(m.name)+'">'+
-            '<span class="pn">'+esc(m.name)+'</span>'+
-            '<span class="pt">'+esc(m.title)+'</span>'+
-            (m.loc?'<span class="pl">'+esc(m.loc)+'</span>':'')+'</li>';
-        }).join('')+'</ul></div>');
-    }
+    if(n.note) h.push('<p class="note">'+esc(n.note)+'</p>');
 
-    if(!n.kids.length && !n.team.length){
-      bits.push('<div class="direct"><p style="color:var(--ink-3)">No one reports to '+
-        esc(n.name)+'.</p></div>');
-    }
-
-    view.innerHTML=bits.join('');
-    drawPath();
-
-    if(spotlight){
-      var row=view.querySelector('[data-who="'+CSS.escape(spotlight)+'"]');
-      if(row){
-        row.classList.add('hl');
-        row.scrollIntoView({block:'center',behavior:'smooth'});
+    if(has){
+      h.push('<div class="kids">');
+      if(n.kids.length){
+        h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');
       }
-      spotlight=null;
+      if(n.team.length){
+        h.push('<div class="direct"><p class="d-lab">'+
+          people(n.team.length)+' reporting straight to '+esc(n.name.split(' ')[0])+
+          '</p><ul class="people">'+
+          n.team.map(function(m){
+            return '<li'+(m.intern?' class="int"':'')+' id="p-'+esc(m.name.replace(/\s+/g,'_'))+'">'+
+              '<span class="pn">'+esc(m.name)+'</span>'+
+              '<span class="pt">'+esc(m.title)+'</span>'+
+              (m.loc?'<span class="pl">'+esc(m.loc)+'</span>':'')+'</li>';
+          }).join('')+'</ul></div>');
+      }
+      h.push('</div>');
     }
+    h.push('</li>');
+    return h.join('');
   }
 
-  function go(id,who){
-    if(!NODES[id]) return;
-    here=id; spotlight=who||null;
-    draw();
-    if(!who) window.scrollTo({top:0,behavior:'smooth'});
+  tree.innerHTML='<ul>'+card(NODES[ROOT],0)+'</ul>';
+
+  /* ── open / close in place ────────────────────────────────────────── */
+  function setOpen(li,open){
+    li.classList.toggle('shut',!open);
+    var b=li.querySelector(':scope > .row[data-tog]');
+    if(b) b.setAttribute('aria-expanded',open?'true':'false');
   }
-  document.addEventListener('click',function(ev){
-    var b=ev.target.closest('[data-go]');
-    if(b) go(b.dataset.go);
+  tree.addEventListener('click',function(ev){
+    var b=ev.target.closest('.row[data-tog]'); if(!b) return;
+    var li=b.closest('.node');
+    setOpen(li,li.classList.contains('shut'));
+  });
+  document.querySelector('.tools').addEventListener('click',function(ev){
+    var a=ev.target.closest('[data-act]'); if(!a) return;
+    var open=a.dataset.act==='open';
+    tree.querySelectorAll('.node').forEach(function(li){
+      setOpen(li, open || li.classList.contains('root'));
+    });
   });
 
-  /* ── search ───────────────────────────────────────────────────────── */
+  /* ── search: reveal in place, never hide anything ─────────────────── */
+  function clearHits(){
+    tree.querySelectorAll('.hit').forEach(function(el){ el.classList.remove('hit'); });
+  }
+  function reveal(el){
+    for(var p=el.closest('.node');p;p=p.parentElement.closest('.node')) setOpen(p,true);
+  }
+  function jump(id,who){
+    clearHits();
+    var target;
+    if(who){
+      var host=document.getElementById('n-'+CSS.escape(id));
+      target=host&&host.querySelector('#p-'+CSS.escape(who.replace(/\s+/g,'_')));
+    }
+    if(!target){
+      var n=document.getElementById('n-'+CSS.escape(id));
+      target=n&&n.querySelector(':scope > .row');
+    }
+    if(!target) return;
+    reveal(target);
+    target.classList.add('hit');
+    target.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+
   function find(term){
     term=term.trim().toLowerCase();
     if(term.length<2){ res.hidden=true; q.setAttribute('aria-expanded','false'); return; }
@@ -434,9 +436,8 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   });
   res.addEventListener('click',function(ev){
     var b=ev.target.closest('[data-id]'); if(!b) return;
-    /* a manager opens their own view; anyone else opens their manager's, highlighted */
-    go(b.dataset.id, b.dataset.mgr==='1'?null:b.dataset.name);
-    res.hidden=true; q.setAttribute('aria-expanded','false'); q.value='';
+    jump(b.dataset.id, b.dataset.mgr==='1'?null:b.dataset.name);
+    res.hidden=true; q.setAttribute('aria-expanded','false');
   });
   document.addEventListener('click',function(ev){
     if(!ev.target.closest('.seek')){ res.hidden=true; q.setAttribute('aria-expanded','false'); }
@@ -445,7 +446,5 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     if(ev.key==='Escape'){ res.hidden=true; q.value=''; q.setAttribute('aria-expanded','false'); }
     if(ev.key==='Enter'){ var f=res.querySelector('[data-id]'); if(f&&!res.hidden) f.click(); }
   });
-
-  draw();
 })();
 </script>
