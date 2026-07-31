@@ -11,6 +11,8 @@
   "emp": 343,
   "interns": 54,
   "direct": 8,
+  "tsm": 145,
+  "tse": 80,
   "locs": [
    {
     "name": "Delhi",
@@ -71,6 +73,8 @@
     "emp": 278,
     "interns": 41,
     "direct": 18,
+    "tsm": 129,
+    "tse": 62,
     "locs": [
      {
       "name": "Delhi",
@@ -185,6 +189,10 @@
       "emp": 77,
       "interns": 8,
       "direct": 15,
+      "rm": true,
+      "rosterTitle": "Regional Manager",
+      "tsm": 48,
+      "tse": 21,
       "locs": [
        {
         "name": "Maharashtra",
@@ -298,6 +306,8 @@
         "emp": 27,
         "interns": 0,
         "direct": 26,
+        "tsm": 17,
+        "tse": 9,
         "locs": [
          {
           "name": "Maharashtra",
@@ -519,6 +529,8 @@
         "emp": 17,
         "interns": 0,
         "direct": 16,
+        "tsm": 13,
+        "tse": 3,
         "locs": [
          {
           "name": "Maharashtra",
@@ -670,6 +682,8 @@
         "emp": 16,
         "interns": 0,
         "direct": 15,
+        "tsm": 13,
+        "tse": 2,
         "locs": [
          {
           "name": "Maharashtra",
@@ -810,6 +824,8 @@
         "emp": 7,
         "interns": 0,
         "direct": 6,
+        "tsm": 3,
+        "tse": 3,
         "locs": [
          {
           "name": "Gujarat",
@@ -891,6 +907,8 @@
         "emp": 7,
         "interns": 0,
         "direct": 6,
+        "tsm": 2,
+        "tse": 4,
         "locs": [
          {
           "name": "Maharashtra",
@@ -970,6 +988,10 @@
       "emp": 42,
       "interns": 15,
       "direct": 11,
+      "rm": true,
+      "rosterTitle": "Regional Manager",
+      "tsm": 7,
+      "tse": 1,
       "locs": [
        {
         "name": "Delhi",
@@ -1375,6 +1397,8 @@
         "emp": 5,
         "interns": 4,
         "direct": 8,
+        "tsm": 3,
+        "tse": 1,
         "locs": [
          {
           "name": "Chandigarh",
@@ -1474,6 +1498,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "tsm": 2,
+        "tse": 0,
         "locs": [
          {
           "name": "Delhi",
@@ -1550,8 +1576,8 @@
      {
       "id": "EUR0530",
       "name": "Vikas Singh Bisht",
-      "title": "General Manager",
-      "short": "GM",
+      "title": "Regional Manager",
+      "short": "RM",
       "sub": "Retail Sales",
       "grade": "C",
       "doj": "2022-11-01",
@@ -1559,6 +1585,10 @@
       "emp": 32,
       "interns": 11,
       "direct": 12,
+      "rm": true,
+      "rosterTitle": "General Manager",
+      "tsm": 15,
+      "tse": 8,
       "locs": [
        {
         "name": "Delhi",
@@ -1659,6 +1689,8 @@
         "emp": 19,
         "interns": 0,
         "direct": 18,
+        "tsm": 11,
+        "tse": 7,
         "locs": [
          {
           "name": "Delhi",
@@ -1832,6 +1864,8 @@
         "emp": 3,
         "interns": 6,
         "direct": 8,
+        "tsm": 2,
+        "tse": 0,
         "locs": [
          {
           "name": "Delhi",
@@ -1923,6 +1957,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "tsm": 1,
+        "tse": 1,
         "locs": [
          {
           "name": "Delhi",
@@ -1972,6 +2008,8 @@
         "emp": 2,
         "interns": 0,
         "direct": 1,
+        "tsm": 1,
+        "tse": 0,
         "locs": [
          {
           "name": "Delhi",
@@ -2052,6 +2090,10 @@
       "direct": 10,
       "vacant": true,
       "note": "Open following Amitabh Singh\u2019s resignation. The team reports to Ratanmani Mohit directly until a replacement joins.",
+      "rm": true,
+      "rosterTitle": "Regional Manager",
+      "tsm": 24,
+      "tse": 7,
       "locs": [
        {
         "name": "Telangana",
@@ -2145,6 +2187,8 @@
         "emp": 10,
         "interns": 0,
         "direct": 9,
+        "tsm": 4,
+        "tse": 5,
         "locs": [
          {
           "name": "Telangana",
@@ -2251,6 +2295,8 @@
         "emp": 9,
         "interns": 0,
         "direct": 8,
+        "tsm": 7,
+        "tse": 1,
         "locs": [
          {
           "name": "Telangana",
@@ -2342,6 +2388,8 @@
         "emp": 9,
         "interns": 0,
         "direct": 8,
+        "tsm": 7,
+        "tse": 1,
         "locs": [
          {
           "name": "Karnataka",
@@ -2437,6 +2485,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "tsm": 2,
+        "tse": 0,
         "locs": [
          {
           "name": "Delhi",
@@ -2479,8 +2529,8 @@
      {
       "id": "EUR0793",
       "name": "Arup Roy Chowdhury",
-      "title": "General Manager",
-      "short": "GM",
+      "title": "Regional Manager",
+      "short": "RM",
       "sub": "Retail Sales",
       "grade": "C",
       "doj": "2023-03-17",
@@ -2488,6 +2538,10 @@
       "emp": 32,
       "interns": 4,
       "direct": 10,
+      "rm": true,
+      "rosterTitle": "General Manager",
+      "tsm": 15,
+      "tse": 10,
       "locs": [
        {
         "name": "Tamil Nadu",
@@ -2570,6 +2624,8 @@
         "emp": 9,
         "interns": 2,
         "direct": 10,
+        "tsm": 2,
+        "tse": 6,
         "locs": [
          {
           "name": "Bihar",
@@ -2679,6 +2735,8 @@
         "emp": 7,
         "interns": 1,
         "direct": 7,
+        "tsm": 5,
+        "tse": 1,
         "locs": [
          {
           "name": "Tamil Nadu",
@@ -2771,6 +2829,8 @@
         "emp": 5,
         "interns": 1,
         "direct": 5,
+        "tsm": 2,
+        "tse": 2,
         "locs": [
          {
           "name": "West Bengal",
@@ -2849,6 +2909,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "tsm": 2,
+        "tse": 0,
         "locs": [
          {
           "name": "Tamil Nadu",
@@ -2894,6 +2956,8 @@
         "emp": 2,
         "interns": 0,
         "direct": 1,
+        "tsm": 1,
+        "tse": 0,
         "locs": [
          {
           "name": "Tamil Nadu",
@@ -2934,6 +2998,10 @@
       "emp": 27,
       "interns": 2,
       "direct": 10,
+      "rm": true,
+      "rosterTitle": "Regional Manager",
+      "tsm": 13,
+      "tse": 10,
       "locs": [
        {
         "name": "Uttar Pradesh",
@@ -3030,6 +3098,8 @@
         "emp": 10,
         "interns": 2,
         "direct": 11,
+        "tsm": 5,
+        "tse": 4,
         "locs": [
          {
           "name": "Uttar Pradesh",
@@ -3150,6 +3220,8 @@
         "emp": 6,
         "interns": 0,
         "direct": 5,
+        "tsm": 3,
+        "tse": 3,
         "locs": [
          {
           "name": "Delhi",
@@ -3232,6 +3304,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "tsm": 2,
+        "tse": 0,
         "locs": [
          {
           "name": "Uttar Pradesh",
@@ -3270,8 +3344,8 @@
      {
       "id": "EUR1692",
       "name": "Siddhartha Sharma",
-      "title": "General Manager",
-      "short": "GM",
+      "title": "Regional Manager",
+      "short": "RM",
       "sub": "Retail Sales",
       "grade": "C",
       "doj": "2025-11-14",
@@ -3279,6 +3353,10 @@
       "emp": 18,
       "interns": 0,
       "direct": 17,
+      "rm": true,
+      "rosterTitle": "General Manager",
+      "tsm": 6,
+      "tse": 5,
       "locs": [
        {
         "name": "Delhi",
@@ -3457,6 +3535,8 @@
       "emp": 2,
       "interns": 0,
       "direct": 1,
+      "tsm": 1,
+      "tse": 0,
       "locs": [
        {
         "name": "Delhi",
@@ -3526,8 +3606,8 @@
    {
     "id": "EUR0757",
     "name": "Gaurav Bhardwaj",
-    "title": "General Manager",
-    "short": "GM",
+    "title": "Regional Manager",
+    "short": "RM",
     "sub": "Sales Central",
     "grade": "C",
     "doj": "2023-02-07",
@@ -3535,6 +3615,10 @@
     "emp": 39,
     "interns": 8,
     "direct": 10,
+    "rm": true,
+    "rosterTitle": "General Manager",
+    "tsm": 16,
+    "tse": 18,
     "locs": [
      {
       "name": "Delhi",
@@ -3649,6 +3733,8 @@
       "emp": 33,
       "interns": 4,
       "direct": 36,
+      "tsm": 16,
+      "tse": 16,
       "locs": [
        {
         "name": "Delhi",

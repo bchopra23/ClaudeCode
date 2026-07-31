@@ -1,8 +1,8 @@
 """Render org.json into the self-contained page.
 
-The chart is a top-down connector tree of managers. Individual contributors
-hang off their manager as a single team node rather than as N sibling nodes,
-which is what keeps a 36-person team from becoming a 36-wide row.
+The page shows one manager at a time — their card, the branches under them,
+and the people who report to them directly — so nothing ever needs zooming or
+scrolling sideways. The view is built in the browser from the tree below.
 """
 import json, base64, html
 
@@ -10,110 +10,46 @@ D = json.load(open('org.json'))
 tree, meta = D['tree'], D['meta']
 e = lambda s: html.escape(str(s or ''))
 
-FONT_DIR = 'fonts'
-FONTS = ['BigShoulders-Bold', 'BigShoulders-Regular',
-         'WorkSans-Regular', 'WorkSans-Bold', 'JetBrainsMono-Regular']
+FONTS = ['BigShoulders-Bold', 'WorkSans-Regular', 'WorkSans-Bold', 'JetBrainsMono-Regular']
 
 def font_face(k):
-    b64 = base64.b64encode(open(f'{FONT_DIR}/{k}.woff2', 'rb').read()).decode()
+    b64 = base64.b64encode(open(f'fonts/{k}.woff2', 'rb').read()).decode()
     return (f'@font-face{{font-family:"{k.split("-")[0]}";'
             f'font-weight:{700 if "Bold" in k else 400};font-style:normal;'
             f'font-display:block;src:url(data:font/woff2;base64,{b64}) format("woff2")}}')
 
-LOGO = open('logo.svg').read()
+# ── flatten the tree into what the view needs ─────────────────────────────
+NODES = {}      # id -> manager record
+INDEX = []      # every person, for search
 
-# ── tree markup ───────────────────────────────────────────────────────────
-DRAWER = {}          # node id -> detail payload consumed by the drawer
-MGRS = [0]
-
-def pills(n):
-    out = f'<span class="pill pill-n">{n["emp"]}</span>'
-    if n['interns']:
-        out += f'<span class="pill pill-i">{n["interns"]}<i>i</i></span>'
-    return out
-
-
-def card(n):
-    tier = ('vp' if n['title'].startswith('Vice President') else
-            'vacant' if n.get('vacant') else 'mgr')
-    loc = n['locs'][0]['name'] if n.get('locs') else ''
-    sub = '' if n['sub'] in ('Retail Sales', 'Leadership') else n['sub']
-    meta_line = ' · '.join(x for x in (sub, loc) if x)
-
-    DRAWER[n['id']] = {
-        'name': n['name'], 'title': n['title'], 'sub': n['sub'], 'grade': n['grade'],
-        'doj': n['doj'], 'loc': n['loc'], 'emp': n['emp'], 'interns': n['interns'],
-        'direct': n['direct'], 'locs': n.get('locs', []),
-        'vacant': n.get('vacant', False), 'note': n.get('note', ''),
-        'reports': [{'name': c['name'], 'title': c['title'],
-                     'emp': c['emp'], 'interns': c['interns']}
-                    for c in n.get('children', [])],
-        'team': n.get('team', {}).get('members', []),
-    }
-    MGRS[0] += 1
-
-    search = f'{n["name"]} {n["title"]} {n["sub"]} {loc}'.lower()
-    return (f'<button class="card c-{tier}" type="button" data-id="{e(n["id"])}" '
-            f'data-search="{e(search)}">'
-            f'<span class="c-name">{e(n["name"])}</span>'
-            f'<span class="c-role">{e(n["short"])}</span>'
-            + (f'<span class="c-meta">{e(meta_line)}</span>' if meta_line else '')
-            + f'<span class="c-pills">{pills(n)}</span></button>')
-
-
-def team_card(n):
-    t = n['team']
-    tid = n['id'] + ':team'
-    DRAWER[tid] = {'name': n['name'] + '’s team', 'title': 'Direct individual contributors',
-                   'sub': n['sub'], 'grade': '', 'doj': '', 'loc': '',
-                   'emp': t['emp'], 'interns': t['interns'], 'direct': len(t['members']),
-                   'locs': [], 'vacant': False, 'note': '', 'reports': [],
-                   'team': t['members']}
-    tally = ' <i>·</i> '.join(f'<b>{v}</b> {e(k)}' for k, v in t['titles'][:3])
-    if len(t['titles']) > 3:
-        tally += f' <i>·</i> <b>+{len(t["titles"]) - 3}</b> more'
-    search = ' '.join(m['name'] + ' ' + m['title'] + ' ' + m['loc'] for m in t['members']).lower()
-    pl = f'<span class="pill pill-n">{t["emp"]}</span>' if t['emp'] else ''
-    if t['interns']:
-        pl += f'<span class="pill pill-i">{t["interns"]}<i>i</i></span>'
-    return (f'<button class="card c-team" type="button" data-id="{e(tid)}" '
-            f'data-search="{e(search)}">'
-            f'<span class="c-role">Team</span>'
-            f'<span class="c-tally">{tally}</span>'
-            f'<span class="c-pills">{pl}</span></button>')
-
-
-def render(n, depth=0):
+def visit(n, parent=None):
     kids = n.get('children', [])
-    has_team = 'team' in n
-    branches = len(kids) + (1 if has_team else 0)
-    # the top three tiers are open on load; deeper tiers start folded
-    collapsed = depth >= 2 and branches > 0
+    team = n.get('team', {})
+    NODES[n['id']] = {
+        'id': n['id'], 'name': n['name'], 'title': n['title'], 'sub': n['sub'],
+        'loc': n['loc'], 'grade': n['grade'], 'emp': n['emp'], 'interns': n['interns'],
+        'vacant': n.get('vacant', False), 'note': n.get('note', ''),
+        'rm': n.get('rm', False), 'rosterTitle': n.get('rosterTitle', ''),
+        'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
+        'parent': parent,
+        'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],
+                  'loc': c['locs'][0]['name'] if c.get('locs') else c['loc'],
+                  'emp': c['emp'], 'interns': c['interns'],
+                  'branches': len(c.get('children', [])),
+                  'direct': len(c.get('team', {}).get('members', [])),
+                  'rm': c.get('rm', False),
+                  'tsm': c.get('tsm', 0), 'tse': c.get('tse', 0),
+                  'vacant': c.get('vacant', False)} for c in kids],
+        'team': team.get('members', []),
+    }
+    INDEX.append({'n': n['name'], 't': n['title'], 'l': n['loc'], 'g': n['id'], 'm': 1})
+    for m in team.get('members', []):
+        INDEX.append({'n': m['name'], 't': m['title'], 'l': m['loc'],
+                      'g': n['id'], 'm': 0})
+    for c in kids:
+        visit(c, n['id'])
 
-    cls = f'lv{min(depth, 4)}'
-    if collapsed: cls += ' collapsed'
-    if branches: cls += ' has-kids'
-
-    out = [f'<li class="{cls}"><div class="slot">', card(n)]
-    if branches:
-        out.append(f'<button class="tog" type="button" '
-                   f'aria-expanded="{"false" if collapsed else "true"}" '
-                   f'aria-label="{e(n["name"])}: {branches} branches">'
-                   f'<span class="tog-n">{branches}</span></button>')
-    out.append('</div>')
-
-    if branches:
-        out.append('<ul>')
-        out += [render(c, depth + 1) for c in kids]
-        if has_team:
-            out.append(f'<li class="lv{min(depth + 1, 4)} is-team"><div class="slot">'
-                       f'{team_card(n)}</div></li>')
-        out.append('</ul>')
-    out.append('</li>')
-    return ''.join(out)
-
-
-tree_html = f'<ul class="root">{render(tree)}</ul>'
+visit(tree)
 
 # ── panels ────────────────────────────────────────────────────────────────
 def bars(rows, label=lambda k: k):
@@ -123,31 +59,30 @@ def bars(rows, label=lambda k: k):
         f'<span class="b-t"><i style="width:{round(v / mx * 100)}%"></i></span>'
         f'<span class="b-v">{v}</span></li>' for k, v in rows)
 
-GRADE = {'A': 'A — field &amp; executive', 'B': 'B — managerial',
-         'C': 'C — senior leadership'}
+GRADE = {'A': 'Field &amp; executive', 'B': 'Managerial', 'C': 'Senior leadership'}
 
 STATS = [(meta['employees'], 'Employees'), (meta['interns'], 'Interns'),
-         (meta['total'], 'Total'), (MGRS[0], 'Managers'),
-         (len(meta['locations']), 'States'), (1, 'Open seat')]
+         (meta['total'], 'People in all'), (1, 'Open seat')]
 
 tpl = open('template.html', encoding='utf-8').read()
 out = (tpl
        .replace('/*FONTS*/', ''.join(font_face(k) for k in FONTS))
-       .replace('<!--LOGO-->', LOGO)
+       .replace('<!--LOGO-->', open('logo.svg').read())
        .replace('<!--STATS-->', ''.join(
            f'<div class="stat"><b>{v}</b><span>{l}</span></div>' for v, l in STATS))
-       .replace('<!--TREE-->', tree_html)
        .replace('<!--SUBBARS-->', bars(meta['subDepts'], e))
        .replace('<!--GBARS-->', bars(meta['grades'], lambda k: GRADE.get(k, e(k))))
        .replace('<!--LOCBARS-->', bars(meta['locations'], e))
-       .replace('/*DATA*/', json.dumps(DRAWER, separators=(',', ':')))
+       .replace('/*NODES*/', json.dumps(NODES, separators=(',', ':')))
+       .replace('/*INDEX*/', json.dumps(INDEX, separators=(',', ':')))
+       .replace('__ROOT__', json.dumps(tree['id']))
        .replace('__TOTAL__', str(meta['total'])))
 
 open('sales-org.html', 'w', encoding='utf-8').write(out)
 
-assert '__TOTAL__' not in out and '/*DATA*/' not in out and '/*FONTS*/' not in out
-assert '<!--TREE-->' not in out and '<!--LOGO-->' not in out
-print('manager cards :', MGRS[0])
-print('drawer entries:', len(DRAWER))
+for token in ('/*FONTS*/', '/*NODES*/', '/*INDEX*/', '__ROOT__', '__TOTAL__',
+              '<!--LOGO-->', '<!--STATS-->', '<!--SUBBARS-->'):
+    assert token not in out, token
+print('manager views :', len(NODES))
+print('searchable    :', len(INDEX))
 print('page size     :', round(len(out) / 1024), 'KB')
-print('placeholders  : all replaced')

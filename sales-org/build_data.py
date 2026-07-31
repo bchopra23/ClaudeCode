@@ -18,6 +18,16 @@ RETAIL = {'3W Retail Sales', '4W Retail Sales', 'Retail Sales'}
 
 VACANT_SOUTH = 'VACANT-SOUTH-RM'
 
+# The roster records these people by grade (General Manager and such); the org
+# role they actually hold is Regional Manager. Confirmed against the RM list.
+REGIONAL_MANAGERS = ['Vinay Binu', 'Rachit Sharma', 'Vikas Singh Bisht',
+                     'Arup Roy Chowdhury', 'Subesh Mukherjee', 'Siddhartha Sharma',
+                     'Gaurav Bhardwaj']
+
+# field roles counted per Regional Manager
+IS_TSM = lambda t: 'Territory Sales Manager' in t          # includes Senior TSM
+IS_TSE = lambda t: 'Territory Sales Executive' in t
+
 norm = lambda n: re.sub(r'[^a-z]', '', (n or '').lower())
 clean = lambda s: (str(s).strip() if s is not None else '')
 
@@ -108,6 +118,13 @@ people.append(byid[VACANT_SOUTH])
 if VACANT_SOUTH not in kids[mohit]:
     kids[mohit].append(VACANT_SOUTH)
 
+RM_IDS = {by_name[norm(n)] for n in REGIONAL_MANAGERS if norm(n) in by_name}
+RM_IDS.add(VACANT_SOUTH)
+for i in RM_IDS:
+    byid[i]['rm'] = True
+    byid[i]['roster_title'] = byid[i]['title']
+    byid[i]['title'] = 'Regional Manager'
+
 ROOT = by_name[norm('Vani Rikhy Mehra')]
 
 # ── roll-ups ──────────────────────────────────────────────────────────────
@@ -125,6 +142,16 @@ def rollup(i, seen=None):
         emp += ce
         itn += ci
     return emp, itn
+
+def field_roles(i, acc=None):
+    """Territory managers and executives anywhere in this line."""
+    acc = acc if acc is not None else {'tsm': 0, 'tse': 0}
+    t = byid[i]['title']
+    if IS_TSM(t): acc['tsm'] += 1
+    elif IS_TSE(t): acc['tse'] += 1
+    for c in kids[i]:
+        field_roles(c, acc)
+    return acc
 
 def locations(i, acc=None):
     acc = acc if acc is not None else collections.Counter()
@@ -172,6 +199,13 @@ def node(i):
     if p.get('vacant'):
         d['vacant'] = True
         d['note'] = p['note']
+
+    if p.get('rm'):
+        d['rm'] = True
+        d['rosterTitle'] = p.get('roster_title', '')
+    f = field_roles(i)
+    if f['tsm'] or f['tse']:
+        d['tsm'], d['tse'] = f['tsm'], f['tse']
 
     top = locations(i).most_common(3)
     if top:
@@ -225,4 +259,13 @@ print('people placed in tree :', placed(tree))
 print('dropped with excluded :', len(dropped))
 print('manager nodes / depth :', mgr_nodes(tree), '/', depth(tree))
 print('root line             :', tree['emp'], 'employees /', tree['interns'], 'interns')
+print('regional managers     :', len(RM_IDS))
+def rmline(n, out=None):
+    out = out if out is not None else []
+    if n.get('rm'):
+        out.append((n['name'], n.get('tsm', 0), n.get('tse', 0), n['emp']))
+    for c in n.get('children', []): rmline(c, out)
+    return out
+for nm, tsm, tse, emp in rmline(tree):
+    print(f'   {nm:32s} {emp:4d} in line | {tsm:3d} TSM | {tse:3d} TSE')
 print('sub-departments       :', meta['subDepts'])

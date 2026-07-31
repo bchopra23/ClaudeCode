@@ -1,8 +1,12 @@
 # Euler Sales — Org Structure
 
-An interactive org chart for the Sales department: 343 employees and 54 interns,
-drawn as a top-down connector tree. Every reporting line is rebuilt from the
-roster's Reporting Manager column.
+An interactive org chart for the Sales department: 343 employees and 54 interns.
+Every reporting line is rebuilt from the roster's Reporting Manager column.
+
+The page shows **one manager at a time** — their card, the branches beneath
+them on a tree rail, and everyone reporting to them directly, listed by name.
+A breadcrumb tracks the path back up. Nothing zooms and nothing scrolls
+sideways, so it reads the same on a phone as on a desktop.
 
 ## Build
 
@@ -35,10 +39,9 @@ variants (`Naitik Srivastav` → `Naitik Srivastava`, `Arup Choudhary` →
 `Arup Roy Chowdhury`, `Vikas singh bisht` → `Vikas Singh Bisht`). All 397 people
 resolve into the tree with none orphaned.
 
-The chart is a tree of managers. A manager's individual contributors do not
-become sibling nodes — they hang off that manager as a single team card, which
-is what stops a 36-person team from rendering as a 36-wide row. Opening a team
-card lists every member with their role and state.
+Search covers all 397 people. Picking a manager opens their view; picking
+anyone else opens their manager's view with that person highlighted in the
+list.
 
 Seven employees share a name with a colleague. None of them is a manager, so
 name-based manager lookup stays unambiguous; each is still a distinct node keyed
@@ -53,6 +56,20 @@ by employee code.
   Retail Sales role under Abhishek Malik. All three report outside Sales
   leadership. That is the 24-person gap between the roster's 367 Sales
   employees and this chart's 343.
+
+## Regional Managers
+
+Seven people are recorded on the roster by grade — mostly General Manager —
+while the role they actually hold is Regional Manager. `REGIONAL_MANAGERS` in
+`build_data.py` carries that list; those people are shown as Regional Managers
+with their roster designation noted alongside. The vacant South seat is the
+eighth RM position.
+
+Each RM shows the number of territory sales managers and territory sales
+executives anywhere in their line. TSM counts include Senior TSM.
+
+Note that Gaurav Bhardwaj is a Regional Manager but reports to the VP directly
+rather than through the AVP, so he appears one level up from the other seven.
 
 ## Structural notes
 
