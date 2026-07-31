@@ -7,26 +7,12 @@
   "sub": "Leadership",
   "grade": "C",
   "doj": "2018-07-01",
-  "loc": "Delhi",
+  "loc": "",
   "emp": 343,
   "interns": 54,
   "direct": 8,
   "tsm": 145,
   "tse": 80,
-  "locs": [
-   {
-    "name": "Delhi",
-    "n": 139
-   },
-   {
-    "name": "Maharashtra",
-    "n": 73
-   },
-   {
-    "name": "Uttar Pradesh",
-    "n": 32
-   }
-  ],
   "team": {
    "emp": 3,
    "interns": 0,
@@ -69,26 +55,12 @@
     "sub": "Retail Sales",
     "grade": "C",
     "doj": "2025-02-12",
-    "loc": "Delhi",
+    "loc": "",
     "emp": 278,
     "interns": 41,
     "direct": 18,
     "tsm": 129,
     "tse": 62,
-    "locs": [
-     {
-      "name": "Delhi",
-      "n": 86
-     },
-     {
-      "name": "Maharashtra",
-      "n": 72
-     },
-     {
-      "name": "Uttar Pradesh",
-      "n": 25
-     }
-    ],
     "team": {
      "emp": 9,
      "interns": 0,

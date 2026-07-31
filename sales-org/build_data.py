@@ -24,6 +24,9 @@ REGIONAL_MANAGERS = ['Vinay Binu', 'Rachit Sharma', 'Vikas Singh Bisht',
                      'Arup Roy Chowdhury', 'Subesh Mukherjee', 'Siddhartha Sharma',
                      'Gaurav Bhardwaj']
 
+# these two sit across the whole department, so a single state would mislead
+HIDE_LOCATION = ['Vani Rikhy Mehra', 'Ratanmani Mohit']
+
 # field roles counted per Regional Manager
 IS_TSM = lambda t: 'Territory Sales Manager' in t          # includes Senior TSM
 IS_TSE = lambda t: 'Territory Sales Executive' in t
@@ -125,6 +128,8 @@ for i in RM_IDS:
     byid[i]['roster_title'] = byid[i]['title']
     byid[i]['title'] = 'Regional Manager'
 
+HIDE_LOC_IDS = {by_name[norm(n)] for n in HIDE_LOCATION if norm(n) in by_name}
+
 ROOT = by_name[norm('Vani Rikhy Mehra')]
 
 # ── roll-ups ──────────────────────────────────────────────────────────────
@@ -207,9 +212,12 @@ def node(i):
     if f['tsm'] or f['tse']:
         d['tsm'], d['tse'] = f['tsm'], f['tse']
 
-    top = locations(i).most_common(3)
-    if top:
-        d['locs'] = [{'name': k, 'n': v} for k, v in top]
+    if i in HIDE_LOC_IDS:
+        d['loc'] = ''
+    else:
+        top = locations(i).most_common(3)
+        if top:
+            d['locs'] = [{'name': k, 'n': v} for k, v in top]
 
     if ics:
         mem = sorted((byid[c] for c in ics), key=lambda x: (x['intern'], x['name']))

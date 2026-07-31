@@ -71,6 +71,13 @@ executives anywhere in their line. TSM counts include Senior TSM.
 Note that Gaurav Bhardwaj is a Regional Manager but reports to the VP directly
 rather than through the AVP, so he appears one level up from the other seven.
 
+## Display notes
+
+`HIDE_LOCATION` in `build_data.py` suppresses the state shown for Vani Rikhy
+Mehra and Ratanmani Mohit — both sit across the whole department, so pinning
+either to one state would mislead. They are still counted in the By state
+totals, which is why those totals sum to all 343 employees.
+
 ## Structural notes
 
 - **South Regional Manager is vacant.** 37 people listed `Amitabh Singh` as their
