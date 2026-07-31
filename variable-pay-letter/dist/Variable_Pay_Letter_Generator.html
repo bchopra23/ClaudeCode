@@ -189,8 +189,26 @@
     border-top: 1px solid var(--line);
   }
 
-  .amount-row .figure { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
-  .amount-row .words { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .pay-split {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 6px 20px;
+    align-items: end;
+  }
+
+  .pay-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .amount-row .figure { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .pay-eligible { font-size: 15px; font-weight: 600; }
+  .pay-percent { font-size: 22px; font-weight: 700; color: var(--euler-blue-dark); letter-spacing: -.01em; }
+  .amount-row .words { font-size: 13px; color: var(--muted); margin-top: 8px; }
 
   .placeholder { color: var(--muted); font-size: 14px; margin: 0; }
 
@@ -365,8 +383,8 @@
 
   tr.bad input { background: #fef7f6; }
 
-  .col-id { width: 24%; }
-  .col-amount { width: 22%; }
+  .col-id { width: 18%; }
+  .col-amount { width: 18%; }
 
   .peek { width: 168px; text-align: center; white-space: nowrap; }
 
@@ -535,7 +553,13 @@
         </div>
 
         <div class="field">
-          <label for="amount">Total Variable Pay <span class="hint">in INR</span></label>
+          <label for="eligible">Total Eligible Variable Pay <span class="hint">in INR</span></label>
+          <input type="text" id="eligible" placeholder="e.g. 300000" autocomplete="off" inputmode="decimal">
+          <div class="error" id="eligibleError"></div>
+        </div>
+
+        <div class="field">
+          <label for="amount">Variable Pay Awarded <span class="hint">in INR</span></label>
           <input type="text" id="amount" placeholder="e.g. 250000" autocomplete="off" inputmode="decimal">
           <div class="error" id="amountError"></div>
         </div>
@@ -566,7 +590,20 @@
             <dt>Location</dt><dd id="dLocation"></dd>
           </dl>
           <div class="amount-row" id="amountRow" hidden>
-            <div class="figure" id="dAmount"></div>
+            <div class="pay-split">
+              <div>
+                <div class="pay-label">Eligible</div>
+                <div class="pay-eligible" id="dEligible"></div>
+              </div>
+              <div>
+                <div class="pay-label">Awarded</div>
+                <div class="figure" id="dAmount"></div>
+              </div>
+              <div>
+                <div class="pay-label">% of eligible</div>
+                <div class="pay-percent" id="dPercent"></div>
+              </div>
+            </div>
             <div class="words" id="dAmountWords"></div>
           </div>
         </div>
@@ -598,14 +635,15 @@
           Every letter in the batch carries this date.
         </li>
         <li>
-          <strong>Paste your two columns into the table.</strong>
-          Copy Employee ID and Variable Pay straight out of your spreadsheet and paste
-          anywhere in the grid. Rows are added as needed, and a copied header row is
-          ignored, so selecting the headings too is fine.
+          <strong>Paste your three columns into the table.</strong>
+          Copy Employee ID, Eligible Variable Pay and Variable Pay Awarded straight out
+          of your spreadsheet and paste anywhere in the grid. Rows are added as needed,
+          and a copied header row is ignored, so selecting the headings too is fine.
         </li>
         <li>
           <strong>Check the Status column.</strong>
-          Each row shows the employee it matched and the amount. Rows highlighted in red
+          Each row shows the employee it matched, the payout and what percentage of the
+          eligible amount that is. Rows highlighted in red
           need fixing &mdash; the zip stays locked until every row is clean, so nobody is
           quietly left out of the run.
         </li>
@@ -633,7 +671,8 @@
             <tr>
               <th class="rownum"></th>
               <th class="col-id">Employee ID</th>
-              <th class="col-amount">Variable Pay</th>
+              <th class="col-amount">Eligible Variable Pay</th>
+              <th class="col-amount">Variable Pay Awarded</th>
               <th>Status</th>
               <th class="peek"></th>
               <th class="drop"></th>
@@ -1257,17 +1296,29 @@ const MAX_AMOUNT = 1e9; // A billion rupees; anything larger is a typo, not a bo
  * Reads a rupee figure written any of the ways a spreadsheet might hold it.
  * Returns { value } or { error }.
  */
-function parseAmount(text) {
+function parseAmount(text, label = "Variable pay") {
   const raw = String(text || "").trim()
     .replace(/^(?:INR|RS\.?|₹)\s*/i, "")
     .replace(/[,\s]/g, "");
-  if (!raw) return { error: "Variable pay is missing." };
-  if (!/^\d*\.?\d+$/.test(raw)) return { error: "Variable pay must be a number." };
+  if (!raw) return { error: `${label} is missing.` };
+  if (!/^\d*\.?\d+$/.test(raw)) return { error: `${label} must be a number.` };
   const value = Number(raw);
-  if (!Number.isFinite(value)) return { error: "Variable pay must be a number." };
-  if (value <= 0) return { error: "Variable pay must be greater than zero." };
-  if (value > MAX_AMOUNT) return { error: "Variable pay looks too large." };
+  if (!Number.isFinite(value)) return { error: `${label} must be a number.` };
+  if (value <= 0) return { error: `${label} must be greater than zero.` };
+  if (value > MAX_AMOUNT) return { error: `${label} looks too large.` };
   return { value: Math.round(value * 100) / 100 };
+}
+
+/**
+ * The payout as a percentage of what the employee was eligible for.
+ *
+ * Trimmed to at most two decimals with trailing zeros dropped, so a full payout
+ * reads "100%" rather than "100.00%" and two thirds reads "66.67%". Payouts above
+ * the eligible amount are legitimate under most schemes and are not capped.
+ */
+function formatPercent(awarded, eligible) {
+  if (!eligible) return "";
+  return `${Number(((awarded / eligible) * 100).toFixed(2))}%`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -1315,10 +1366,10 @@ function leading(points, factor = 1.42) {
 /**
  * Builds the letter.
  * @param employee record from the master database
- * @param amount   rupees, already validated
+ * @param pay      { eligible, awarded } in rupees, both already validated
  * @param dateISO  the letter date the user entered, as YYYY-MM-DD
  */
-function buildLetter(employee, amount, dateISO) {
+function buildLetter(employee, pay, dateISO) {
   const doc = newDocument();
   doc.addImage(LETTERHEAD, "JPEG", ART.x, ART.y, ART.w, ART.h, undefined, "FAST");
 
@@ -1396,7 +1447,7 @@ function buildLetter(employee, amount, dateISO) {
     + `awarded a variable pay as set out below.`
   );
 
-  y = drawAmountBox(doc, y, amount);
+  y = drawAmountBox(doc, y, pay);
 
   paragraph(
     "Your ownership, consistency and commitment have contributed meaningfully to "
@@ -1418,9 +1469,13 @@ function buildLetter(employee, amount, dateISO) {
   return doc;
 }
 
-/** The highlighted variable pay callout. Returns the cursor below it. */
-function drawAmountBox(doc, y, amount) {
-  const height = 23;
+/**
+ * The highlighted variable pay callout: what the employee was eligible for, what
+ * has been awarded, and the payout as a percentage of the two. Returns the cursor
+ * below it.
+ */
+function drawAmountBox(doc, y, pay) {
+  const height = 27;
   const radius = 2;
 
   doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
@@ -1428,24 +1483,52 @@ function drawAmountBox(doc, y, amount) {
   doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
   doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
 
-  const textX = MARGIN.left + 8;
+  // Three columns across the box. The awarded figure is the headline, so it and
+  // the percentage are set larger than the eligible amount they derive from.
+  const columns = [
+    {
+      x: MARGIN.left + 8,
+      label: "TOTAL ELIGIBLE VARIABLE PAY",
+      value: `INR ${formatINR(pay.eligible)}`,
+      size: 11.5,
+      color: COLORS.ink,
+    },
+    {
+      x: MARGIN.left + 66,
+      label: "VARIABLE PAY AWARDED",
+      value: `INR ${formatINR(pay.awarded)}`,
+      size: 15,
+      color: COLORS.ink,
+    },
+    {
+      x: MARGIN.left + 124,
+      label: "% OF ELIGIBLE",
+      value: formatPercent(pay.awarded, pay.eligible),
+      size: 15,
+      color: [43, 127, 174],
+    },
+  ];
 
-  doc.setFont("Poppins", "semibold");
-  doc.setFontSize(7.5);
-  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.setCharSpace(0.4);
-  doc.text("TOTAL VARIABLE PAY", textX, y + 7);
-  doc.setCharSpace(0);
+  for (const column of columns) {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+    doc.setCharSpace(0.4);
+    doc.text(column.label, column.x, y + 7);
+    doc.setCharSpace(0);
 
-  doc.setFont("Poppins", "bold");
-  doc.setFontSize(15);
-  doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
-  doc.text(`INR ${formatINR(amount)}`, textX, y + 14.4);
+    doc.setFont("Poppins", "bold");
+    doc.setFontSize(column.size);
+    doc.setTextColor(column.color[0], column.color[1], column.color[2]);
+    doc.text(column.value, column.x, y + 15);
+  }
 
+  // Spelled out in full so the payout figure cannot be misread.
   doc.setFont("Poppins", "normal");
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.text(`(${amountInWords(amount)})`, textX, y + 19.8, { maxWidth: COLUMN - 16 });
+  doc.text(`Variable pay awarded in words: ${amountInWords(pay.awarded)}`,
+    MARGIN.left + 8, y + 22, { maxWidth: COLUMN - 16 });
 
   return y + height + 6;
 }
@@ -1539,9 +1622,11 @@ function saveBlob(blob, filename) {
  * ------------------------------------------------------------------ */
 
 const empIdInput = el("empId");
+const eligibleInput = el("eligible");
 const amountInput = el("amount");
 const dateInput = el("letterDate");
 const empError = el("empError");
+const eligibleError = el("eligibleError");
 const amountError = el("amountError");
 const dateError = el("dateError");
 const detailsBox = el("details");
@@ -1551,7 +1636,7 @@ const previewButton = el("preview");
 const downloadButton = el("download");
 
 let currentEmployee = null;
-let currentAmount = null;
+let currentPay = null;
 let currentDate = null;
 
 function readEmployee() {
@@ -1565,14 +1650,25 @@ function readEmployee() {
   return employee;
 }
 
-function readAmount() {
-  if (!amountInput.value.trim()) {
-    setError(amountError, amountInput, "");
-    return null;
+/** Reads both figures, returning { eligible, awarded } or null. */
+function readPay() {
+  const fields = [
+    [eligibleInput, eligibleError, "Total eligible variable pay"],
+    [amountInput, amountError, "Variable pay awarded"],
+  ];
+  const values = [];
+  for (const [input, errorNode, label] of fields) {
+    if (!input.value.trim()) {
+      setError(errorNode, input, "");
+      values.push(null);
+      continue;
+    }
+    const result = parseAmount(input.value, label);
+    setError(errorNode, input, result.error || "");
+    values.push(result.error ? null : result.value);
   }
-  const result = parseAmount(amountInput.value);
-  setError(amountError, amountInput, result.error || "");
-  return result.error ? null : result.value;
+  const [eligible, awarded] = values;
+  return eligible === null || awarded === null ? null : { eligible, awarded };
 }
 
 function readDate() {
@@ -1585,7 +1681,7 @@ function readDate() {
   return value;
 }
 
-function paintDetails(employee, amount) {
+function paintDetails(employee, pay) {
   if (!employee) {
     detailsBox.hidden = true;
     detailsPlaceholder.hidden = false;
@@ -1602,10 +1698,12 @@ function paintDetails(employee, amount) {
   el("dDoj").textContent = formatDate(employee.doj) || "—";
   el("dLocation").textContent = employee.location || "—";
 
-  amountRow.hidden = amount === null;
-  if (amount !== null) {
-    el("dAmount").textContent = `INR ${formatINR(amount)}`;
-    el("dAmountWords").textContent = amountInWords(amount);
+  amountRow.hidden = pay === null;
+  if (pay) {
+    el("dEligible").textContent = `INR ${formatINR(pay.eligible)}`;
+    el("dAmount").textContent = `INR ${formatINR(pay.awarded)}`;
+    el("dPercent").textContent = formatPercent(pay.awarded, pay.eligible);
+    el("dAmountWords").textContent = amountInWords(pay.awarded);
   }
 }
 
@@ -1688,7 +1786,7 @@ const individualPane = createPreviewPane("viewer", "pdfCanvas", "viewerEmpty", "
 /** Builds the letter, reporting failure against the Employee ID field. */
 function tryBuild() {
   try {
-    return buildLetter(currentEmployee, currentAmount, currentDate);
+    return buildLetter(currentEmployee, currentPay, currentDate);
   } catch (error) {
     console.error(error);
     setError(empError, empIdInput, "Could not build the letter. See the browser console for details.");
@@ -1706,14 +1804,14 @@ function showPreview() {
 }
 
 function individualReady() {
-  return Boolean(currentEmployee) && currentAmount !== null && Boolean(currentDate);
+  return Boolean(currentEmployee) && currentPay !== null && Boolean(currentDate);
 }
 
 function refreshIndividual() {
   currentEmployee = readEmployee();
-  currentAmount = readAmount();
+  currentPay = readPay();
   currentDate = readDate();
-  paintDetails(currentEmployee, currentAmount);
+  paintDetails(currentEmployee, currentPay);
 
   const ready = individualReady();
   previewButton.disabled = !ready;
@@ -1725,6 +1823,7 @@ function refreshIndividual() {
 }
 
 empIdInput.addEventListener("input", refreshIndividual);
+eligibleInput.addEventListener("input", refreshIndividual);
 amountInput.addEventListener("input", refreshIndividual);
 dateInput.addEventListener("input", refreshIndividual);
 
@@ -1764,7 +1863,7 @@ let previewedRow = null;
 let previewedSignature = "";
 
 const STARTING_ROWS = 12;
-const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "amount", "date"];
+const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "eligible", "amount", "awarded", "date"];
 
 function makeRow() {
   const tr = document.createElement("tr");
@@ -1772,6 +1871,7 @@ function makeRow() {
     '<td class="rownum"></td>'
     + '<td><input type="text" data-col="0" autocomplete="off" spellcheck="false"></td>'
     + '<td><input type="text" data-col="1" autocomplete="off" inputmode="decimal"></td>'
+    + '<td><input type="text" data-col="2" autocomplete="off" inputmode="decimal"></td>'
     + '<td class="status"></td>'
     + '<td class="peek">'
     +   '<button type="button" data-act="preview" disabled>Preview</button>'
@@ -1861,7 +1961,7 @@ function readBulkRows() {
   let errors = 0;
 
   for (const tr of Array.from(grid.rows)) {
-    const [idCell, amountCell] = rowCells(tr);
+    const [idCell, eligibleCell, awardedCell] = rowCells(tr);
     const status = tr.querySelector(".status");
     tr.classList.remove("bad");
     status.className = "status";
@@ -1882,11 +1982,18 @@ function readBulkRows() {
       continue;
     }
 
-    const amount = parseAmount(amountCell.value);
-    if (amount.error) {
-      fail(amount.error);
+    const eligible = parseAmount(eligibleCell.value, "Eligible variable pay");
+    if (eligible.error) {
+      fail(eligible.error);
       continue;
     }
+
+    const awarded = parseAmount(awardedCell.value, "Variable pay awarded");
+    if (awarded.error) {
+      fail(awarded.error);
+      continue;
+    }
+    const pay = { eligible: eligible.value, awarded: awarded.value };
 
     if (!fallback) {
       fail("Set the letter date above.");
@@ -1901,9 +2008,10 @@ function readBulkRows() {
     }
     seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
 
-    status.textContent = `${employee.name} · INR ${formatINR(amount.value)}`;
+    status.textContent = `${employee.name} · INR ${formatINR(pay.awarded)} `
+      + `of ${formatINR(pay.eligible)} · ${formatPercent(pay.awarded, pay.eligible)}`;
     status.classList.add("ok");
-    jobs.push({ employee, amount: amount.value, dateISO: fallback, row: tr });
+    jobs.push({ employee, pay, dateISO: fallback, row: tr });
   }
 
   return { jobs, errors };
@@ -1913,7 +2021,7 @@ let bulkBusy = false;
 
 /** Identifies what a row would produce, so a stale preview can be spotted. */
 function jobSignature(job) {
-  return `${job.employee.code}|${job.amount}|${job.dateISO}`;
+  return `${job.employee.code}|${job.pay.eligible}|${job.pay.awarded}|${job.dateISO}`;
 }
 
 function clearBulkPreview() {
@@ -1934,7 +2042,7 @@ function previewRow(tr) {
 
   let doc;
   try {
-    doc = buildLetter(job.employee, job.amount, job.dateISO);
+    doc = buildLetter(job.employee, job.pay, job.dateISO);
   } catch (error) {
     console.error(error);
     clearBulkPreview();
@@ -1948,7 +2056,7 @@ function downloadRow(tr) {
   const job = readBulkRows().jobs.find((candidate) => candidate.row === tr);
   if (!job) return;
   try {
-    buildLetter(job.employee, job.amount, job.dateISO).save(fileNameFor(job.employee));
+    buildLetter(job.employee, job.pay, job.dateISO).save(fileNameFor(job.employee));
   } catch (error) {
     console.error(error);
     bulkSummary.innerHTML = '<span class="bad">Could not build that letter. See the browser console for details.</span>';
@@ -2013,9 +2121,9 @@ downloadZipButton.addEventListener("click", async () => {
   try {
     const zip = new JSZip();
     for (let i = 0; i < jobs.length; i += 1) {
-      const { employee, amount, dateISO } = jobs[i];
+      const { employee, pay, dateISO } = jobs[i];
       downloadZipButton.textContent = `Building ${i + 1} of ${jobs.length}…`;
-      zip.file(fileNameFor(employee), buildLetter(employee, amount, dateISO).output("arraybuffer"));
+      zip.file(fileNameFor(employee), buildLetter(employee, pay, dateISO).output("arraybuffer"));
       // Hand the frame back so the label repaints instead of freezing the tab.
       if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
     }

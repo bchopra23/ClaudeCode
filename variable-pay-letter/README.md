@@ -1,9 +1,10 @@
 # Euler Variable Pay Letter Generator
 
 Generates variable pay letters on the Euler Motors letterhead from an Employee ID,
-an amount and a date. Everything else — name, designation, date of joining,
-department, sub-department and location — is looked up from the HR master
-database, and the letter carries Priyanka Singh's signature and the company seal.
+the employee's eligible and awarded variable pay, and a date. Everything else —
+name, designation, date of joining, department, sub-department and location — is
+looked up from the HR master database, and the letter carries Priyanka Singh's
+signature and the company seal.
 
 Open **`dist/Variable_Pay_Letter_Generator.html`** in a browser. That is the whole
 application: one file, no install, no server, no network. Double-clicking it works.
@@ -14,7 +15,9 @@ It has two modes.
 One letter at a time, with an on-screen preview.
 
 1. Enter the Employee ID (`EUR1796`; `eur1796` and a bare `1796` also resolve).
-2. Enter the total variable pay in rupees (`250000`, or `2,50,000`).
+2. Enter the **Total Eligible Variable Pay** and the **Variable Pay Awarded**, in
+   rupees (`250000`, or `2,50,000`). The letter prints both and works out the
+   payout percentage between them.
 3. Set the letter date. It starts on today's date and can be changed.
 4. The employee's details appear as soon as the ID matches. An ID that is not in
    the database shows an error and both buttons stay disabled.
@@ -26,10 +29,12 @@ One letter at a time, with an on-screen preview.
 A whole payout run in one zip.
 
 1. Set the letter date. It applies to every letter in the batch.
-2. Copy the Employee ID and Variable Pay columns out of your spreadsheet and
-   paste them anywhere in the table. Rows are added as needed and a pasted header
-   row is ignored, so selecting the headings too is harmless.
-3. Each row shows the resolved employee and amount, or what is wrong with it.
+2. Copy the Employee ID, Eligible Variable Pay and Variable Pay Awarded columns
+   out of your spreadsheet and paste them anywhere in the table. Rows are added as
+   needed and a pasted header row is ignored, so selecting the headings too is
+   harmless.
+3. Each row shows the resolved employee, the payout against the eligible amount
+   and the percentage, or what is wrong with it.
 4. **Preview** on any valid row draws that letter in the pane beside the table,
    and **Download** saves that one letter on its own.
 5. **Download all Letters (Zip)** produces `Variable_Pay_Letters_<date>.zip`
@@ -42,8 +47,8 @@ table no longer agrees with; editing any other row leaves it alone.
 The zip download stays disabled until every row is valid. A batch is refused rather
 than quietly built minus the broken rows — silently dropping someone from a payout
 run is worse than making the typo obvious first. Rows are flagged for an unknown
-ID, a non-numeric or non-positive amount, or an employee listed twice (two
-letters for one person would collide inside the zip).
+ID, a non-numeric or non-positive figure in either amount column, or an employee
+listed twice (two letters for one person would collide inside the zip).
 
 Reckon on roughly a quarter of a megabyte per letter and about a tenth of a second
 to build each one: 200 letters is a 50 MB zip that takes around 20 seconds. Very
@@ -58,6 +63,12 @@ A4, one page, on the supplied letterhead: the date, a block of the seven employe
 fields, a subject line, a congratulatory message for **FY 2025-26**, the amount in
 figures and in words (Indian numbering — lakh and crore), a confidentiality
 paragraph, and the signature block with the company seal struck across it.
+
+The amount callout carries three figures side by side: the total the employee was
+eligible for, what has been awarded, and the award as a percentage of the two.
+Payouts above 100% are legitimate under most schemes, so they are shown as-is
+rather than capped. The percentage is trimmed to at most two decimals with
+trailing zeros dropped, so a full payout reads `100%`, not `100.00%`.
 
 Any employee field that is blank in the database is dropped from the block rather
 than printed as an empty row.
