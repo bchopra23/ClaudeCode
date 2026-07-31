@@ -1,109 +1,228 @@
+"""Turn the Sales roster workbooks into the tree the page renders.
+
+Reporting lines come from the Reporting Manager column, which holds names
+rather than employee codes, so managers are matched by normalised name with a
+token-subset fallback for spelling variants. People are keyed by employee code
+throughout, so colleagues who share a name stay distinct.
+"""
 import openpyxl, collections, re, json
 
-EMP='/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c71ff813-Sales_Employees.xlsx'
-INT='/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
-norm=lambda n: re.sub(r'[^a-z]','',(n or '').lower())
+EMP = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
+INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
 
-def clean(s): return (str(s).strip() if s is not None else '')
+# lines that report outside Sales leadership and are out of scope for this chart
+EXCLUDE_LINES = ['Raman Pandey', 'Vijay Malik', 'Jashanjot Singh']
 
-# ---- employees ----
-wb=openpyxl.load_workbook(EMP, data_only=True)
-emps=[]
-for r in wb.active.iter_rows(min_row=2, values_only=True):
-    if not (r[2] and str(r[2]).strip()=='Sales'): continue
-    emps.append({'id':clean(r[0]),'name':clean(r[1]),'sub':clean(r[3]),'title':clean(r[4]),
-                 'band':clean(r[5]),'grade':clean(r[6]),
-                 'doj':r[7].strftime('%Y-%m-%d') if r[7] else '','mgr':clean(r[8]),'intern':False})
-# ---- interns ----
-wb2=openpyxl.load_workbook(INT, data_only=True)
-interns=[]
-for r in wb2.active.iter_rows(min_row=2, values_only=True):
-    if not r[0]: continue
-    interns.append({'id':clean(r[0]),'name':clean(r[1]),'sub':clean(r[3]),'title':clean(r[4]),
-                    'band':'Intern','grade':'','doj':'','mgr':clean(r[5]),'intern':True})
+# the roster splits retail by vehicle class; the chart treats it as one function
+RETAIL = {'3W Retail Sales', '4W Retail Sales', 'Retail Sales'}
+
+VACANT_SOUTH = 'VACANT-SOUTH-RM'
+
+norm = lambda n: re.sub(r'[^a-z]', '', (n or '').lower())
+clean = lambda s: (str(s).strip() if s is not None else '')
+
+def merge_sub(s):
+    s = clean(s)
+    return 'Retail Sales' if s in RETAIL else s
+
+
+# ── read ──────────────────────────────────────────────────────────────────
+emps = []
+for r in openpyxl.load_workbook(EMP, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    if not (r[2] and clean(r[2]) == 'Sales'):
+        continue
+    emps.append({'id': clean(r[0]), 'name': clean(r[1]), 'sub': merge_sub(r[3]),
+                 'title': clean(r[4]), 'band': clean(r[5]), 'grade': clean(r[6]),
+                 'doj': r[7].strftime('%Y-%m-%d') if r[7] else '',
+                 'mgr': clean(r[8]), 'loc': clean(r[9]), 'intern': False})
+
+interns = []
+for r in openpyxl.load_workbook(INT, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    if not r[0]:
+        continue
+    interns.append({'id': clean(r[0]), 'name': clean(r[1]), 'sub': merge_sub(r[3]),
+                    'title': 'Intern', 'band': 'Intern', 'grade': '', 'doj': '',
+                    'mgr': clean(r[5]), 'loc': '', 'intern': True})
 
 people = emps + interns
-# manager name -> id  (no manager name is duplicated; verified)
-by_name={}
-for p in emps: by_name.setdefault(norm(p['name']), p['id'])
-ALIAS={'naitiksrivastav':'naitiksrivastava','arupchoudhary':'aruproychowdhury','jaikumarcj':'jaikumarcj'}
-EXTERNAL={'sauravkumar':'Saurav Kumar','ashishtandon':'Ashish Tandon','abhishekmalik':'Abhishek Malik'}
+by_name = {}
+for p in emps:
+    by_name.setdefault(norm(p['name']), p['id'])
 
-VACANT_SOUTH='VACANT-SOUTH-RM'
+ALIAS = {'naitiksrivastav': 'naitiksrivastava', 'arupchoudhary': 'aruproychowdhury'}
+OUTSIDE = {'sauravkumar', 'ashishtandon', 'abhishekmalik'}
 
 def resolve(m):
-    k=norm(m)
-    if k in ALIAS: k=ALIAS[k]
-    if k=='amitabhsingh': return VACANT_SOUTH          # resigned South RM -> vacant node
-    if k in by_name: return by_name[k]
-    if k in EXTERNAL: return None
-    toks=set(re.findall(r'[a-z]+', m.lower()))
-    c=[p for p in emps if toks and toks <= set(re.findall(r'[a-z]+', p['name'].lower()))]
-    if len(c)==1: return c[0]['id']
-    return None
+    k = ALIAS.get(norm(m), norm(m))
+    if k == 'amitabhsingh':          # resigned South RM — becomes the vacant seat
+        return VACANT_SOUTH
+    if k in by_name:
+        return by_name[k]
+    if k in OUTSIDE:
+        return None
+    toks = set(re.findall(r'[a-z]+', (m or '').lower()))
+    c = [p for p in emps if toks and toks <= set(re.findall(r'[a-z]+', p['name'].lower()))]
+    return c[0]['id'] if len(c) == 1 else None
 
 for p in people:
-    p['mgrId']=resolve(p['mgr']) if p['mgr'] else None
+    p['mgrId'] = resolve(p['mgr']) if p['mgr'] else None
 
-# vacant South RM node, reports to Ratanmani Mohit, interim: Mohit
-mohit=by_name[norm('Ratanmani Mohit')]
-people.append({'id':VACANT_SOUTH,'name':'Vacant — South Regional Manager','sub':'Retail Sales',
-               'title':'Regional Manager','band':'Regional Manager','grade':'','doj':'',
-               'mgr':'Ratanmani Mohit','mgrId':mohit,'intern':False,'vacant':True,
-               'note':'Position open following Amitabh Singh’s resignation. Team currently overseen directly by Ratanmani Mohit.'})
-
-kids=collections.defaultdict(list)
-byid={p['id']:p for p in people}
+byid = {p['id']: p for p in people}
+kids = collections.defaultdict(list)
 for p in people:
-    if p['mgrId'] and p['mgrId']!=p['id'] and p['mgrId'] in byid:
+    if p['mgrId'] and p['mgrId'] != p['id']:
         kids[p['mgrId']].append(p['id'])
 
-# dotted-line roots: report outside Sales leadership
-DOTTED={by_name[norm('Raman Pandey')]:'Ashish Tandon', by_name[norm('Vijay Malik')]:'Ashish Tandon'}
-jash=by_name.get(norm('Jashanjot Singh'))
-if jash: DOTTED[jash]='Abhishek Malik'
-
-ROOT=by_name[norm('Vani Rikhy Mehra')]
-
-def rollup(i, seen=None):
-    seen=seen or set()
-    if i in seen: return (0,0)
-    seen.add(i)
-    e = 0 if byid[i].get('vacant') else (0 if byid[i]['intern'] else 1)
-    n = 1 if byid[i]['intern'] else 0
+# ── drop the out-of-scope lines, whole subtree each ───────────────────────
+def subtree(i, acc=None):
+    acc = acc if acc is not None else set()
+    if i in acc:
+        return acc
+    acc.add(i)
     for c in kids[i]:
-        ce,cn = rollup(c, seen); e+=ce; n+=cn
-    return e,n
+        subtree(c, acc)
+    return acc
+
+dropped = set()
+for nm in EXCLUDE_LINES:
+    if norm(nm) in by_name:
+        dropped |= subtree(by_name[norm(nm)])
+
+people = [p for p in people if p['id'] not in dropped]
+byid = {p['id']: p for p in people}
+for k in list(kids):
+    if k in dropped:
+        del kids[k]
+    else:
+        kids[k] = [c for c in kids[k] if c not in dropped]
+
+# ── the vacant South seat ─────────────────────────────────────────────────
+mohit = by_name[norm('Ratanmani Mohit')]
+byid[VACANT_SOUTH] = {
+    'id': VACANT_SOUTH, 'name': 'Vacant — South Regional Manager', 'sub': 'Retail Sales',
+    'title': 'Regional Manager', 'band': '', 'grade': '', 'doj': '', 'loc': '',
+    'mgr': 'Ratanmani Mohit', 'mgrId': mohit, 'intern': False, 'vacant': True,
+    'note': 'Open following Amitabh Singh’s resignation. The team reports to '
+            'Ratanmani Mohit directly until a replacement joins.'}
+people.append(byid[VACANT_SOUTH])
+if VACANT_SOUTH not in kids[mohit]:
+    kids[mohit].append(VACANT_SOUTH)
+
+ROOT = by_name[norm('Vani Rikhy Mehra')]
+
+# ── roll-ups ──────────────────────────────────────────────────────────────
+def rollup(i, seen=None):
+    """(employees, interns) in this line, counting the person named."""
+    seen = seen if seen is not None else set()
+    if i in seen:
+        return 0, 0
+    seen.add(i)
+    p = byid[i]
+    emp = 0 if (p.get('vacant') or p['intern']) else 1
+    itn = 1 if p['intern'] else 0
+    for c in kids[i]:
+        ce, ci = rollup(c, seen)
+        emp += ce
+        itn += ci
+    return emp, itn
+
+def locations(i, acc=None):
+    acc = acc if acc is not None else collections.Counter()
+    if byid[i].get('loc'):
+        acc[byid[i]['loc']] += 1
+    for c in kids[i]:
+        locations(c, acc)
+    return acc
+
+ABBR = [('Assistant Vice President', 'AVP'), ('Vice President', 'VP'),
+        ('Senior Territory Sales Manager', 'Sr TSM'), ('Territory Sales Manager', 'TSM'),
+        ('Territory Sales Executive', 'TSE'), ('Senior Area Sales Manager', 'Sr ASM'),
+        ('Area Sales Manager', 'ASM'), ('Key Accounts Manager', 'KAM'),
+        ('Key Account Manager', 'KAM'), ('Assistant General Manager', 'AGM'),
+        ('General Manager', 'GM'), ('Regional Manager', 'RM'),
+        ('Senior Sales Executive', 'Sr Sales Exec'), ('Sales Executive', 'Sales Exec'),
+        ('Senior Executive- Accounts', 'Sr Exec (Accts)'), ('Senior Executive', 'Sr Exec'),
+        ('Senior Manager- Inside Sales', 'Sr Mgr'), ('Senior Manager', 'Sr Mgr'),
+        ('Assistant Manager - New Product Sales', 'Asst Mgr'),
+        ('Assistant Manager', 'Asst Mgr'), ('Senior Pogram Manager', 'Sr Program Mgr'),
+        ('Program Manager', 'Program Mgr'), ('Data Analyst Executive', 'Data Analyst'),
+        ('State Head-Sales', 'State Head'), ('Regional Trainer', 'Trainer'),
+        ('Manager-Network Expansion', 'Mgr'), ('Manager- BTL Marketing', 'Mgr'),
+        ('Intern', 'Intern')]
+
+def abbr(t):
+    t = clean(t)
+    for long, short in ABBR:
+        if t.startswith(long):
+            return short
+    return t
+
 
 def node(i):
-    p=byid[i]; e,n=rollup(i)
-    d={'id':i,'name':p['name'],'title':p['title'],'sub':p['sub'],'band':p['band'],
-       'grade':p['grade'],'doj':p['doj'],'intern':p['intern'],'emp':e,'interns':n,
-       'direct':len(kids[i])}
-    if p.get('vacant'): d['vacant']=True; d['note']=p['note']
-    if i in DOTTED: d['dotted']=DOTTED[i]
-    ch=[node(c) for c in kids[i]]
-    ch.sort(key=lambda x:(x['intern'], -(x['emp']+x['interns']), x['name']))
-    if ch: d['children']=ch
+    """A manager becomes a tree node; their individual contributors become that
+    node's team, so the tree stays a tree instead of a 36-wide row of leaves."""
+    p = byid[i]
+    emp, itn = rollup(i)
+    mgr_kids = [c for c in kids[i] if kids[c]]
+    ics = [c for c in kids[i] if not kids[c]]
+
+    d = {'id': i, 'name': p['name'], 'title': p['title'], 'short': abbr(p['title']),
+         'sub': p['sub'], 'grade': p['grade'], 'doj': p['doj'], 'loc': p.get('loc', ''),
+         'emp': emp, 'interns': itn, 'direct': len(kids[i])}
+    if p.get('vacant'):
+        d['vacant'] = True
+        d['note'] = p['note']
+
+    top = locations(i).most_common(3)
+    if top:
+        d['locs'] = [{'name': k, 'n': v} for k, v in top]
+
+    if ics:
+        mem = sorted((byid[c] for c in ics), key=lambda x: (x['intern'], x['name']))
+        d['team'] = {
+            'emp': sum(0 if m['intern'] else 1 for m in mem),
+            'interns': sum(1 for m in mem if m['intern']),
+            'titles': collections.Counter(abbr(m['title']) for m in mem).most_common(),
+            'members': [{'name': m['name'], 'title': m['title'], 'loc': m.get('loc', ''),
+                         'intern': m['intern'], 'grade': m['grade']} for m in mem]}
+
+    if mgr_kids:
+        ch = [node(c) for c in mgr_kids]
+        ch.sort(key=lambda x: -(x['emp'] + x['interns']))
+        d['children'] = ch
     return d
 
-tree=[node(ROOT)] + [node(i) for i in DOTTED]
-data={'tree':tree,'meta':{
-  'employees':len(emps),'interns':len(interns),'total':len(emps)+len(interns),
-  'subDepts':dict(collections.Counter(p['sub'] for p in emps)),
-  'grades':dict(collections.Counter(p['grade'] for p in emps)),
-}}
-json.dump(data, open('org.json','w'), indent=1)
 
-covered=set()
-def mark(nd):
-    covered.add(nd['id'])
-    for c in nd.get('children',[]): mark(c)
-for t in tree: mark(t)
-print('employees',len(emps),'interns',len(interns),'total',len(emps)+len(interns))
-print('nodes in tree:',len(covered),'| expected',len(people))
-missing=[p['name']+' | mgr='+p['mgr'] for p in people if p['id'] not in covered]
-print('MISSING:',missing)
-print('Vani rollup:', rollup(ROOT))
-print('South vacant rollup:', rollup(VACANT_SOUTH))
-for i,src in DOTTED.items(): print('dotted:',byid[i]['name'],'->',src, rollup(i))
+tree = node(ROOT)
+
+emp_total = sum(1 for p in people if not p['intern'] and not p.get('vacant'))
+int_total = sum(1 for p in people if p['intern'])
+
+meta = {
+    'employees': emp_total, 'interns': int_total, 'total': emp_total + int_total,
+    'subDepts': collections.Counter(p['sub'] for p in people
+                                    if not p['intern'] and not p.get('vacant')).most_common(),
+    'grades': sorted(collections.Counter(p['grade'] for p in people if p['grade']).items()),
+    'locations': collections.Counter(p['loc'] for p in people if p.get('loc')).most_common(),
+    'excluded': EXCLUDE_LINES,
+}
+json.dump({'tree': tree, 'meta': meta}, open('org.json', 'w'), indent=1)
+
+# ── checks ────────────────────────────────────────────────────────────────
+def placed(n):
+    t = 0 if n.get('vacant') else 1
+    t += len(n.get('team', {}).get('members', []))
+    return t + sum(placed(c) for c in n.get('children', []))
+
+def mgr_nodes(n):
+    return 1 + sum(mgr_nodes(c) for c in n.get('children', []))
+
+def depth(n):
+    return 1 + max([depth(c) for c in n.get('children', [])] or [0])
+
+print(f'employees {emp_total} + interns {int_total} = {emp_total + int_total}')
+print('people placed in tree :', placed(tree))
+print('dropped with excluded :', len(dropped))
+print('manager nodes / depth :', mgr_nodes(tree), '/', depth(tree))
+print('root line             :', tree['emp'], 'employees /', tree['interns'], 'interns')
+print('sub-departments       :', meta['subDepts'])

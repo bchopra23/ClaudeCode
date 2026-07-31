@@ -1,193 +1,153 @@
-import json, base64, html, collections, re
+"""Render org.json into the self-contained page.
+
+The chart is a top-down connector tree of managers. Individual contributors
+hang off their manager as a single team node rather than as N sibling nodes,
+which is what keeps a 36-person team from becoming a 36-wide row.
+"""
+import json, base64, html
 
 D = json.load(open('org.json'))
 tree, meta = D['tree'], D['meta']
-
-FONT_DIR = 'fonts'
-
-def font(f):
-    return base64.b64encode(open(f'{FONT_DIR}/{f}.woff2', 'rb').read()).decode()
-
-FONTS = {k: font(k) for k in
-         ['BigShoulders-Bold', 'BigShoulders-Regular',
-          'WorkSans-Regular', 'WorkSans-Bold', 'JetBrainsMono-Regular']}
-
 e = lambda s: html.escape(str(s or ''))
 
-# ---- title abbreviations for roll-up strips -------------------------------
-ABBR = [
-    ('Assistant Vice President', 'AVP'), ('Vice President', 'VP'),
-    ('Senior Territory Sales Manager', 'Sr TSM'), ('Territory Sales Manager', 'TSM'),
-    ('Territory Sales Executive', 'TSE'), ('Senior Area Sales Manager', 'Sr ASM'),
-    ('Area Sales Manager', 'ASM'), ('Key Accounts Manager', 'KAM'),
-    ('Key Account Manager', 'KAM'), ('Assistant General Manager', 'AGM'),
-    ('General Manager', 'GM'), ('Regional Manager', 'RM'),
-    ('Senior Sales Executive', 'Sr Sales Exec'), ('Sales Executive', 'Sales Exec'),
-    ('Senior Executive- Accounts', 'Sr Exec (Accts)'), ('Senior Executive', 'Sr Exec'),
-    ('Senior Manager- Inside Sales', 'Sr Mgr'), ('Senior Manager', 'Sr Mgr'),
-    ('Assistant Manager - New Product Sales', 'Asst Mgr'),
-    ('Assistant Manager', 'Asst Mgr'), ('Program Manager', 'Program Mgr'),
-    ('Data Analyst Executive', 'Data Analyst'), ('State Head-Sales', 'State Head'),
-    ('Regional Trainer', 'Trainer'), ('Manager-Network Expansion', 'Mgr'),
-    ('Manager- BTL Marketing', 'Mgr'), ('Intern', 'Intern'),
-]
-def abbr(t):
-    t = (t or '').strip()
-    for long, short in ABBR:
-        if t.startswith(long):
-            return short
-    return t
+FONT_DIR = 'fonts'
+FONTS = ['BigShoulders-Bold', 'BigShoulders-Regular',
+         'WorkSans-Regular', 'WorkSans-Bold', 'JetBrainsMono-Regular']
 
-# tier controls type size / weight of a row
-def tier(n, depth):
-    if depth == 0: return 'vp'
-    if n.get('children'): return 'lead' if depth <= 2 else 'mgr'
-    return 'ic'
+def font_face(k):
+    b64 = base64.b64encode(open(f'{FONT_DIR}/{k}.woff2', 'rb').read()).decode()
+    return (f'@font-face{{font-family:"{k.split("-")[0]}";'
+            f'font-weight:{700 if "Bold" in k else 400};font-style:normal;'
+            f'font-display:block;src:url(data:font/woff2;base64,{b64}) format("woff2")}}')
 
-def counts(n):
-    # a leaf is always exactly itself — the chip would say nothing
-    if not n.get('children'):
-        return ''
-    out = []
-    if n['emp']:
-        out.append(f'<span class="chip chip-n" title="Employees in this line, including {e(n["name"])}">{n["emp"]}</span>')
+LOGO = open('logo.svg').read()
+
+# ── tree markup ───────────────────────────────────────────────────────────
+DRAWER = {}          # node id -> detail payload consumed by the drawer
+MGRS = [0]
+
+def pills(n):
+    out = f'<span class="pill pill-n">{n["emp"]}</span>'
     if n['interns']:
-        out.append(f'<span class="chip chip-i" title="Interns in this line">{n["interns"]}<span class="u">i</span></span>')
-    return ''.join(out)
+        out += f'<span class="pill pill-i">{n["interns"]}<i>i</i></span>'
+    return out
 
-nid = [0]
+
+def card(n):
+    tier = ('vp' if n['title'].startswith('Vice President') else
+            'vacant' if n.get('vacant') else 'mgr')
+    loc = n['locs'][0]['name'] if n.get('locs') else ''
+    sub = '' if n['sub'] in ('Retail Sales', 'Leadership') else n['sub']
+    meta_line = ' · '.join(x for x in (sub, loc) if x)
+
+    DRAWER[n['id']] = {
+        'name': n['name'], 'title': n['title'], 'sub': n['sub'], 'grade': n['grade'],
+        'doj': n['doj'], 'loc': n['loc'], 'emp': n['emp'], 'interns': n['interns'],
+        'direct': n['direct'], 'locs': n.get('locs', []),
+        'vacant': n.get('vacant', False), 'note': n.get('note', ''),
+        'reports': [{'name': c['name'], 'title': c['title'],
+                     'emp': c['emp'], 'interns': c['interns']}
+                    for c in n.get('children', [])],
+        'team': n.get('team', {}).get('members', []),
+    }
+    MGRS[0] += 1
+
+    search = f'{n["name"]} {n["title"]} {n["sub"]} {loc}'.lower()
+    return (f'<button class="card c-{tier}" type="button" data-id="{e(n["id"])}" '
+            f'data-search="{e(search)}">'
+            f'<span class="c-name">{e(n["name"])}</span>'
+            f'<span class="c-role">{e(n["short"])}</span>'
+            + (f'<span class="c-meta">{e(meta_line)}</span>' if meta_line else '')
+            + f'<span class="c-pills">{pills(n)}</span></button>')
+
+
+def team_card(n):
+    t = n['team']
+    tid = n['id'] + ':team'
+    DRAWER[tid] = {'name': n['name'] + '’s team', 'title': 'Direct individual contributors',
+                   'sub': n['sub'], 'grade': '', 'doj': '', 'loc': '',
+                   'emp': t['emp'], 'interns': t['interns'], 'direct': len(t['members']),
+                   'locs': [], 'vacant': False, 'note': '', 'reports': [],
+                   'team': t['members']}
+    tally = ' <i>·</i> '.join(f'<b>{v}</b> {e(k)}' for k, v in t['titles'][:3])
+    if len(t['titles']) > 3:
+        tally += f' <i>·</i> <b>+{len(t["titles"]) - 3}</b> more'
+    search = ' '.join(m['name'] + ' ' + m['title'] + ' ' + m['loc'] for m in t['members']).lower()
+    pl = f'<span class="pill pill-n">{t["emp"]}</span>' if t['emp'] else ''
+    if t['interns']:
+        pl += f'<span class="pill pill-i">{t["interns"]}<i>i</i></span>'
+    return (f'<button class="card c-team" type="button" data-id="{e(tid)}" '
+            f'data-search="{e(search)}">'
+            f'<span class="c-role">Team</span>'
+            f'<span class="c-tally">{tally}</span>'
+            f'<span class="c-pills">{pl}</span></button>')
+
 
 def render(n, depth=0):
-    nid[0] += 1
-    me = f'n{nid[0]}'
     kids = n.get('children', [])
-    leaf_only = bool(kids) and all(not c.get('children') for c in kids)
-    collapsed = leaf_only and len(kids) >= 3
-    t = tier(n, depth)
+    has_team = 'team' in n
+    branches = len(kids) + (1 if has_team else 0)
+    # the top three tiers are open on load; deeper tiers start folded
+    collapsed = depth >= 2 and branches > 0
 
-    search = ' '.join([n['name'], n['title'], n['sub']]).lower()
-    cls = ['node', f't-{t}']
-    if n.get('vacant'): cls.append('is-vacant')
-    if n.get('dotted'): cls.append('is-dotted')
-    if n['intern']: cls.append('is-intern')
+    cls = f'lv{min(depth, 4)}'
+    if collapsed: cls += ' collapsed'
+    if branches: cls += ' has-kids'
 
-    # ---- row -------------------------------------------------------------
-    if kids:
-        tw = (f'<button class="twist" type="button" aria-expanded="{"false" if collapsed else "true"}" '
-              f'aria-controls="{me}k" aria-label="{e(n["name"])}’s team, {len(kids)} direct reports">'
-              f'<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2.5 1.5 L7 5 L2.5 8.5"/></svg></button>')
-    else:
-        tw = '<span class="twist twist-none" aria-hidden="true"></span>'
+    out = [f'<li class="{cls}"><div class="slot">', card(n)]
+    if branches:
+        out.append(f'<button class="tog" type="button" '
+                   f'aria-expanded="{"false" if collapsed else "true"}" '
+                   f'aria-label="{e(n["name"])}: {branches} branches">'
+                   f'<span class="tog-n">{branches}</span></button>')
+    out.append('</div>')
 
-    flags = ''
-    if n.get('vacant'):
-        flags += '<span class="flag flag-vac">Position open</span>'
-    if n.get('dotted'):
-        flags += f'<span class="flag flag-dot">Reports to {e(n["dotted"])}</span>'
-
-    sub = f'<span class="chip chip-s">{e(n["sub"])}</span>' if n['sub'] else ''
-
-    row = (f'<div class="row">{tw}'
-           f'<span class="who"><span class="nm">{e(n["name"])}</span>'
-           f'<span class="ttl">{e(n["title"])}</span></span>'
-           f'<span class="tags">{flags}{sub}{counts(n)}</span></div>')
-
-    note = f'<p class="note">{e(n["note"])}</p>' if n.get('note') else ''
-
-    # ---- children --------------------------------------------------------
-    # the tally stands in for the team while it is folded, so it lives
-    # outside .kids and swaps with it
-    inner = ''
-    if kids:
-        tally = collections.Counter(abbr(c['title']) for c in kids)
-        strip = ' <span class="sep">·</span> '.join(
-            f'<b>{v}</b> {e(k)}' for k, v in tally.most_common())
-        inner += (f'<button class="rollup" type="button" aria-controls="{me}k" tabindex="-1">'
-                  f'{strip}<span class="more">Show</span></button>')
-        inner += (f'<div class="kids" id="{me}k">'
-                  + ''.join(render(c, depth + 1) for c in kids) + '</div>')
-
-    openattr = ' data-open="false"' if collapsed else ' data-open="true"'
-    return (f'<div class="{" ".join(cls)}" data-search="{e(search)}" '
-            f'data-depth="{depth}"{openattr}>{row}{note}{inner}</div>')
+    if branches:
+        out.append('<ul>')
+        out += [render(c, depth + 1) for c in kids]
+        if has_team:
+            out.append(f'<li class="lv{min(depth + 1, 4)} is-team"><div class="slot">'
+                       f'{team_card(n)}</div></li>')
+        out.append('</ul>')
+    out.append('</li>')
+    return ''.join(out)
 
 
-root = tree[0]
-dotted = tree[1:]
-body = render(root) + ''.join(render(d) for d in dotted)
+tree_html = f'<ul class="root">{render(tree)}</ul>'
 
-# ---- leadership band ------------------------------------------------------
-directs = root.get('children', [])
-mx = max((d['emp'] + d['interns']) for d in directs + dotted)
+# ── panels ────────────────────────────────────────────────────────────────
+def bars(rows, label=lambda k: k):
+    mx = max(v for _, v in rows)
+    return ''.join(
+        f'<li><span class="b-l">{label(k)}</span>'
+        f'<span class="b-t"><i style="width:{round(v / mx * 100)}%"></i></span>'
+        f'<span class="b-v">{v}</span></li>' for k, v in rows)
 
-def card(d, kind='solid'):
-    tot = d['emp'] + d['interns']
-    pct = round(tot / mx * 100)
-    vac = '<span class="flag flag-vac">1 open</span>' if any(
-        c.get('vacant') for c in d.get('children', [])) else ''
-    line = (f'<span class="c-line">reports to {e(d["dotted"])}</span>'
-            if d.get('dotted') else '')
-    ints = f'<span class="c-i">+{d["interns"]} interns</span>' if d['interns'] else ''
-    return (f'<article class="card card-{kind}" tabindex="0" data-goto="{e(d["name"])}">'
-            f'<h3>{e(d["name"])}</h3>'
-            f'<p class="c-t">{e(d["title"])}</p>'
-            f'<p class="c-s">{e(d["sub"])}{vac}</p>'
-            f'<p class="c-n"><b>{d["emp"]}</b><span>people</span>{ints}</p>'
-            f'<div class="meter"><i style="width:{pct}%"></i></div>{line}</article>')
-
-band = ''.join(card(d) for d in directs)
-band_dotted = ''.join(card(d, 'dotted') for d in dotted)
-
-# ---- distribution ---------------------------------------------------------
-subs = sorted(meta['subDepts'].items(), key=lambda x: -x[1])
-smax = subs[0][1]
-subbars = ''.join(
-    f'<li><span class="b-l">{e(k)}</span>'
-    f'<span class="b-t"><i style="width:{round(v / smax * 100)}%"></i></span>'
-    f'<span class="b-v">{v}</span></li>' for k, v in subs)
-
-GRADE = {'A': 'Grade A — field &amp; executive',
-         'B': 'Grade B — managerial',
-         'C': 'Grade C — senior leadership'}
-gr = sorted(meta['grades'].items())
-gtot = sum(v for _, v in gr)
-gbars = ''.join(
-    f'<li><span class="b-l">{GRADE.get(k, e(k))}</span>'
-    f'<span class="b-t"><i style="width:{round(v / gtot * 100)}%"></i></span>'
-    f'<span class="b-v">{v}</span></li>' for k, v in gr)
-
-# widest spans of control — direct reports, deepest-first
-spans = []
-def collect(n):
-    if n.get('children'):
-        spans.append((n['name'], n['title'], len(n['children'])))
-        for c in n['children']: collect(c)
-for t in tree: collect(t)
-spans.sort(key=lambda x: -x[2])
-smx = spans[0][2]
-spanbars = ''.join(
-    f'<li><span class="b-l">{e(nm)}<em>{e(abbr(ti))}</em></span>'
-    f'<span class="b-t"><i style="width:{round(c / smx * 100)}%"></i></span>'
-    f'<span class="b-v">{c}</span></li>' for nm, ti, c in spans[:8])
+GRADE = {'A': 'A — field &amp; executive', 'B': 'B — managerial',
+         'C': 'C — senior leadership'}
 
 STATS = [(meta['employees'], 'Employees'), (meta['interns'], 'Interns'),
-         (meta['total'], 'Total headcount'), (len(directs), 'VP direct reports'),
-         (1, 'Open position')]
-stats = ''.join(f'<div class="stat"><b>{v}</b><span>{l}</span></div>' for v, l in STATS)
+         (meta['total'], 'Total'), (MGRS[0], 'Managers'),
+         (len(meta['locations']), 'States'), (1, 'Open seat')]
 
 tpl = open('template.html', encoding='utf-8').read()
-out = (tpl.replace('/*FONTS*/', ''.join(
-        f'@font-face{{font-family:"{k.split("-")[0]}";'
-        f'font-weight:{700 if "Bold" in k else 400};font-style:normal;font-display:block;'
-        f'src:url(data:font/woff2;base64,{v}) format("woff2")}}'
-        for k, v in FONTS.items()))
-       .replace('<!--STATS-->', stats)
-       .replace('<!--BAND-->', band)
-       .replace('<!--BANDDOTTED-->', band_dotted)
-       .replace('<!--TREE-->', body)
-       .replace('<!--SUBBARS-->', subbars)
-       .replace('<!--GBARS-->', gbars)
-       .replace('<!--SPANBARS-->', spanbars)
+out = (tpl
+       .replace('/*FONTS*/', ''.join(font_face(k) for k in FONTS))
+       .replace('<!--LOGO-->', LOGO)
+       .replace('<!--STATS-->', ''.join(
+           f'<div class="stat"><b>{v}</b><span>{l}</span></div>' for v, l in STATS))
+       .replace('<!--TREE-->', tree_html)
+       .replace('<!--SUBBARS-->', bars(meta['subDepts'], e))
+       .replace('<!--GBARS-->', bars(meta['grades'], lambda k: GRADE.get(k, e(k))))
+       .replace('<!--LOCBARS-->', bars(meta['locations'], e))
+       .replace('/*DATA*/', json.dumps(DRAWER, separators=(',', ':')))
        .replace('__TOTAL__', str(meta['total'])))
+
 open('sales-org.html', 'w', encoding='utf-8').write(out)
-print('wrote sales-org.html', round(len(out) / 1024), 'KB')
+
+assert '__TOTAL__' not in out and '/*DATA*/' not in out and '/*FONTS*/' not in out
+assert '<!--TREE-->' not in out and '<!--LOGO-->' not in out
+print('manager cards :', MGRS[0])
+print('drawer entries:', len(DRAWER))
+print('page size     :', round(len(out) / 1024), 'KB')
+print('placeholders  : all replaced')
