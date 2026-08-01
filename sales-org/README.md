@@ -72,7 +72,24 @@ executives anywhere in their line. TSM counts include Senior TSM.
 Note that Gaurav Bhardwaj is a Regional Manager but reports to the VP directly
 rather than through the AVP, so he appears one level up from the other seven.
 
+## Function heads
+
+`PORTFOLIOS` in `build_data.py` names what each of the VP's function heads owns.
+The roster designation alone ("General Manager") does not say which part of
+Sales that is, so the portfolio is shown as the primary line on the card, with
+the roster designation kept underneath:
+
+| Person | Owns |
+| --- | --- |
+| Ratanmani Mohit | Retail Sales & Brands |
+| Gaurav Bhardwaj | Regional Management · Sales Central · Special Projects |
+| Ritesh Roy | Sales Expansion |
+| Shashank | Sales Operations |
+
 ## Display notes
+
+The page renders light by default and only goes dark if the viewer explicitly
+toggles it — `prefers-color-scheme` is deliberately not consulted.
 
 `HIDE_LOCATION` in `build_data.py` suppresses the state shown for Vani Rikhy
 Mehra and Ratanmani Mohit — both sit across the whole department, so pinning

@@ -30,6 +30,7 @@ def visit(n, parent=None):
         'loc': n['loc'], 'grade': n['grade'], 'emp': n['emp'], 'interns': n['interns'],
         'vacant': n.get('vacant', False), 'note': n.get('note', ''),
         'rm': n.get('rm', False), 'rosterTitle': n.get('rosterTitle', ''),
+        'portfolio': n.get('portfolio', ''),
         'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
         'parent': parent,
         'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],

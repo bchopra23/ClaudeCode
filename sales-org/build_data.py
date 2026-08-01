@@ -24,6 +24,15 @@ REGIONAL_MANAGERS = ['Vinay Binu', 'Rachit Sharma', 'Vikas Singh Bisht',
                      'Arup Roy Chowdhury', 'Subesh Mukherjee', 'Siddhartha Sharma',
                      'Gaurav Bhardwaj']
 
+# what each function head actually owns — the roster designation alone
+# ("General Manager") does not say which part of Sales that is
+PORTFOLIOS = {
+    'Ratanmani Mohit': 'Retail Sales & Brands',
+    'Shashank': 'Sales Operations',
+    'Gaurav Bhardwaj': 'Regional Management · Sales Central · Special Projects',
+    'Ritesh Roy': 'Sales Expansion',
+}
+
 # these two sit across the whole department, so a single state would mislead
 HIDE_LOCATION = ['Vani Rikhy Mehra', 'Ratanmani Mohit']
 
@@ -129,6 +138,7 @@ for i in RM_IDS:
     byid[i]['title'] = 'Regional Manager'
 
 HIDE_LOC_IDS = {by_name[norm(n)] for n in HIDE_LOCATION if norm(n) in by_name}
+PORTFOLIO_BY_ID = {by_name[norm(n)]: v for n, v in PORTFOLIOS.items() if norm(n) in by_name}
 
 ROOT = by_name[norm('Vani Rikhy Mehra')]
 
@@ -204,6 +214,8 @@ def node(i):
     if p.get('vacant'):
         d['vacant'] = True
         d['note'] = p['note']
+    if i in PORTFOLIO_BY_ID:
+        d['portfolio'] = PORTFOLIO_BY_ID[i]
 
     if p.get('rm'):
         d['rm'] = True

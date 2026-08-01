@@ -14,19 +14,7 @@
   --sh:0 1px 2px rgba(11,23,39,.05), 0 6px 16px -12px rgba(11,23,39,.4);
   --sh-2:0 2px 6px rgba(11,23,39,.07), 0 16px 36px -18px rgba(11,23,39,.45);
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --paper:#18263E; --card:#213353; --soft:#27395B; --sunk:#131F33;
-    --line:#33507D; --line-2:#43608F; --rail:#41608F;
-    --ink:#F2F6FB; --ink-2:#BDCDE0; --ink-3:#93A8C0;
-    --gold:#F7B25C; --gold-fill:#E2A040; --gold-soft:#40301A;
-    --teal:#6FD6CD; --teal-soft:#173D3A;
-    --red:#F79184; --red-soft:#45231F;
-    --navy:#101C30;
-    --sh:0 1px 2px rgba(0,0,0,.35), 0 6px 16px -12px rgba(0,0,0,.8);
-    --sh-2:0 2px 6px rgba(0,0,0,.45), 0 16px 36px -18px rgba(0,0,0,.9);
-  }
-}
+/* Light by default. Dark applies only when the viewer toggles it. */
 :root[data-theme="light"]{
   --paper:#F1F4F8; --card:#FFF; --soft:#F6F8FB; --sunk:#E6ECF4;
   --line:#DCE4EE; --line-2:#C4D0DF; --rail:#C0CEDE;
@@ -139,7 +127,12 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 
 .who{min-width:0; flex:1}
 .nm{display:block; font-weight:700; font-size:1rem; line-height:1.3}
+.port{display:block; font-size:.95rem; font-weight:700; color:var(--gold);
+  line-height:1.35; margin-top:2px}
 .rl{display:block; font-size:.84rem; color:var(--ink-3); line-height:1.4}
+/* a function head reads as their remit first, their grade second */
+.row.owns{border-left:4px solid var(--gold-fill); padding-left:14px}
+.node.root > .row .port{font-size:1.05rem}
 .cnt{flex:none; text-align:right}
 .cnt b{display:block; font-family:"BigShoulders",sans-serif; font-size:1.45rem;
   line-height:1; font-variant-numeric:tabular-nums}
@@ -320,8 +313,9 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     var open=depth<1;                       // department head starts open
     var has=n.kids.length||n.team.length;
 
-    var role=[n.title, (n.sub&&n.sub!=='Leadership'&&n.sub!=='Retail Sales')?n.sub:'', n.loc]
-             .filter(Boolean).map(esc).join(' · ');
+    /* the portfolio already names the function, so don't repeat it below */
+    var showSub = !n.portfolio && n.sub && n.sub!=='Leadership' && n.sub!=='Retail Sales';
+    var role=[n.title, showSub?n.sub:'', n.loc].filter(Boolean).map(esc).join(' · ');
     var under=[];
     if(n.kids.length) under.push(plural(n.kids.length,'team'));
     if(n.team.length) under.push(people(n.team.length));
@@ -335,11 +329,13 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 
     var h=['<li class="node'+(depth===0?' root':'')+(open||!has?'':' shut')+
            '" id="n-'+esc(n.id)+'">'];
-    h.push('<'+(has?'button':'div')+' class="row'+(n.vacant?' vac':'')+(has?'':' flat')+'"'+
+    h.push('<'+(has?'button':'div')+' class="row'+(n.vacant?' vac':'')+(has?'':' flat')+
+      (n.portfolio?' owns':'')+'"'+
       (has?' type="button" aria-expanded="'+(open?'true':'false')+'" data-tog="'+esc(n.id)+'"':'')+'>');
     h.push('<span class="chev'+(has?'':' blank')+'">'+(has?CHEV:'')+'</span>');
     h.push('<span class="who"><span class="nm">'+esc(n.name)+
       (n.rm?'<span class="tag">'+(depth===0?'Regional Manager':'RM')+'</span>':'')+'</span>'+
+      (n.portfolio?'<span class="port">'+esc(n.portfolio)+'</span>':'')+
       '<span class="rl">'+role+'</span>'+field+'</span>');
     h.push('<span class="cnt"><b>'+n.emp+'</b><span>people</span>'+
       (n.interns?'<span class="ki">+'+n.interns+' interns</span>':'')+'</span>');

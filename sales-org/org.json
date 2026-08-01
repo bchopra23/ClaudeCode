@@ -59,6 +59,7 @@
     "emp": 278,
     "interns": 41,
     "direct": 18,
+    "portfolio": "Retail Sales & Brands",
     "tsm": 129,
     "tse": 62,
     "team": {
@@ -3587,6 +3588,7 @@
     "emp": 39,
     "interns": 8,
     "direct": 10,
+    "portfolio": "Regional Management \u00b7 Sales Central \u00b7 Special Projects",
     "rm": true,
     "rosterTitle": "General Manager",
     "tsm": 16,
@@ -4012,6 +4014,7 @@
     "emp": 11,
     "interns": 5,
     "direct": 8,
+    "portfolio": "Sales Expansion",
     "locs": [
      {
       "name": "Delhi",
@@ -4242,6 +4245,7 @@
     "emp": 7,
     "interns": 0,
     "direct": 5,
+    "portfolio": "Sales Operations",
     "locs": [
      {
       "name": "Delhi",
