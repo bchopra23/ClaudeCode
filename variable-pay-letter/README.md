@@ -69,15 +69,19 @@ paragraph, and the signature block with the company seal struck across it.
 
 ### Award period
 
-The award covers **01 April 2025 to 30 June 2026**. The subject line always names
-that full period, because it names the exercise. The body states the period the
-individual was actually assessed over: for anyone who joined partway through, it
-runs from their date of joining to 30 June 2026 instead. `awardPeriod()` applies
-that rule; `PERIOD` at the top of the script holds the two dates.
+The award covers **01 April 2025 to 30 June 2026**, and every letter names that
+full period. Anyone who joined partway through has their joining date noted in
+brackets straight after the start date:
 
-A joining date *after* the period ends falls back to the full period. That case
-should not really arise, and a letter for someone who joined after the window
-closed deserves a second look whatever it says.
+> during the period 01 April 2025 **(19 January 2026)** to 30 June 2026
+
+so the period reads the same for everyone while still showing when that person
+actually became eligible. `awardPeriod()` applies the rule; `PERIOD` at the top of
+the script holds the two dates.
+
+A joining date *after* the period ends gets no bracket. That case should not
+really arise, and a letter for someone who joined after the window closed
+deserves a second look whatever it says.
 
 ### Word template
 

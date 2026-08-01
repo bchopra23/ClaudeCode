@@ -810,18 +810,20 @@ function formatDate(iso) {
 /**
  * The period this employee's award covers, as display text.
  *
- * Someone who joined partway through was only eligible from their joining date,
- * so their letter says so rather than claiming a period they were not employed
- * for. ISO dates compare correctly as plain strings, so no parsing is needed.
+ * Always the full scheme window. Someone who joined partway through has their
+ * joining date noted in brackets straight after the start date, so the letter
+ * names the same period for everyone while still showing when that person
+ * actually became eligible.
  *
- * A joining date after the period ends falls back to the full period. That case
- * should not arise — an award for someone who joined after the window closed is
- * questionable however it is worded — but it keeps the letter coherent.
+ * ISO dates compare correctly as plain strings, so no parsing is needed. A
+ * joining date after the period ends gets no bracket — that case should not
+ * arise, and such a letter deserves a second look regardless of wording.
  */
 function awardPeriod(employee) {
   const doj = employee.doj || "";
-  const start = doj > PERIOD.start && doj <= PERIOD.end ? doj : PERIOD.start;
-  return `${formatDate(start)} to ${formatDate(PERIOD.end)}`;
+  const joinedDuring = doj > PERIOD.start && doj <= PERIOD.end;
+  const start = formatDate(PERIOD.start) + (joinedDuring ? ` (${formatDate(doj)})` : "");
+  return `${start} to ${formatDate(PERIOD.end)}`;
 }
 
 /** The scheme's own period, the same on every letter. */
