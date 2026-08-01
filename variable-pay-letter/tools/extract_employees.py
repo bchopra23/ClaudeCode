@@ -29,6 +29,9 @@ COLUMNS = {
     "department": "department",
     "sub-department": "subDepartment",
     "location": "location",
+    # Needed to address the letter's covering email. Work addresses only; the
+    # personal email and phone columns stay out of the extract.
+    "official email id": "email",
 }
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -84,6 +87,8 @@ def main(source):
                 record[key] = ""
             elif key == "doj":
                 record[key] = as_iso_date(value)
+            elif key == "email":
+                record[key] = clean(value).lower()
             else:
                 record[key] = clean(value)
 
@@ -102,7 +107,7 @@ def main(source):
     OUT.write_text(json.dumps(employees, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     print(f"Wrote {len(employees)} employees to {OUT.relative_to(ROOT)}")
-    for key in ("designation", "doj", "department", "subDepartment", "location"):
+    for key in ("designation", "doj", "department", "subDepartment", "location", "email"):
         blank = sum(1 for employee in employees if not employee[key])
         if blank:
             print(f"  note: {blank} record(s) have no {key}; the letter will omit that line")

@@ -212,6 +212,15 @@
 
   .placeholder { color: var(--muted); font-size: 14px; margin: 0; }
 
+  .note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .note.warn { color: #8a5a00; }
+
   .actions { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
 
   button.action {
@@ -380,6 +389,7 @@
 
   td.status.ok { color: var(--ok); }
   td.status.bad { color: var(--danger); }
+  td.status.warn { color: #8a5a00; }
 
   tr.bad input { background: #fef7f6; }
 
@@ -437,8 +447,10 @@
   .summary { font-size: 14px; color: var(--muted); }
   .summary strong { color: var(--ink); }
   .summary .bad { color: var(--danger); }
+  .summary .warn { color: #8a5a00; }
 
-  .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
+  .bulk-footer button.action { width: auto; min-width: 200px; margin: 0; }
+  .bulk-footer #downloadPack { margin-left: auto; }
 
   .help {
     margin: 0 0 20px;
@@ -573,7 +585,9 @@
         <div class="actions">
           <button id="preview" class="action btn-primary" disabled>Preview Letter</button>
           <button id="download" class="action btn-secondary" disabled>Download Letter PDF</button>
+          <button id="downloadEml" class="action btn-secondary" disabled>Download Email Draft (.eml)</button>
         </div>
+        <p class="note" id="emailNote"></p>
       </div>
 
       <div class="card">
@@ -588,6 +602,7 @@
             <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
             <dt>Date of Joining</dt><dd id="dDoj"></dd>
             <dt>Location</dt><dd id="dLocation"></dd>
+            <dt>Work email</dt><dd id="dEmail"></dd>
           </dl>
           <div class="amount-row" id="amountRow" hidden>
             <div class="pay-split">
@@ -651,6 +666,8 @@
           <strong>Download.</strong>
           <em>Preview</em> or <em>Download</em> on a row handles that one letter.
           <em>Download all Letters (Zip)</em> at the bottom builds the whole batch.
+          <em>Download Email Pack (Zip)</em> adds the addresses and a script that
+          mails each letter to the employee it belongs to.
         </li>
         </ol>
       </details>
@@ -684,6 +701,7 @@
 
       <div class="bulk-footer">
         <div class="summary" id="bulkSummary"></div>
+        <button id="downloadPack" class="action btn-secondary" disabled>Download Email Pack (Zip)</button>
         <button id="downloadZip" class="action btn-primary" disabled>Download all Letters (Zip)</button>
       </div>
     </section>
@@ -1149,6 +1167,341 @@ function fileNameFor(employee) {
 }
 
 /* ------------------------------------------------------------------ *
+ * Covering email                                                      *
+ *                                                                     *
+ * The app cannot send mail itself. It is a page opened from a file://  *
+ * URL: browsers have no SMTP, and posting as hr@eulermotors.com would  *
+ * need credentials for that mailbox besides. What it can do is build   *
+ * everything the send needs and hand it to something that can — a      *
+ * ready-to-send .eml for one letter, or a pack plus a script for a run.*
+ * ------------------------------------------------------------------ */
+
+const HR = { name: "Euler Motors HR", address: "hr@eulermotors.com" };
+const EMAIL_SUBJECT = `Your Variable Pay Letter - FY ${FINANCIAL_YEAR}`;
+
+function emailBody(employee) {
+  return [
+    `Dear ${employee.name},`,
+    "",
+    `Please find attached your variable pay letter for FY ${FINANCIAL_YEAR}.`,
+    "",
+    "The letter and its contents are confidential and intended solely for you.",
+    "",
+    `If you have any questions, please write to ${HR.address}.`,
+    "",
+    "Warm regards,",
+    "Human Resources",
+    COMPANY,
+  ].join("\r\n");
+}
+
+/** UTF-8 safe base64, chunked so long attachments do not blow the call stack. */
+function bytesToBase64(bytes) {
+  const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < view.length; i += chunk) {
+    binary += String.fromCharCode.apply(null, view.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+function textToBase64(text) {
+  return bytesToBase64(new TextEncoder().encode(text));
+}
+
+/** Mail headers are ASCII; anything else needs RFC 2047 encoding. */
+function encodeHeader(text) {
+  return /^[\x20-\x7E]*$/.test(text) ? text : `=?UTF-8?B?${textToBase64(text)}?=`;
+}
+
+function wrapBase64(text) {
+  return text.replace(/(.{76})/g, "$1\r\n");
+}
+
+/**
+ * A complete RFC 822 message with the letter attached.
+ *
+ * X-Unsent: 1 is the part that matters: without it Outlook opens a .eml as a
+ * received message that can only be forwarded. With it, the file opens as a
+ * composed draft with the recipient, subject, body and attachment already in
+ * place and the Send button live.
+ */
+function buildEml(employee, pdfBytes, filename) {
+  const boundary = `----euler-${Math.random().toString(36).slice(2)}`;
+  return [
+    `From: ${encodeHeader(HR.name)} <${HR.address}>`,
+    `To: ${encodeHeader(employee.name)} <${employee.email}>`,
+    `Subject: ${encodeHeader(EMAIL_SUBJECT)}`,
+    "X-Unsent: 1",
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/mixed; boundary="${boundary}"`,
+    "",
+    `--${boundary}`,
+    'Content-Type: text/plain; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    wrapBase64(textToBase64(emailBody(employee))),
+    `--${boundary}`,
+    `Content-Type: application/pdf; name="${filename}"`,
+    `Content-Disposition: attachment; filename="${filename}"`,
+    "Content-Transfer-Encoding: base64",
+    "",
+    wrapBase64(bytesToBase64(pdfBytes)),
+    `--${boundary}--`,
+    "",
+  ].join("\r\n");
+}
+
+function csvCell(value) {
+  const text = String(value == null ? "" : value);
+  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function recipientsCsv(jobs) {
+  const rows = [["EmployeeID", "Name", "Email", "Attachment"]];
+  for (const job of jobs) {
+    rows.push([job.employee.code, job.employee.name, job.employee.email, fileNameFor(job.employee)]);
+  }
+  // BOM so Excel opens it as UTF-8 rather than mangling any accented name.
+  return "﻿" + rows.map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
+}
+
+function outlookScript() {
+  return String.raw`<#
+    Sends the variable pay letters through the copy of Outlook already signed in
+    on this machine. No passwords, no SMTP settings: it drives the desktop app.
+
+      .\send_via_outlook.ps1            # build the drafts and leave them open
+      .\send_via_outlook.ps1 -Send      # actually send them
+
+    Run it from inside the folder this file came in, with Outlook open.
+    -From sets Send-As; drop it if Outlook is already signed in as that mailbox.
+#>
+param(
+    [switch]$Send,
+    [string]$From = 'hr@eulermotors.com'
+)
+
+$ErrorActionPreference = 'Stop'
+$here = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$rows = Import-Csv (Join-Path $here 'recipients.csv')
+
+$subject = 'PLACEHOLDER_SUBJECT'
+$bodyTemplate = @'
+PLACEHOLDER_BODY
+'@
+
+if (-not $rows) { throw 'recipients.csv is empty.' }
+
+if ($Send) {
+    Write-Host ("About to SEND {0} letters. This cannot be undone." -f $rows.Count) -ForegroundColor Yellow
+    if ((Read-Host 'Type SEND to confirm') -ne 'SEND') { Write-Host 'Cancelled.'; exit }
+}
+
+$outlook = New-Object -ComObject Outlook.Application
+$done = 0
+$failed = @()
+
+foreach ($row in $rows) {
+    try {
+        if (-not $row.Email) { throw 'no email address' }
+        $attachment = Join-Path $here (Join-Path 'letters' $row.Attachment)
+        if (-not (Test-Path $attachment)) { throw "missing attachment $($row.Attachment)" }
+
+        $mail = $outlook.CreateItem(0)
+        if ($From) { $mail.SentOnBehalfOfName = $From }
+        $mail.To = $row.Email
+        $mail.Subject = $subject
+        $mail.Body = $bodyTemplate.Replace('{{Name}}', $row.Name)
+        $mail.Attachments.Add($attachment) | Out-Null
+
+        if ($Send) { $mail.Send() } else { $mail.Display() }
+        $done++
+        Write-Host ("  {0}  {1} <{2}>" -f $(if ($Send) { 'sent   ' } else { 'drafted' }), $row.EmployeeID, $row.Email)
+    } catch {
+        $failed += [pscustomobject]@{ EmployeeID = $row.EmployeeID; Email = $row.Email; Reason = $_.Exception.Message }
+        Write-Host ("  failed  {0}: {1}" -f $row.EmployeeID, $_.Exception.Message) -ForegroundColor Red
+    }
+}
+
+Write-Host ''
+Write-Host ("{0} of {1} handled." -f $done, $rows.Count) -ForegroundColor Green
+if ($failed) {
+    $log = Join-Path $here 'failed.csv'
+    $failed | Export-Csv -Path $log -NoTypeInformation -Encoding UTF8
+    Write-Host ("{0} failed; details in {1}" -f $failed.Count, $log) -ForegroundColor Red
+}
+`;
+}
+
+function smtpScript() {
+  return String.raw`#!/usr/bin/env python3
+"""Send the variable pay letters over SMTP.
+
+For anywhere without Outlook on the desktop. Nothing is stored: the password is
+typed in each run, and on Microsoft 365 or Google Workspace it has to be an app
+password, since both refuse plain account passwords over SMTP.
+
+    python send_via_smtp.py                     # list what would go, send nothing
+    python send_via_smtp.py --send              # actually send
+    python send_via_smtp.py --send --host smtp.gmail.com
+
+Run it from inside the folder this file came in.
+"""
+
+import argparse
+import csv
+import getpass
+import smtplib
+import sys
+from email.message import EmailMessage
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+SUBJECT = "PLACEHOLDER_SUBJECT"
+BODY = """PLACEHOLDER_BODY"""
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--send", action="store_true", help="actually send; otherwise just list")
+    parser.add_argument("--host", default="smtp.office365.com")
+    parser.add_argument("--port", type=int, default=587)
+    parser.add_argument("--user", default="PLACEHOLDER_FROM", help="mailbox to authenticate as")
+    parser.add_argument("--from", dest="sender", default="PLACEHOLDER_FROM")
+    args = parser.parse_args()
+
+    with (HERE / "recipients.csv").open(encoding="utf-8-sig", newline="") as handle:
+        rows = [row for row in csv.DictReader(handle) if row.get("Email")]
+    if not rows:
+        sys.exit("recipients.csv has no rows with an email address.")
+
+    if not args.send:
+        print(f"Dry run. {len(rows)} letters would go out as {args.sender}:")
+        for row in rows:
+            print(f"  {row['EmployeeID']:10} {row['Email']:40} {row['Attachment']}")
+        print("\nRe-run with --send to send them.")
+        return
+
+    print(f"About to SEND {len(rows)} letters as {args.sender}. This cannot be undone.")
+    if input("Type SEND to confirm: ").strip() != "SEND":
+        sys.exit("Cancelled.")
+    password = getpass.getpass(f"App password for {args.user}: ")
+
+    failed = []
+    with smtplib.SMTP(args.host, args.port) as server:
+        server.starttls()
+        server.login(args.user, password)
+        for row in rows:
+            try:
+                attachment = HERE / "letters" / row["Attachment"]
+                message = EmailMessage()
+                message["From"] = args.sender
+                message["To"] = row["Email"]
+                message["Subject"] = SUBJECT
+                message.set_content(BODY.replace("{{Name}}", row["Name"]))
+                message.add_attachment(attachment.read_bytes(), maintype="application",
+                                       subtype="pdf", filename=row["Attachment"])
+                server.send_message(message)
+                print(f"  sent    {row['EmployeeID']} <{row['Email']}>")
+            except Exception as error:                      # noqa: BLE001 - report and carry on
+                failed.append((row["EmployeeID"], row["Email"], str(error)))
+                print(f"  failed  {row['EmployeeID']}: {error}")
+
+    print(f"\n{len(rows) - len(failed)} of {len(rows)} sent.")
+    if failed:
+        with (HERE / "failed.csv").open("w", encoding="utf-8", newline="") as handle:
+            csv.writer(handle).writerows([("EmployeeID", "Email", "Reason"), *failed])
+        print(f"{len(failed)} failed; details in failed.csv")
+
+
+if __name__ == "__main__":
+    main()
+`;
+}
+
+function howToSend(count, dateISO) {
+  return [
+    "EULER MOTORS - VARIABLE PAY LETTERS",
+    "===================================",
+    "",
+    `${count} letter${count === 1 ? "" : "s"}, dated ${formatDate(dateISO)}.`,
+    "",
+    "WHAT IS IN HERE",
+    "  letters/              one PDF per employee",
+    "  recipients.csv        who each letter goes to",
+    "  send_via_outlook.ps1  sends through Outlook on this PC (recommended)",
+    "  send_via_smtp.py      sends over SMTP, for machines without Outlook",
+    "",
+    "BEFORE YOU SEND",
+    "  Open two or three of the PDFs and check the figures. Once these are out",
+    "  they cannot be recalled, and they carry people's pay.",
+    "",
+    "OPTION 1 - OUTLOOK ON WINDOWS (no passwords needed)",
+    "  1. Unzip this folder somewhere local, not inside the zip viewer.",
+    "  2. Open Outlook and make sure it is signed in.",
+    "  3. Right-click send_via_outlook.ps1 and choose 'Run with PowerShell'.",
+    "     It opens every email as a draft for you to look over.",
+    "  4. Happy with them? Run it again from a PowerShell window with -Send:",
+    "         .\\send_via_outlook.ps1 -Send",
+    "     It asks you to type SEND before anything goes out.",
+    "",
+    "  If PowerShell refuses to run the script, start it with:",
+    "      powershell -ExecutionPolicy Bypass -File .\\send_via_outlook.ps1",
+    "",
+    "OPTION 2 - SMTP (Gmail, Microsoft 365, anything else)",
+    "  1. Create an app password for the sending mailbox. Neither Microsoft 365",
+    "     nor Google Workspace will accept an ordinary account password here.",
+    "  2. python send_via_smtp.py                 lists what would go out",
+    "  3. python send_via_smtp.py --send          sends, after a confirmation",
+    "     Add --host smtp.gmail.com for Google Workspace.",
+    "",
+    "OPTION 3 - BY HAND",
+    "  recipients.csv has every address and the file each person should get.",
+    "  Use it with your own mail merge, or attach the PDFs yourself.",
+    "",
+    `Anything that fails is written to failed.csv so you can retry just those.`,
+    "",
+  ].join("\r\n");
+}
+
+/** Substitutes the shared subject and body into a generated script. */
+function fillTemplate(script, employeeNamePlaceholder) {
+  const body = emailBody({ name: employeeNamePlaceholder }).replace(/\r\n/g, "\n");
+  return script
+    .replace("PLACEHOLDER_SUBJECT", () => EMAIL_SUBJECT)
+    .replace("PLACEHOLDER_BODY", () => body)
+    .replace(/PLACEHOLDER_FROM/g, () => HR.address);
+}
+
+/**
+ * Everything a mail run needs: the letters, who they go to, and two scripts that
+ * can do the sending. Returns a Blob.
+ */
+async function buildEmailPack(jobs, dateISO, onProgress) {
+  const zip = new JSZip();
+  const letters = zip.folder("letters");
+
+  for (let i = 0; i < jobs.length; i += 1) {
+    const job = jobs[i];
+    if (onProgress) onProgress(i + 1, jobs.length);
+    letters.file(fileNameFor(job.employee),
+      buildLetter(job.employee, job.pay, job.dateISO).output("arraybuffer"));
+    // Hand the frame back so the progress label repaints instead of freezing.
+    if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+
+  zip.file("recipients.csv", recipientsCsv(jobs));
+  zip.file("send_via_outlook.ps1", fillTemplate(outlookScript(), "{{Name}}"));
+  zip.file("send_via_smtp.py", fillTemplate(smtpScript(), "{{Name}}"));
+  zip.file("HOW_TO_SEND.txt", howToSend(jobs.length, dateISO));
+
+  // The PDFs are already deflated internally; re-compressing buys nothing.
+  return zip.generateAsync({ type: "blob", compression: "STORE" });
+}
+
+/* ------------------------------------------------------------------ *
  * Shared UI helpers                                                   *
  * ------------------------------------------------------------------ */
 
@@ -1189,6 +1542,8 @@ const detailsPlaceholder = el("detailsPlaceholder");
 const amountRow = el("amountRow");
 const previewButton = el("preview");
 const downloadButton = el("download");
+const downloadEmlButton = el("downloadEml");
+const emailNote = el("emailNote");
 
 let currentEmployee = null;
 let currentPay = null;
@@ -1252,6 +1607,7 @@ function paintDetails(employee, pay) {
   el("dSubDepartment").textContent = employee.subDepartment || "—";
   el("dDoj").textContent = formatDate(employee.doj) || "—";
   el("dLocation").textContent = employee.location || "—";
+  el("dEmail").textContent = employee.email || "not on file";
 
   amountRow.hidden = pay === null;
   if (pay) {
@@ -1371,6 +1727,20 @@ function refreshIndividual() {
   const ready = individualReady();
   previewButton.disabled = !ready;
   downloadButton.disabled = !ready;
+  downloadEmlButton.disabled = !ready || !currentEmployee.email;
+
+  if (ready && !currentEmployee.email) {
+    emailNote.textContent = `${currentEmployee.code} has no work email in the master database, `
+      + "so no draft can be addressed. The letter PDF is unaffected.";
+    emailNote.classList.add("warn");
+  } else if (ready) {
+    emailNote.textContent = `The draft opens in your mail client addressed to `
+      + `${currentEmployee.email}, with the letter attached. Nothing is sent until you send it.`;
+    emailNote.classList.remove("warn");
+  } else {
+    emailNote.textContent = "";
+    emailNote.classList.remove("warn");
+  }
 
   // Any edit makes an on-screen preview stale, so drop it rather than leave a
   // letter showing figures the inputs no longer agree with.
@@ -1391,6 +1761,16 @@ downloadButton.addEventListener("click", () => {
   if (doc) doc.save(fileNameFor(currentEmployee));
 });
 
+downloadEmlButton.addEventListener("click", () => {
+  if (!individualReady() || !currentEmployee.email) return;
+  const doc = tryBuild();
+  if (!doc) return;
+  const filename = fileNameFor(currentEmployee);
+  const eml = buildEml(currentEmployee, doc.output("arraybuffer"), filename);
+  saveBlob(new Blob([eml], { type: "message/rfc822" }),
+    filename.replace(/\.pdf$/, ".eml"));
+});
+
 // Keep the preview crisp and correctly sized when the window changes.
 let resizeTimer = null;
 window.addEventListener("resize", () => {
@@ -1409,6 +1789,7 @@ const grid = el("grid");
 const bulkDate = el("bulkDate");
 const bulkSummary = el("bulkSummary");
 const downloadZipButton = el("downloadZip");
+const downloadPackButton = el("downloadPack");
 const bulkPane = createPreviewPane("bulkViewer", "bulkCanvas", "bulkViewerEmpty", "bulkFilename");
 
 /* The row currently shown in the bulk preview, and what it said at the time. A
@@ -1514,6 +1895,7 @@ function readBulkRows() {
   const jobs = [];
   const seen = new Map();
   let errors = 0;
+  let missingEmail = 0;
 
   for (const tr of Array.from(grid.rows)) {
     const [idCell, eligibleCell, awardedCell] = rowCells(tr);
@@ -1563,13 +1945,22 @@ function readBulkRows() {
     }
     seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
 
-    status.textContent = `${employee.name} · INR ${formatINR(pay.awarded)} `
+    let summary = `${employee.name} · INR ${formatINR(pay.awarded)} `
       + `of ${formatINR(pay.eligible)} · ${formatPercent(pay.awarded, pay.eligible)}`;
-    status.classList.add("ok");
+    // A missing address stops the email pack but not the letter, so it is a
+    // warning on the row rather than an error that blocks the batch.
+    if (!employee.email) {
+      summary += " · no work email on file";
+      missingEmail += 1;
+      status.classList.add("warn");
+    } else {
+      status.classList.add("ok");
+    }
+    status.textContent = summary;
     jobs.push({ employee, pay, dateISO: fallback, row: tr });
   }
 
-  return { jobs, errors };
+  return { jobs, errors, missingEmail };
 }
 
 let bulkBusy = false;
@@ -1623,7 +2014,7 @@ function refreshBulk() {
     tr.querySelector(".rownum").textContent = index + 1;
   });
 
-  const { jobs, errors } = readBulkRows();
+  const { jobs, errors, missingEmail } = readBulkRows();
 
   const byRow = new Map(jobs.map((job) => [job.row, job]));
   let previewStillValid = false;
@@ -1642,13 +2033,19 @@ function refreshBulk() {
     bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ready · `
       + `<span class="bad"><strong>${errors}</strong> ${errors === 1 ? "row needs" : "rows need"} attention</span>`;
   } else {
-    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`;
+    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`
+      + (missingEmail
+        ? ` · <span class="warn"><strong>${missingEmail}</strong> without a work email</span>`
+        : "");
   }
 
   // Refuse to build a partial batch: silently skipping a row in a payroll run is
   // worse than making someone fix the typo first.
   downloadZipButton.disabled = bulkBusy || errors > 0 || jobs.length === 0;
+  // The pack is only useful if every letter in it has somewhere to go.
+  downloadPackButton.disabled = bulkBusy || errors > 0 || jobs.length === 0 || missingEmail > 0;
   if (!bulkBusy) {
+    downloadPackButton.textContent = "Download Email Pack (Zip)";
     downloadZipButton.textContent = jobs.length && !errors
       ? `Download all ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
       : "Download all Letters (Zip)";
@@ -1691,6 +2088,29 @@ downloadZipButton.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     bulkSummary.innerHTML = '<span class="bad">Could not build the letters. See the browser console for details.</span>';
+  } finally {
+    bulkBusy = false;
+    refreshBulk();
+  }
+});
+
+downloadPackButton.addEventListener("click", async () => {
+  const { jobs, errors, missingEmail } = readBulkRows();
+  if (errors || missingEmail || !jobs.length) return;
+
+  bulkBusy = true;
+  downloadPackButton.disabled = true;
+  downloadZipButton.disabled = true;
+
+  try {
+    const blob = await buildEmailPack(jobs, bulkDate.value || todayISO(), (done, total) => {
+      downloadPackButton.textContent = `Building ${done} of ${total}…`;
+    });
+    downloadPackButton.textContent = "Packaging zip…";
+    saveBlob(blob, `Variable_Pay_Email_Pack_${bulkDate.value || todayISO()}.zip`);
+  } catch (error) {
+    console.error(error);
+    bulkSummary.innerHTML = '<span class="bad">Could not build the email pack. See the browser console for details.</span>';
   } finally {
     bulkBusy = false;
     refreshBulk();

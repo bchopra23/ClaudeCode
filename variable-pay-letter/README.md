@@ -23,6 +23,8 @@ One letter at a time, with an on-screen preview.
    the database shows an error and both buttons stay disabled.
 5. **Preview Letter** renders the finished letter on screen.
 6. **Download Letter PDF** saves it as `Variable_Pay_Letter_<EmployeeID>.pdf`.
+7. **Download Email Draft (.eml)** saves a ready-addressed covering email with the
+   letter attached. See "Sending the letters" below.
 
 ## Bulk Letters
 
@@ -39,6 +41,8 @@ A whole payout run in one zip.
    and **Download** saves that one letter on its own.
 5. **Download all Letters (Zip)** produces `Variable_Pay_Letters_<date>.zip`
    containing one `Variable_Pay_Letter_<EmployeeID>.pdf` per row.
+6. **Download Email Pack (Zip)** produces the same letters plus everything needed
+   to mail each one to the employee it belongs to. See "Sending the letters".
 
 A preview is tied to the row that produced it. Change that row's ID or amount, or
 the batch date, and the preview is dropped rather than left showing figures the
@@ -56,6 +60,46 @@ large runs are better split into a few batches.
 
 Nothing is uploaded anywhere, in either mode. The database, the fonts and the PDF
 engine are all embedded in the file, and every letter is built in the browser.
+
+## Sending the letters
+
+The app does not send email, and cannot. It is a page opened from a `file://` URL:
+browsers have no SMTP, and posting as `hr@eulermotors.com` would need credentials
+for that mailbox besides. What it does instead is prepare everything the send
+needs and hand it to something that can.
+
+**One letter.** *Download Email Draft (.eml)* gives a complete message — recipient,
+subject, body, letter attached. Open it and your mail client shows a composed
+draft; you press Send. It carries `X-Unsent: 1`, which is what makes Outlook treat
+a `.eml` as a sendable draft rather than a read-only received message.
+
+**A whole run.** *Download Email Pack (Zip)* contains:
+
+```
+letters/              one PDF per employee
+recipients.csv        who each letter goes to
+send_via_outlook.ps1  drives the Outlook already signed in on the PC
+send_via_smtp.py      sends over SMTP, for machines without Outlook
+HOW_TO_SEND.txt       the same instructions, for whoever runs it
+```
+
+`send_via_outlook.ps1` needs no passwords — it drives the desktop app, so mail
+leaves from whichever mailbox Outlook is signed into (`-From` sets Send-As).
+It **creates drafts by default**; `-Send` sends, and asks the operator to type
+`SEND` before anything goes out. `send_via_smtp.py` is the fallback for
+Gmail/Workspace or any machine without Outlook; it prompts for an app password
+each run and stores nothing. Both write anything that fails to `failed.csv`.
+
+The subject and body live in `emailBody()` and `EMAIL_SUBJECT` in
+`src/index.html`, and are substituted into both scripts at export time, so there
+is one place to edit the wording.
+
+### Employees with no address
+
+Five of the 1,108 employees have no work email in the master database, and two
+addresses are each shared by two people. A row with no address is flagged amber
+and blocks the email pack, but not the letters zip — the letter is still valid,
+it just has nowhere to be mailed. Sort those out by hand.
 
 ## What the letter contains
 
@@ -111,10 +155,12 @@ python tools/build.py
 
 `extract_employees.py` reads the `Active Employees List` sheet and writes
 `data/employees.json` with **only** `code`, `name`, `designation`, `doj`,
-`department`, `subDepartment` and `location`.
+`department`, `subDepartment`, `location` and the official work `email`.
 
-This is deliberate. The master workbook also holds PAN numbers, Aadhaar numbers,
-bank account numbers, home addresses, personal email addresses and phone numbers.
+This is deliberate. The work address is there because the covering email needs
+somewhere to go; it is directory information. The master workbook also holds PAN
+numbers, Aadhaar numbers, bank account numbers, home addresses, *personal* email
+addresses and phone numbers.
 None of that is needed to print a letter, so none of it is copied out of the
 workbook and none of it is committed here. Keep the workbook itself out of this
 repository.
