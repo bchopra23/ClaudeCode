@@ -808,23 +808,36 @@ function formatDate(iso) {
 }
 
 /**
- * The period this employee's award covers, as display text.
+ * How the body clause names the award period for someone who joined partway
+ * through. Two wordings are kept so the phrasing can be swapped in one place:
  *
- * Always the full scheme window. Someone who joined partway through has their
- * joining date labelled in brackets straight after the start date, so the letter
- * names the same period for everyone while still showing when that person
- * actually became eligible.
+ *   "bracket"  during the period 01 April 2025 (Date of Joining - 19 January 2026) to 30 June 2026
+ *   "fromDoj"  from your Date of Joining - 19 January 2026 to 30 June 2026
  *
- * ISO dates compare correctly as plain strings, so no parsing is needed. A
- * joining date after the period ends gets no bracket — that case should not
- * arise, and such a letter deserves a second look regardless of wording.
+ * Everyone who was employed for the whole window reads the same either way.
  */
-function awardPeriod(employee) {
+const PERIOD_WORDING = "bracket";
+
+/**
+ * The clause naming the period this employee's award covers, ready to drop into
+ * the sentence. ISO dates compare correctly as plain strings, so no parsing is
+ * needed. A joining date after the period ends is treated as a full-period
+ * employee — that case should not arise, and such a letter deserves a second
+ * look regardless of wording.
+ */
+function awardPeriodPhrase(employee) {
   const doj = employee.doj || "";
   const joinedDuring = doj > PERIOD.start && doj <= PERIOD.end;
+  const end = formatDate(PERIOD.end);
+
+  if (joinedDuring && PERIOD_WORDING === "fromDoj") {
+    // Lower-case "from" because it sits mid-sentence.
+    return `from your Date of Joining - ${formatDate(doj)} to ${end}`;
+  }
+
   const start = formatDate(PERIOD.start)
     + (joinedDuring ? ` (Date of Joining - ${formatDate(doj)})` : "");
-  return `${start} to ${formatDate(PERIOD.end)}`;
+  return `during the period ${start} to ${end}`;
 }
 
 /** The scheme's own period, the same on every letter. */
@@ -1045,7 +1058,7 @@ function buildLetter(employee, pay, dateISO) {
 
   paragraph(
     "We are pleased to inform you that, in recognition of your performance and "
-    + `contribution during the period ${awardPeriod(employee)}, you have been `
+    + `contribution ${awardPeriodPhrase(employee)}, you have been `
     + "awarded a variable pay as set out below."
   );
 
@@ -1317,7 +1330,7 @@ function buildWordTemplate() {
 
   // The scheme period, not a placeholder: it is the same on every letter. Someone
   // filling this in for a mid-period joiner edits it to their joining date, the
-  // way awardPeriod() does automatically for employees the database knows.
+  // way awardPeriodPhrase() does automatically for employees the database knows.
   body += para(run("We are pleased to inform you that, in recognition of your performance and "
     + `contribution during the period ${schemePeriod()}, you have been `
     + "awarded a variable pay as set out below."), { after: 6 });

@@ -76,8 +76,17 @@ brackets straight after the start date:
 > during the period 01 April 2025 **(Date of Joining - 19 January 2026)** to 30 June 2026
 
 so the period reads the same for everyone while still showing when that person
-actually became eligible. `awardPeriod()` applies the rule; `PERIOD` at the top of
-the script holds the two dates.
+actually became eligible. `PERIOD` at the top of the script holds the two dates.
+
+`PERIOD_WORDING` selects how that clause is phrased for a mid-period joiner:
+
+| Value | Mid-period joiner reads |
+| --- | --- |
+| `"bracket"` (default) | during the period 01 April 2025 (Date of Joining - 19 January 2026) to 30 June 2026 |
+| `"fromDoj"` | from your Date of Joining - 19 January 2026 to 30 June 2026 |
+
+Anyone employed for the whole window reads the same either way. Flip the constant
+and rebuild to switch; `awardPeriodPhrase()` returns the finished clause.
 
 A joining date *after* the period ends gets no bracket. That case should not
 really arise, and a letter for someone who joined after the window closed
