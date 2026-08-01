@@ -70,10 +70,10 @@ paragraph, and the signature block with the company seal struck across it.
 ### Award period
 
 The award covers **01 April 2025 to 30 June 2026**, and every letter names that
-full period. Anyone who joined partway through has their joining date noted in
+full period. Anyone who joined partway through has their joining date labelled in
 brackets straight after the start date:
 
-> during the period 01 April 2025 **(19 January 2026)** to 30 June 2026
+> during the period 01 April 2025 **(Date of Joining - 19 January 2026)** to 30 June 2026
 
 so the period reads the same for everyone while still showing when that person
 actually became eligible. `awardPeriod()` applies the rule; `PERIOD` at the top of

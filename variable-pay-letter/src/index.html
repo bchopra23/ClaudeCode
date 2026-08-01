@@ -811,7 +811,7 @@ function formatDate(iso) {
  * The period this employee's award covers, as display text.
  *
  * Always the full scheme window. Someone who joined partway through has their
- * joining date noted in brackets straight after the start date, so the letter
+ * joining date labelled in brackets straight after the start date, so the letter
  * names the same period for everyone while still showing when that person
  * actually became eligible.
  *
@@ -822,7 +822,8 @@ function formatDate(iso) {
 function awardPeriod(employee) {
   const doj = employee.doj || "";
   const joinedDuring = doj > PERIOD.start && doj <= PERIOD.end;
-  const start = formatDate(PERIOD.start) + (joinedDuring ? ` (${formatDate(doj)})` : "");
+  const start = formatDate(PERIOD.start)
+    + (joinedDuring ? ` (Date of Joining - ${formatDate(doj)})` : "");
   return `${start} to ${formatDate(PERIOD.end)}`;
 }
 
