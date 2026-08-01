@@ -205,9 +205,12 @@
     margin-bottom: 2px;
   }
 
-  .amount-row .figure { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
-  .pay-eligible { font-size: 15px; font-weight: 600; }
-  .pay-percent { font-size: 22px; font-weight: 700; color: var(--euler-blue-dark); letter-spacing: -.01em; }
+  /* One size for all three, matching how they are set on the letter itself. */
+  .amount-row .figure,
+  .pay-eligible,
+  .pay-percent { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+
+  .pay-percent { color: var(--euler-blue-dark); }
   .amount-row .words { font-size: 13px; color: var(--muted); margin-top: 8px; }
 
   .placeholder { color: var(--muted); font-size: 14px; margin: 0; }
@@ -218,8 +221,6 @@
     line-height: 1.5;
     color: var(--muted);
   }
-
-  .note.warn { color: #8a5a00; }
 
   .actions { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
 
@@ -389,7 +390,6 @@
 
   td.status.ok { color: var(--ok); }
   td.status.bad { color: var(--danger); }
-  td.status.warn { color: #8a5a00; }
 
   tr.bad input { background: #fef7f6; }
 
@@ -447,10 +447,8 @@
   .summary { font-size: 14px; color: var(--muted); }
   .summary strong { color: var(--ink); }
   .summary .bad { color: var(--danger); }
-  .summary .warn { color: #8a5a00; }
 
-  .bulk-footer button.action { width: auto; min-width: 200px; margin: 0; }
-  .bulk-footer #downloadPack { margin-left: auto; }
+  .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
 
   .help {
     margin: 0 0 20px;
@@ -585,9 +583,12 @@
         <div class="actions">
           <button id="preview" class="action btn-primary" disabled>Preview Letter</button>
           <button id="download" class="action btn-secondary" disabled>Download Letter PDF</button>
-          <button id="downloadEml" class="action btn-secondary" disabled>Download Email Draft (.eml)</button>
+          <button id="downloadDocx" class="action btn-secondary">Download Word Template (.docx)</button>
         </div>
-        <p class="note" id="emailNote"></p>
+        <p class="note">
+          The Word template is blank and always available &mdash; use it for anyone the
+          master database does not have, and type their details in by hand.
+        </p>
       </div>
 
       <div class="card">
@@ -602,7 +603,6 @@
             <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
             <dt>Date of Joining</dt><dd id="dDoj"></dd>
             <dt>Location</dt><dd id="dLocation"></dd>
-            <dt>Work email</dt><dd id="dEmail"></dd>
           </dl>
           <div class="amount-row" id="amountRow" hidden>
             <div class="pay-split">
@@ -666,8 +666,6 @@
           <strong>Download.</strong>
           <em>Preview</em> or <em>Download</em> on a row handles that one letter.
           <em>Download all Letters (Zip)</em> at the bottom builds the whole batch.
-          <em>Download Email Pack (Zip)</em> adds the addresses and a script that
-          mails each letter to the employee it belongs to.
         </li>
         </ol>
       </details>
@@ -701,7 +699,6 @@
 
       <div class="bulk-footer">
         <div class="summary" id="bulkSummary"></div>
-        <button id="downloadPack" class="action btn-secondary" disabled>Download Email Pack (Zip)</button>
         <button id="downloadZip" class="action btn-primary" disabled>Download all Letters (Zip)</button>
       </div>
     </section>
@@ -750,7 +747,9 @@ const ASSET_ASPECTS = "__ASSET_ASPECTS__";
 const SIGNATORY = { name: "Priyanka Singh", title: "Vice President – Human Resources" };
 const COMPANY = "Euler Motors Pvt. Ltd.";
 const COMPANY_SHORT = "Euler Motors";
-const FINANCIAL_YEAR = "2025-26";
+/* The window this award covers. Stated on the letter in place of a financial
+ * year, because the period is 15 months and does not line up with one. */
+const PERIOD = { start: "2025-04-01", end: "2026-06-30" };
 
 /* ------------------------------------------------------------------ *
  * Page geometry, in millimetres on A4.                                *
@@ -780,6 +779,11 @@ const STAMP_OVERLAP = 0.72;
 const COLUMN = MARGIN.right - MARGIN.left;
 const LABEL_WIDTH = 38;
 
+/* Point size of the three figures in the amount callout. Columns sit 58mm apart,
+ * and the widest realistic value is about 38mm at this size, so they cannot
+ * collide. */
+const FIGURE_SIZE = 13;
+
 const COLORS = {
   ink: [22, 32, 42],
   muted: [90, 116, 136],
@@ -801,6 +805,28 @@ function formatDate(iso) {
   if (!match) return "";
   const month = MONTHS[Number(match[2]) - 1];
   return month ? `${match[3]} ${month} ${match[1]}` : "";
+}
+
+/**
+ * The period this employee's award covers, as display text.
+ *
+ * Someone who joined partway through was only eligible from their joining date,
+ * so their letter says so rather than claiming a period they were not employed
+ * for. ISO dates compare correctly as plain strings, so no parsing is needed.
+ *
+ * A joining date after the period ends falls back to the full period. That case
+ * should not arise — an award for someone who joined after the window closed is
+ * questionable however it is worded — but it keeps the letter coherent.
+ */
+function awardPeriod(employee) {
+  const doj = employee.doj || "";
+  const start = doj > PERIOD.start && doj <= PERIOD.end ? doj : PERIOD.start;
+  return `${formatDate(start)} to ${formatDate(PERIOD.end)}`;
+}
+
+/** The scheme's own period, the same on every letter. */
+function schemePeriod() {
+  return `${formatDate(PERIOD.start)} to ${formatDate(PERIOD.end)}`;
 }
 
 function todayISO() {
@@ -996,7 +1022,7 @@ function buildLetter(employee, pay, dateISO) {
   y += 8;
 
   use("semibold", 10.5);
-  doc.text(`Subject: Variable Pay for FY ${FINANCIAL_YEAR}`, MARGIN.left, y);
+  doc.text(`Subject: Variable Pay for the period ${schemePeriod()}`, MARGIN.left, y);
   y += 9;
 
   use("bold", 13, [43, 127, 174]);
@@ -1015,9 +1041,9 @@ function buildLetter(employee, pay, dateISO) {
   };
 
   paragraph(
-    `We are pleased to inform you that, in recognition of your performance and `
-    + `contribution during the financial year ${FINANCIAL_YEAR}, you have been `
-    + `awarded a variable pay as set out below.`
+    "We are pleased to inform you that, in recognition of your performance and "
+    + `contribution during the period ${awardPeriod(employee)}, you have been `
+    + "awarded a variable pay as set out below."
   );
 
   y = drawAmountBox(doc, y, pay);
@@ -1056,28 +1082,26 @@ function drawAmountBox(doc, y, pay) {
   doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
   doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
 
-  // Three columns across the box. The awarded figure is the headline, so it and
-  // the percentage are set larger than the eligible amount they derive from.
+  // Three columns across the box, all three figures at one size. The payout is
+  // still the focal point, but through the accent colour on the percentage
+  // rather than by setting the numbers at different sizes.
   const columns = [
     {
       x: MARGIN.left + 8,
       label: "TOTAL ELIGIBLE VARIABLE PAY",
       value: `INR ${formatINR(pay.eligible)}`,
-      size: 11.5,
       color: COLORS.ink,
     },
     {
       x: MARGIN.left + 66,
       label: "VARIABLE PAY AWARDED",
       value: `INR ${formatINR(pay.awarded)}`,
-      size: 15,
       color: COLORS.ink,
     },
     {
       x: MARGIN.left + 124,
       label: "% OF ELIGIBLE",
       value: formatPercent(pay.awarded, pay.eligible),
-      size: 15,
       color: [43, 127, 174],
     },
   ];
@@ -1091,7 +1115,7 @@ function drawAmountBox(doc, y, pay) {
     doc.setCharSpace(0);
 
     doc.setFont("Poppins", "bold");
-    doc.setFontSize(column.size);
+    doc.setFontSize(FIGURE_SIZE);
     doc.setTextColor(column.color[0], column.color[1], column.color[2]);
     doc.text(column.value, column.x, y + 15);
   }
@@ -1167,338 +1191,233 @@ function fileNameFor(employee) {
 }
 
 /* ------------------------------------------------------------------ *
- * Covering email                                                      *
+ * Word template                                                       *
  *                                                                     *
- * The app cannot send mail itself. It is a page opened from a file://  *
- * URL: browsers have no SMTP, and posting as hr@eulermotors.com would  *
- * need credentials for that mailbox besides. What it can do is build   *
- * everything the send needs and hand it to something that can — a      *
- * ready-to-send .eml for one letter, or a pack plus a script for a run.*
+ * A blank, editable version of the letter for anyone the master        *
+ * database does not have. Every detail is a marked placeholder; the    *
+ * letterhead, signature and seal are already in place.                 *
+ *                                                                     *
+ * A .docx is a zip of XML, and JSZip is already here, so this needs no *
+ * new dependency. The layout is driven off the same geometry constants *
+ * as the PDF, so a typed letter lines up with a generated one.         *
  * ------------------------------------------------------------------ */
 
-const HR = { name: "Euler Motors HR", address: "hr@eulermotors.com" };
-const EMAIL_SUBJECT = `Your Variable Pay Letter - FY ${FINANCIAL_YEAR}`;
+/* Word measures in EMUs for drawings and twentieths of a point for pages. */
+const EMU_PER_MM = 36000;
+const TWIPS_PER_MM = 1440 / 25.4;
+const emu = (mm) => Math.round(mm * EMU_PER_MM);
+const twips = (mm) => Math.round(mm * TWIPS_PER_MM);
 
-function emailBody(employee) {
-  return [
-    `Dear ${employee.name},`,
-    "",
-    `Please find attached your variable pay letter for FY ${FINANCIAL_YEAR}.`,
-    "",
-    "The letter and its contents are confidential and intended solely for you.",
-    "",
-    `If you have any questions, please write to ${HR.address}.`,
-    "",
-    "Warm regards,",
-    "Human Resources",
-    COMPANY,
-  ].join("\r\n");
+const PLACEHOLDERS = {
+  code: "[Employee ID]",
+  name: "[Employee Name]",
+  designation: "[Designation]",
+  department: "[Department]",
+  subDepartment: "[Sub-department]",
+  doj: "[Date of Joining]",
+  location: "[Location]",
+  eligible: "[Total Eligible Variable Pay]",
+  awarded: "[Variable Pay Awarded]",
+  percent: "[%]",
+  words: "[Amount in words]",
+  date: "[Letter date]",
+};
+
+function xmlEscape(text) {
+  return String(text)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
-/** UTF-8 safe base64, chunked so long attachments do not blow the call stack. */
-function bytesToBase64(bytes) {
-  const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-  let binary = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < view.length; i += chunk) {
-    binary += String.fromCharCode.apply(null, view.subarray(i, i + chunk));
-  }
-  return btoa(binary);
+/** One run. Sizes are half-points, hence the doubling. */
+function run(text, { bold = false, size = 10, color = "16202A", caps = false } = {}) {
+  return `<w:r><w:rPr>`
+    + `<w:rFonts w:ascii="Poppins" w:hAnsi="Poppins" w:cs="Poppins"/>`
+    + (bold ? "<w:b/>" : "")
+    + (caps ? "<w:caps/>" : "")
+    + `<w:color w:val="${color}"/>`
+    + `<w:sz w:val="${size * 2}"/><w:szCs w:val="${size * 2}"/>`
+    + `</w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r>`;
 }
 
-function textToBase64(text) {
-  return bytesToBase64(new TextEncoder().encode(text));
+/** One paragraph. `after` is the space beneath it, in points. */
+function para(runs, { after = 6, align = "left" } = {}) {
+  return `<w:p><w:pPr>`
+    + `<w:spacing w:after="${Math.round(after * 20)}" w:line="264" w:lineRule="auto"/>`
+    + (align === "left" ? "" : `<w:jc w:val="${align}"/>`)
+    + `</w:pPr>${runs}</w:p>`;
 }
 
-/** Mail headers are ASCII; anything else needs RFC 2047 encoding. */
-function encodeHeader(text) {
-  return /^[\x20-\x7E]*$/.test(text) ? text : `=?UTF-8?B?${textToBase64(text)}?=`;
-}
-
-function wrapBase64(text) {
-  return text.replace(/(.{76})/g, "$1\r\n");
-}
-
-/**
- * A complete RFC 822 message with the letter attached.
- *
- * X-Unsent: 1 is the part that matters: without it Outlook opens a .eml as a
- * received message that can only be forwarded. With it, the file opens as a
- * composed draft with the recipient, subject, body and attachment already in
- * place and the Send button live.
- */
-function buildEml(employee, pdfBytes, filename) {
-  const boundary = `----euler-${Math.random().toString(36).slice(2)}`;
-  return [
-    `From: ${encodeHeader(HR.name)} <${HR.address}>`,
-    `To: ${encodeHeader(employee.name)} <${employee.email}>`,
-    `Subject: ${encodeHeader(EMAIL_SUBJECT)}`,
-    "X-Unsent: 1",
-    "MIME-Version: 1.0",
-    `Content-Type: multipart/mixed; boundary="${boundary}"`,
-    "",
-    `--${boundary}`,
-    'Content-Type: text/plain; charset="UTF-8"',
-    "Content-Transfer-Encoding: base64",
-    "",
-    wrapBase64(textToBase64(emailBody(employee))),
-    `--${boundary}`,
-    `Content-Type: application/pdf; name="${filename}"`,
-    `Content-Disposition: attachment; filename="${filename}"`,
-    "Content-Transfer-Encoding: base64",
-    "",
-    wrapBase64(bytesToBase64(pdfBytes)),
-    `--${boundary}--`,
-    "",
-  ].join("\r\n");
-}
-
-function csvCell(value) {
-  const text = String(value == null ? "" : value);
-  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-}
-
-function recipientsCsv(jobs) {
-  const rows = [["EmployeeID", "Name", "Email", "Attachment"]];
-  for (const job of jobs) {
-    rows.push([job.employee.code, job.employee.name, job.employee.email, fileNameFor(job.employee)]);
-  }
-  // BOM so Excel opens it as UTF-8 rather than mangling any accented name.
-  return "﻿" + rows.map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
-}
-
-function outlookScript() {
-  return String.raw`<#
-    Sends the variable pay letters through the copy of Outlook already signed in
-    on this machine. No passwords, no SMTP settings: it drives the desktop app.
-
-      .\send_via_outlook.ps1            # build the drafts and leave them open
-      .\send_via_outlook.ps1 -Send      # actually send them
-
-    Run it from inside the folder this file came in, with Outlook open.
-    -From sets Send-As; drop it if Outlook is already signed in as that mailbox.
-#>
-param(
-    [switch]$Send,
-    [string]$From = 'hr@eulermotors.com'
-)
-
-$ErrorActionPreference = 'Stop'
-$here = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$rows = Import-Csv (Join-Path $here 'recipients.csv')
-
-$subject = 'PLACEHOLDER_SUBJECT'
-$bodyTemplate = @'
-PLACEHOLDER_BODY
-'@
-
-if (-not $rows) { throw 'recipients.csv is empty.' }
-
-if ($Send) {
-    Write-Host ("About to SEND {0} letters. This cannot be undone." -f $rows.Count) -ForegroundColor Yellow
-    if ((Read-Host 'Type SEND to confirm') -ne 'SEND') { Write-Host 'Cancelled.'; exit }
-}
-
-$outlook = New-Object -ComObject Outlook.Application
-$done = 0
-$failed = @()
-
-foreach ($row in $rows) {
-    try {
-        if (-not $row.Email) { throw 'no email address' }
-        $attachment = Join-Path $here (Join-Path 'letters' $row.Attachment)
-        if (-not (Test-Path $attachment)) { throw "missing attachment $($row.Attachment)" }
-
-        $mail = $outlook.CreateItem(0)
-        if ($From) { $mail.SentOnBehalfOfName = $From }
-        $mail.To = $row.Email
-        $mail.Subject = $subject
-        $mail.Body = $bodyTemplate.Replace('{{Name}}', $row.Name)
-        $mail.Attachments.Add($attachment) | Out-Null
-
-        if ($Send) { $mail.Send() } else { $mail.Display() }
-        $done++
-        Write-Host ("  {0}  {1} <{2}>" -f $(if ($Send) { 'sent   ' } else { 'drafted' }), $row.EmployeeID, $row.Email)
-    } catch {
-        $failed += [pscustomobject]@{ EmployeeID = $row.EmployeeID; Email = $row.Email; Reason = $_.Exception.Message }
-        Write-Host ("  failed  {0}: {1}" -f $row.EmployeeID, $_.Exception.Message) -ForegroundColor Red
-    }
-}
-
-Write-Host ''
-Write-Host ("{0} of {1} handled." -f $done, $rows.Count) -ForegroundColor Green
-if ($failed) {
-    $log = Join-Path $here 'failed.csv'
-    $failed | Export-Csv -Path $log -NoTypeInformation -Encoding UTF8
-    Write-Host ("{0} failed; details in {1}" -f $failed.Count, $log) -ForegroundColor Red
-}
-`;
-}
-
-function smtpScript() {
-  return String.raw`#!/usr/bin/env python3
-"""Send the variable pay letters over SMTP.
-
-For anywhere without Outlook on the desktop. Nothing is stored: the password is
-typed in each run, and on Microsoft 365 or Google Workspace it has to be an app
-password, since both refuse plain account passwords over SMTP.
-
-    python send_via_smtp.py                     # list what would go, send nothing
-    python send_via_smtp.py --send              # actually send
-    python send_via_smtp.py --send --host smtp.gmail.com
-
-Run it from inside the folder this file came in.
-"""
-
-import argparse
-import csv
-import getpass
-import smtplib
-import sys
-from email.message import EmailMessage
-from pathlib import Path
-
-HERE = Path(__file__).resolve().parent
-SUBJECT = "PLACEHOLDER_SUBJECT"
-BODY = """PLACEHOLDER_BODY"""
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--send", action="store_true", help="actually send; otherwise just list")
-    parser.add_argument("--host", default="smtp.office365.com")
-    parser.add_argument("--port", type=int, default=587)
-    parser.add_argument("--user", default="PLACEHOLDER_FROM", help="mailbox to authenticate as")
-    parser.add_argument("--from", dest="sender", default="PLACEHOLDER_FROM")
-    args = parser.parse_args()
-
-    with (HERE / "recipients.csv").open(encoding="utf-8-sig", newline="") as handle:
-        rows = [row for row in csv.DictReader(handle) if row.get("Email")]
-    if not rows:
-        sys.exit("recipients.csv has no rows with an email address.")
-
-    if not args.send:
-        print(f"Dry run. {len(rows)} letters would go out as {args.sender}:")
-        for row in rows:
-            print(f"  {row['EmployeeID']:10} {row['Email']:40} {row['Attachment']}")
-        print("\nRe-run with --send to send them.")
-        return
-
-    print(f"About to SEND {len(rows)} letters as {args.sender}. This cannot be undone.")
-    if input("Type SEND to confirm: ").strip() != "SEND":
-        sys.exit("Cancelled.")
-    password = getpass.getpass(f"App password for {args.user}: ")
-
-    failed = []
-    with smtplib.SMTP(args.host, args.port) as server:
-        server.starttls()
-        server.login(args.user, password)
-        for row in rows:
-            try:
-                attachment = HERE / "letters" / row["Attachment"]
-                message = EmailMessage()
-                message["From"] = args.sender
-                message["To"] = row["Email"]
-                message["Subject"] = SUBJECT
-                message.set_content(BODY.replace("{{Name}}", row["Name"]))
-                message.add_attachment(attachment.read_bytes(), maintype="application",
-                                       subtype="pdf", filename=row["Attachment"])
-                server.send_message(message)
-                print(f"  sent    {row['EmployeeID']} <{row['Email']}>")
-            except Exception as error:                      # noqa: BLE001 - report and carry on
-                failed.append((row["EmployeeID"], row["Email"], str(error)))
-                print(f"  failed  {row['EmployeeID']}: {error}")
-
-    print(f"\n{len(rows) - len(failed)} of {len(rows)} sent.")
-    if failed:
-        with (HERE / "failed.csv").open("w", encoding="utf-8", newline="") as handle:
-            csv.writer(handle).writerows([("EmployeeID", "Email", "Reason"), *failed])
-        print(f"{len(failed)} failed; details in failed.csv")
-
-
-if __name__ == "__main__":
-    main()
-`;
-}
-
-function howToSend(count, dateISO) {
-  return [
-    "EULER MOTORS - VARIABLE PAY LETTERS",
-    "===================================",
-    "",
-    `${count} letter${count === 1 ? "" : "s"}, dated ${formatDate(dateISO)}.`,
-    "",
-    "WHAT IS IN HERE",
-    "  letters/              one PDF per employee",
-    "  recipients.csv        who each letter goes to",
-    "  send_via_outlook.ps1  sends through Outlook on this PC (recommended)",
-    "  send_via_smtp.py      sends over SMTP, for machines without Outlook",
-    "",
-    "BEFORE YOU SEND",
-    "  Open two or three of the PDFs and check the figures. Once these are out",
-    "  they cannot be recalled, and they carry people's pay.",
-    "",
-    "OPTION 1 - OUTLOOK ON WINDOWS (no passwords needed)",
-    "  1. Unzip this folder somewhere local, not inside the zip viewer.",
-    "  2. Open Outlook and make sure it is signed in.",
-    "  3. Right-click send_via_outlook.ps1 and choose 'Run with PowerShell'.",
-    "     It opens every email as a draft for you to look over.",
-    "  4. Happy with them? Run it again from a PowerShell window with -Send:",
-    "         .\\send_via_outlook.ps1 -Send",
-    "     It asks you to type SEND before anything goes out.",
-    "",
-    "  If PowerShell refuses to run the script, start it with:",
-    "      powershell -ExecutionPolicy Bypass -File .\\send_via_outlook.ps1",
-    "",
-    "OPTION 2 - SMTP (Gmail, Microsoft 365, anything else)",
-    "  1. Create an app password for the sending mailbox. Neither Microsoft 365",
-    "     nor Google Workspace will accept an ordinary account password here.",
-    "  2. python send_via_smtp.py                 lists what would go out",
-    "  3. python send_via_smtp.py --send          sends, after a confirmation",
-    "     Add --host smtp.gmail.com for Google Workspace.",
-    "",
-    "OPTION 3 - BY HAND",
-    "  recipients.csv has every address and the file each person should get.",
-    "  Use it with your own mail merge, or attach the PDFs yourself.",
-    "",
-    `Anything that fails is written to failed.csv so you can retry just those.`,
-    "",
-  ].join("\r\n");
-}
-
-/** Substitutes the shared subject and body into a generated script. */
-function fillTemplate(script, employeeNamePlaceholder) {
-  const body = emailBody({ name: employeeNamePlaceholder }).replace(/\r\n/g, "\n");
-  return script
-    .replace("PLACEHOLDER_SUBJECT", () => EMAIL_SUBJECT)
-    .replace("PLACEHOLDER_BODY", () => body)
-    .replace(/PLACEHOLDER_FROM/g, () => HR.address);
+/** A label / value line from the employee detail block. */
+function detailRow(label, value) {
+  return para(
+    run(`${label}: `, { size: 9.5, color: "5A7488" }) + run(value, { size: 9.5, bold: true }),
+    { after: 1 }
+  );
 }
 
 /**
- * Everything a mail run needs: the letters, who they go to, and two scripts that
- * can do the sending. Returns a Blob.
+ * An image anchored on the page.
+ * `behind` puts it under the text, which is what makes the letterhead behave
+ * like stationery rather than shoving the body down the page.
  */
-async function buildEmailPack(jobs, dateISO, onProgress) {
+function anchoredImage(id, name, relId, xMm, yMm, wMm, hMm, behind) {
+  return `<w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:drawing>`
+    + `<wp:anchor distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="${behind ? 1 : 5}"`
+    + ` behindDoc="${behind ? 1 : 0}" locked="0" layoutInCell="1" allowOverlap="1">`
+    + `<wp:simplePos x="0" y="0"/>`
+    + `<wp:positionH relativeFrom="page"><wp:posOffset>${emu(xMm)}</wp:posOffset></wp:positionH>`
+    + `<wp:positionV relativeFrom="page"><wp:posOffset>${emu(yMm)}</wp:posOffset></wp:positionV>`
+    + `<wp:extent cx="${emu(wMm)}" cy="${emu(hMm)}"/>`
+    + `<wp:effectExtent l="0" t="0" r="0" b="0"/>`
+    + `<wp:wrapNone/>`
+    + `<wp:docPr id="${id}" name="${name}"/>`
+    + `<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">`
+    + `<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">`
+    + `<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">`
+    + `<pic:nvPicPr><pic:cNvPr id="${id}" name="${name}"/><pic:cNvPicPr/></pic:nvPicPr>`
+    + `<pic:blipFill><a:blip r:embed="${relId}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>`
+    + `<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${emu(wMm)}" cy="${emu(hMm)}"/></a:xfrm>`
+    + `<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>`
+    + `</pic:pic></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>`;
+}
+
+/** Strips the data: prefix so the payload can go straight into the zip. */
+function dataUriPayload(uri) {
+  return uri.slice(uri.indexOf(",") + 1);
+}
+
+function buildWordTemplate() {
   const zip = new JSZip();
-  const letters = zip.folder("letters");
+  const P = PLACEHOLDERS;
 
-  for (let i = 0; i < jobs.length; i += 1) {
-    const job = jobs[i];
-    if (onProgress) onProgress(i + 1, jobs.length);
-    letters.file(fileNameFor(job.employee),
-      buildLetter(job.employee, job.pay, job.dateISO).output("arraybuffer"));
-    // Hand the frame back so the progress label repaints instead of freezing.
-    if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
-  }
+  // --- body -------------------------------------------------------------
+  const signatureWidth = 40;
+  const signatureHeight = signatureWidth * ASSET_ASPECTS.signature;
+  const stampHeight = STAMP_WIDTH * ASSET_ASPECTS.stamp;
 
-  zip.file("recipients.csv", recipientsCsv(jobs));
-  zip.file("send_via_outlook.ps1", fillTemplate(outlookScript(), "{{Name}}"));
-  zip.file("send_via_smtp.py", fillTemplate(smtpScript(), "{{Name}}"));
-  zip.file("HOW_TO_SEND.txt", howToSend(jobs.length, dateISO));
+  let body = "";
+  body += para(run(`Date: ${P.date}`, { size: 9.5, color: "5A7488" }), { after: 8 });
 
-  // The PDFs are already deflated internally; re-compressing buys nothing.
-  return zip.generateAsync({ type: "blob", compression: "STORE" });
+  body += detailRow("Employee ID", P.code);
+  body += detailRow("Name", P.name);
+  body += detailRow("Designation", P.designation);
+  body += detailRow("Department", P.department);
+  body += detailRow("Sub-department", P.subDepartment);
+  body += detailRow("Date of Joining", P.doj);
+  body += detailRow("Location", P.location);
+
+  body += para(run(`Dear ${P.name},`, { size: 10.5 }), { after: 8 });
+  body += para(run(`Subject: Variable Pay for the period ${schemePeriod()}`,
+    { size: 10.5, bold: true }), { after: 8 });
+  body += para(run("Congratulations!", { size: 13, bold: true, color: "2B7FAE" }), { after: 7 });
+
+  // The scheme period, not a placeholder: it is the same on every letter. Someone
+  // filling this in for a mid-period joiner edits it to their joining date, the
+  // way awardPeriod() does automatically for employees the database knows.
+  body += para(run("We are pleased to inform you that, in recognition of your performance and "
+    + `contribution during the period ${schemePeriod()}, you have been `
+    + "awarded a variable pay as set out below."), { after: 6 });
+
+  // The callout, as a plain three-line block: a Word table would be more work
+  // to edit by hand, which is the entire point of this file.
+  body += para(run("TOTAL ELIGIBLE VARIABLE PAY: ", { size: 8, bold: true, color: "5A7488" })
+    + run(P.eligible, { size: 13, bold: true }), { after: 2 });
+  body += para(run("VARIABLE PAY AWARDED: ", { size: 8, bold: true, color: "5A7488" })
+    + run(P.awarded, { size: 13, bold: true }), { after: 2 });
+  body += para(run("% OF ELIGIBLE: ", { size: 8, bold: true, color: "5A7488" })
+    + run(P.percent, { size: 13, bold: true, color: "2B7FAE" }), { after: 2 });
+  body += para(run(`Variable pay awarded in words: ${P.words}`,
+    { size: 8.5, color: "5A7488" }), { after: 8 });
+
+  body += para(run("Your ownership, consistency and commitment have contributed meaningfully to "
+    + `${COMPANY_SHORT}' progress through the period. We look forward to your continued `
+    + "contribution as we build the future of commercial electric mobility."), { after: 6 });
+  body += para(run("This letter and its contents are strictly confidential and are intended solely "
+    + "for you. You are requested not to disclose the same to any other person."), { after: 6 });
+  body += para(run("Once again, congratulations, and thank you for being an important part of the "
+    + `${COMPANY_SHORT} journey.`), { after: 10 });
+
+  body += para(run("Warm regards,"), { after: 1 });
+  body += para(run(`For ${COMPANY}`, { bold: true }), { after: 2 });
+
+  // Signature and seal sit where they do on the PDF, measured from the page.
+  const signTop = CONTENT_TOP + 176;
+  body += anchoredImage(2, "Signature", "rId20", MARGIN.left, signTop,
+    signatureWidth, signatureHeight, false);
+  body += anchoredImage(3, "Company seal", "rId21",
+    MARGIN.left + signatureWidth * STAMP_OVERLAP,
+    signTop + signatureHeight / 2 - stampHeight / 2,
+    STAMP_WIDTH, stampHeight, false);
+
+  // Push the closing block below the signature artwork.
+  body += para(run(" "), { after: signatureHeight * 2.2 });
+  body += para(run(SIGNATORY.name, { bold: true }), { after: 1 });
+  body += para(run(SIGNATORY.title, { size: 9.5, color: "5A7488" }), { after: 0 });
+
+  const section = `<w:sectPr>`
+    + `<w:headerReference w:type="default" r:id="rId10"/>`
+    + `<w:pgSz w:w="${twips(210)}" w:h="${twips(297)}"/>`
+    + `<w:pgMar w:top="${twips(CONTENT_TOP)}" w:right="${twips(210 - MARGIN.right)}"`
+    + ` w:bottom="${twips(297 - SAFE.bottom)}" w:left="${twips(MARGIN.left)}"`
+    + ` w:header="0" w:footer="0" w:gutter="0"/>`
+    + `</w:sectPr>`;
+
+  const NS = `xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"`
+    + ` xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"`
+    + ` xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"`;
+  const REL_NS = `xmlns="http://schemas.openxmlformats.org/package/2006/relationships"`;
+  const rel = (id, type, target) =>
+    `<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/${type}" Target="${target}"/>`;
+
+  // Order matters: a package reader expects [Content_Types].xml first, and
+  // createFolders:false keeps bare directory entries out of the archive.
+  const add = (name, content, options) =>
+    zip.file(name, content, Object.assign({ createFolders: false }, options));
+
+  add("[Content_Types].xml",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`
+    + `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">`
+    + `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>`
+    + `<Default Extension="xml" ContentType="application/xml"/>`
+    + `<Default Extension="jpeg" ContentType="image/jpeg"/>`
+    + `<Default Extension="png" ContentType="image/png"/>`
+    + `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>`
+    + `<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>`
+    + `</Types>`);
+
+  add("_rels/.rels",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships ${REL_NS}>`
+    + rel("rId1", "officeDocument", "word/document.xml") + `</Relationships>`);
+
+  add("word/document.xml",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`
+    + `<w:document ${NS}><w:body>${body}${section}</w:body></w:document>`);
+
+  add("word/_rels/document.xml.rels",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships ${REL_NS}>`
+    + rel("rId10", "header", "header1.xml")
+    + rel("rId20", "image", "media/signature.png")
+    + rel("rId21", "image", "media/stamp.png")
+    + `</Relationships>`);
+
+  // The letterhead lives in the header, full bleed and behind the text.
+  add("word/header1.xml",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`
+    + `<w:hdr ${NS}>${anchoredImage(1, "Letterhead", "rId11", 0, 0, ART.w, ART.h, true)}</w:hdr>`);
+
+  add("word/_rels/header1.xml.rels",
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships ${REL_NS}>`
+    + rel("rId11", "image", "media/letterhead.jpeg") + `</Relationships>`);
+
+  add("word/media/letterhead.jpeg", dataUriPayload(LETTERHEAD), { base64: true });
+  add("word/media/signature.png", dataUriPayload(SIGNATURE), { base64: true });
+  add("word/media/stamp.png", dataUriPayload(STAMP), { base64: true });
+
+  return zip.generateAsync({
+    type: "blob",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
 }
 
 /* ------------------------------------------------------------------ *
@@ -1542,8 +1461,6 @@ const detailsPlaceholder = el("detailsPlaceholder");
 const amountRow = el("amountRow");
 const previewButton = el("preview");
 const downloadButton = el("download");
-const downloadEmlButton = el("downloadEml");
-const emailNote = el("emailNote");
 
 let currentEmployee = null;
 let currentPay = null;
@@ -1607,7 +1524,6 @@ function paintDetails(employee, pay) {
   el("dSubDepartment").textContent = employee.subDepartment || "—";
   el("dDoj").textContent = formatDate(employee.doj) || "—";
   el("dLocation").textContent = employee.location || "—";
-  el("dEmail").textContent = employee.email || "not on file";
 
   amountRow.hidden = pay === null;
   if (pay) {
@@ -1727,20 +1643,6 @@ function refreshIndividual() {
   const ready = individualReady();
   previewButton.disabled = !ready;
   downloadButton.disabled = !ready;
-  downloadEmlButton.disabled = !ready || !currentEmployee.email;
-
-  if (ready && !currentEmployee.email) {
-    emailNote.textContent = `${currentEmployee.code} has no work email in the master database, `
-      + "so no draft can be addressed. The letter PDF is unaffected.";
-    emailNote.classList.add("warn");
-  } else if (ready) {
-    emailNote.textContent = `The draft opens in your mail client addressed to `
-      + `${currentEmployee.email}, with the letter attached. Nothing is sent until you send it.`;
-    emailNote.classList.remove("warn");
-  } else {
-    emailNote.textContent = "";
-    emailNote.classList.remove("warn");
-  }
 
   // Any edit makes an on-screen preview stale, so drop it rather than leave a
   // letter showing figures the inputs no longer agree with.
@@ -1761,14 +1663,15 @@ downloadButton.addEventListener("click", () => {
   if (doc) doc.save(fileNameFor(currentEmployee));
 });
 
-downloadEmlButton.addEventListener("click", () => {
-  if (!individualReady() || !currentEmployee.email) return;
-  const doc = tryBuild();
-  if (!doc) return;
-  const filename = fileNameFor(currentEmployee);
-  const eml = buildEml(currentEmployee, doc.output("arraybuffer"), filename);
-  saveBlob(new Blob([eml], { type: "message/rfc822" }),
-    filename.replace(/\.pdf$/, ".eml"));
+// Deliberately not gated on a valid employee: the template exists precisely for
+// the people the database does not have.
+el("downloadDocx").addEventListener("click", async () => {
+  try {
+    saveBlob(await buildWordTemplate(), "Variable_Pay_Letter_Template.docx");
+  } catch (error) {
+    console.error(error);
+    setError(empError, empIdInput, "Could not build the Word template. See the browser console for details.");
+  }
 });
 
 // Keep the preview crisp and correctly sized when the window changes.
@@ -1789,7 +1692,6 @@ const grid = el("grid");
 const bulkDate = el("bulkDate");
 const bulkSummary = el("bulkSummary");
 const downloadZipButton = el("downloadZip");
-const downloadPackButton = el("downloadPack");
 const bulkPane = createPreviewPane("bulkViewer", "bulkCanvas", "bulkViewerEmpty", "bulkFilename");
 
 /* The row currently shown in the bulk preview, and what it said at the time. A
@@ -1895,7 +1797,6 @@ function readBulkRows() {
   const jobs = [];
   const seen = new Map();
   let errors = 0;
-  let missingEmail = 0;
 
   for (const tr of Array.from(grid.rows)) {
     const [idCell, eligibleCell, awardedCell] = rowCells(tr);
@@ -1945,22 +1846,13 @@ function readBulkRows() {
     }
     seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
 
-    let summary = `${employee.name} · INR ${formatINR(pay.awarded)} `
+    status.textContent = `${employee.name} · INR ${formatINR(pay.awarded)} `
       + `of ${formatINR(pay.eligible)} · ${formatPercent(pay.awarded, pay.eligible)}`;
-    // A missing address stops the email pack but not the letter, so it is a
-    // warning on the row rather than an error that blocks the batch.
-    if (!employee.email) {
-      summary += " · no work email on file";
-      missingEmail += 1;
-      status.classList.add("warn");
-    } else {
-      status.classList.add("ok");
-    }
-    status.textContent = summary;
+    status.classList.add("ok");
     jobs.push({ employee, pay, dateISO: fallback, row: tr });
   }
 
-  return { jobs, errors, missingEmail };
+  return { jobs, errors };
 }
 
 let bulkBusy = false;
@@ -2014,7 +1906,7 @@ function refreshBulk() {
     tr.querySelector(".rownum").textContent = index + 1;
   });
 
-  const { jobs, errors, missingEmail } = readBulkRows();
+  const { jobs, errors } = readBulkRows();
 
   const byRow = new Map(jobs.map((job) => [job.row, job]));
   let previewStillValid = false;
@@ -2033,19 +1925,13 @@ function refreshBulk() {
     bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ready · `
       + `<span class="bad"><strong>${errors}</strong> ${errors === 1 ? "row needs" : "rows need"} attention</span>`;
   } else {
-    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`
-      + (missingEmail
-        ? ` · <span class="warn"><strong>${missingEmail}</strong> without a work email</span>`
-        : "");
+    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`;
   }
 
   // Refuse to build a partial batch: silently skipping a row in a payroll run is
   // worse than making someone fix the typo first.
   downloadZipButton.disabled = bulkBusy || errors > 0 || jobs.length === 0;
-  // The pack is only useful if every letter in it has somewhere to go.
-  downloadPackButton.disabled = bulkBusy || errors > 0 || jobs.length === 0 || missingEmail > 0;
   if (!bulkBusy) {
-    downloadPackButton.textContent = "Download Email Pack (Zip)";
     downloadZipButton.textContent = jobs.length && !errors
       ? `Download all ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
       : "Download all Letters (Zip)";
@@ -2088,29 +1974,6 @@ downloadZipButton.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     bulkSummary.innerHTML = '<span class="bad">Could not build the letters. See the browser console for details.</span>';
-  } finally {
-    bulkBusy = false;
-    refreshBulk();
-  }
-});
-
-downloadPackButton.addEventListener("click", async () => {
-  const { jobs, errors, missingEmail } = readBulkRows();
-  if (errors || missingEmail || !jobs.length) return;
-
-  bulkBusy = true;
-  downloadPackButton.disabled = true;
-  downloadZipButton.disabled = true;
-
-  try {
-    const blob = await buildEmailPack(jobs, bulkDate.value || todayISO(), (done, total) => {
-      downloadPackButton.textContent = `Building ${done} of ${total}…`;
-    });
-    downloadPackButton.textContent = "Packaging zip…";
-    saveBlob(blob, `Variable_Pay_Email_Pack_${bulkDate.value || todayISO()}.zip`);
-  } catch (error) {
-    console.error(error);
-    bulkSummary.innerHTML = '<span class="bad">Could not build the email pack. See the browser console for details.</span>';
   } finally {
     bulkBusy = false;
     refreshBulk();
