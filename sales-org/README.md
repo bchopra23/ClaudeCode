@@ -1,4 +1,4 @@
-# Euler Sales — Org Structure
+# Sales Org Structure
 
 An interactive org chart for the Sales department: 343 employees and 54 interns.
 Every reporting line is rebuilt from the roster's Reporting Manager column.
