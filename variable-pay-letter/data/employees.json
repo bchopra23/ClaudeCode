@@ -57,7 +57,7 @@
   "code": "EUR0008",
   "name": "Ravi Kumar Raj",
   "department": "Manufacturing",
-  "subDepartment": "Battery lab",
+  "subDepartment": "Battery Production",
   "designation": "Executive",
   "doj": "2018-07-01",
   "location": "Haryana"
@@ -137,17 +137,17 @@
  {
   "code": "EUR0020",
   "name": "Kailash",
-  "department": "Manufacturing",
-  "subDepartment": "Vehicle Assembly",
+  "department": "Technology",
+  "subDepartment": "NPI",
   "designation": "Senior Executive",
   "doj": "2019-06-01",
-  "location": "Haryana"
+  "location": "Delhi"
  },
  {
   "code": "EUR0026",
   "name": "Vishnu Dubey",
   "department": "Manufacturing",
-  "subDepartment": "Battery Lab",
+  "subDepartment": "Battery Production",
   "designation": "Manager",
   "doj": "2019-12-25",
   "location": "Haryana"
@@ -174,7 +174,7 @@
   "code": "EUR0051",
   "name": "Parimal Mishra",
   "department": "Admin & Infra",
-  "subDepartment": "Pantry",
+  "subDepartment": "Housekeeping",
   "designation": "Senior Executive",
   "doj": "2020-06-01",
   "location": "Delhi"
@@ -210,7 +210,7 @@
   "code": "EUR0065",
   "name": "Rahul Yadav",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "Service Infra",
   "designation": "Manager",
   "doj": "2020-08-01",
   "location": "Delhi"
@@ -264,7 +264,7 @@
   "code": "EUR0088",
   "name": "Bhim Singh",
   "department": "Admin & Infra",
-  "subDepartment": "Pantry",
+  "subDepartment": "Housekeeping",
   "designation": "Chef",
   "doj": "2021-01-01",
   "location": "Delhi"
@@ -300,7 +300,7 @@
   "code": "EUR0105",
   "name": "Naveen Gaur",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2021-03-01",
   "location": "Delhi"
@@ -328,7 +328,7 @@
   "name": "Vivek Sharma",
   "department": "Service & Maintenance",
   "subDepartment": "Service & Maintenance",
-  "designation": "Senior Manager",
+  "designation": "Assistant General Manager",
   "doj": "2021-07-01",
   "location": "Delhi"
  },
@@ -408,7 +408,7 @@
   "code": "EUR0170",
   "name": "Sorav Kumar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2021-12-10",
   "location": "Uttar Pradesh"
@@ -462,13 +462,13 @@
   "code": "EUR0184",
   "name": "Jagdamba Prasad",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2022-02-02",
   "location": "Delhi"
  },
  {
-  "code": "EUR0185",
+  "code": "EUR0196",
   "name": "Parul Singh",
   "department": "Customer Relationship Management",
   "subDepartment": "Customer Relationship Management",
@@ -498,7 +498,7 @@
   "code": "EUR0206",
   "name": "Rajan Singh Chauhan",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Assistant Manager",
   "doj": "2022-02-26",
   "location": "Delhi"
@@ -552,7 +552,7 @@
   "code": "EUR0240",
   "name": "Ranjit Kumar Mishra",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2022-03-28",
   "location": "Delhi"
@@ -560,7 +560,7 @@
  {
   "code": "EUR0243",
   "name": "Rohit Gattani",
-  "department": "Vehicle Financing",
+  "department": "Vehicle Finance",
   "subDepartment": "Leadership",
   "designation": "Vice President",
   "doj": "2022-04-01",
@@ -623,8 +623,8 @@
  {
   "code": "EUR0263",
   "name": "Shivam Dayal",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Deputy General Manager",
   "doj": "2022-04-26",
   "location": "Delhi"
@@ -642,7 +642,7 @@
   "code": "EUR0279",
   "name": "Vikas Singh",
   "department": "Manufacturing",
-  "subDepartment": "Battery Lab",
+  "subDepartment": "Battery Production",
   "designation": "Executive",
   "doj": "2022-05-05",
   "location": "Haryana"
@@ -668,8 +668,8 @@
  {
   "code": "EUR0294",
   "name": "Harshvardhan Bhati",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Manager",
   "doj": "2022-05-16",
   "location": "Delhi"
@@ -687,7 +687,7 @@
   "code": "EUR0307",
   "name": "Rubi Singh",
   "department": "Admin & Infra",
-  "subDepartment": "Front &Travel Desk",
+  "subDepartment": "Travel Desk",
   "designation": "Senior Executive",
   "doj": "2022-06-01",
   "location": "Delhi"
@@ -822,7 +822,7 @@
   "code": "EUR0360",
   "name": "Omprakash Singh",
   "department": "Human Resources",
-  "subDepartment": "Factory Support Function",
+  "subDepartment": "Plant HR",
   "designation": "Senior Manager",
   "doj": "2022-07-04",
   "location": "Haryana"
@@ -867,7 +867,7 @@
   "code": "EUR0384",
   "name": "Sandeep Kumar Yadav",
   "department": "Manufacturing",
-  "subDepartment": "Vehicle Assembly",
+  "subDepartment": "Quality",
   "designation": "Senior Manager-Production",
   "doj": "2022-07-18",
   "location": "Haryana"
@@ -913,7 +913,7 @@
   "name": "Hitesh kumar",
   "department": "Technology",
   "subDepartment": "ADAS",
-  "designation": "Member of Technical Staff - I",
+  "designation": "MTS - II ADAS",
   "doj": "2022-08-13",
   "location": "Delhi"
  },
@@ -930,7 +930,7 @@
   "code": "EUR0428",
   "name": "Vijay Kumar",
   "department": "Manufacturing",
-  "subDepartment": "Paintshop",
+  "subDepartment": "Paint Shop",
   "designation": "Team Leader",
   "doj": "2022-08-22",
   "location": "Haryana"
@@ -939,7 +939,7 @@
   "code": "EUR0429",
   "name": "Shyam Sunder",
   "department": "Manufacturing",
-  "subDepartment": "Paintshop",
+  "subDepartment": "Paint Shop",
   "designation": "Team Leader",
   "doj": "2022-08-22",
   "location": "Haryana"
@@ -966,7 +966,7 @@
   "code": "EUR0447",
   "name": "Swarnika Raj",
   "department": "Finance & Accounts",
-  "subDepartment": "Secreterial & Legal",
+  "subDepartment": "Legal & Secretarial",
   "designation": "Legal Associate",
   "doj": "2022-09-01",
   "location": "Delhi"
@@ -1002,8 +1002,8 @@
   "code": "EUR0471",
   "name": "Narender",
   "department": "Finance & Accounts",
-  "subDepartment": "Banking",
-  "designation": "Senior Executive",
+  "subDepartment": "Accounts Payable",
+  "designation": "Assistant Manager",
   "doj": "2022-09-16",
   "location": "Haryana"
  },
@@ -1011,7 +1011,7 @@
   "code": "EUR0488",
   "name": "Patel Kaushik Kumar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2022-10-07",
   "location": "Gujarat"
@@ -1020,7 +1020,7 @@
   "code": "EUR0489",
   "name": "Alina",
   "department": "Human Resources",
-  "subDepartment": "Operations",
+  "subDepartment": "HRBP",
   "designation": "Assistant Manager",
   "doj": "2022-10-10",
   "location": "Delhi"
@@ -1056,7 +1056,7 @@
   "code": "EUR0508",
   "name": "Mahesh Upadhyay",
   "department": "Manufacturing",
-  "subDepartment": "PPC",
+  "subDepartment": "Production Planning and Control",
   "designation": "Deputy Manager",
   "doj": "2022-10-17",
   "location": "Haryana"
@@ -1092,7 +1092,7 @@
   "code": "EUR0530",
   "name": "Vikas Singh Bisht",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "General Manager",
   "doj": "2022-11-01",
   "location": "Delhi"
@@ -1110,7 +1110,7 @@
   "code": "EUR0549",
   "name": "Pradeep Immanuel",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2022-11-07",
   "location": "Tamil Nadu"
@@ -1119,7 +1119,7 @@
   "code": "EUR0550",
   "name": "D S Immanuel",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2022-11-07",
   "location": "Tamil Nadu"
@@ -1137,7 +1137,7 @@
   "code": "EUR0557",
   "name": "Uday Uttam Sharma",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2022-11-09",
   "location": "Maharashtra"
@@ -1263,8 +1263,8 @@
   "code": "EUR0617",
   "name": "Deepanshu Chauhan",
   "department": "Manufacturing",
-  "subDepartment": "Battery Lab",
-  "designation": "Team Leader (Battery Production)",
+  "subDepartment": "Battery",
+  "designation": "Team Leader",
   "doj": "2022-12-10",
   "location": "Delhi"
  },
@@ -1398,7 +1398,7 @@
   "code": "EUR0685",
   "name": "Sunil Kumar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-01-04",
   "location": "Bihar"
@@ -1415,7 +1415,7 @@
  {
   "code": "EUR0695",
   "name": "Sanjiv Suman",
-  "department": "Factory Support Function",
+  "department": "Manufacturing",
   "subDepartment": "Logistics",
   "designation": "Senior Executive",
   "doj": "2023-01-09",
@@ -1479,7 +1479,7 @@
   "code": "EUR0730",
   "name": "Kaushal Kishore",
   "department": "Manufacturing",
-  "subDepartment": "PPC",
+  "subDepartment": "Production Planning and Control",
   "designation": "Senior Executive",
   "doj": "2023-01-23",
   "location": "Haryana"
@@ -1515,7 +1515,7 @@
   "code": "EUR0748",
   "name": "Swayamber Prasad",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-02-01",
   "location": "Haryana"
@@ -1587,7 +1587,7 @@
   "code": "EUR0786",
   "name": "Pankaj Gupta",
   "department": "Manufacturing",
-  "subDepartment": "PPC",
+  "subDepartment": "Production Planning and Control",
   "designation": "Manager",
   "doj": "2023-03-06",
   "location": "Haryana"
@@ -1596,7 +1596,7 @@
   "code": "EUR0787",
   "name": "Ranbir Kumar",
   "department": "Manufacturing",
-  "subDepartment": "Cost Engineering",
+  "subDepartment": "Quality",
   "designation": "Senior Manager",
   "doj": "2023-03-06",
   "location": "Haryana"
@@ -1623,7 +1623,7 @@
   "code": "EUR0793",
   "name": "Arup Roy Chowdhury",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "General Manager",
   "doj": "2023-03-17",
   "location": "West Bengal"
@@ -1631,8 +1631,8 @@
  {
   "code": "EUR0795",
   "name": "Amit Sharma",
-  "department": "Factory Support Function",
-  "subDepartment": "Inventory&Warehouse Management",
+  "department": "Manufacturing",
+  "subDepartment": "Inventory & Warehouse Management",
   "designation": "General Manager",
   "doj": "2023-03-22",
   "location": "Haryana"
@@ -1641,7 +1641,7 @@
   "code": "EUR0796",
   "name": "Kotta Venkatesham",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-03-22",
   "location": "Telangana"
@@ -1704,7 +1704,7 @@
   "code": "EUR0819",
   "name": "Vaseem Akhtar Khan",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2023-06-19",
   "location": "Maharashtra"
@@ -1722,7 +1722,7 @@
   "code": "EUR0826",
   "name": "Bhawna Bindal",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Assistant Manager",
   "doj": "2023-06-22",
   "location": "Delhi"
@@ -1767,7 +1767,7 @@
   "code": "EUR0841",
   "name": "Saindane Bhatu Prabhakar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-07-10",
   "location": "Gujarat"
@@ -1794,7 +1794,7 @@
   "code": "EUR0858",
   "name": "Ravi Gupta",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Social Media",
   "designation": "Manager",
   "doj": "2023-08-17",
   "location": "Delhi"
@@ -1812,7 +1812,7 @@
   "code": "EUR0862",
   "name": "Shubhrungsu Barui",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-09-18",
   "location": "West Bengal"
@@ -1848,7 +1848,7 @@
   "code": "EUR0867",
   "name": "Gaurav Wadhwa",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2023-09-26",
   "location": "Delhi"
@@ -1866,7 +1866,7 @@
   "code": "EUR0871",
   "name": "Amardeep Kumar Singh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2023-10-03",
   "location": "Bihar"
@@ -1884,7 +1884,7 @@
   "code": "EUR0881",
   "name": "Aditya Kumar",
   "department": "Finance & Accounts",
-  "subDepartment": "Sales Invoicing",
+  "subDepartment": "Accounts Receivable",
   "designation": "Executive",
   "doj": "2023-11-01",
   "location": "Delhi"
@@ -1917,15 +1917,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR0899",
-  "name": "Abhishek Sisodia",
-  "department": "Technology",
-  "subDepartment": "Embedded",
-  "designation": "Member of Technical Staff - I",
-  "doj": "2024-01-02",
-  "location": "Delhi"
- },
- {
   "code": "EUR0900",
   "name": "Rajendra Singh Shekhawat",
   "department": "Manufacturing",
@@ -1947,7 +1938,7 @@
   "code": "EUR0905",
   "name": "Ajay Pandurang Gunjal",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-01-10",
   "location": "Maharashtra"
@@ -1965,7 +1956,7 @@
   "code": "EUR0909",
   "name": "Shitanshu Shekhar",
   "department": "Human Resources",
-  "subDepartment": "Payroll",
+  "subDepartment": "Payroll & Compliance",
   "designation": "Senior Manager",
   "doj": "2024-01-17",
   "location": "Delhi"
@@ -1974,7 +1965,7 @@
   "code": "EUR0912",
   "name": "Prince Vishwakarma",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-01-24",
   "location": "Delhi"
@@ -2001,7 +1992,7 @@
   "code": "EUR0918",
   "name": "Chandan Mishra",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-02-20",
   "location": "Uttar Pradesh"
@@ -2028,7 +2019,7 @@
   "code": "EUR0930",
   "name": "Snehasis Ganguly",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-03-13",
   "location": "West Bengal"
@@ -2037,7 +2028,7 @@
   "code": "EUR0937",
   "name": "Rajesh Rachamalla",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-04-03",
   "location": "Telangana"
@@ -2064,7 +2055,7 @@
   "code": "EUR0942",
   "name": "Pradeep Kumar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-04-17",
   "location": "Delhi"
@@ -2082,7 +2073,7 @@
   "code": "EUR0945",
   "name": "Anupam Guin",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-04-17",
   "location": "West Bengal"
@@ -2090,8 +2081,8 @@
  {
   "code": "EUR0956",
   "name": "Raj Kumar Dwivedi",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Senior Executive",
   "doj": "2024-05-13",
   "location": "Delhi"
@@ -2099,8 +2090,8 @@
  {
   "code": "EUR0957",
   "name": "Noush E Rawan Adil",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Senior Executive",
   "doj": "2024-05-13",
   "location": "Delhi"
@@ -2108,11 +2099,11 @@
  {
   "code": "EUR0958",
   "name": "Rohit Singh",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Senior Executive",
   "doj": "2024-05-13",
-  "location": "Delhi"
+  "location": "West Bengal"
  },
  {
   "code": "EUR0960",
@@ -2145,7 +2136,7 @@
   "code": "EUR0968",
   "name": "Prashant Subhash Patil",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-06-03",
   "location": "Maharashtra"
@@ -2154,7 +2145,7 @@
   "code": "EUR0969",
   "name": "Dilkash Alam",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-06-03",
   "location": "Jharkhand"
@@ -2163,7 +2154,7 @@
   "code": "EUR0972",
   "name": "Vicky Lalu Gaware",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-06-10",
   "location": "Maharashtra"
@@ -2199,7 +2190,7 @@
   "code": "EUR0983",
   "name": "Ashutosh Pant",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-06-24",
   "location": "Gujarat"
@@ -2208,7 +2199,7 @@
   "code": "EUR0987",
   "name": "Shiv Kumar Sharma",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Senior Executive",
   "doj": "2024-07-01",
   "location": "Delhi"
@@ -2217,7 +2208,7 @@
   "code": "EUR0988",
   "name": "Dilkhush Kumar",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Executive",
   "doj": "2024-07-01",
   "location": "Haryana"
@@ -2235,7 +2226,7 @@
   "code": "EUR0991",
   "name": "Madan Pal Singh",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Executive",
   "doj": "2024-07-01",
   "location": "Delhi"
@@ -2280,7 +2271,7 @@
   "code": "EUR1003",
   "name": "Kashaveni Rajesh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-07-08",
   "location": "Telangana"
@@ -2307,7 +2298,7 @@
   "code": "EUR1008",
   "name": "Akanksha Priya",
   "department": "Human Resources",
-  "subDepartment": "Operations",
+  "subDepartment": "HR Operations",
   "designation": "Executive",
   "doj": "2024-07-17",
   "location": "Delhi"
@@ -2334,7 +2325,7 @@
   "code": "EUR1011",
   "name": "Amit Vishwakarma",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Assistant General Manager",
   "doj": "2024-07-18",
   "location": "Delhi"
@@ -2343,7 +2334,7 @@
   "code": "EUR1013",
   "name": "Pankaj Kumar",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "SPD",
   "designation": "Manager",
   "doj": "2024-07-22",
   "location": "Delhi"
@@ -2406,7 +2397,7 @@
   "code": "EUR1029",
   "name": "Owais Aslam Lone",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-08-02",
   "location": "Delhi"
@@ -2426,15 +2417,6 @@
   "department": "Technology",
   "subDepartment": "Design",
   "designation": "Transportation Designer",
-  "doj": "2024-08-05",
-  "location": "Delhi"
- },
- {
-  "code": "EUR1034",
-  "name": "Mohit",
-  "department": "Technology",
-  "subDepartment": "Software",
-  "designation": "Member of Technical Staff - I",
   "doj": "2024-08-05",
   "location": "Delhi"
  },
@@ -2514,7 +2496,7 @@
   "code": "EUR1049",
   "name": "Madival Sandeep",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-08-21",
   "location": "Karnataka"
@@ -2559,7 +2541,7 @@
   "code": "EUR1057",
   "name": "Tufail Ansari",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-08-28",
   "location": "Delhi"
@@ -2586,7 +2568,7 @@
   "code": "EUR1067",
   "name": "Ishfaq Ahmad Mir",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-09-04",
   "location": "Delhi"
@@ -2595,7 +2577,7 @@
   "code": "EUR1068",
   "name": "Mushtaq Ahmad Rather",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-09-04",
   "location": "Delhi"
@@ -2649,7 +2631,7 @@
   "code": "EUR1085",
   "name": "Chinta Adinarayana",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-09-11",
   "location": "Telangana"
@@ -2730,7 +2712,7 @@
   "code": "EUR1103",
   "name": "Shyamu Tiwari",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-09-20",
   "location": "Maharashtra"
@@ -2748,7 +2730,7 @@
   "code": "EUR1108",
   "name": "Pawan Joshi",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Social Media",
   "designation": "Senior Content Creator",
   "doj": "2024-09-23",
   "location": "Delhi"
@@ -2775,7 +2757,7 @@
   "code": "EUR1115",
   "name": "Yogendra Singh",
   "department": "Manufacturing",
-  "subDepartment": "Battery Lab",
+  "subDepartment": "Battery Production",
   "designation": "Engineer – Battery Lab",
   "doj": "2024-10-01",
   "location": "Haryana"
@@ -2784,7 +2766,7 @@
   "code": "EUR1116",
   "name": "Deepak Singh",
   "department": "Manufacturing",
-  "subDepartment": "Battery Lab",
+  "subDepartment": "Battery Production",
   "designation": "Engineer – Battery Lab",
   "doj": "2024-10-01",
   "location": "Haryana"
@@ -2955,7 +2937,7 @@
   "code": "EUR1146",
   "name": "Naitik Srivastava",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-10-18",
   "location": "Uttar Pradesh"
@@ -2973,7 +2955,7 @@
   "code": "EUR1152",
   "name": "Narinder Singh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-10-23",
   "location": "Chandigarh"
@@ -3072,7 +3054,7 @@
   "code": "EUR1170",
   "name": "Ashish",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-11-11",
   "location": "Delhi"
@@ -3099,7 +3081,7 @@
   "code": "EUR1175",
   "name": "Gaurav Pathak",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2024-11-11",
   "location": "Delhi"
@@ -3108,7 +3090,7 @@
   "code": "EUR1178",
   "name": "Vivek Singh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-11-15",
   "location": "Delhi"
@@ -3135,7 +3117,7 @@
   "code": "EUR1184",
   "name": "Dharmendra Kumar Chejara",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-11-20",
   "location": "Rajasthan"
@@ -3162,7 +3144,7 @@
   "code": "EUR1190",
   "name": "Ankit Kumar Jain",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2024-12-04",
   "location": "Delhi"
@@ -3171,7 +3153,7 @@
   "code": "EUR1192",
   "name": "R Ashokkumar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-12-06",
   "location": "Tamil Nadu"
@@ -3207,7 +3189,7 @@
   "code": "EUR1201",
   "name": "Karthik",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-12-11",
   "location": "Karnataka"
@@ -3234,7 +3216,7 @@
   "code": "EUR1207",
   "name": "Trilok Deshwal",
   "department": "Manufacturing",
-  "subDepartment": "Purchase",
+  "subDepartment": "Production Planning and Control",
   "designation": "Deputy Manager",
   "doj": "2024-12-16",
   "location": "Haryana"
@@ -3270,7 +3252,7 @@
   "code": "EUR1219",
   "name": "Somashekar B",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2024-12-23",
   "location": "Karnataka"
@@ -3351,7 +3333,7 @@
   "code": "EUR1241",
   "name": "Akhileshwar Jha",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-01-08",
   "location": "Bihar"
@@ -3360,7 +3342,7 @@
   "code": "EUR1242",
   "name": "Arun Gupta",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-01-13",
   "location": "Delhi"
@@ -3378,7 +3360,7 @@
   "code": "EUR1245",
   "name": "Sachin Kumar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-01-13",
   "location": "Delhi"
@@ -3400,15 +3382,6 @@
   "designation": "Program Manager",
   "doj": "2025-01-13",
   "location": "Delhi"
- },
- {
-  "code": "EUR1249",
-  "name": "Mohammed Abdul Wadood",
-  "department": "Sales",
-  "subDepartment": "4W Retail Sales",
-  "designation": "Area Sales Manager",
-  "doj": "2025-01-13",
-  "location": "Telangana"
  },
  {
   "code": "EUR1251",
@@ -3459,7 +3432,7 @@
   "code": "EUR1263",
   "name": "Prashant Kumar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-02-03",
   "location": "Uttar Pradesh"
@@ -3486,25 +3459,16 @@
   "code": "EUR1267",
   "name": "Ashish Kumar Shaw",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Social Media",
   "designation": "Video Editor",
   "doj": "2025-02-03",
   "location": "Delhi"
  },
  {
-  "code": "EUR1273",
-  "name": "Deependra Singh",
-  "department": "Sales",
-  "subDepartment": "3W Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2025-02-04",
-  "location": "Uttar Pradesh"
- },
- {
   "code": "EUR1274",
   "name": "Jai Kumar C J",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2025-02-06",
   "location": "Tamil Nadu"
@@ -3540,7 +3504,7 @@
   "code": "EUR1282",
   "name": "Aditya Vats",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Social Media",
   "designation": "Assistant Manager",
   "doj": "2025-02-10",
   "location": "Delhi"
@@ -3558,7 +3522,7 @@
   "code": "EUR1285",
   "name": "Ratanmani Mohit",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Assistant Vice President - Sales",
   "doj": "2025-02-12",
   "location": "Delhi"
@@ -3576,7 +3540,7 @@
   "code": "EUR1289",
   "name": "Alhad Anil Mayekar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-02-14",
   "location": "Maharashtra"
@@ -3621,7 +3585,7 @@
   "code": "EUR1296",
   "name": "Sachin",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-02-21",
   "location": "Delhi"
@@ -3636,19 +3600,10 @@
   "location": "Haryana"
  },
  {
-  "code": "EUR1300",
-  "name": "V P Sreenath",
-  "department": "Sales",
-  "subDepartment": "3W Retail Sales",
-  "designation": "Senior Territory Sales Manager",
-  "doj": "2025-02-24",
-  "location": "Tamil Nadu"
- },
- {
   "code": "EUR1302",
   "name": "Deepak Sharma",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2025-03-01",
   "location": "Delhi"
@@ -3712,7 +3667,7 @@
   "name": "Ritik Gupta",
   "department": "Technology",
   "subDepartment": "Software",
-  "designation": "MTS 1 - Frontend Engineer",
+  "designation": "Member of Technical Staff - I",
   "doj": "2025-03-24",
   "location": "Delhi"
  },
@@ -3747,7 +3702,7 @@
   "code": "EUR1323",
   "name": "Dibyendu Saha",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-04-02",
   "location": "West Bengal"
@@ -3766,7 +3721,7 @@
   "name": "Harshit Vajpayee",
   "department": "Customer Excellence",
   "subDepartment": "Expansion",
-  "designation": "Head Network Development (Service&Spares)",
+  "designation": "Head Network Development (Service & Spares)",
   "doj": "2025-04-02",
   "location": "Delhi"
  },
@@ -3774,7 +3729,7 @@
   "code": "EUR1327",
   "name": "Subesh Mukherjee",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Regional Manager",
   "doj": "2025-04-02",
   "location": "West Bengal"
@@ -3783,7 +3738,7 @@
   "code": "EUR1328",
   "name": "Rahul Ramashankar Dubey",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-04-04",
   "location": "Maharashtra"
@@ -3828,7 +3783,7 @@
   "code": "EUR1334",
   "name": "Lokesh Kumar Jain",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-04-11",
   "location": "Rajasthan"
@@ -3837,7 +3792,7 @@
   "code": "EUR1338",
   "name": "Vinay Binu",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Regional Manager",
   "doj": "2025-04-14",
   "location": "Maharashtra"
@@ -3864,7 +3819,7 @@
   "code": "EUR1355",
   "name": "Abir Chakraborty",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-04-18",
   "location": "West Bengal"
@@ -3873,7 +3828,7 @@
   "code": "EUR1356",
   "name": "G Anil Kumar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-04-18",
   "location": "Telangana"
@@ -3921,7 +3876,7 @@
   "subDepartment": "Service & Maintenance",
   "designation": "Product Support Engineer",
   "doj": "2025-04-23",
-  "location": "Delhi"
+  "location": "Andhra Pradesh"
  },
  {
   "code": "EUR1363",
@@ -3939,7 +3894,7 @@
   "subDepartment": "Service & Maintenance",
   "designation": "Product Support Engineer",
   "doj": "2025-04-23",
-  "location": "Maharashtra"
+  "location": "Delhi"
  },
  {
   "code": "EUR1365",
@@ -3972,7 +3927,7 @@
   "code": "EUR1368",
   "name": "Prashant Koul",
   "department": "CEO's Office",
-  "subDepartment": "Product",
+  "subDepartment": "CEO's Office",
   "designation": "Product Manager",
   "doj": "2025-04-25",
   "location": "Delhi"
@@ -3984,7 +3939,7 @@
   "subDepartment": "Customer Relationship Management",
   "designation": "Senior Executive",
   "doj": "2025-04-25",
-  "location": "Karnataka"
+  "location": "Telangana"
  },
  {
   "code": "EUR1370",
@@ -4017,7 +3972,7 @@
   "code": "EUR1378",
   "name": "Badisha Kumaraswamy",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2025-05-05",
   "location": "Telangana"
@@ -4047,15 +4002,6 @@
   "subDepartment": "Embedded Software",
   "designation": "Member of Technical Staff - I",
   "doj": "2025-05-07",
-  "location": "Delhi"
- },
- {
-  "code": "EUR1383",
-  "name": "Ankit Bhardwaj",
-  "department": "Technology",
-  "subDepartment": "Mechanical",
-  "designation": "Manager- Vehicle Modelling Engineer",
-  "doj": "2025-05-09",
   "location": "Delhi"
  },
  {
@@ -4089,7 +4035,7 @@
   "code": "EUR1387",
   "name": "Donthi Ashok Kumar",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2025-05-14",
   "location": "Telangana"
@@ -4152,7 +4098,7 @@
   "code": "EUR1397",
   "name": "Pathangi Manikantan",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-05-16",
   "location": "Karnataka"
@@ -4194,15 +4140,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1403",
-  "name": "Logeshwer S P",
-  "department": "Technology",
-  "subDepartment": "Embedded System",
-  "designation": "Member of Technical Staff - I",
-  "doj": "2025-05-16",
-  "location": "Delhi"
- },
- {
   "code": "EUR1404",
   "name": "Nikunj Bhargava",
   "department": "Supply Chain Management",
@@ -4233,7 +4170,7 @@
   "code": "EUR1407",
   "name": "Mahender kumar",
   "department": "Manufacturing",
-  "subDepartment": "Maintenance",
+  "subDepartment": "Plant Maintenance",
   "designation": "Engineer",
   "doj": "2025-05-16",
   "location": "Haryana"
@@ -4251,7 +4188,7 @@
   "code": "EUR1414",
   "name": "Ishika",
   "department": "Manufacturing",
-  "subDepartment": "Projects",
+  "subDepartment": "Project Planning",
   "designation": "Engineer",
   "doj": "2025-05-16",
   "location": "Haryana"
@@ -4302,15 +4239,6 @@
   "location": "Haryana"
  },
  {
-  "code": "EUR1421",
-  "name": "Abhi Jaswal",
-  "department": "Supply Chain Management",
-  "subDepartment": "PPC",
-  "designation": "Executive",
-  "doj": "2025-05-16",
-  "location": "Haryana"
- },
- {
   "code": "EUR1423",
   "name": "Swastik Panda",
   "department": "Supply Chain Management",
@@ -4332,7 +4260,7 @@
   "code": "EUR1425",
   "name": "K Asen Basha",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Area Sales Manager",
   "doj": "2025-05-19",
   "location": "Tamil Nadu"
@@ -4359,7 +4287,7 @@
   "code": "EUR1429",
   "name": "Astha Jain",
   "department": "Finance & Accounts",
-  "subDepartment": "Secreterial & Legal",
+  "subDepartment": "Legal & Secretarial",
   "designation": "Company Secretary",
   "doj": "2025-05-21",
   "location": "Delhi"
@@ -4386,7 +4314,7 @@
   "code": "EUR1432",
   "name": "Mirza Ghayaz Baig",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-05-23",
   "location": "Telangana"
@@ -4395,7 +4323,7 @@
   "code": "EUR1434",
   "name": "Jiya",
   "department": "Sales",
-  "subDepartment": "Sales Central",
+  "subDepartment": "Inside Sales",
   "designation": "Executive",
   "doj": "2025-05-23",
   "location": "Delhi"
@@ -4404,7 +4332,7 @@
   "code": "EUR1435",
   "name": "Aritra Kar",
   "department": "Sales",
-  "subDepartment": "Sales Central",
+  "subDepartment": "Inside Sales",
   "designation": "Executive",
   "doj": "2025-05-23",
   "location": "Delhi"
@@ -4412,8 +4340,8 @@
  {
   "code": "EUR1436",
   "name": "Ansh Maheshwari",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Executive",
   "doj": "2025-05-23",
   "location": "Delhi"
@@ -4422,7 +4350,7 @@
   "code": "EUR1438",
   "name": "Jashanjot Singh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Executive",
   "doj": "2025-05-23",
   "location": "Delhi"
@@ -4440,7 +4368,7 @@
   "code": "EUR1442",
   "name": "Anandhan A",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2025-06-02",
   "location": "Tamil Nadu"
@@ -4449,7 +4377,7 @@
   "code": "EUR1444",
   "name": "Debarpito Mondal",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Territory Sales Manager",
   "doj": "2025-06-02",
   "location": "West Bengal"
@@ -4458,7 +4386,7 @@
   "code": "EUR1447",
   "name": "Vaddiparthi Kishore",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-06-02",
   "location": "Telangana"
@@ -4467,7 +4395,7 @@
   "code": "EUR1448",
   "name": "Rupesh Kumar Singh",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-06-02",
   "location": "Jharkhand"
@@ -4476,7 +4404,7 @@
   "code": "EUR1450",
   "name": "Rachit Sharma",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Regional Manager",
   "doj": "2025-06-09",
   "location": "Delhi"
@@ -4485,19 +4413,10 @@
   "code": "EUR1451",
   "name": "Ravi Prakash",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Senior Area Sales Manager",
   "doj": "2025-06-09",
   "location": "Karnataka"
- },
- {
-  "code": "EUR1455",
-  "name": "Abhishek Malik",
-  "department": "CEO's Office",
-  "subDepartment": "CEO's Office",
-  "designation": "Senior Program Manager",
-  "doj": "2025-06-16",
-  "location": "Delhi"
  },
  {
   "code": "EUR1458",
@@ -4512,7 +4431,7 @@
   "code": "EUR1462",
   "name": "Pranit Prakash Sanade",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Executive",
   "doj": "2025-06-16",
   "location": "Maharashtra"
@@ -4521,7 +4440,7 @@
   "code": "EUR1463",
   "name": "Manoj Madhukar Bargaje",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-06-20",
   "location": "Maharashtra"
@@ -4529,8 +4448,8 @@
  {
   "code": "EUR1464",
   "name": "Akash Tewatia",
-  "department": "Supply Chain Management",
-  "subDepartment": "PPC",
+  "department": "Manufacturing",
+  "subDepartment": "Production Planning and Control",
   "designation": "Assistant Manager",
   "doj": "2025-06-23",
   "location": "Haryana"
@@ -4539,7 +4458,7 @@
   "code": "EUR1465",
   "name": "Anshul Kanchan",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Digital Marketing",
   "designation": "Assistant Manager",
   "doj": "2025-06-23",
   "location": "Delhi"
@@ -4566,7 +4485,7 @@
   "code": "EUR1469",
   "name": "Niharika Sagar",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "PR & Media",
   "designation": "Manager",
   "doj": "2025-06-23",
   "location": "Delhi"
@@ -4575,7 +4494,7 @@
   "code": "EUR1470",
   "name": "Sudeep",
   "department": "Sales",
-  "subDepartment": "4W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-06-23",
   "location": "Delhi"
@@ -4583,8 +4502,8 @@
  {
   "code": "EUR1471",
   "name": "Govind Ram",
-  "department": "Supply Chain Management",
-  "subDepartment": "PPC",
+  "department": "Manufacturing",
+  "subDepartment": "Production Planning and Control",
   "designation": "Assistant Manager",
   "doj": "2025-06-25",
   "location": "Haryana"
@@ -4620,7 +4539,7 @@
   "code": "EUR1484",
   "name": "Dhannjay Kumar",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-07-02",
   "location": "Uttar Pradesh"
@@ -4788,15 +4707,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1509",
-  "name": "Gokul S",
-  "department": "Technology",
-  "subDepartment": "Embedded Software",
-  "designation": "Member of Technical Staff - I (Software)",
-  "doj": "2025-07-04",
-  "location": "Delhi"
- },
- {
   "code": "EUR1510",
   "name": "Nehal Mishra",
   "department": "Technology",
@@ -4815,15 +4725,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1513",
-  "name": "Pranjal Singh",
-  "department": "Manufacturing",
-  "subDepartment": "Quality",
-  "designation": "Engineer-QMS",
-  "doj": "2025-07-07",
-  "location": "Haryana"
- },
- {
   "code": "EUR1516",
   "name": "C P Balakrishnan",
   "department": "Sales",
@@ -4835,7 +4736,7 @@
  {
   "code": "EUR1517",
   "name": "Vikesh Kumar",
-  "department": "Supply Chain Management",
+  "department": "Manufacturing",
   "subDepartment": "Project Planning",
   "designation": "Deputy Manager",
   "doj": "2025-07-11",
@@ -4890,7 +4791,7 @@
   "code": "EUR1524",
   "name": "Tukaram Vaijnath Ghaytidak",
   "department": "Sales",
-  "subDepartment": "3W Retail Sales",
+  "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
   "doj": "2025-07-18",
   "location": "Maharashtra"
@@ -4899,7 +4800,7 @@
   "code": "EUR1525",
   "name": "Mohd Sameer",
   "department": "Manufacturing",
-  "subDepartment": "ME",
+  "subDepartment": "Manufacturing Engineering",
   "designation": "Manager",
   "doj": "2025-07-19",
   "location": "Haryana"
@@ -4950,15 +4851,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1532",
-  "name": "Pranav Binoy Nair",
-  "department": "Technology",
-  "subDepartment": "Battery",
-  "designation": "Battery Design Engineer",
-  "doj": "2025-08-01",
-  "location": "Delhi"
- },
- {
   "code": "EUR1533",
   "name": "Sancia John",
   "department": "Supply Chain Management",
@@ -5001,15 +4893,6 @@
   "subDepartment": "Sourcing & NPD - sheet metal",
   "designation": "Executive",
   "doj": "2025-08-04",
-  "location": "Delhi"
- },
- {
-  "code": "EUR1542",
-  "name": "Yellapu Manikanta Swamy",
-  "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
-  "designation": "Product Support Engineer",
-  "doj": "2025-08-06",
   "location": "Delhi"
  },
  {
@@ -5103,15 +4986,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1557",
-  "name": "Rendla Sai Advaith",
-  "department": "Technology",
-  "subDepartment": "Power Electronics",
-  "designation": "MTS 1 - Systems Engineer",
-  "doj": "2025-09-01",
-  "location": "Delhi"
- },
- {
   "code": "EUR1558",
   "name": "Himanshu Sharma",
   "department": "Manufacturing",
@@ -5157,15 +5031,6 @@
   "location": "Haryana"
  },
  {
-  "code": "EUR1568",
-  "name": "Vijay Bharath S",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2025-09-03",
-  "location": "Karnataka"
- },
- {
   "code": "EUR1570",
   "name": "Inderpreet Singh Jagdeva",
   "department": "Sales",
@@ -5195,8 +5060,8 @@
  {
   "code": "EUR1574",
   "name": "Praveen Kumar V",
-  "department": "Vehicle Financing",
-  "subDepartment": "Retail Channel Finance",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Senior Manager",
   "doj": "2025-09-05",
   "location": "Karnataka"
@@ -5218,15 +5083,6 @@
   "designation": "Senior Manager",
   "doj": "2025-09-08",
   "location": "Haryana"
- },
- {
-  "code": "EUR1579",
-  "name": "Rahul Pandey",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2025-09-08",
-  "location": "Delhi"
  },
  {
   "code": "EUR1582",
@@ -5267,8 +5123,8 @@
  {
   "code": "EUR1589",
   "name": "Neeraj Upadhyay",
-  "department": "Finance & Accounts",
-  "subDepartment": "Accounts Payable",
+  "department": "Supply Chain Management",
+  "subDepartment": "Accounts",
   "designation": "Senior Executive",
   "doj": "2025-09-15",
   "location": "Delhi"
@@ -5474,20 +5330,11 @@
  {
   "code": "EUR1621",
   "name": "Mahendra Singh",
-  "department": "Supply Chain Management",
-  "subDepartment": "PPC",
+  "department": "Manufacturing",
+  "subDepartment": "Production Planning and Control",
   "designation": "Assistant Manager",
   "doj": "2025-10-06",
   "location": "Haryana"
- },
- {
-  "code": "EUR1622",
-  "name": "Amit Malik",
-  "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
-  "designation": "Area Service Manager",
-  "doj": "2025-10-06",
-  "location": "Delhi"
  },
  {
   "code": "EUR1623",
@@ -5573,8 +5420,8 @@
  {
   "code": "EUR1635",
   "name": "Shalini Joshi",
-  "department": "Finance & Accounts",
-  "subDepartment": "Accounts Payable",
+  "department": "Supply Chain Management",
+  "subDepartment": "Accounts",
   "designation": "Executive",
   "doj": "2025-10-13",
   "location": "Delhi"
@@ -5646,7 +5493,7 @@
   "code": "EUR1645",
   "name": "Malvika Gupta",
   "department": "Human Resources",
-  "subDepartment": "Talent Acquisition",
+  "subDepartment": "Organisational Development",
   "designation": "Assistant Manager",
   "doj": "2025-10-24",
   "location": "Delhi"
@@ -5655,7 +5502,7 @@
   "code": "EUR1650",
   "name": "Gaurav Sharma",
   "department": "Human Resources",
-  "subDepartment": "Payroll",
+  "subDepartment": "Payroll & Compliance",
   "designation": "Senior Executive",
   "doj": "2025-10-27",
   "location": "Delhi"
@@ -5727,7 +5574,7 @@
   "code": "EUR1659",
   "name": "Rishi Kumar",
   "department": "Manufacturing",
-  "subDepartment": "BIW",
+  "subDepartment": "Manufacturing Engineering",
   "designation": "Manager",
   "doj": "2025-11-03",
   "location": "Haryana"
@@ -5841,15 +5688,6 @@
   "location": "Maharashtra"
  },
  {
-  "code": "EUR1673",
-  "name": "Kundan Kumar",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2025-11-07",
-  "location": "Maharashtra"
- },
- {
   "code": "EUR1675",
   "name": "Kamal",
   "department": "Sales",
@@ -5924,8 +5762,8 @@
  {
   "code": "EUR1685",
   "name": "Shubham Pandey",
-  "department": "Vehicle Financing",
-  "subDepartment": "Retail Channel Finance",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Manager",
   "doj": "2025-11-12",
   "location": "Delhi"
@@ -6168,7 +6006,7 @@
   "code": "EUR1717",
   "name": "Sandeep Kumar Tiwari",
   "department": "Manufacturing",
-  "subDepartment": "PPC",
+  "subDepartment": "Production Planning and Control",
   "designation": "Assistant Manager",
   "doj": "2025-12-03",
   "location": "Haryana"
@@ -6249,7 +6087,7 @@
   "code": "EUR1726",
   "name": "Deepak",
   "department": "Human Resources",
-  "subDepartment": "Talent Acquisition",
+  "subDepartment": "Plant HR",
   "designation": "Senior Executive",
   "doj": "2025-12-08",
   "location": "Haryana"
@@ -6384,7 +6222,7 @@
   "code": "EUR1746",
   "name": "Mridul Tiwari",
   "department": "Sales",
-  "subDepartment": "Network Expansion",
+  "subDepartment": "Expansion",
   "designation": "Assistant General Manager",
   "doj": "2025-12-22",
   "location": "Delhi"
@@ -6411,7 +6249,7 @@
   "code": "EUR1753",
   "name": "Nitin Tiwari",
   "department": "Marketing",
-  "subDepartment": "Marketing",
+  "subDepartment": "Social Media",
   "designation": "Senior Executive",
   "doj": "2025-12-24",
   "location": "Delhi"
@@ -6456,7 +6294,7 @@
   "code": "EUR1760",
   "name": "Sultan Ahmed",
   "department": "Supply Chain Management",
-  "subDepartment": "Supply Chain Management",
+  "subDepartment": "Accounts",
   "designation": "Assistant Manager - Account Payable",
   "doj": "2026-01-02",
   "location": "Delhi"
@@ -6654,7 +6492,7 @@
   "code": "EUR1789",
   "name": "Rahul Nain",
   "department": "Human Resources",
-  "subDepartment": "Payroll",
+  "subDepartment": "Payroll & Compliance",
   "designation": "Deputy Manager",
   "doj": "2026-01-14",
   "location": "Delhi"
@@ -6690,7 +6528,7 @@
   "code": "EUR1793",
   "name": "Anshuman Malviya",
   "department": "Sales",
-  "subDepartment": "Network Expansion",
+  "subDepartment": "Expansion",
   "designation": "Manager",
   "doj": "2026-01-19",
   "location": "Delhi"
@@ -6717,7 +6555,7 @@
   "code": "EUR1796",
   "name": "Priyanka Singh",
   "department": "Human Resources",
-  "subDepartment": "Human Resources",
+  "subDepartment": "Leadership",
   "designation": "Vice President",
   "doj": "2026-01-19",
   "location": "Delhi"
@@ -6843,7 +6681,7 @@
   "code": "EUR1811",
   "name": "Nitesh Mishra",
   "department": "Marketing",
-  "subDepartment": "BTL Strategy",
+  "subDepartment": "Brand Management",
   "designation": "Executive",
   "doj": "2026-02-02",
   "location": "Delhi"
@@ -6879,7 +6717,7 @@
   "code": "EUR1817",
   "name": "Aashish Sanjay Kothawade",
   "department": "Technology",
-  "subDepartment": "Mechanical",
+  "subDepartment": "Battery",
   "designation": "Battery Design Engineer",
   "doj": "2026-02-02",
   "location": "Delhi"
@@ -6894,19 +6732,10 @@
   "location": "Haryana"
  },
  {
-  "code": "EUR1819",
-  "name": "Santosh Popat Honmane",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2026-02-04",
-  "location": "Maharashtra"
- },
- {
   "code": "EUR1820",
   "name": "Anil Kumar B",
-  "department": "Vehicle Financing",
-  "subDepartment": "Retail Finance",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Deputy Manager",
   "doj": "2026-02-04",
   "location": "Karnataka"
@@ -6951,7 +6780,7 @@
   "code": "EUR1825",
   "name": "Rajat Kumar",
   "department": "Customer Excellence",
-  "subDepartment": "Customer Excellence",
+  "subDepartment": "Expansion",
   "designation": "Senior Executive",
   "doj": "2026-02-09",
   "location": "Delhi"
@@ -7032,7 +6861,7 @@
   "code": "EUR1834",
   "name": "Abhishek Kumar Sinha",
   "department": "Human Resources",
-  "subDepartment": "Human Resources",
+  "subDepartment": "Plant HR",
   "designation": "General Manager",
   "doj": "2026-02-10",
   "location": "Haryana"
@@ -7150,9 +6979,9 @@
   "name": "Akshay Dua",
   "department": "Sales",
   "subDepartment": "Sales",
-  "designation": "Program Manager- Sales",
+  "designation": "Program Manager",
   "doj": "2026-02-16",
-  "location": "Delhi"
+  "location": "Maharashtra"
  },
  {
   "code": "EUR1850",
@@ -7167,7 +6996,7 @@
   "code": "EUR1851",
   "name": "Prem",
   "department": "Manufacturing",
-  "subDepartment": "Manufacturing",
+  "subDepartment": "Battery Production",
   "designation": "Engineer",
   "doj": "2026-02-16",
   "location": "Haryana"
@@ -7236,15 +7065,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1862",
-  "name": "Rahul Mishra",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
-  "doj": "2026-02-25",
-  "location": "Delhi"
- },
- {
   "code": "EUR1864",
   "name": "Vishwaprabhat",
   "department": "Manufacturing",
@@ -7279,15 +7099,6 @@
   "designation": "Territory Sales Executive",
   "doj": "2026-03-02",
   "location": "Bihar"
- },
- {
-  "code": "EUR1870",
-  "name": "Kirti Singal",
-  "department": "Finance & Accounts",
-  "subDepartment": "Record to Report",
-  "designation": "Senior Executive",
-  "doj": "2026-03-06",
-  "location": "Delhi"
  },
  {
   "code": "EUR1873",
@@ -7374,7 +7185,7 @@
   "code": "EUR1884",
   "name": "Nakshita Shaktawat",
   "department": "Sales",
-  "subDepartment": "Network Expansion",
+  "subDepartment": "Expansion",
   "designation": "Executive",
   "doj": "2026-03-17",
   "location": "Delhi"
@@ -7392,8 +7203,8 @@
   "code": "EUR1887",
   "name": "Rachit Jain",
   "department": "Sales",
-  "subDepartment": "Sales and Marketing",
-  "designation": "Program Manager - Sales",
+  "subDepartment": "Sales",
+  "designation": "Program Manager",
   "doj": "2026-03-23",
   "location": "Delhi"
  },
@@ -7401,7 +7212,7 @@
   "code": "EUR1888",
   "name": "Shrishti Singh",
   "department": "Human Resources",
-  "subDepartment": "Talent Acquisition",
+  "subDepartment": "HRBP",
   "designation": "Manager",
   "doj": "2026-03-23",
   "location": "Delhi"
@@ -7446,8 +7257,8 @@
   "code": "EUR1894",
   "name": "Sanjeev Kumar",
   "department": "Manufacturing",
-  "subDepartment": "QMS",
-  "designation": "Deputy Manager",
+  "subDepartment": "Quality",
+  "designation": "Deputy Manager - QMS",
   "doj": "2026-03-25",
   "location": "Haryana"
  },
@@ -7473,7 +7284,7 @@
   "code": "EUR1897",
   "name": "Apurv Bhushan",
   "department": "Sales",
-  "subDepartment": "Sales and Marketing",
+  "subDepartment": "Sales",
   "designation": "Manager",
   "doj": "2026-04-01",
   "location": "Delhi"
@@ -7482,7 +7293,7 @@
   "code": "EUR1898",
   "name": "Soumya Salini Kar",
   "department": "Human Resources",
-  "subDepartment": "Human Resources",
+  "subDepartment": "Organisational Development",
   "designation": "Management Trainee",
   "doj": "2026-04-01",
   "location": "Delhi"
@@ -7491,17 +7302,8 @@
   "code": "EUR1899",
   "name": "Bhavay Chopra",
   "department": "Human Resources",
-  "subDepartment": "Human Resources",
+  "subDepartment": "Organisational Development",
   "designation": "Management Trainee",
-  "doj": "2026-04-01",
-  "location": "Delhi"
- },
- {
-  "code": "EUR1900",
-  "name": "Gaurang Tank",
-  "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
-  "designation": "Product Support Engineer",
   "doj": "2026-04-01",
   "location": "Delhi"
  },
@@ -7572,7 +7374,7 @@
   "code": "EUR1910",
   "name": "Karan Singh Chauhan",
   "department": "Sales",
-  "subDepartment": "Network Expansion",
+  "subDepartment": "Expansion",
   "designation": "Assistant General Manager",
   "doj": "2026-04-06",
   "location": "Delhi"
@@ -7870,7 +7672,7 @@
   "name": "Sachin Daga",
   "department": "Finance & Accounts",
   "subDepartment": "Finance & Accounts",
-  "designation": "Assistant General Manager",
+  "designation": "Finance Controller",
   "doj": "2026-05-04",
   "location": "Delhi"
  },
@@ -7968,7 +7770,7 @@
   "code": "EUR1961",
   "name": "Devyani Raman Jha",
   "department": "Sales",
-  "subDepartment": "Retail Sales",
+  "subDepartment": "Sales",
   "designation": "Program Manager",
   "doj": "2026-05-06",
   "location": "Delhi"
@@ -8004,7 +7806,7 @@
   "code": "EUR1966",
   "name": "Ravi Rawat",
   "department": "Sales",
-  "subDepartment": "Sales and Marketing",
+  "subDepartment": "Sales",
   "designation": "Assistant Manager",
   "doj": "2026-05-11",
   "location": "Delhi"
@@ -8091,15 +7893,6 @@
   "location": "Uttar Pradesh"
  },
  {
-  "code": "EUR1977",
-  "name": "Anoonya Das",
-  "department": "Finance & Accounts",
-  "subDepartment": "Legal & Secretarial",
-  "designation": "Associate",
-  "doj": "2026-05-15",
-  "location": "Delhi"
- },
- {
   "code": "EUR1978",
   "name": "Ranjeet Kumar Singh",
   "department": "Sales",
@@ -8139,7 +7932,7 @@
   "code": "EUR1982",
   "name": "Govind Gaurav Dwiwedi",
   "department": "Human Resources",
-  "subDepartment": "Payroll",
+  "subDepartment": "Payroll & Compliance",
   "designation": "Lead - Payroll & Compliance",
   "doj": "2026-05-18",
   "location": "Delhi"
@@ -8181,15 +7974,6 @@
   "location": "Delhi"
  },
  {
-  "code": "EUR1987",
-  "name": "Monu Kumar",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Executive",
-  "doj": "2026-05-20",
-  "location": "Delhi"
- },
- {
   "code": "EUR1988",
   "name": "Shivam Pathak",
   "department": "Sales",
@@ -8201,8 +7985,8 @@
  {
   "code": "EUR1989",
   "name": "Abhishek Parashar",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Senior Manager - Operations",
   "doj": "2026-05-26",
   "location": "Delhi"
@@ -8229,7 +8013,7 @@
   "code": "EUR1992",
   "name": "Anmol Taneja",
   "department": "Finance & Accounts",
-  "subDepartment": "FP&A",
+  "subDepartment": "Financial Planning & Analysis",
   "designation": "Analyst",
   "doj": "2026-05-26",
   "location": "Delhi"
@@ -8237,8 +8021,8 @@
  {
   "code": "EUR1993",
   "name": "Madhur Mittal",
-  "department": "Vehicle Financing",
-  "subDepartment": "Vehicle Financing",
+  "department": "Vehicle Finance",
+  "subDepartment": "Vehicle Finance",
   "designation": "Program Manager",
   "doj": "2026-05-26",
   "location": "Delhi"
@@ -8292,7 +8076,7 @@
   "code": "EUR2001",
   "name": "Akash Kumar",
   "department": "Sales",
-  "subDepartment": "Retail Sales",
+  "subDepartment": "Sales",
   "designation": "Program Manager",
   "doj": "2026-06-01",
   "location": "Delhi"
@@ -8363,7 +8147,7 @@
  {
   "code": "EUR2009",
   "name": "Akshay Kumar",
-  "department": "Service & Maintenance",
+  "department": "Sales",
   "subDepartment": "Government Sales",
   "designation": "Senior Executive",
   "doj": "2026-06-02",
@@ -8375,15 +8159,6 @@
   "department": "Supply Chain Management",
   "subDepartment": "Supply Chain Management",
   "designation": "Senior Executive",
-  "doj": "2026-06-05",
-  "location": "Delhi"
- },
- {
-  "code": "EUR2011",
-  "name": "Azad Singh",
-  "department": "Sales",
-  "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
   "doj": "2026-06-05",
   "location": "Delhi"
  },
@@ -8407,7 +8182,7 @@
  },
  {
   "code": "EUR2014",
-  "name": "Abhijeet Bhattacharjee",
+  "name": "Abhijit Bhattacharjee",
   "department": "Sales",
   "subDepartment": "Retail Sales",
   "designation": "Territory Sales Manager",
@@ -8526,7 +8301,7 @@
   "code": "EUR2028",
   "name": "Abhijit Prakash Poddar",
   "department": "Sales",
-  "subDepartment": "Sales and Marketing",
+  "subDepartment": "Sales",
   "designation": "Manager",
   "doj": "2026-06-15",
   "location": "Maharashtra"
@@ -8779,7 +8554,7 @@
   "name": "Riyasudheen M M",
   "department": "Sales",
   "subDepartment": "Retail Sales",
-  "designation": "Territory Sales Manager",
+  "designation": "Senior Territory Sales Manager",
   "doj": "2026-07-01",
   "location": "Delhi"
  },
@@ -8797,7 +8572,7 @@
   "name": "Rohit",
   "department": "Finance & Accounts",
   "subDepartment": "Accounts Receivable",
-  "designation": "Senior Executive Manager",
+  "designation": "Executive",
   "doj": "2026-07-01",
   "location": "Delhi"
  },
@@ -8904,7 +8679,7 @@
   "code": "EUR2071",
   "name": "Siddhant Pundir",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "Warranty Operations",
   "designation": "Warranty Executive",
   "doj": "2026-07-03",
   "location": "Haryana"
@@ -9264,7 +9039,7 @@
   "code": "EUR2114",
   "name": "Shivam Kumar Singh",
   "department": "Supply Chain Management",
-  "subDepartment": "",
+  "subDepartment": "Supply Chain Management",
   "designation": "Manager",
   "doj": "2026-07-10",
   "location": "Delhi"
@@ -9290,9 +9065,9 @@
  {
   "code": "EUR2117",
   "name": "Deen Dayal Gandhi",
-  "department": "Customer excellence",
-  "subDepartment": "customer excellence",
-  "designation": "Manager",
+  "department": "Customer Excellence",
+  "subDepartment": "Customer Excellence",
+  "designation": "Service Network Quality Manager",
   "doj": "2026-07-10",
   "location": "Delhi"
  },
@@ -9561,7 +9336,7 @@
   "code": "EUR2147",
   "name": "Anusha Tageja",
   "department": "Technology",
-  "subDepartment": "Technology",
+  "subDepartment": "Software",
   "designation": "Analyst",
   "doj": "2026-07-15",
   "location": "Delhi"
@@ -9695,7 +9470,7 @@
  {
   "code": "EUR2162",
   "name": "Saurabh Aabasaheb Pawar",
-  "department": "Service and Maintenance",
+  "department": "Service & Maintenance",
   "subDepartment": "Service and Maintenance",
   "designation": "Area Service Manager",
   "doj": "2026-07-17",
@@ -9714,7 +9489,7 @@
   "code": "EUR2164",
   "name": "Sagar Bhausaheb Katkade",
   "department": "Service & Maintenance",
-  "subDepartment": "Service & Maintenance",
+  "subDepartment": "Battery Service",
   "designation": "Senior Engineer",
   "doj": "2026-07-20",
   "location": "Maharashtra"
@@ -9850,7 +9625,7 @@
   "name": "Saurav Singh Kuntal",
   "department": "Supply Chain Management",
   "subDepartment": "Electronics",
-  "designation": "Manager - Strategic sourcing and procurement",
+  "designation": "Manager Strategic sourcing and procurement",
   "doj": "2026-07-27",
   "location": "Delhi"
  },
@@ -9969,6 +9744,42 @@
   "subDepartment": "Data Science",
   "designation": "Data Analyst",
   "doj": "2026-07-29",
+  "location": "Delhi"
+ },
+ {
+  "code": "EUR2193",
+  "name": "Vipin Kamboj",
+  "department": "Manufacturing",
+  "subDepartment": "Manufacturing",
+  "designation": "Assistant General Manager",
+  "doj": "2026-08-01",
+  "location": "Haryana"
+ },
+ {
+  "code": "EUR2194",
+  "name": "Ramesh V",
+  "department": "Sales",
+  "subDepartment": "Goverment Sales",
+  "designation": "Area Service Manager",
+  "doj": "2026-08-01",
+  "location": "Andra Pradesh"
+ },
+ {
+  "code": "EUR2195",
+  "name": "Pinku Kumar",
+  "department": "Supply Chain Management",
+  "subDepartment": "Electrical Sourcing",
+  "designation": "Senior Manager- Electrical Sourcing",
+  "doj": "2026-08-01",
+  "location": "Delhi"
+ },
+ {
+  "code": "EUR2196",
+  "name": "Kunal Raut",
+  "department": "Sales",
+  "subDepartment": "Goverment Sales",
+  "designation": "Area Service Manager",
+  "doj": "2026-08-01",
   "location": "Delhi"
  }
 ]

@@ -70,27 +70,26 @@ paragraph, and the signature block with the company seal struck across it.
 ### Award period
 
 The award covers **01 April 2025 to 30 June 2026**, and every letter names that
-full period. Anyone who joined partway through has their joining date labelled in
-brackets straight after the start date:
+full period. Anyone who joined partway through has the clause rewritten to start from their
+joining date:
 
-> during the period 01 April 2025 **(Date of Joining - 19 January 2026)** to 30 June 2026
+> **from your Date of Joining - 19 January 2026** to 30 June 2026
 
-so the period reads the same for everyone while still showing when that person
-actually became eligible. `PERIOD` at the top of the script holds the two dates.
+`PERIOD` at the top of the script holds the two dates.
 
 `PERIOD_WORDING` selects how that clause is phrased for a mid-period joiner:
 
 | Value | Mid-period joiner reads |
 | --- | --- |
-| `"bracket"` (default) | during the period 01 April 2025 (Date of Joining - 19 January 2026) to 30 June 2026 |
-| `"fromDoj"` | from your Date of Joining - 19 January 2026 to 30 June 2026 |
+| `"fromDoj"` (default) | from your Date of Joining - 19 January 2026 to 30 June 2026 |
+| `"bracket"` | during the period 01 April 2025 (Date of Joining - 19 January 2026) to 30 June 2026 |
 
 Anyone employed for the whole window reads the same either way. Flip the constant
 and rebuild to switch; `awardPeriodPhrase()` returns the finished clause.
 
-A joining date *after* the period ends gets no bracket. That case should not
-really arise, and a letter for someone who joined after the window closed
-deserves a second look whatever it says.
+A joining date *after* the period ends is treated as a full-period employee. On
+the current roster that is **140 people**, who were not employed during the window
+at all — a letter for any of them deserves a second look whatever it says.
 
 ### Word template
 
@@ -151,7 +150,9 @@ python tools/extract_employees.py path/to/Master_Database.xlsx
 python tools/build.py
 ```
 
-`extract_employees.py` reads the `Active Employees List` sheet and writes
+`extract_employees.py` finds the employee sheet by name (`Active EM`, or the older
+`Active Employees List`), falling back to whichever sheet carries an `Emp Code`
+header — the sheet has been renamed once already. It writes
 `data/employees.json` with **only** `code`, `name`, `designation`, `doj`,
 `department`, `subDepartment` and `location`.
 

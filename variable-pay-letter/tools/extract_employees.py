@@ -17,7 +17,9 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-SHEET = "Active Employees List"
+# Sheet names HR has used so far. The header sniff below is the real safety net:
+# the sheet was renamed once already, and hardcoding a name breaks every time.
+KNOWN_SHEETS = ("Active EM", "Active Employees List")
 
 # Header label -> key in the emitted record. Matching is on the normalised
 # header text so stray spacing or capitalisation in the workbook is tolerated.
@@ -57,11 +59,27 @@ def as_iso_date(value):
     return ""
 
 
+def find_sheet(workbook):
+    """The employee sheet, by name if we recognise it, otherwise by its headers."""
+    for name in KNOWN_SHEETS:
+        if name in workbook.sheetnames:
+            return workbook[name]
+
+    for sheet in workbook.worksheets:
+        labels = {normalise(sheet.cell(1, column).value)
+                  for column in range(1, min(sheet.max_column, 60) + 1)}
+        if "emp code" in labels:
+            print(f"  note: using sheet {sheet.title!r}, matched on its headers")
+            return sheet
+
+    sys.exit("No employee sheet found: none named "
+             f"{list(KNOWN_SHEETS)} and none with an 'Emp Code' header. "
+             f"Sheets present: {workbook.sheetnames}")
+
+
 def main(source):
     workbook = load_workbook(source, data_only=True, read_only=False)
-    if SHEET not in workbook.sheetnames:
-        sys.exit(f"Sheet {SHEET!r} not found. Sheets present: {workbook.sheetnames}")
-    sheet = workbook[SHEET]
+    sheet = find_sheet(workbook)
 
     headers = {}
     for column in range(1, sheet.max_column + 1):
