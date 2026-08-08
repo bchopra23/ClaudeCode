@@ -1,6 +1,6 @@
 {
   "name": "chariot-control-panel",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Offline-first habit tracker PWA with Android WebView wrapper",
   "scripts": {
     "build:css": "tailwindcss -i styles/tailwind.css -o www/tailwind.css --minify"

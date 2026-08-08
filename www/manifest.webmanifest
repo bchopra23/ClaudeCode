@@ -1,4 +1,5 @@
 {
+  "id": "chariot-control-panel",
   "name": "The Chariot Control Panel",
   "short_name": "Chariot",
   "description": "A private, offline-first habit tracker: morning protocols, an emergency urge firewall, and a nightly scientist audit. All data stays on your device.",
@@ -6,8 +7,23 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#111827",
-  "theme_color": "#111827",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "categories": ["health", "lifestyle", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Deploy the firewall",
+      "short_name": "Firewall",
+      "description": "Jump straight to the emergency urge intercept",
+      "url": "./index.html#firewall"
+    },
+    {
+      "name": "Nightly audit",
+      "short_name": "Audit",
+      "description": "Log tonight's observation",
+      "url": "./index.html#log"
+    }
+  ],
   "icons": [
     {
       "src": "icons/icon.svg",

@@ -8,3 +8,4 @@ android/app/src/main/assets/
 *.apk
 *.aab
 .DS_Store
+android/.kotlin/

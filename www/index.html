@@ -3,1097 +3,561 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#0B1120">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Chariot Panel">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="A private, offline-first habit tracker: morning protocols, an emergency urge firewall, and a nightly scientist audit.">
 <title>The Chariot Control Panel</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon.svg">
 <link rel="stylesheet" href="tailwind.css">
-<style>
-  html { scroll-behavior: smooth; }
-  body { background: #111827; color: #F9FAFB; -webkit-tap-highlight-color: transparent; }
-  ::selection { background: rgba(16,185,129,0.35); color: #F9FAFB; }
-  ::-webkit-scrollbar { width: 10px; }
-  ::-webkit-scrollbar-track { background: #111827; }
-  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 8px; }
-  ::-webkit-scrollbar-thumb:hover { background: #4B5563; }
-
-  @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.55), 0 0 22px 2px rgba(239,68,68,0.35); }
-    50% { box-shadow: 0 0 0 10px rgba(239,68,68,0), 0 0 34px 6px rgba(16,185,129,0.30); }
-  }
-  .firewall-btn { animation: pulseGlow 2.2s ease-in-out infinite; }
-
-  @keyframes flashPrompt {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.55; transform: scale(0.985); }
-  }
-  .flash-prompt { animation: flashPrompt 1.4s ease-in-out infinite; }
-
-  @keyframes modalIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .modal-enter { animation: modalIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .card-in { animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-  .timer-ring { transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 0.3s linear; }
-
-  @keyframes boxBreath {
-    0% { transform: scale(0.55); }
-    25% { transform: scale(1); }
-    50% { transform: scale(1); }
-    75% { transform: scale(0.55); }
-    100% { transform: scale(0.55); }
-  }
-  .pacer-circle {
-    width: 72px;
-    height: 72px;
-    border-radius: 9999px;
-    background: radial-gradient(circle at 30% 30%, #34D399, #059669);
-    box-shadow: 0 0 30px rgba(16,185,129,0.45);
-    animation: boxBreath 16s ease-in-out infinite;
-  }
-
-  .glass {
-    background: rgba(17, 24, 39, 0.72);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-  }
-  .glass-card {
-    background: rgba(31, 41, 55, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .checkbox-shell input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .checkbox-visual { transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
-  .checkbox-shell input:checked ~ .checkbox-row .checkbox-visual {
-    background: #10B981;
-    border-color: #10B981;
-    box-shadow: 0 0 14px rgba(16,185,129,0.45);
-  }
-  .checkbox-shell input:checked ~ .checkbox-row .checkbox-tick { opacity: 1; transform: scale(1); }
-  .checkbox-tick { opacity: 0; transform: scale(0.4); transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .checkbox-shell input:checked ~ .checkbox-row .checkbox-label { color: #10B981; }
-  .checkbox-shell input:focus-visible ~ .checkbox-row .checkbox-visual {
-    outline: 2px solid #10B981;
-    outline-offset: 3px;
-  }
-
-  select, input[type="date"] { color-scheme: dark; }
-  select {
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.9rem center;
-  }
-
-  .gradient-text {
-    background: linear-gradient(120deg, #34D399, #10B981 55%, #059669);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .divider-glow {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(16,185,129,0.5), transparent);
-  }
-
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateY(16px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .toast-in { animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-  body.modal-open { overflow: hidden; }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .firewall-btn, .flash-prompt, .pacer-circle { animation: none !important; }
-    .firewall-btn { box-shadow: 0 0 22px 2px rgba(239,68,68,0.35); }
-    .modal-enter, .card-in, .toast-in { animation-duration: 0.01ms !important; }
-    .timer-ring, .checkbox-visual, .checkbox-tick { transition-duration: 0.01ms !important; }
-    [class*="animate-"] { animation: none !important; }
-  }
-</style>
 </head>
-<body class="font-body text-snow min-h-screen antialiased">
+<body class="min-h-screen">
 
-<div class="fixed inset-x-0 top-0 h-72 pointer-events-none bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent"></div>
+<div class="aurora" aria-hidden="true"></div>
 
-<main id="mainContent" class="relative max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24 space-y-10">
+<div id="appShell">
 
-  <header class="text-center space-y-5 card-in">
-    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold tracking-widest uppercase">
-      <span class="w-2 h-2 rounded-full bg-emeraldx animate-pulse"></span>
-      Vehicle Identity Online
-    </div>
-    <h1 class="font-display font-extrabold text-3xl sm:text-5xl tracking-tight leading-tight">
-      THE <span class="gradient-text">CHARIOT</span><br class="sm:hidden"> CONTROL PANEL
-    </h1>
-    <p class="text-silver text-sm sm:text-base italic max-w-md mx-auto">
-      "The mind is a superb servant, but a terrible master."
-    </p>
-    <div class="relative text-left rounded-2xl border border-emerald-500/25 bg-obsidian/80 p-5 sm:p-6 overflow-hidden">
-      <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emeraldx to-emerald-700"></div>
-      <div class="flex items-start gap-4">
-        <div class="shrink-0 w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg">🔬</div>
-        <div>
-          <h2 class="font-display font-bold text-emerald-400 text-sm tracking-widest uppercase mb-1.5">The Scientist Creed</h2>
-          <p class="text-sm sm:text-[0.95rem] text-gray-300 leading-relaxed">
-            <span class="text-snow font-semibold">Scientist Mindset:</span> I am the detached observer analyzing my mental machinery. No guilt, no self-hatred. Slips are purely data to adjust the gears.
-          </p>
-        </div>
+  <header class="app-bar">
+    <div class="mx-auto flex w-full max-w-2xl items-center gap-3 px-4 py-3 sm:px-6">
+      <div class="min-w-0 flex-1">
+        <p class="eyebrow">The Chariot</p>
+        <h1 class="truncate font-display text-base font-extrabold tracking-tight">CONTROL <span class="gradient-text">PANEL</span></h1>
       </div>
+      <button id="streakChip" type="button" class="chip chip-accent" title="View insights">
+        <span aria-hidden="true">🔥</span><span id="streakChipValue">0d</span>
+      </button>
+      <button id="settingsButton" type="button" class="icon-btn" aria-label="Open settings">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
     </div>
   </header>
 
-  <section class="card-in" style="animation-delay:0.08s" aria-labelledby="shield-heading">
-    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
-      <div class="px-5 sm:px-7 pt-6 pb-4 flex items-center justify-between gap-3">
-        <div>
-          <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 1 · Daily Protocol</p>
-          <h2 id="shield-heading" class="font-display font-bold text-xl sm:text-2xl">🛡️ The Morning Shield</h2>
-        </div>
-        <div id="shieldStatus" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap">0 / 2 Armed</div>
-      </div>
-      <div class="divider-glow mx-5 sm:mx-7"></div>
-      <div class="p-5 sm:p-7 space-y-4">
-        <label class="checkbox-shell block cursor-pointer group">
-          <input type="checkbox" id="checkBrahma">
-          <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
-            <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
-              <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </span>
-            <span>
-              <span class="checkbox-label block font-semibold text-snow text-sm sm:text-base transition-colors">Brahma Muhurta Protocol</span>
-              <span class="block text-silver text-xs sm:text-sm mt-1 leading-relaxed">Grounded consciousness in stillness before digital stimulation or checking devices.</span>
-            </span>
-          </div>
-        </label>
-        <label class="checkbox-shell block cursor-pointer group">
-          <input type="checkbox" id="checkIntention">
-          <div class="checkbox-row flex items-start gap-4 rounded-xl border border-gray-700/70 bg-canvas/60 p-4 sm:p-5 transition-colors group-hover:border-emerald-500/40">
-            <span class="checkbox-visual shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-gray-500 flex items-center justify-center">
-              <svg class="checkbox-tick w-4 h-4 text-canvas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </span>
-            <span>
-              <span class="checkbox-label block font-semibold text-snow text-sm sm:text-base transition-colors">Intention Activation</span>
-              <span class="block text-silver text-xs sm:text-sm mt-1 leading-relaxed">Deliberately affirming identity as an eternal spiritual soul (Atman), detached from passing chemical cravings.</span>
-            </span>
-          </div>
-        </label>
-        <p class="text-[0.7rem] text-gray-500 text-center pt-1">Shield state auto-saves locally, resets each new calendar day, and is snapshotted into every Nightly Audit you log.</p>
-      </div>
-    </div>
-  </section>
+  <main id="viewport" class="viewport">
 
-  <section class="card-in" style="animation-delay:0.16s" aria-labelledby="firewall-heading">
-    <div class="rounded-2xl bg-obsidian border border-red-500/25 shadow-xl shadow-black/30 p-5 sm:p-7 text-center space-y-5">
-      <div>
-        <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-crimsonx uppercase mb-1">Section 2 · Emergency Intercept</p>
-        <h2 id="firewall-heading" class="font-display font-bold text-xl sm:text-2xl">🔥 The 3-Question Firewall</h2>
-        <p class="text-silver text-xs sm:text-sm mt-2 max-w-md mx-auto">An urge detected is an urge intercepted. Deploy the firewall the instant the wave begins to rise.</p>
-      </div>
-      <button id="deployFirewall" type="button" class="firewall-btn w-full sm:w-auto inline-flex items-center justify-center gap-3 font-display font-bold text-base sm:text-lg tracking-wide text-snow px-8 py-4 rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-emerald-600 hover:from-red-500 hover:via-red-400 hover:to-emerald-500 active:scale-[0.98] transition-all duration-200">
-        ⚠️ DEPLOY EMERGENCY FIREWALL
-      </button>
-      <p id="firewallCount" class="text-[0.7rem] text-gray-500"></p>
-    </div>
-  </section>
+    <!-- ============================ TODAY ============================ -->
+    <section id="view-today" class="view space-y-5" role="tabpanel" aria-labelledby="tab-today">
 
-  <section class="card-in" style="animation-delay:0.24s" aria-labelledby="audit-heading">
-    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
-      <div class="px-5 sm:px-7 pt-6 pb-4">
-        <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 3 · Data Entry</p>
-        <h2 id="audit-heading" class="font-display font-bold text-xl sm:text-2xl">🔭 The Nightly Scientist Audit</h2>
-      </div>
-      <div class="divider-glow mx-5 sm:mx-7"></div>
-      <form id="auditForm" class="p-5 sm:p-7 space-y-5" novalidate>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label for="auditDate" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Observation Date</label>
-            <input type="date" id="auditDate" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
-          </div>
-          <div>
-            <label for="slipType" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Slip Type</label>
-            <select id="slipType" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
-              <option value="None (Flawless Victory)">None (Flawless Victory)</option>
-              <option value="Smoking">Smoking</option>
-              <option value="Masturbation">Masturbation</option>
-              <option value="Both">Both</option>
-            </select>
-          </div>
-          <div>
-            <label for="rootTrigger" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Root Trigger</label>
-            <select id="rootTrigger" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
-              <option value="Boredom">Boredom</option>
-              <option value="Work/Life Stress">Work/Life Stress</option>
-              <option value="Loneliness">Loneliness</option>
-              <option value="Fatigue/Exhaustion">Fatigue/Exhaustion</option>
-              <option value="Environmental Cue">Environmental Cue</option>
-            </select>
-          </div>
-          <div>
-            <label for="reactionTime" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">Charioteer Reaction Time</label>
-            <select id="reactionTime" required class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 pr-10 text-sm text-snow focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition">
-              <option value="Automatic Pilot (Slid Instantly)">Automatic Pilot (Slid Instantly)</option>
-              <option value="Delayed Action (Fought for a few minutes)">Delayed Action (Fought for a few minutes)</option>
-              <option value="Defended Successfully">Defended Successfully</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label for="gearNotes" class="block text-xs font-semibold tracking-wider uppercase text-silver mb-2">The Gear Adjustment (Notes for Tomorrow)</label>
-          <textarea id="gearNotes" rows="4" placeholder="What did the data reveal? Which gear gets adjusted tomorrow?" class="w-full rounded-xl bg-canvas border border-gray-600 px-4 py-3 text-sm text-snow placeholder-gray-500 resize-y focus:outline-none focus:ring-2 focus:ring-emeraldx focus:border-emeraldx transition"></textarea>
-        </div>
-        <button type="submit" class="w-full font-display font-bold tracking-wide text-canvas bg-emeraldx hover:bg-emerald-400 active:scale-[0.99] rounded-xl px-6 py-4 text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-500/25">
-          📡 LOG OBSERVATION TO REPOSITORY
-        </button>
-      </form>
-    </div>
-  </section>
-
-  <section class="card-in" style="animation-delay:0.32s" aria-labelledby="repo-heading">
-    <div class="rounded-2xl bg-obsidian border border-gray-700/60 shadow-xl shadow-black/30 overflow-hidden">
-      <div class="px-5 sm:px-7 pt-6 pb-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p class="text-[0.65rem] font-semibold tracking-[0.25em] text-emerald-400 uppercase mb-1">Section 4 · Persistent Log Data</p>
-          <h2 id="repo-heading" class="font-display font-bold text-xl sm:text-2xl">🗄️ The Mounted Repository</h2>
-        </div>
-        <div id="repoStats" class="text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap"></div>
-      </div>
-      <div class="divider-glow mx-5 sm:mx-7"></div>
-      <div id="repoAnalytics" class="hidden px-5 sm:px-7 pt-6 space-y-5">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
-            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Current Streak</p>
-            <p class="font-display font-extrabold text-xl sm:text-2xl text-emerald-400"><span id="statCurrentStreak">0</span><span class="text-xs font-bold text-silver ml-1">days</span></p>
-          </div>
-          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
-            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Best Streak</p>
-            <p class="font-display font-extrabold text-xl sm:text-2xl text-snow"><span id="statBestStreak">0</span><span class="text-xs font-bold text-silver ml-1">days</span></p>
-          </div>
-          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
-            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Victory Rate</p>
-            <p class="font-display font-extrabold text-xl sm:text-2xl text-snow"><span id="statSuccessRate">0</span><span class="text-xs font-bold text-silver ml-1">%</span></p>
-          </div>
-          <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4 text-center">
-            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1.5">Top Threat</p>
-            <p id="statTopTrigger" class="font-display font-extrabold text-sm sm:text-base text-crimsonx leading-tight pt-1">—</p>
-          </div>
-        </div>
-        <div class="rounded-xl border border-gray-700/70 bg-canvas/60 p-4">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver">Battle Map · Last 35 Days</p>
-            <div class="flex items-center gap-3 text-[0.6rem] text-silver">
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emeraldx inline-block"></span>Clean</span>
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-crimsonx inline-block"></span>Slip</span>
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-gray-700 inline-block"></span>No Data</span>
+      <div class="card card-pad rise-in">
+        <div class="flex items-center gap-5">
+          <div class="relative h-24 w-24 shrink-0">
+            <svg class="h-full w-full" viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#2A3547" stroke-width="9"></circle>
+              <circle id="streakRing" class="timer-ring" cx="60" cy="60" r="52" fill="none" stroke="rgb(var(--accent))" stroke-width="9" stroke-linecap="round" stroke-dasharray="326.726" stroke-dashoffset="326.726"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="streakValue" class="font-display text-2xl font-extrabold leading-none text-snow">0</span>
+              <span class="text-[0.55rem] font-bold uppercase tracking-[0.2em] text-muted">days</span>
             </div>
           </div>
-          <div id="heatmapGrid" class="grid grid-cols-7 gap-1.5"></div>
-        </div>
-      </div>
-      <div id="historyFeed" class="p-5 sm:p-7 space-y-4"></div>
-      <div id="loadMoreWrap" class="hidden px-5 sm:px-7 pb-4 text-center">
-        <button id="loadMoreButton" type="button" class="text-xs font-semibold tracking-wider uppercase text-silver hover:text-snow border border-gray-600 hover:border-gray-400 hover:bg-gray-500/10 rounded-xl px-5 py-2.5 transition-all duration-200"></button>
-      </div>
-      <div class="px-5 sm:px-7 pb-7 flex flex-wrap items-center justify-center gap-3">
-        <button id="exportRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-emerald-400 hover:text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/60 hover:bg-emerald-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
-          ⬇️ Export Data
-        </button>
-        <button id="importRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-silver hover:text-snow border border-gray-600 hover:border-gray-400 hover:bg-gray-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
-          ⬆️ Import Data
-        </button>
-        <button id="clearRepo" type="button" class="text-xs font-semibold tracking-wider uppercase text-crimsonx/80 hover:text-crimsonx border border-red-500/30 hover:border-red-500/60 hover:bg-red-500/10 rounded-xl px-5 py-2.5 transition-all duration-200">
-          🗑️ Clear Repository Data
-        </button>
-        <input type="file" id="importInput" accept=".json,application/json" class="hidden">
-      </div>
-    </div>
-  </section>
-
-  <footer class="text-center text-[0.7rem] text-gray-600 pt-4 pb-2">
-    All data lives only on this device. No network. No telemetry. Export regularly. The observer remains sovereign.
-  </footer>
-
-</main>
-
-<div id="firewallModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="firewall-modal-title">
-  <div class="glass absolute inset-0"></div>
-  <div id="firewallScroll" class="relative h-full overflow-y-auto">
-    <div class="modal-enter min-h-full flex flex-col items-center px-4 sm:px-6 py-10 sm:py-14">
-      <div class="w-full max-w-2xl space-y-8">
-
-        <div class="text-center space-y-3">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/40 bg-red-500/15 text-red-400 text-xs font-bold tracking-[0.25em] uppercase">
-            <span class="w-2 h-2 rounded-full bg-crimsonx animate-ping"></span>
-            Firewall Engaged · Interface Locked
+          <div class="min-w-0 space-y-1.5">
+            <p id="todayGreeting" class="font-display text-lg font-bold leading-tight text-snow"></p>
+            <p id="todayDate" class="text-xs text-silver"></p>
+            <p id="milestoneLabel" class="text-xs text-accent"></p>
           </div>
-          <h2 id="firewall-modal-title" class="font-display font-extrabold text-2xl sm:text-4xl text-snow tracking-tight">NEURAL LOOP <span class="text-crimsonx">INTERCEPTED</span></h2>
-          <p class="text-silver text-sm">Breathe. Read every word slowly. The wave cannot survive observation.</p>
+        </div>
+        <div id="todayStatus" class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-line/70 bg-canvas/60 p-3.5"></div>
+      </div>
+
+      <div class="card rise-in" style="animation-delay:.05s">
+        <div class="flex items-center justify-between gap-3 px-5 pb-3 pt-5 sm:px-6">
+          <div>
+            <p class="eyebrow">Daily protocol</p>
+            <h2 class="section-title">🛡️ Morning Shield</h2>
+          </div>
+          <span id="shieldStatus" class="chip">0 / 0</span>
+        </div>
+        <div class="divider-glow mx-5 sm:mx-6"></div>
+        <div class="space-y-3 p-5 sm:p-6">
+          <div id="ritualList" class="space-y-3"></div>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button id="addRitualButton" type="button" class="btn btn-ghost btn-sm">＋ Add ritual</button>
+            <button id="manageRitualsButton" type="button" class="btn btn-ghost btn-sm">Manage</button>
+          </div>
+          <p class="pt-1 text-center text-[0.68rem] text-muted">Resets each calendar day and is snapshotted into every audit you log.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <button id="quickCleanButton" type="button" class="btn btn-ghost rise-in flex-col gap-1 px-2 py-3 text-[0.68rem]" style="animation-delay:.1s"><span class="text-lg">✅</span>Clean day</button>
+        <button id="quickFirewallButton" type="button" class="btn btn-ghost rise-in flex-col gap-1 px-2 py-3 text-[0.68rem]" style="animation-delay:.13s"><span class="text-lg">🔥</span>Firewall</button>
+        <button id="quickAuditButton" type="button" class="btn btn-ghost rise-in flex-col gap-1 px-2 py-3 text-[0.68rem]" style="animation-delay:.16s"><span class="text-lg">🔭</span>Tonight's audit</button>
+      </div>
+
+      <div class="card card-pad rise-in" style="animation-delay:.2s">
+        <div class="flex items-start gap-4">
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-lg">🔬</div>
+          <div>
+            <h2 class="mb-1.5 font-display text-sm font-bold uppercase tracking-widest text-accent">The Scientist Creed</h2>
+            <p class="text-sm leading-relaxed text-slate-300">
+              <span class="font-semibold text-snow">Scientist Mindset:</span> I am the detached observer analysing my own mental machinery. No guilt, no self-hatred. Slips are purely data to adjust the gears.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =========================== FIREWALL =========================== -->
+    <section id="view-firewall" class="view hidden space-y-5" role="tabpanel" aria-labelledby="tab-firewall">
+
+      <div class="card card-pad space-y-5 rounded-2xl border-danger/25 text-center">
+        <div>
+          <p class="eyebrow text-danger">Emergency intercept</p>
+          <h2 class="mt-1 font-display text-xl font-bold sm:text-2xl">🔥 The 3-Question Firewall</h2>
+          <p class="mx-auto mt-2 max-w-md text-xs text-silver sm:text-sm">An urge detected is an urge intercepted. Deploy the instant the wave begins to rise.</p>
+        </div>
+        <button id="deployFirewall" type="button" class="pulse-glow btn w-full bg-gradient-to-r from-red-600 via-red-500 to-accent px-8 py-4 text-base text-snow sm:text-lg">
+          ⚠️ DEPLOY EMERGENCY FIREWALL
+        </button>
+        <p id="firewallSummary" class="text-[0.7rem] text-muted"></p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="stat-tile"><p class="eyebrow mb-1.5">Deploys</p><p class="stat-value text-snow" id="fwTotal">0</p></div>
+        <div class="stat-tile"><p class="eyebrow mb-1.5">Held line</p><p class="stat-value text-accent" id="fwHeld">0<span class="ml-0.5 text-xs font-bold text-muted">%</span></p></div>
+        <div class="stat-tile"><p class="eyebrow mb-1.5">Avg hold</p><p class="stat-value text-snow" id="fwAvg">0:00</p></div>
+        <div class="stat-tile"><p class="eyebrow mb-1.5">Last 7 days</p><p class="stat-value text-snow" id="fwWeek">0</p></div>
+      </div>
+
+      <div class="card">
+        <div class="flex items-center justify-between gap-3 px-5 pb-3 pt-5 sm:px-6">
+          <div>
+            <p class="eyebrow">Personal anchors</p>
+            <h2 class="section-title">⚓ Why you hold</h2>
+          </div>
+          <button id="addAnchorButton" type="button" class="btn btn-ghost btn-sm">＋ Add</button>
+        </div>
+        <div class="divider-glow mx-5 sm:mx-6"></div>
+        <div class="p-5 sm:p-6">
+          <p class="mb-3 text-xs text-silver">These are shown to you inside the intercept, when your reasoning is at its weakest.</p>
+          <div id="anchorList" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="px-5 pb-3 pt-5 sm:px-6">
+          <p class="eyebrow">Recent intercepts</p>
+          <h2 class="section-title">📡 Intercept log</h2>
+        </div>
+        <div class="divider-glow mx-5 sm:mx-6"></div>
+        <div id="sessionList" class="space-y-2 p-5 sm:p-6"></div>
+      </div>
+
+    </section>
+
+    <!-- ============================= LOG ============================= -->
+    <section id="view-log" class="view hidden space-y-5" role="tabpanel" aria-labelledby="tab-log">
+
+      <div class="card">
+        <div class="flex items-center justify-between gap-3 px-5 pb-3 pt-5 sm:px-6">
+          <div>
+            <p class="eyebrow">Data entry</p>
+            <h2 id="auditFormTitle" class="section-title">🔭 Nightly Scientist Audit</h2>
+          </div>
+          <button id="cancelEditButton" type="button" class="btn btn-ghost btn-sm hidden">Cancel edit</button>
+        </div>
+        <div class="divider-glow mx-5 sm:mx-6"></div>
+        <form id="auditForm" class="space-y-5 p-5 sm:p-6" novalidate>
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label for="auditDate" class="label">Observation date</label>
+              <input type="date" id="auditDate" required class="field">
+            </div>
+            <div>
+              <label for="slipType" class="label">Slip type</label>
+              <select id="slipType" required class="field">
+                <option value="None (Flawless Victory)">None (Flawless Victory)</option>
+                <option value="Smoking">Smoking</option>
+                <option value="Masturbation">Masturbation</option>
+                <option value="Both">Both</option>
+              </select>
+            </div>
+            <div>
+              <label for="rootTrigger" class="label">Root trigger</label>
+              <select id="rootTrigger" required class="field">
+                <option value="Boredom">Boredom</option>
+                <option value="Work/Life Stress">Work/Life Stress</option>
+                <option value="Loneliness">Loneliness</option>
+                <option value="Fatigue/Exhaustion">Fatigue/Exhaustion</option>
+                <option value="Environmental Cue">Environmental Cue</option>
+                <option value="Anxiety">Anxiety</option>
+                <option value="Celebration/Reward">Celebration/Reward</option>
+                <option value="__custom__">Something else…</option>
+              </select>
+            </div>
+            <div>
+              <label for="reactionTime" class="label">Charioteer reaction time</label>
+              <select id="reactionTime" required class="field">
+                <option value="Automatic Pilot (Slid Instantly)">Automatic Pilot (Slid Instantly)</option>
+                <option value="Delayed Action (Fought for a few minutes)">Delayed Action (Fought for a few minutes)</option>
+                <option value="Defended Successfully">Defended Successfully</option>
+              </select>
+            </div>
+          </div>
+          <div id="customTriggerWrap" class="hidden">
+            <label for="customTrigger" class="label">Name that trigger</label>
+            <input type="text" id="customTrigger" maxlength="40" placeholder="e.g. Late-night scrolling" class="field">
+          </div>
+          <div>
+            <span class="label">Clarity &amp; energy</span>
+            <div id="moodChips" class="grid grid-cols-5 gap-2" role="group" aria-label="Clarity and energy rating"></div>
+          </div>
+          <div>
+            <label for="gearNotes" class="label">The gear adjustment (notes for tomorrow)</label>
+            <textarea id="gearNotes" rows="4" placeholder="What did the data reveal? Which gear gets adjusted tomorrow?" class="field resize-y"></textarea>
+          </div>
+          <button id="auditSubmit" type="submit" class="btn btn-primary w-full py-4">📡 Log observation</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="flex flex-wrap items-end justify-between gap-3 px-5 pb-3 pt-5 sm:px-6">
+          <div>
+            <p class="eyebrow">Persistent log data</p>
+            <h2 class="section-title">🗄️ The Mounted Repository</h2>
+          </div>
+          <span id="repoStats" class="chip"></span>
+        </div>
+        <div class="divider-glow mx-5 sm:mx-6"></div>
+
+        <div class="space-y-3 px-5 pt-5 sm:px-6">
+          <label for="searchInput" class="sr-only">Search entries</label>
+          <input type="search" id="searchInput" placeholder="Search notes, triggers, dates…" class="field">
+          <div id="filterChips" class="flex flex-wrap gap-2" role="group" aria-label="Filter entries"></div>
         </div>
 
-        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
-          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 01</span>
-          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">WHO WANTS THIS—THE SOUL OR THE MIND?</h3>
-          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">The soul is already complete and peaceful. This urge is a temporary, restless chemical wave passing through the physical midbrain (Manas).</p>
+        <div id="historyFeed" class="space-y-3 p-5 sm:p-6"></div>
+        <div id="loadMoreWrap" class="hidden px-5 pb-4 text-center sm:px-6">
+          <button id="loadMoreButton" type="button" class="btn btn-ghost btn-sm"></button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =========================== INSIGHTS =========================== -->
+    <section id="view-insights" class="view hidden space-y-5" role="tabpanel" aria-labelledby="tab-insights">
+
+      <div id="insightsEmpty" class="card card-pad hidden space-y-3 text-center">
+        <div class="text-4xl">📭</div>
+        <p class="text-sm text-silver">No observations yet. Log your first nightly audit and the analytics deck powers up.</p>
+        <button type="button" class="btn btn-primary btn-sm mx-auto" data-goto="log">Open the audit</button>
+      </div>
+
+      <div id="insightsBody" class="space-y-5">
+
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="stat-tile"><p class="eyebrow mb-1.5">Current streak</p><p class="stat-value text-accent"><span id="statCurrentStreak">0</span><span class="ml-1 text-xs font-bold text-muted">d</span></p></div>
+          <div class="stat-tile"><p class="eyebrow mb-1.5">Best streak</p><p class="stat-value text-snow"><span id="statBestStreak">0</span><span class="ml-1 text-xs font-bold text-muted">d</span></p></div>
+          <div class="stat-tile"><p class="eyebrow mb-1.5">Victory rate</p><p class="stat-value text-snow"><span id="statSuccessRate">0</span><span class="ml-1 text-xs font-bold text-muted">%</span></p></div>
+          <div class="stat-tile"><p class="eyebrow mb-1.5">Top threat</p><p id="statTopTrigger" class="stat-value pt-1 text-sm leading-tight text-danger sm:text-base">—</p></div>
         </div>
 
-        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
-          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 02</span>
-          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">WHAT IS THE EXACT END-RESULT OF THIS ACTION?</h3>
-          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">A 5-minute illusionary escape followed immediately by hours of brain fog, physical fatigue, lost vital energy (Ojas), and deep spiritual guilt.</p>
+        <div class="card card-pad">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <button id="calPrev" type="button" class="icon-btn h-9 w-9" aria-label="Previous month">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <div class="text-center">
+              <p class="eyebrow">Battle map</p>
+              <p id="calendarLabel" class="font-display text-sm font-bold text-snow"></p>
+            </div>
+            <button id="calNext" type="button" class="icon-btn h-9 w-9" aria-label="Next month">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+          <div class="mx-auto max-w-sm">
+            <div class="mb-1.5 grid grid-cols-7 gap-1.5 text-center text-[0.55rem] font-bold uppercase tracking-wider text-muted">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5"></div>
+          </div>
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-3 text-[0.6rem] text-silver">
+            <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-sm bg-accent"></span>Clean</span>
+            <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-sm bg-danger"></span>Slip</span>
+            <span class="flex items-center gap-1.5"><span class="inline-block h-2.5 w-2.5 rounded-sm bg-elevated"></span>No data</span>
+            <span class="text-muted">· tap a day to log or review it</span>
+          </div>
         </div>
 
-        <div class="glass-card rounded-2xl border border-emerald-500/25 p-6 sm:p-8 text-center space-y-4">
-          <span class="inline-block text-[0.65rem] font-bold tracking-[0.3em] text-emerald-400 uppercase">Question 03</span>
-          <h3 class="font-display font-extrabold text-xl sm:text-3xl leading-snug text-snow">DOES THIS ACTION TAKE ME CLOSER TO GOLOKA VAIKUNTHA OR PULL ME DOWN?</h3>
-          <p class="text-silver text-sm sm:text-base leading-relaxed max-w-lg mx-auto">It anchors consciousness to raw material impulses. True freedom means prioritizing my eternal destination over a passing physical itch.</p>
+        <div class="card card-pad">
+          <p class="eyebrow mb-4">Clean rate · last 8 weeks</p>
+          <div id="weeklyBars" class="flex h-32 items-end justify-between gap-1.5"></div>
         </div>
 
-        <div class="glass-card rounded-2xl border border-red-500/30 p-6 sm:p-8 text-center space-y-6">
-          <div class="flex flex-col items-center gap-4">
-            <div class="relative w-32 h-32 sm:w-36 sm:h-36">
-              <svg class="w-full h-full" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="52" fill="none" stroke="#374151" stroke-width="8"></circle>
-                <circle id="timerRing" class="timer-ring" cx="60" cy="60" r="52" fill="none" stroke="#10B981" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.726" stroke-dashoffset="0"></circle>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div class="card card-pad">
+            <p class="eyebrow mb-4">Threat breakdown</p>
+            <div id="triggerBars" class="space-y-3"></div>
+          </div>
+          <div class="card card-pad">
+            <p class="eyebrow mb-4">Charioteer reaction</p>
+            <div id="reactionBars" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <p class="eyebrow">Clarity trend · last 14 logs</p>
+            <p id="moodAverage" class="text-xs font-bold text-accent"></p>
+          </div>
+          <div id="moodSpark"></div>
+        </div>
+
+        <div class="card card-pad">
+          <p class="eyebrow mb-4">Protocol adherence · last 30 days</p>
+          <div id="ritualAdherence" class="space-y-3"></div>
+        </div>
+
+        <div class="card card-pad">
+          <p class="eyebrow mb-4">Milestones</p>
+          <div id="milestoneRow" class="grid grid-cols-4 gap-2 sm:grid-cols-8"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tab-bar" role="tablist" aria-label="Main sections">
+    <div class="mx-auto flex w-full max-w-2xl">
+      <button id="tab-today" class="tab-btn" role="tab" data-tab="today" aria-selected="true" aria-controls="view-today">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"></path></svg>
+        Today
+      </button>
+      <button id="tab-firewall" class="tab-btn" role="tab" data-tab="firewall" aria-selected="false" aria-controls="view-firewall">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s4 4.5 4 8a4 4 0 0 1-8 0c0-1.5.7-2.9 1.4-4C9.4 8.5 12 7 12 2z"></path><path d="M5 15c0 4 3.1 7 7 7s7-3 7-7c0-1.6-.6-3.2-1.5-4.5"></path></svg>
+        Firewall
+      </button>
+      <button id="tab-log" class="tab-btn" role="tab" data-tab="log" aria-selected="false" aria-controls="view-log">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        Log
+      </button>
+      <button id="tab-insights" class="tab-btn" role="tab" data-tab="insights" aria-selected="false" aria-controls="view-insights">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        Insights
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- ========================= FIREWALL MODAL ========================= -->
+<div id="firewallModal" class="fixed inset-0 z-[60] hidden bg-canvas" role="dialog" aria-modal="true" aria-labelledby="firewall-modal-title">
+  <div id="firewallScroll" class="h-full overflow-y-auto">
+    <div class="pop-in mx-auto w-full max-w-2xl space-y-6 px-4 sm:px-6" style="padding-top:calc(var(--safe-top) + 2rem);padding-bottom:calc(var(--safe-bottom) + 2rem)">
+
+      <div id="firewallStage" class="space-y-6">
+        <div class="space-y-3 text-center">
+          <span class="chip chip-danger"><span class="h-2 w-2 animate-ping rounded-full bg-danger"></span>Firewall engaged · interface locked</span>
+          <h2 id="firewall-modal-title" class="font-display text-2xl font-extrabold tracking-tight sm:text-4xl">NEURAL LOOP <span class="text-danger">INTERCEPTED</span></h2>
+          <p class="text-sm text-silver">Breathe. Read every word slowly. The wave cannot survive observation.</p>
+        </div>
+
+        <div class="glass-card space-y-6 rounded-2xl border border-danger/30 p-6 text-center sm:p-8">
+          <div class="flex flex-col items-center gap-5">
+            <div class="relative h-32 w-32 sm:h-36 sm:w-36">
+              <svg class="h-full w-full" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#2A3547" stroke-width="8"></circle>
+                <circle id="timerRing" class="timer-ring" cx="60" cy="60" r="52" fill="none" stroke="rgb(var(--accent))" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.726" stroke-dashoffset="0"></circle>
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span id="timerDisplay" class="font-display font-extrabold text-3xl sm:text-4xl text-snow">3:00</span>
-                <span class="text-[0.6rem] tracking-[0.25em] uppercase text-silver">Hold the line</span>
+                <span id="timerDisplay" class="font-display text-3xl font-extrabold sm:text-4xl">3:00</span>
+                <span class="text-[0.5rem] uppercase tracking-[0.1em] text-muted">Hold the line</span>
               </div>
             </div>
-            <p id="timerComplete" class="hidden font-display font-bold text-emerald-400 text-sm tracking-widest uppercase">⚔️ The wave has broken. You outlasted it.</p>
+            <p id="timerComplete" class="hidden font-display text-sm font-bold uppercase tracking-widest text-accent">⚔️ The wave has broken. You outlasted it.</p>
           </div>
+
           <div class="flex flex-col items-center gap-3">
-            <div class="h-24 flex items-center justify-center"><div id="pacerCircle" class="pacer-circle"></div></div>
-            <p class="text-[0.65rem] tracking-[0.3em] uppercase text-silver">Box Breathing · <span id="pacerLabel" class="text-emerald-400 font-bold">Inhale</span></p>
+            <div class="flex h-28 items-center justify-center"><div id="pacerOrb" class="pacer-orb"></div></div>
+            <p class="text-[0.62rem] uppercase tracking-[0.28em] text-muted">
+              <span id="pacerPattern">Box breathing</span> · <span id="pacerLabel" class="font-bold text-accent">Inhale</span> <span id="pacerCount" class="text-snow"></span>
+            </p>
           </div>
-          <p class="flash-prompt font-display font-bold text-base sm:text-xl text-snow leading-relaxed">
+
+          <p class="flash-prompt font-display text-base font-bold leading-relaxed sm:text-xl">
             ACTION: Drop the phone/vape. Change your physical room right now.<br class="hidden sm:block">
             Drink ice-cold water or chant the Maha-Mantra out loud.
           </p>
-          <button id="closeFirewall" type="button" class="w-full sm:w-auto font-display font-bold tracking-wide text-canvas bg-emeraldx hover:bg-emerald-400 active:scale-[0.98] rounded-xl px-8 py-4 text-sm sm:text-base transition-all duration-200 shadow-lg shadow-emerald-500/30">
-            🧘 Close Firewall (Mind Restored)
-          </button>
         </div>
 
+        <div id="anchorsInModal" class="space-y-3"></div>
+
+        <div class="glass-card space-y-4 rounded-2xl border border-accent/25 p-6 text-center sm:p-8">
+          <span class="eyebrow text-accent">Question 01</span>
+          <h3 class="font-display text-xl font-extrabold leading-snug sm:text-3xl">WHO WANTS THIS—THE SOUL OR THE MIND?</h3>
+          <p class="mx-auto max-w-lg text-sm leading-relaxed text-silver sm:text-base">The soul is already complete and peaceful. This urge is a temporary, restless chemical wave passing through the physical midbrain (Manas).</p>
+        </div>
+
+        <div class="glass-card space-y-4 rounded-2xl border border-accent/25 p-6 text-center sm:p-8">
+          <span class="eyebrow text-accent">Question 02</span>
+          <h3 class="font-display text-xl font-extrabold leading-snug sm:text-3xl">WHAT IS THE EXACT END-RESULT OF THIS ACTION?</h3>
+          <p class="mx-auto max-w-lg text-sm leading-relaxed text-silver sm:text-base">A 5-minute illusionary escape followed immediately by hours of brain fog, physical fatigue, lost vital energy (Ojas), and deep spiritual guilt.</p>
+        </div>
+
+        <div class="glass-card space-y-4 rounded-2xl border border-accent/25 p-6 text-center sm:p-8">
+          <span class="eyebrow text-accent">Question 03</span>
+          <h3 class="font-display text-xl font-extrabold leading-snug sm:text-3xl">DOES THIS TAKE ME CLOSER TO GOLOKA VAIKUNTHA OR PULL ME DOWN?</h3>
+          <p class="mx-auto max-w-lg text-sm leading-relaxed text-silver sm:text-base">It anchors consciousness to raw material impulses. True freedom means prioritising my eternal destination over a passing physical itch.</p>
+        </div>
+
+        <button id="closeFirewall" type="button" class="btn btn-primary w-full py-4">🧘 Close firewall (mind restored)</button>
       </div>
+
+      <div id="firewallAftermath" class="hidden space-y-6">
+        <div class="space-y-3 text-center">
+          <span class="chip chip-accent">Debrief</span>
+          <h2 class="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">LOG THE <span class="gradient-text">DATA</span></h2>
+          <p id="aftermathHold" class="text-sm text-silver"></p>
+        </div>
+        <div class="card card-pad space-y-4">
+          <p class="label mb-0">How strong was the wave?</p>
+          <div id="intensityChips" class="grid grid-cols-4 gap-2" role="group" aria-label="Urge intensity"></div>
+        </div>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <button id="heldButton" type="button" class="btn btn-primary py-4">⚔️ I held the line</button>
+          <button id="slippedButton" type="button" class="btn btn-danger py-4">📉 I slipped — log it</button>
+        </div>
+        <button id="skipAftermath" type="button" class="mx-auto block text-xs font-semibold uppercase tracking-widest text-muted hover:text-silver">Skip debrief</button>
+      </div>
+
     </div>
   </div>
 </div>
 
-<div id="confirmModal" class="fixed inset-0 z-[70] hidden" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
-  <div class="glass absolute inset-0"></div>
-  <div class="relative h-full flex items-center justify-center p-4">
-    <div class="modal-enter w-full max-w-sm rounded-2xl border border-gray-700 bg-obsidian p-6 sm:p-7 space-y-5 text-center shadow-2xl shadow-black/60">
-      <h3 id="confirmTitle" class="font-display font-bold text-lg text-snow"></h3>
-      <p id="confirmMessage" class="text-sm text-silver leading-relaxed"></p>
+<!-- ========================== SETTINGS SHEET ========================== -->
+<div id="settingsScrim" class="scrim hidden"></div>
+<div id="settingsSheet" class="sheet hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="mx-auto w-full max-w-2xl">
+    <div class="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-line/60 bg-surface/95 px-5 py-4 backdrop-blur-xl sm:px-6">
+      <h2 id="settingsTitle" class="font-display text-lg font-bold">Settings</h2>
+      <button id="closeSettings" type="button" class="icon-btn" aria-label="Close settings">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="space-y-7 px-5 py-6 sm:px-6">
+
+      <div>
+        <p class="label">Accent colour</p>
+        <div id="accentChoices" class="flex gap-3"></div>
+      </div>
+
+      <div>
+        <label for="timerLength" class="label">Firewall hold duration</label>
+        <select id="timerLength" class="field">
+          <option value="60">1 minute</option>
+          <option value="180">3 minutes</option>
+          <option value="300">5 minutes</option>
+          <option value="600">10 minutes</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="breathPattern" class="label">Breathing pattern</label>
+        <select id="breathPattern" class="field">
+          <option value="box">Box · 4-4-4-4</option>
+          <option value="calm">Relaxing · 4-7-8</option>
+          <option value="even">Coherent · 5-5</option>
+        </select>
+      </div>
+
+      <div class="space-y-3">
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line/70 bg-canvas/60 p-4">
+          <input type="checkbox" id="hapticsToggle" class="mt-0.5 h-5 w-5 shrink-0 accent-[rgb(var(--accent))]">
+          <span>
+            <span class="block text-sm font-semibold text-snow">Haptic feedback</span>
+            <span class="mt-0.5 block text-xs text-silver">Short vibrations on breath phases, check-offs and milestones.</span>
+          </span>
+        </label>
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line/70 bg-canvas/60 p-4">
+          <input type="checkbox" id="privacyToggle" class="mt-0.5 h-5 w-5 shrink-0 accent-[rgb(var(--accent))]">
+          <span>
+            <span class="block text-sm font-semibold text-snow">Discreet mode</span>
+            <span class="mt-0.5 block text-xs text-silver">Blur entry notes and slip labels until you tap them.</span>
+          </span>
+        </label>
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line/70 bg-canvas/60 p-4">
+          <input type="checkbox" id="confirmCloseToggle" class="mt-0.5 h-5 w-5 shrink-0 accent-[rgb(var(--accent))]">
+          <span>
+            <span class="block text-sm font-semibold text-snow">Guard the firewall exit</span>
+            <span class="mt-0.5 block text-xs text-silver">Ask for confirmation if you close an intercept before the timer ends.</span>
+          </span>
+        </label>
+      </div>
+
+      <div>
+        <p class="label">Data</p>
+        <div class="flex flex-wrap gap-2">
+          <button id="exportRepo" type="button" class="btn btn-ghost btn-sm">⬇️ Export backup</button>
+          <button id="importRepo" type="button" class="btn btn-ghost btn-sm">⬆️ Import backup</button>
+          <button id="clearRepo" type="button" class="btn btn-danger btn-sm">🗑️ Erase everything</button>
+          <input type="file" id="importInput" accept=".json,application/json" class="hidden">
+        </div>
+        <p class="mt-3 text-[0.68rem] leading-relaxed text-muted">A backup contains every entry, ritual, anchor, intercept and preference. It never leaves this device unless you share the file yourself.</p>
+      </div>
+
+      <div id="installWrap" class="hidden">
+        <p class="label">Install</p>
+        <button id="installButton" type="button" class="btn btn-ghost btn-sm">📲 Install to home screen</button>
+      </div>
+
+      <p class="border-t border-line/60 pt-5 text-center text-[0.68rem] leading-relaxed text-muted">
+        The Chariot Control Panel · <span id="appVersion"></span><br>
+        All data lives only on this device. No network. No telemetry. The observer remains sovereign.
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================ DIALOGS ============================ -->
+<div id="confirmModal" class="fixed inset-0 z-[80] hidden" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="relative flex h-full items-center justify-center p-4">
+    <div class="pop-in w-full max-w-sm space-y-5 rounded-2xl border border-line bg-surface p-6 text-center shadow-2xl shadow-black/60">
+      <h3 id="confirmTitle" class="font-display text-lg font-bold"></h3>
+      <p id="confirmMessage" class="text-sm leading-relaxed text-silver"></p>
       <div class="flex gap-3">
-        <button id="confirmCancel" type="button" class="flex-1 font-semibold text-sm text-silver hover:text-snow border border-gray-600 hover:border-gray-400 rounded-xl px-4 py-3 transition-all duration-200">Cancel</button>
-        <button id="confirmAccept" type="button" class="flex-1 font-display font-bold text-sm rounded-xl px-4 py-3 transition-all duration-200"></button>
+        <button id="confirmCancel" type="button" class="btn btn-ghost flex-1">Cancel</button>
+        <button id="confirmAccept" type="button" class="btn flex-1"></button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="toast" class="fixed bottom-6 inset-x-4 z-[80] flex justify-center pointer-events-none hidden" aria-live="polite">
-  <div id="toastBody" class="toast-in rounded-xl border border-emerald-500/40 bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow text-center max-w-md"></div>
+<div id="promptModal" class="fixed inset-0 z-[80] hidden" role="dialog" aria-modal="true" aria-labelledby="promptTitle">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="relative flex h-full items-center justify-center p-4">
+    <form id="promptForm" class="pop-in w-full max-w-sm space-y-4 rounded-2xl border border-line bg-surface p-6 shadow-2xl shadow-black/60">
+      <h3 id="promptTitle" class="font-display text-lg font-bold"></h3>
+      <div>
+        <label id="promptLabel" for="promptInput" class="label"></label>
+        <input type="text" id="promptInput" maxlength="80" class="field" autocomplete="off">
+      </div>
+      <div id="promptDetailWrap">
+        <label id="promptDetailLabel" for="promptDetail" class="label">Detail (optional)</label>
+        <textarea id="promptDetail" rows="2" maxlength="160" class="field resize-none"></textarea>
+      </div>
+      <div class="flex gap-3 pt-1">
+        <button id="promptCancel" type="button" class="btn btn-ghost flex-1">Cancel</button>
+        <button type="submit" id="promptAccept" class="btn btn-primary flex-1">Save</button>
+      </div>
+    </form>
+  </div>
 </div>
 
-<script>
-(() => {
-  "use strict";
-
-  const STORAGE_KEYS = {
-    logs: "chariot_logs_v1",
-    shield: "chariot_shield_v1",
-    firewall: "chariot_firewall_deploys_v1",
-    sessions: "chariot_firewall_sessions_v1"
-  };
-
-  const TIMER_TOTAL_SECONDS = 180;
-  const RING_CIRCUMFERENCE = 326.726;
-  const CLEAN_SLIP_VALUE = "None (Flawless Victory)";
-  const LOGS_PER_PAGE = 14;
-  const HEATMAP_DAYS = 35;
-  const MAX_STORED_SESSIONS = 200;
-  const BREATH_PHASES = ["Inhale", "Hold", "Exhale", "Hold"];
-  const BREATH_PHASE_MS = 4000;
-  const SHORT_TRIGGERS = {
-    "Boredom": "Boredom",
-    "Work/Life Stress": "Stress",
-    "Loneliness": "Loneliness",
-    "Fatigue/Exhaustion": "Fatigue",
-    "Environmental Cue": "Env. Cue"
-  };
-
-  const elements = {
-    main: document.getElementById("mainContent"),
-    shieldBrahma: document.getElementById("checkBrahma"),
-    shieldIntention: document.getElementById("checkIntention"),
-    shieldStatus: document.getElementById("shieldStatus"),
-    deployButton: document.getElementById("deployFirewall"),
-    firewallModal: document.getElementById("firewallModal"),
-    firewallScroll: document.getElementById("firewallScroll"),
-    closeFirewallButton: document.getElementById("closeFirewall"),
-    firewallCount: document.getElementById("firewallCount"),
-    timerDisplay: document.getElementById("timerDisplay"),
-    timerRing: document.getElementById("timerRing"),
-    timerComplete: document.getElementById("timerComplete"),
-    pacerCircle: document.getElementById("pacerCircle"),
-    pacerLabel: document.getElementById("pacerLabel"),
-    auditForm: document.getElementById("auditForm"),
-    auditDate: document.getElementById("auditDate"),
-    slipType: document.getElementById("slipType"),
-    rootTrigger: document.getElementById("rootTrigger"),
-    reactionTime: document.getElementById("reactionTime"),
-    gearNotes: document.getElementById("gearNotes"),
-    historyFeed: document.getElementById("historyFeed"),
-    repoStats: document.getElementById("repoStats"),
-    repoAnalytics: document.getElementById("repoAnalytics"),
-    statCurrentStreak: document.getElementById("statCurrentStreak"),
-    statBestStreak: document.getElementById("statBestStreak"),
-    statSuccessRate: document.getElementById("statSuccessRate"),
-    statTopTrigger: document.getElementById("statTopTrigger"),
-    heatmapGrid: document.getElementById("heatmapGrid"),
-    loadMoreWrap: document.getElementById("loadMoreWrap"),
-    loadMoreButton: document.getElementById("loadMoreButton"),
-    exportButton: document.getElementById("exportRepo"),
-    importButton: document.getElementById("importRepo"),
-    importInput: document.getElementById("importInput"),
-    clearButton: document.getElementById("clearRepo"),
-    confirmModal: document.getElementById("confirmModal"),
-    confirmTitle: document.getElementById("confirmTitle"),
-    confirmMessage: document.getElementById("confirmMessage"),
-    confirmAccept: document.getElementById("confirmAccept"),
-    confirmCancel: document.getElementById("confirmCancel"),
-    toast: document.getElementById("toast"),
-    toastBody: document.getElementById("toastBody")
-  };
-
-  let timerIntervalId = null;
-  let timerEndTimestamp = null;
-  let firewallOpenedAt = null;
-  let toastTimeoutId = null;
-  let pendingConfirmAction = null;
-  let lastFocusedElement = null;
-  let visibleLogCount = LOGS_PER_PAGE;
-
-  const todayISO = () => {
-    const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    return `${now.getFullYear()}-${month}-${day}`;
-  };
-
-  const isoToDate = (iso) => {
-    const [year, month, day] = iso.split("-").map(Number);
-    return new Date(year, month - 1, day);
-  };
-
-  const dateToISO = (dateObject) => {
-    const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-    const day = String(dateObject.getDate()).padStart(2, "0");
-    return `${dateObject.getFullYear()}-${month}-${day}`;
-  };
-
-  const shiftISO = (iso, deltaDays) => {
-    const dateObject = isoToDate(iso);
-    dateObject.setDate(dateObject.getDate() + deltaDays);
-    return dateToISO(dateObject);
-  };
-
-  const safeParse = (raw, fallback) => {
-    if (!raw) return fallback;
-    try {
-      const parsed = JSON.parse(raw);
-      return parsed === null || parsed === undefined ? fallback : parsed;
-    } catch {
-      return fallback;
-    }
-  };
-
-  const readLogs = () => {
-    const logs = safeParse(localStorage.getItem(STORAGE_KEYS.logs), []);
-    return Array.isArray(logs) ? logs : [];
-  };
-
-  const writeLogs = (logs) => {
-    localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
-  };
-
-  const readShield = () => {
-    const state = safeParse(localStorage.getItem(STORAGE_KEYS.shield), null);
-    if (!state || state.date !== todayISO()) {
-      return { date: todayISO(), brahma: false, intention: false };
-    }
-    return state;
-  };
-
-  const writeShield = (state) => {
-    localStorage.setItem(STORAGE_KEYS.shield, JSON.stringify(state));
-  };
-
-  const readFirewallDeploys = () => {
-    const count = parseInt(localStorage.getItem(STORAGE_KEYS.firewall), 10);
-    return Number.isNaN(count) ? 0 : count;
-  };
-
-  const readSessions = () => {
-    const sessions = safeParse(localStorage.getItem(STORAGE_KEYS.sessions), []);
-    return Array.isArray(sessions) ? sessions : [];
-  };
-
-  const writeSessions = (sessions) => {
-    localStorage.setItem(STORAGE_KEYS.sessions, JSON.stringify(sessions.slice(-MAX_STORED_SESSIONS)));
-  };
-
-  const isCleanLog = (log) => log.slipType === CLEAN_SLIP_VALUE;
-
-  const escapeHTML = (value) => {
-    const div = document.createElement("div");
-    div.textContent = value;
-    return div.innerHTML;
-  };
-
-  const formatDisplayDate = (isoDate) => {
-    const parts = isoDate.split("-");
-    if (parts.length !== 3) return isoDate;
-    const dateObject = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-    return dateObject.toLocaleDateString(undefined, { weekday: "short", year: "numeric", month: "short", day: "numeric" });
-  };
-
-  const formatClock = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${String(seconds).padStart(2, "0")}`;
-  };
-
-  const formatRelative = (timestamp) => {
-    const minutes = Math.floor((Date.now() - timestamp) / 60000);
-    if (minutes < 1) return "just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    return `${Math.floor(hours / 24)}d ago`;
-  };
-
-  const anyOverlayOpen = () =>
-    !elements.firewallModal.classList.contains("hidden") ||
-    !elements.confirmModal.classList.contains("hidden");
-
-  const syncInert = () => {
-    const locked = anyOverlayOpen();
-    elements.main.inert = locked;
-    document.body.classList.toggle("modal-open", locked);
-  };
-
-  const showToast = (message, isAlert) => {
-    if (toastTimeoutId) clearTimeout(toastTimeoutId);
-    elements.toastBody.textContent = message;
-    elements.toastBody.className = `toast-in rounded-xl border bg-obsidian px-5 py-3.5 shadow-2xl shadow-black/50 text-sm font-semibold text-snow text-center max-w-md ${isAlert ? "border-red-500/50" : "border-emerald-500/40"}`;
-    elements.toast.classList.remove("hidden");
-    toastTimeoutId = setTimeout(() => {
-      elements.toast.classList.add("hidden");
-    }, 2800);
-  };
-
-  const showConfirm = ({ title, message, acceptLabel, danger, onAccept }) => {
-    lastFocusedElement = document.activeElement;
-    elements.confirmTitle.textContent = title;
-    elements.confirmMessage.textContent = message;
-    elements.confirmAccept.textContent = acceptLabel;
-    elements.confirmAccept.className = `flex-1 font-display font-bold text-sm rounded-xl px-4 py-3 transition-all duration-200 ${danger ? "text-snow bg-crimsonx hover:bg-red-400 shadow-lg shadow-red-500/25" : "text-canvas bg-emeraldx hover:bg-emerald-400 shadow-lg shadow-emerald-500/25"}`;
-    pendingConfirmAction = onAccept;
-    elements.confirmModal.classList.remove("hidden");
-    syncInert();
-    elements.confirmCancel.focus();
-  };
-
-  const closeConfirm = () => {
-    elements.confirmModal.classList.add("hidden");
-    pendingConfirmAction = null;
-    syncInert();
-    if (lastFocusedElement && typeof lastFocusedElement.focus === "function" && !anyOverlayOpen()) {
-      lastFocusedElement.focus();
-    }
-    lastFocusedElement = null;
-  };
-
-  const renderShield = () => {
-    const state = readShield();
-    elements.shieldBrahma.checked = state.brahma;
-    elements.shieldIntention.checked = state.intention;
-    const armed = (state.brahma ? 1 : 0) + (state.intention ? 1 : 0);
-    if (armed === 2) {
-      elements.shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-emerald-500/50 bg-emerald-500/15 text-emerald-400 whitespace-nowrap";
-      elements.shieldStatus.textContent = "Shield Fully Armed";
-    } else {
-      elements.shieldStatus.className = "text-[0.65rem] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-gray-600 text-silver whitespace-nowrap";
-      elements.shieldStatus.textContent = `${armed} / 2 Armed`;
-    }
-  };
-
-  const handleShieldChange = () => {
-    writeShield({
-      date: todayISO(),
-      brahma: elements.shieldBrahma.checked,
-      intention: elements.shieldIntention.checked
-    });
-    renderShield();
-  };
-
-  const renderFirewallCount = () => {
-    const deploys = readFirewallDeploys();
-    if (deploys === 0) {
-      elements.firewallCount.textContent = "No emergency deployments recorded yet.";
-      return;
-    }
-    let text = `Firewall deployed ${deploys} ${deploys === 1 ? "time" : "times"} — every deployment is a victory of awareness.`;
-    const sessions = readSessions();
-    if (sessions.length > 0) {
-      const averageHold = Math.round(sessions.reduce((sum, session) => sum + (session.heldSeconds || 0), 0) / sessions.length);
-      const lastSession = sessions[sessions.length - 1];
-      text += ` Avg hold ${formatClock(averageHold)} · last intercept ${formatRelative(lastSession.at)}.`;
-    }
-    elements.firewallCount.textContent = text;
-  };
-
-  const updateTimerVisual = (remaining) => {
-    elements.timerDisplay.textContent = formatClock(remaining);
-    const progress = remaining / TIMER_TOTAL_SECONDS;
-    elements.timerRing.setAttribute("stroke-dashoffset", String(RING_CIRCUMFERENCE * (1 - progress)));
-    elements.timerRing.setAttribute("stroke", remaining <= 30 && remaining > 0 ? "#EF4444" : "#10B981");
-  };
-
-  const updatePacer = () => {
-    if (!firewallOpenedAt) return;
-    const elapsed = Date.now() - firewallOpenedAt;
-    const phaseIndex = Math.floor((elapsed % (BREATH_PHASES.length * BREATH_PHASE_MS)) / BREATH_PHASE_MS);
-    elements.pacerLabel.textContent = BREATH_PHASES[phaseIndex];
-  };
-
-  const tickTimer = () => {
-    updatePacer();
-    const remaining = Math.max(0, Math.ceil((timerEndTimestamp - Date.now()) / 1000));
-    updateTimerVisual(remaining);
-    if (remaining <= 0) {
-      elements.timerComplete.classList.remove("hidden");
-    }
-  };
-
-  const stopTimer = () => {
-    if (timerIntervalId) {
-      clearInterval(timerIntervalId);
-      timerIntervalId = null;
-    }
-  };
-
-  const startTimer = () => {
-    stopTimer();
-    firewallOpenedAt = Date.now();
-    timerEndTimestamp = firewallOpenedAt + TIMER_TOTAL_SECONDS * 1000;
-    elements.timerComplete.classList.add("hidden");
-    updateTimerVisual(TIMER_TOTAL_SECONDS);
-    elements.pacerLabel.textContent = BREATH_PHASES[0];
-    elements.pacerCircle.style.animation = "none";
-    void elements.pacerCircle.offsetWidth;
-    elements.pacerCircle.style.animation = "";
-    timerIntervalId = setInterval(tickTimer, 250);
-  };
-
-  const openFirewall = () => {
-    localStorage.setItem(STORAGE_KEYS.firewall, String(readFirewallDeploys() + 1));
-    renderFirewallCount();
-    elements.firewallModal.classList.remove("hidden");
-    syncInert();
-    elements.firewallScroll.scrollTop = 0;
-    startTimer();
-    elements.closeFirewallButton.focus();
-  };
-
-  const closeFirewall = () => {
-    const heldSeconds = firewallOpenedAt ? Math.round((Date.now() - firewallOpenedAt) / 1000) : 0;
-    stopTimer();
-    firewallOpenedAt = null;
-    const sessions = readSessions();
-    sessions.push({ at: Date.now(), heldSeconds });
-    writeSessions(sessions);
-    renderFirewallCount();
-    elements.firewallModal.classList.add("hidden");
-    syncInert();
-    elements.deployButton.focus();
-    showToast(`🧘 Mind restored. You held the line for ${formatClock(heldSeconds)}.`, false);
-  };
-
-  const computeStats = (logs) => {
-    const dayMap = new Map();
-    logs.forEach((log) => {
-      const clean = isCleanLog(log);
-      dayMap.set(log.date, dayMap.has(log.date) ? dayMap.get(log.date) && clean : clean);
-    });
-
-    let currentStreak = 0;
-    let cursor = todayISO();
-    if (!dayMap.has(cursor)) cursor = shiftISO(cursor, -1);
-    while (dayMap.get(cursor) === true) {
-      currentStreak += 1;
-      cursor = shiftISO(cursor, -1);
-    }
-
-    let bestStreak = 0;
-    let run = 0;
-    let previousDate = null;
-    [...dayMap.keys()].sort().forEach((date) => {
-      if (dayMap.get(date)) {
-        run = previousDate !== null && run > 0 && shiftISO(previousDate, 1) === date ? run + 1 : 1;
-      } else {
-        run = 0;
-      }
-      bestStreak = Math.max(bestStreak, run);
-      previousDate = date;
-    });
-
-    const total = logs.length;
-    const clean = logs.filter(isCleanLog).length;
-    const successRate = total === 0 ? 0 : Math.round((clean / total) * 100);
-
-    const triggerCounts = {};
-    logs.filter((log) => !isCleanLog(log)).forEach((log) => {
-      triggerCounts[log.trigger] = (triggerCounts[log.trigger] || 0) + 1;
-    });
-    let topTrigger = null;
-    let topCount = 0;
-    Object.entries(triggerCounts).forEach(([trigger, count]) => {
-      if (count > topCount) {
-        topTrigger = trigger;
-        topCount = count;
-      }
-    });
-
-    return { currentStreak, bestStreak, successRate, topTrigger, total, clean, dayMap };
-  };
-
-  const renderHeatmap = (dayMap) => {
-    const today = todayISO();
-    const cells = [];
-    for (let offset = HEATMAP_DAYS - 1; offset >= 0; offset--) {
-      const date = shiftISO(today, -offset);
-      const hasData = dayMap.has(date);
-      const clean = dayMap.get(date) === true;
-      const colorClass = !hasData ? "bg-gray-700/70" : clean ? "bg-emeraldx" : "bg-crimsonx";
-      const todayClass = date === today ? " ring-2 ring-emerald-300/80" : "";
-      const statusLabel = !hasData ? "No data" : clean ? "Clean" : "Slip";
-      cells.push(`<div class="aspect-square rounded-md ${colorClass}${todayClass}" title="${escapeHTML(formatDisplayDate(date))} — ${statusLabel}" role="img" aria-label="${escapeHTML(formatDisplayDate(date))}: ${statusLabel}"></div>`);
-    }
-    elements.heatmapGrid.innerHTML = cells.join("");
-  };
-
-  const buildLogCard = (log) => {
-    const cleanDay = isCleanLog(log);
-    const badgeClasses = cleanDay
-      ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-400"
-      : "border-red-500/50 bg-red-500/15 text-red-400";
-    const edgeClass = cleanDay ? "bg-emeraldx" : "bg-crimsonx";
-    const shieldChip = typeof log.shield === "number"
-      ? `<span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${log.shield === 2 ? "border-emerald-500/40 text-emerald-400" : "border-gray-600 text-silver"}">🛡 ${log.shield}/2</span>`
-      : "";
-    const notesHTML = log.notes
-      ? `<div class="mt-3 pt-3 border-t border-gray-700/60">
-           <p class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver mb-1">Gear Adjustment</p>
-           <p class="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">${escapeHTML(log.notes)}</p>
-         </div>`
-      : "";
-    return `<article class="relative rounded-xl border border-gray-700/70 bg-canvas/60 overflow-hidden">
-      <div class="absolute left-0 top-0 bottom-0 w-1 ${edgeClass}"></div>
-      <div class="p-4 sm:p-5 pl-5 sm:pl-6">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <h3 class="font-display font-bold text-sm sm:text-base text-snow">${escapeHTML(formatDisplayDate(log.date))}</h3>
-          <div class="flex items-center gap-2">
-            ${shieldChip}
-            <span class="text-[0.65rem] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border ${badgeClasses}">${escapeHTML(log.slipType)}</span>
-            <button type="button" data-delete-id="${escapeHTML(log.id)}" aria-label="Delete entry for ${escapeHTML(formatDisplayDate(log.date))}" class="text-gray-500 hover:text-crimsonx text-sm font-bold px-1.5 py-0.5 rounded transition-colors">✕</button>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-          <div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Trigger</span><span class="text-gray-300">${escapeHTML(log.trigger)}</span></div>
-          <div class="flex items-baseline gap-2"><span class="text-[0.6rem] font-bold tracking-[0.2em] uppercase text-silver shrink-0">Reaction</span><span class="text-gray-300">${escapeHTML(log.reaction)}</span></div>
-        </div>
-        ${notesHTML}
-      </div>
-    </article>`;
-  };
-
-  const renderRepository = () => {
-    const logs = readLogs().slice().sort((a, b) => {
-      if (a.date === b.date) return (b.createdAt || 0) - (a.createdAt || 0);
-      return a.date < b.date ? 1 : -1;
-    });
-
-    const stats = computeStats(logs);
-    elements.repoStats.textContent = stats.total === 0
-      ? "Repository Empty"
-      : `${stats.clean} clean / ${stats.total} logged`;
-
-    if (stats.total === 0) {
-      elements.repoAnalytics.classList.add("hidden");
-      elements.loadMoreWrap.classList.add("hidden");
-      elements.historyFeed.innerHTML = `<div class="text-center py-10 space-y-3">
-        <div class="text-4xl">📭</div>
-        <p class="text-silver text-sm">The repository is empty. Complete tonight's Scientist Audit to mount your first data card.</p>
-      </div>`;
-      return;
-    }
-
-    elements.repoAnalytics.classList.remove("hidden");
-    elements.statCurrentStreak.textContent = String(stats.currentStreak);
-    elements.statBestStreak.textContent = String(stats.bestStreak);
-    elements.statSuccessRate.textContent = String(stats.successRate);
-    elements.statTopTrigger.textContent = stats.topTrigger ? (SHORT_TRIGGERS[stats.topTrigger] || stats.topTrigger) : "—";
-    renderHeatmap(stats.dayMap);
-
-    const visibleLogs = logs.slice(0, visibleLogCount);
-    elements.historyFeed.innerHTML = visibleLogs.map(buildLogCard).join("");
-
-    const remaining = logs.length - visibleLogs.length;
-    if (remaining > 0) {
-      elements.loadMoreWrap.classList.remove("hidden");
-      elements.loadMoreButton.textContent = `Reveal ${Math.min(LOGS_PER_PAGE, remaining)} older ${remaining === 1 ? "entry" : "entries"} (${remaining} archived)`;
-    } else {
-      elements.loadMoreWrap.classList.add("hidden");
-    }
-  };
-
-  const handleLoadMore = () => {
-    visibleLogCount += LOGS_PER_PAGE;
-    renderRepository();
-  };
-
-  const handleAuditSubmit = (event) => {
-    event.preventDefault();
-    const today = todayISO();
-    elements.auditDate.max = today;
-    if (!elements.auditDate.value) {
-      showToast("⚠️ Select an observation date first.", true);
-      elements.auditDate.focus();
-      return;
-    }
-    if (elements.auditDate.value > today) {
-      showToast("⚠️ The scientist records the past, not the future.", true);
-      elements.auditDate.focus();
-      return;
-    }
-
-    const shieldState = readShield();
-    const entry = {
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
-      date: elements.auditDate.value,
-      slipType: elements.slipType.value,
-      trigger: elements.rootTrigger.value,
-      reaction: elements.reactionTime.value,
-      notes: elements.gearNotes.value.trim(),
-      shield: (shieldState.brahma ? 1 : 0) + (shieldState.intention ? 1 : 0),
-      createdAt: Date.now()
-    };
-
-    const logs = readLogs();
-    const existingIndex = logs.findIndex((log) => log.date === entry.date);
-
-    const commitEntry = () => {
-      if (existingIndex >= 0) {
-        logs[existingIndex] = entry;
-      } else {
-        logs.push(entry);
-      }
-      writeLogs(logs);
-      renderRepository();
-      elements.auditForm.reset();
-      elements.auditDate.value = todayISO();
-      showToast(isCleanLog(entry) ? "✅ Flawless victory mounted to the repository." : "📡 Data logged. The gears adjust tomorrow.", false);
-      document.getElementById("repo-heading").scrollIntoView({ behavior: "smooth", block: "center" });
-    };
-
-    if (existingIndex >= 0) {
-      showConfirm({
-        title: "Overwrite Existing Audit?",
-        message: `An audit for ${formatDisplayDate(entry.date)} is already mounted. Replace it with this new observation? The nightly audit keeps one record per day.`,
-        acceptLabel: "Replace Entry",
-        danger: false,
-        onAccept: commitEntry
-      });
-    } else {
-      commitEntry();
-    }
-  };
-
-  const handleFeedClick = (event) => {
-    const button = event.target.closest("[data-delete-id]");
-    if (!button) return;
-    const entryId = button.getAttribute("data-delete-id");
-    showConfirm({
-      title: "Discard This Observation?",
-      message: "This single entry will be permanently removed from the repository. The rest of your data stays intact.",
-      acceptLabel: "Delete Entry",
-      danger: true,
-      onAccept: () => {
-        writeLogs(readLogs().filter((log) => log.id !== entryId));
-        renderRepository();
-        showToast("🗑️ Entry removed from the repository.", true);
-      }
-    });
-  };
-
-  const handleClearRepository = () => {
-    const logs = readLogs();
-    if (logs.length === 0) {
-      showToast("📭 The repository is already empty.", true);
-      return;
-    }
-    showConfirm({
-      title: "Wipe The Entire Repository?",
-      message: `All ${logs.length} ${logs.length === 1 ? "entry" : "entries"} will be permanently erased from this device. Consider exporting your data first — this cannot be undone.`,
-      acceptLabel: "Erase Everything",
-      danger: true,
-      onAccept: () => {
-        localStorage.removeItem(STORAGE_KEYS.logs);
-        visibleLogCount = LOGS_PER_PAGE;
-        renderRepository();
-        showToast("🗑️ Repository wiped. Fresh observation field ready.", true);
-      }
-    });
-  };
-
-  const handleExport = () => {
-    const logs = readLogs();
-    if (logs.length === 0) {
-      showToast("📭 Nothing to export yet.", true);
-      return;
-    }
-    const payload = JSON.stringify({ app: "chariot-control-panel", version: 1, exportedAt: new Date().toISOString(), logs }, null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `chariot-repository-${todayISO()}.json`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast(`⬇️ ${logs.length} ${logs.length === 1 ? "entry" : "entries"} exported as JSON.`, false);
-  };
-
-  const sanitizeImportedEntry = (raw) => {
-    if (!raw || typeof raw !== "object") return null;
-    if (typeof raw.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(raw.date)) return null;
-    if (typeof raw.slipType !== "string" || raw.slipType.length === 0) return null;
-    return {
-      id: typeof raw.id === "string" && raw.id.length > 0 ? raw.id : Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
-      date: raw.date,
-      slipType: raw.slipType,
-      trigger: typeof raw.trigger === "string" ? raw.trigger : "Environmental Cue",
-      reaction: typeof raw.reaction === "string" ? raw.reaction : "Automatic Pilot (Slid Instantly)",
-      notes: typeof raw.notes === "string" ? raw.notes : "",
-      shield: typeof raw.shield === "number" ? Math.min(2, Math.max(0, Math.round(raw.shield))) : undefined,
-      createdAt: typeof raw.createdAt === "number" ? raw.createdAt : Date.now()
-    };
-  };
-
-  const handleImportFile = (event) => {
-    const file = event.target.files && event.target.files[0];
-    elements.importInput.value = "";
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const parsed = safeParse(String(reader.result), null);
-      const rawList = Array.isArray(parsed) ? parsed : parsed && Array.isArray(parsed.logs) ? parsed.logs : null;
-      if (!rawList) {
-        showToast("⚠️ That file is not a valid repository export.", true);
-        return;
-      }
-      const logs = readLogs();
-      const existingIds = new Set(logs.map((log) => log.id));
-      const existingDates = new Set(logs.map((log) => log.date));
-      let imported = 0;
-      let skipped = 0;
-      rawList.forEach((raw) => {
-        const entry = sanitizeImportedEntry(raw);
-        if (!entry || existingIds.has(entry.id) || existingDates.has(entry.date)) {
-          skipped += 1;
-          return;
-        }
-        logs.push(entry);
-        existingIds.add(entry.id);
-        existingDates.add(entry.date);
-        imported += 1;
-      });
-      if (imported === 0) {
-        showToast(`⚠️ Nothing imported — ${skipped} ${skipped === 1 ? "entry was a duplicate or invalid" : "entries were duplicates or invalid"}.`, true);
-        return;
-      }
-      writeLogs(logs);
-      renderRepository();
-      showToast(`⬆️ Imported ${imported} ${imported === 1 ? "entry" : "entries"}${skipped > 0 ? `, skipped ${skipped}` : ""}.`, false);
-    };
-    reader.onerror = () => showToast("⚠️ Could not read that file.", true);
-    reader.readAsText(file);
-  };
-
-  const handleKeydown = (event) => {
-    if (event.key !== "Escape") return;
-    if (!elements.confirmModal.classList.contains("hidden")) {
-      closeConfirm();
-    } else if (!elements.firewallModal.classList.contains("hidden")) {
-      closeFirewall();
-    }
-  };
-
-  elements.shieldBrahma.addEventListener("change", handleShieldChange);
-  elements.shieldIntention.addEventListener("change", handleShieldChange);
-  elements.deployButton.addEventListener("click", openFirewall);
-  elements.closeFirewallButton.addEventListener("click", closeFirewall);
-  elements.auditForm.addEventListener("submit", handleAuditSubmit);
-  elements.historyFeed.addEventListener("click", handleFeedClick);
-  elements.loadMoreButton.addEventListener("click", handleLoadMore);
-  elements.clearButton.addEventListener("click", handleClearRepository);
-  elements.exportButton.addEventListener("click", handleExport);
-  elements.importButton.addEventListener("click", () => elements.importInput.click());
-  elements.importInput.addEventListener("change", handleImportFile);
-  elements.confirmCancel.addEventListener("click", closeConfirm);
-  elements.confirmAccept.addEventListener("click", () => {
-    const action = pendingConfirmAction;
-    closeConfirm();
-    if (action) action();
-  });
-  document.addEventListener("keydown", handleKeydown);
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && timerIntervalId) tickTimer();
-  });
-
-  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  }
-
-  elements.auditDate.value = todayISO();
-  elements.auditDate.max = todayISO();
-  renderShield();
-  renderFirewallCount();
-  renderRepository();
-})();
-</script>
+<div id="toast" class="pointer-events-none fixed inset-x-4 z-[90] hidden flex justify-center" style="bottom:calc(var(--safe-bottom) + 5.5rem)" aria-live="polite">
+  <div id="toastBody" class="pop-in pointer-events-auto flex max-w-md items-center gap-3 rounded-xl border border-accent/40 bg-surface px-5 py-3.5 text-sm font-semibold shadow-2xl shadow-black/50">
+    <span id="toastText"></span>
+    <button id="toastAction" type="button" class="hidden shrink-0 rounded-lg border border-line px-3 py-1 text-xs font-bold uppercase tracking-wider text-accent"></button>
+  </div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
