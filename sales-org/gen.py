@@ -31,6 +31,7 @@ def visit(n, parent=None):
         'vacant': n.get('vacant', False), 'note': n.get('note', ''),
         'rm': n.get('rm', False), 'rosterTitle': n.get('rosterTitle', ''),
         'portfolio': n.get('portfolio', ''),
+        'zones': n.get('zones', []), 'cities': n.get('cities', []),
         'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
         'parent': parent,
         'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],
@@ -38,7 +39,7 @@ def visit(n, parent=None):
                   'emp': c['emp'], 'interns': c['interns'],
                   'branches': len(c.get('children', [])),
                   'direct': len(c.get('team', {}).get('members', [])),
-                  'rm': c.get('rm', False),
+                  'rm': c.get('rm', False), 'zones': c.get('zones', []),
                   'tsm': c.get('tsm', 0), 'tse': c.get('tse', 0),
                   'vacant': c.get('vacant', False)} for c in kids],
         'team': team.get('members', []),
@@ -63,7 +64,8 @@ def bars(rows, label=lambda k: k):
 GRADE = {'A': 'Field &amp; executive', 'B': 'Managerial', 'C': 'Senior leadership'}
 
 STATS = [(meta['employees'], 'Employees'), (meta['interns'], 'Interns'),
-         (meta['total'], 'People in all'), (1, 'Open seat')]
+         (meta['total'], 'People in all'), (meta['cities'], 'Cities covered'),
+         (1, 'Open seat')]
 
 tpl = open('template.html', encoding='utf-8').read()
 out = (tpl
@@ -74,6 +76,7 @@ out = (tpl
        .replace('<!--SUBBARS-->', bars(meta['subDepts'], e))
        .replace('<!--GBARS-->', bars(meta['grades'], lambda k: GRADE.get(k, e(k))))
        .replace('<!--LOCBARS-->', bars(meta['locations'], e))
+       .replace('<!--ZONEBARS-->', bars(meta['zones'], e))
        .replace('/*NODES*/', json.dumps(NODES, separators=(',', ':')))
        .replace('/*INDEX*/', json.dumps(INDEX, separators=(',', ':')))
        .replace('__ROOT__', json.dumps(tree['id']))

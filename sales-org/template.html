@@ -180,6 +180,20 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   text-transform:uppercase; background:var(--teal-soft); color:var(--teal);
   padding:2px 5px; border-radius:4px; vertical-align:middle}
 
+/* ── territory ──────────────────────────────────────────────────────── */
+.terr{position:relative; margin-top:9px; padding:13px 16px; border-radius:12px;
+  background:var(--soft); border:1px solid var(--line)}
+.terr::before{content:""; position:absolute; left:-21px; top:24px;
+  width:21px; height:2px; background:var(--rail)}
+.t-lab{font-family:"JetBrainsMono",monospace; font-size:.68rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 9px}
+.zones{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+.zones span{font-family:"JetBrainsMono",monospace; font-size:.7rem; padding:3px 8px;
+  border-radius:6px; background:var(--gold-soft); color:var(--gold); font-weight:700}
+.zones span i{font-style:normal; opacity:.7; font-weight:400; margin-left:3px}
+.cities{margin:0; font-size:.87rem; color:var(--ink-2); line-height:1.75}
+.cities b{font-weight:400; color:var(--ink-3)}
+
 .hit{border-color:var(--gold-fill) !important;
   box-shadow:0 0 0 3px var(--gold-soft), var(--sh-2) !important}
 .people li.hit{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill) !important;
@@ -253,6 +267,7 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
       <div><h3>By function</h3><ul class="bars"><!--SUBBARS--></ul></div>
       <div><h3>By grade</h3><ul class="bars"><!--GBARS--></ul></div>
       <div><h3>By state</h3><ul class="bars"><!--LOCBARS--></ul></div>
+      <div><h3>Cities by zone</h3><ul class="bars"><!--ZONEBARS--></ul></div>
     </div>
   </section>
 </main>
@@ -308,7 +323,7 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   /* ── build the whole tree once; opening a branch never removes another ── */
   function card(n,depth){
     var open=depth<1;                       // department head starts open
-    var has=n.kids.length||n.team.length;
+    var has=n.kids.length||n.team.length||n.cities.length;
 
     /* the portfolio already names the function, so don't repeat it below */
     var showSub = !n.portfolio && n.sub && n.sub!=='Leadership' && n.sub!=='Retail Sales';
@@ -318,8 +333,10 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     if(n.team.length) under.push(people(n.team.length));
     if(under.length) role+=(role?' — ':'')+under.join(', ')+' below';
 
-    var field=(n.tsm||n.tse)
+    var field=(n.tsm||n.tse||n.zones.length)
       ? '<span class="field">'+
+        (n.zones.length?'<span><b>'+n.cities.length+'</b> cities · '+
+          n.zones.map(function(z){return esc(z.name);}).join(', ')+'</span>':'')+
         (n.tsm?'<span><b>'+n.tsm+'</b> TSM</span>':'')+
         (n.tse?'<span><b>'+n.tse+'</b> TSE</span>':'')+'</span>'
       : '';
@@ -344,6 +361,14 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
       h.push('<div class="kids">');
       if(n.kids.length){
         h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');
+      }
+      if(n.cities.length){
+        h.push('<div class="terr"><p class="t-lab">Territory — '+
+          n.cities.length+' cities</p><div class="zones">'+
+          n.zones.map(function(z){
+            return '<span>'+esc(z.name)+'<i>'+z.n+'</i></span>';
+          }).join('')+'</div><p class="cities">'+
+          n.cities.map(esc).join(' <b>·</b> ')+'</p></div>');
       }
       if(n.team.length){
         h.push('<div class="direct"><p class="d-lab">'+

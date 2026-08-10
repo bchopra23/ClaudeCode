@@ -9,6 +9,7 @@ import openpyxl, collections, re, json
 
 EMP = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
 INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
+TERR = 'territory.xlsx'          # city -> zone -> RM coverage map
 
 # lines that report outside Sales leadership and are out of scope for this chart
 EXCLUDE_LINES = ['Raman Pandey', 'Vijay Malik', 'Jashanjot Singh']
@@ -31,6 +32,15 @@ PORTFOLIOS = {
     'Shashank': 'Sales Operations',
     'Gaurav Bhardwaj': 'Regional Management · Sales Central · Special Projects',
     'Ritesh Roy': 'Sales Expansion',
+}
+
+# the territory sheet names RMs by first name only
+TERRITORY_OWNER = {
+    'vinay': 'Vinay Binu', 'rachit': 'Rachit Sharma', 'vikas': 'Vikas Singh Bisht',
+    'arup': 'Arup Roy Chowdhury', 'subesh': 'Subesh Mukherjee',
+    'siddhartha': 'Siddhartha Sharma', 'amit': 'Amit Vishwakarma',
+    # the South cities belong to the open seat; Ratanmani Mohit is covering them
+    'mohit': VACANT_SOUTH,
 }
 
 # these two sit across the whole department, so a single state would mislead
@@ -137,6 +147,24 @@ for i in RM_IDS:
     byid[i]['roster_title'] = byid[i]['title']
     byid[i]['title'] = 'Regional Manager'
 
+# ── territory map ─────────────────────────────────────────────────────────
+TERRITORY = collections.defaultdict(list)     # owner id -> [{city, zone}]
+_seen = set()
+for r in openpyxl.load_workbook(TERR, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    city, zone, owner = clean(r[0]), clean(r[1]), clean(r[2])
+    if not city or not owner:
+        continue
+    key = (city.lower(), zone.lower(), owner.lower())
+    if key in _seen:                          # the sheet repeats a few rows verbatim
+        continue
+    _seen.add(key)
+    target = TERRITORY_OWNER.get(owner.lower())
+    if not target:
+        continue
+    oid = target if target == VACANT_SOUTH else by_name.get(norm(target))
+    if oid:
+        TERRITORY[oid].append({'city': city, 'zone': zone})
+
 HIDE_LOC_IDS = {by_name[norm(n)] for n in HIDE_LOCATION if norm(n) in by_name}
 PORTFOLIO_BY_ID = {by_name[norm(n)]: v for n, v in PORTFOLIOS.items() if norm(n) in by_name}
 
@@ -216,6 +244,11 @@ def node(i):
         d['note'] = p['note']
     if i in PORTFOLIO_BY_ID:
         d['portfolio'] = PORTFOLIO_BY_ID[i]
+    if i in TERRITORY:
+        t = sorted(TERRITORY[i], key=lambda x: x['city'])
+        z = collections.Counter(x['zone'] for x in t)
+        d['cities'] = [x['city'] for x in t]
+        d['zones'] = [{'name': k, 'n': v} for k, v in z.most_common()]
 
     if p.get('rm'):
         d['rm'] = True
@@ -258,6 +291,9 @@ meta = {
                                     if not p['intern'] and not p.get('vacant')).most_common(),
     'grades': sorted(collections.Counter(p['grade'] for p in people if p['grade']).items()),
     'locations': collections.Counter(p['loc'] for p in people if p.get('loc')).most_common(),
+    'cities': sum(len(v) for v in TERRITORY.values()),
+    'zones': collections.Counter(x['zone'] for v in TERRITORY.values()
+                                 for x in v).most_common(),
     'excluded': EXCLUDE_LINES,
 }
 json.dump({'tree': tree, 'meta': meta}, open('org.json', 'w'), indent=1)
@@ -288,4 +324,6 @@ def rmline(n, out=None):
     return out
 for nm, tsm, tse, emp in rmline(tree):
     print(f'   {nm:32s} {emp:4d} in line | {tsm:3d} TSM | {tse:3d} TSE')
+print('cities mapped         :', sum(len(v) for v in TERRITORY.values()),
+      'across', len(TERRITORY), 'owners')
 print('sub-departments       :', meta['subDepts'])

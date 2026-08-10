@@ -86,6 +86,26 @@ the roster designation kept underneath:
 | Ritesh Roy | Sales Expansion |
 | Shashank | Sales Operations |
 
+## Territory map
+
+`territory.xlsx` maps 102 cities to a zone and a Regional Manager. Each RM's
+card shows their city count and zones, and their branch lists every city they
+cover. `TERRITORY_OWNER` in `build_data.py` resolves the sheet's first-name
+column onto roster people.
+
+Two things the sheet settles:
+
+- **The South cities belong to the open seat.** The sheet lists them under
+  "Mohit"; they are attached to the vacant South Regional Manager node, which
+  Ratanmani Mohit covers directly.
+- **Gaurav Bhardwaj holds no cities.** He is a Regional Manager by title but
+  owns Sales Central and Special Projects rather than a geography, which is
+  why he reports to the VP rather than through the AVP.
+
+The sheet's Zone column mixes true zones (North, South, East, West) with state
+codes (UP, RJ, MP, CG, JK) and individual states (Punjab, Haryana,
+Chandigarh). Zones are shown as recorded rather than normalised.
+
 ## Display notes
 
 The page renders light by default and only goes dark if the viewer explicitly

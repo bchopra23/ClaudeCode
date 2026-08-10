@@ -162,6 +162,30 @@
       "emp": 77,
       "interns": 8,
       "direct": 15,
+      "cities": [
+       "Ahilyanagar",
+       "Ahmedabad",
+       "Akola",
+       "CSB Nagar",
+       "Chandrapur",
+       "Dhule",
+       "Kachchh",
+       "Mumbai",
+       "Nagpur",
+       "Nashik",
+       "Parbhani",
+       "Pune",
+       "Sangli",
+       "Somnath / Amareli",
+       "Surat",
+       "Yavatmal"
+      ],
+      "zones": [
+       {
+        "name": "West",
+        "n": 16
+       }
+      ],
       "rm": true,
       "rosterTitle": "Regional Manager",
       "tsm": 48,
@@ -961,6 +985,44 @@
       "emp": 42,
       "interns": 15,
       "direct": 11,
+      "cities": [
+       "Agra",
+       "Aligarh",
+       "Bareilly",
+       "Chandigarh",
+       "Dehradun",
+       "Etawah",
+       "Jammu",
+       "Kurukshetra",
+       "Ludhiana",
+       "Mathura",
+       "Meerut",
+       "Moradabad",
+       "New Agra",
+       "Srinagar"
+      ],
+      "zones": [
+       {
+        "name": "UP",
+        "n": 9
+       },
+       {
+        "name": "JK",
+        "n": 2
+       },
+       {
+        "name": "Chandigarh",
+        "n": 1
+       },
+       {
+        "name": "Haryana",
+        "n": 1
+       },
+       {
+        "name": "Punjab",
+        "n": 1
+       }
+      ],
       "rm": true,
       "rosterTitle": "Regional Manager",
       "tsm": 7,
@@ -1558,6 +1620,25 @@
       "emp": 32,
       "interns": 11,
       "direct": 12,
+      "cities": [
+       "COCO",
+       "Delhi",
+       "E. Delhi",
+       "G. Noida",
+       "Ghaziabad",
+       "Gurgaon",
+       "Jhajjar",
+       "Noida",
+       "Okhla",
+       "Rewari",
+       "W. Delhi"
+      ],
+      "zones": [
+       {
+        "name": "North",
+        "n": 11
+       }
+      ],
       "rm": true,
       "rosterTitle": "General Manager",
       "tsm": 15,
@@ -2063,6 +2144,30 @@
       "direct": 10,
       "vacant": true,
       "note": "Open following Amitabh Singh\u2019s resignation. The team reports to Ratanmani Mohit directly until a replacement joins.",
+      "cities": [
+       "Bangalore",
+       "Bengaluru",
+       "Bijapur",
+       "Calicut",
+       "Hubballi",
+       "Hyderabad",
+       "Kalaburagi",
+       "Kochi",
+       "Kurnool",
+       "Nellore",
+       "Nizamabad",
+       "Ongole",
+       "Tirupati",
+       "Trivandrum",
+       "Vijayawada",
+       "Visakhapatnam"
+      ],
+      "zones": [
+       {
+        "name": "South",
+        "n": 16
+       }
+      ],
       "rm": true,
       "rosterTitle": "Regional Manager",
       "tsm": 24,
@@ -2511,6 +2616,36 @@
       "emp": 32,
       "interns": 4,
       "direct": 10,
+      "cities": [
+       "Chennai",
+       "Dharbhanga",
+       "Durgapur",
+       "Howrah",
+       "Kallakurichi",
+       "Kolkata",
+       "Madurai",
+       "Muzaffarpur",
+       "New Coimbatore",
+       "Patna",
+       "Purnia",
+       "Salem",
+       "Siliguri",
+       "Tirunelveli",
+       "Tiruppur",
+       "Tiruvannamalai",
+       "Trichy",
+       "Vellore"
+      ],
+      "zones": [
+       {
+        "name": "South",
+        "n": 10
+       },
+       {
+        "name": "East",
+        "n": 8
+       }
+      ],
       "rm": true,
       "rosterTitle": "General Manager",
       "tsm": 15,
@@ -2971,6 +3106,28 @@
       "emp": 27,
       "interns": 2,
       "direct": 10,
+      "cities": [
+       "Bhubaneswar",
+       "Dhubri",
+       "Dumka",
+       "Gorakhpur",
+       "Guwahati",
+       "Kanpur",
+       "Lucknow",
+       "Prayagraj",
+       "Ranchi",
+       "Varanasi"
+      ],
+      "zones": [
+       {
+        "name": "East",
+        "n": 5
+       },
+       {
+        "name": "North",
+        "n": 5
+       }
+      ],
       "rm": true,
       "rosterTitle": "Regional Manager",
       "tsm": 13,
@@ -3326,6 +3483,37 @@
       "emp": 18,
       "interns": 0,
       "direct": 17,
+      "cities": [
+       "Ambikapur",
+       "Banswara",
+       "Bhopal",
+       "Bikaner",
+       "Bilaspur",
+       "Chittorgarh",
+       "Dungarpur",
+       "Indore",
+       "Jabalpur",
+       "Jaipur",
+       "Jodhpur",
+       "Katni",
+       "Raipur",
+       "Rajgarh",
+       "Ujjain"
+      ],
+      "zones": [
+       {
+        "name": "RJ",
+        "n": 6
+       },
+       {
+        "name": "MP",
+        "n": 6
+       },
+       {
+        "name": "CG",
+        "n": 3
+       }
+      ],
       "rm": true,
       "rosterTitle": "General Manager",
       "tsm": 6,
@@ -3508,6 +3696,16 @@
       "emp": 2,
       "interns": 0,
       "direct": 1,
+      "cities": [
+       "Faridabad",
+       "Sonipat"
+      ],
+      "zones": [
+       {
+        "name": "North",
+        "n": 2
+       }
+      ],
       "tsm": 1,
       "tse": 0,
       "locs": [
@@ -4519,6 +4717,57 @@
    [
     "Jharkhand",
     2
+   ],
+   [
+    "Haryana",
+    1
+   ]
+  ],
+  "cities": 102,
+  "zones": [
+   [
+    "South",
+    26
+   ],
+   [
+    "North",
+    18
+   ],
+   [
+    "West",
+    16
+   ],
+   [
+    "East",
+    13
+   ],
+   [
+    "UP",
+    9
+   ],
+   [
+    "RJ",
+    6
+   ],
+   [
+    "MP",
+    6
+   ],
+   [
+    "CG",
+    3
+   ],
+   [
+    "JK",
+    2
+   ],
+   [
+    "Chandigarh",
+    1
+   ],
+   [
+    "Punjab",
+    1
    ],
    [
     "Haryana",
