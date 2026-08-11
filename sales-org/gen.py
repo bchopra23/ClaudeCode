@@ -65,9 +65,10 @@ def bars(rows, label=lambda k: k):
 
 GRADE = {'A': 'Field &amp; executive', 'B': 'Managerial', 'C': 'Senior leadership'}
 
+RM_COUNT = sum(1 for n in NODES.values() if n['rm'])
 STATS = [(meta['employees'], 'Employees'), (meta['interns'], 'Interns'),
-         (meta['total'], 'People in all'), (meta['cities'], 'Cities covered'),
-         (1, 'Open seat')]
+         (meta['total'], 'People in all'), (RM_COUNT, 'Regional managers'),
+         (meta['cities'], 'Cities covered')]
 
 tpl = open('template.html', encoding='utf-8').read()
 out = (tpl

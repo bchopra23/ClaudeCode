@@ -58,6 +58,14 @@ by employee code.
   leadership. That is the 24-person gap between the roster's 367 Sales
   employees and this chart's 343.
 
+## The South seat
+
+Rohit Madhavan (EUR2236) has joined as South Regional Manager. `SOUTH_RM` in
+`build_data.py` names him; everyone the roster still records against Amitabh
+Singh is repointed to him, and Ravi Prakash — parked under the AVP while the
+seat was open — moves back under him with his own line. Ratanmani Mohit no
+longer oversees the South directly. The seat carries 40 people and 16 cities.
+
 ## Regional Managers
 
 Seven people are recorded on the roster by grade — mostly General Manager —
@@ -95,9 +103,7 @@ column onto roster people.
 
 Two things the sheet settles:
 
-- **The South cities belong to the open seat.** The sheet lists them under
-  "Mohit"; they are attached to the vacant South Regional Manager node, which
-  Ratanmani Mohit covers directly.
+- **The South cities belong to Rohit Madhavan**, who now holds the seat.
 - **Gaurav Bhardwaj holds no cities.** He is a Regional Manager by title but
   owns Sales Central and Special Projects rather than a geography, which is
   why he reports to the VP rather than through the AVP.

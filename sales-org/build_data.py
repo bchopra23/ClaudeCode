@@ -19,13 +19,18 @@ EXCLUDE_LINES = ['Raman Pandey', 'Vijay Malik', 'Jashanjot Singh']
 # the roster splits retail by vehicle class; the chart treats it as one function
 RETAIL = {'3W Retail Sales', '4W Retail Sales', 'Retail Sales'}
 
-VACANT_SOUTH = 'VACANT-SOUTH-RM'
+# The South seat, open since Amitabh Singh resigned, has been filled.
+SOUTH_RM = 'Rohit Madhavan'
+# people the roster still records against the departed RM move to the new one
+LEGACY_SOUTH_RM = 'amitabhsingh'
+# and this Senior ASM, parked under the AVP while the seat was open, moves back
+MOVED_TO_SOUTH_RM = ['Ravi Prakash']
 
 # The roster records these people by grade (General Manager and such); the org
 # role they actually hold is Regional Manager. Confirmed against the RM list.
 REGIONAL_MANAGERS = ['Vinay Binu', 'Rachit Sharma', 'Vikas Singh Bisht',
                      'Arup Roy Chowdhury', 'Subesh Mukherjee', 'Siddhartha Sharma',
-                     'Gaurav Bhardwaj']
+                     'Gaurav Bhardwaj', SOUTH_RM]
 
 # what each function head actually owns — the roster designation alone
 # ("General Manager") does not say which part of Sales that is
@@ -41,8 +46,8 @@ TERRITORY_OWNER = {
     'vinay': 'Vinay Binu', 'rachit': 'Rachit Sharma', 'vikas': 'Vikas Singh Bisht',
     'arup': 'Arup Roy Chowdhury', 'subesh': 'Subesh Mukherjee',
     'siddhartha': 'Siddhartha Sharma', 'amit': 'Amit Vishwakarma',
-    # the South cities belong to the open seat; Ratanmani Mohit is covering them
-    'mohit': VACANT_SOUTH,
+    # the sheet listed the South cities under Mohit while he was covering the seat
+    'mohit': SOUTH_RM,
 }
 
 # these two sit across the whole department, so a single state would mislead
@@ -97,8 +102,8 @@ OUTSIDE = {'sauravkumar', 'ashishtandon', 'abhishekmalik'}
 
 def resolve(m):
     k = ALIAS.get(norm(m), norm(m))
-    if k == 'amitabhsingh':          # resigned South RM — becomes the vacant seat
-        return VACANT_SOUTH
+    if k == LEGACY_SOUTH_RM:         # departed South RM — his line moves to the new one
+        return by_name.get(norm(SOUTH_RM))
     if k in by_name:
         return by_name[k]
     if k in OUTSIDE:
@@ -109,6 +114,11 @@ def resolve(m):
 
 for p in people:
     p['mgrId'] = resolve(p['mgr']) if p['mgr'] else None
+
+south = by_name.get(norm(SOUTH_RM))
+for p in people:
+    if p['name'] in MOVED_TO_SOUTH_RM and south:
+        p['mgrId'] = south
 
 byid = {p['id']: p for p in people}
 kids = collections.defaultdict(list)
@@ -139,20 +149,13 @@ for k in list(kids):
     else:
         kids[k] = [c for c in kids[k] if c not in dropped]
 
-# ── the vacant South seat ─────────────────────────────────────────────────
-mohit = by_name[norm('Ratanmani Mohit')]
-byid[VACANT_SOUTH] = {
-    'id': VACANT_SOUTH, 'name': 'Vacant — South Regional Manager', 'sub': 'Retail Sales',
-    'title': 'Regional Manager', 'band': '', 'grade': '', 'doj': '', 'loc': '',
-    'mgr': 'Ratanmani Mohit', 'mgrId': mohit, 'intern': False, 'vacant': True,
-    'note': 'Open following Amitabh Singh’s resignation. The team reports to '
-            'Ratanmani Mohit directly until a replacement joins.'}
-people.append(byid[VACANT_SOUTH])
-if VACANT_SOUTH not in kids[mohit]:
-    kids[mohit].append(VACANT_SOUTH)
+# ── the South seat, now filled ────────────────────────────────────────────
+if south:
+    byid[south]['note'] = ('Joined to lead the South region. The seat was open '
+                           'after Amitabh Singh’s resignation, covered in the '
+                           'interim by Ratanmani Mohit.')
 
 RM_IDS = {by_name[norm(n)] for n in REGIONAL_MANAGERS if norm(n) in by_name}
-RM_IDS.add(VACANT_SOUTH)
 for i in RM_IDS:
     byid[i]['rm'] = True
     byid[i]['roster_title'] = byid[i]['title']
@@ -184,7 +187,7 @@ for r in openpyxl.load_workbook(TERR, data_only=True).active.iter_rows(min_row=2
     target = TERRITORY_OWNER.get(owner.lower())
     if not target:
         continue
-    oid = target if target == VACANT_SOUTH else by_name.get(norm(target))
+    oid = by_name.get(norm(target))
     if oid:
         TERRITORY[oid].append({'city': city, 'zone': zone})
 
@@ -273,6 +276,8 @@ def node(i):
          'emp': emp, 'interns': itn, 'direct': len(kids[i])}
     if p.get('vacant'):
         d['vacant'] = True
+        d['note'] = p['note']
+    if p.get('note'):
         d['note'] = p['note']
     if i in PORTFOLIO_BY_ID:
         d['portfolio'] = PORTFOLIO_BY_ID[i]

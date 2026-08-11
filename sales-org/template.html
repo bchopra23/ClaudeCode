@@ -149,8 +149,8 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .row.vac{border-color:var(--red); border-style:dashed; background:var(--red-soft)}
 .row.vac .nm{color:var(--red)}
 .note{margin:9px 0 0 15px; padding:11px 13px; border-radius:10px;
-  background:var(--red-soft); color:var(--red); font-size:.87rem; line-height:1.55;
-  border:1px solid var(--red)}
+  background:var(--soft); color:var(--ink-2); font-size:.87rem; line-height:1.55;
+  border:1px solid var(--line); border-left:3px solid var(--gold-fill)}
 
 /* root card sits above the tree as the department header */
 .node.root > .row{margin-top:0; padding:22px 24px; border-radius:16px; align-items:flex-start}
@@ -368,9 +368,7 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 
     if(has){
       h.push('<div class="kids">');
-      if(n.kids.length){
-        h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');
-      }
+      /* territory first — it is the answer to "what does this person cover?" */
       if(n.cities.length){
         h.push('<div class="terr"><p class="t-lab">Territory — '+
           n.cities.length+' cities</p><div class="zones">'+
@@ -378,6 +376,9 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
             return '<span>'+esc(z.name)+'<i>'+z.n+'</i></span>';
           }).join('')+'</div><p class="cities">'+
           n.cities.map(esc).join(' <b>·</b> ')+'</p></div>');
+      }
+      if(n.kids.length){
+        h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');
       }
       if(n.team.length){
         h.push('<div class="direct"><p class="d-lab">'+
