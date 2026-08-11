@@ -12,6 +12,24 @@ GRADES_FROM = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/332377
 INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
 TERR = 'territory.xlsx'          # city -> zone -> RM coverage map
 MASTER = 'masterfile.xlsx'       # validated field-force file: channel, city, outlet
+DEALERS = 'dealers.xlsx'         # dealer master: dealership -> ASM -> RM -> zone
+
+# There is no channel concept in Inside Sales, Sales Ops, Expansion or Brands,
+# so those lines never show a channel figure. Everyone else may: a Regional
+# Manager recorded under Sales Central still runs a retail region.
+NO_CHANNEL = {'Inside Sales', 'Sales Ops', 'Expansion', 'Network Expansion',
+              'Brands', 'Sales and Marketing'}
+
+# Clear data errors, corrected here rather than left to mislead. Each is a
+# single place recorded two ways, or a value that is not a place at all.
+CITY_FIX = {
+    'kolkata(east)': 'Kolkata',        # same city as Kolkata
+    'bengaluru': 'Bangalore',          # same city, both spellings in use
+    'new agra': 'Agra',                # same city
+    'new delhi': 'Delhi',              # same city as the territory map's Delhi
+    'manager strategic sourcing and procurement': '',   # a job title in a city field
+    'coco': '',                        # an outlet model, not a city
+}
 
 # lines that report outside Sales leadership and are out of scope for this chart
 EXCLUDE_LINES = ['Raman Pandey', 'Vijay Malik', 'Jashanjot Singh']
@@ -41,14 +59,22 @@ PORTFOLIOS = {
     'Ritesh Roy': 'Sales Expansion',
 }
 
-# the territory sheet names RMs by first name only
+# the territory and dealer sheets name RMs by first name only
 TERRITORY_OWNER = {
     'vinay': 'Vinay Binu', 'rachit': 'Rachit Sharma', 'vikas': 'Vikas Singh Bisht',
     'arup': 'Arup Roy Chowdhury', 'subesh': 'Subesh Mukherjee',
-    'siddhartha': 'Siddhartha Sharma', 'amit': 'Amit Vishwakarma',
-    # the sheet listed the South cities under Mohit while he was covering the seat
+    'siddhartha': 'Siddhartha Sharma',
+    # territory sits with the Regional Manager. Amit Vishwakarma is an AGM under
+    # Vikas Singh Bisht, so Faridabad and Sonipat belong to Vikas.
+    'amit': 'Vikas Singh Bisht',
+    # the sheets listed the South cities under Mohit while he covered the seat,
+    # and older rows still name the departed RM
     'mohit': SOUTH_RM,
+    'amitabh': SOUTH_RM,
 }
+
+def fix_city(c):
+    return CITY_FIX.get(clean(c).lower(), clean(c))
 
 # these two sit across the whole department, so a single state would mislead
 HIDE_LOCATION = ['Vani Rikhy Mehra', 'Ratanmani Mohit']
@@ -82,7 +108,7 @@ for r in openpyxl.load_workbook(EMP, data_only=True).active.iter_rows(min_row=2,
                  'title': clean(r[4]), 'band': clean(r[5]),
                  'grade': GRADE.get(code, ''), 'doj': '',
                  'mgr': clean(r[6]), 'loc': clean(r[7]),
-                 'city': clean(r[8]), 'intern': False})
+                 'city': fix_city(r[8]), 'intern': False})
 
 interns = []
 for r in openpyxl.load_workbook(INT, data_only=True).active.iter_rows(min_row=2, values_only=True):
@@ -173,12 +199,41 @@ for r in openpyxl.load_workbook(MASTER, data_only=True).active.iter_rows(min_row
     MASTER_ROWS[code] = {'chan': clean(r[6]), 'city': clean(r[15]),
                          'cat': cat, 'flagged': clean(r[16]) == 'Incorrect Mapping'}
 
+# ── dealer master ─────────────────────────────────────────────────────────
+# A dealership belongs to an ASM, who belongs to an RM. Offboarded dealers are
+# counted separately so a live network figure stays live.
+DEALERS_BY = collections.defaultdict(lambda: {'live': 0, 'off': 0})
+DEALER_META = {'model': collections.Counter(), 'status': collections.Counter(),
+               'tier': collections.Counter()}
+_dseen = set()
+for r in openpyxl.load_workbook(DEALERS, data_only=True)['Sheet1'].iter_rows(min_row=6, values_only=True):
+    name = clean(r[12])
+    if not name or name in _dseen:
+        continue
+    _dseen.add(name)
+    status, model, tier = clean(r[10]), clean(r[9]), clean(r[8])
+    DEALER_META['model'][model] += 1
+    DEALER_META['status'][status] += 1
+    DEALER_META['tier'][tier] += 1
+    live = status != 'Offboarded'
+    for who, col in (('rm', 2), ('asm', 3)):
+        val = clean(r[col])
+        if not val or val == '-':
+            continue
+        target = TERRITORY_OWNER.get(val.lower(), val) if who == 'rm' else val
+        oid = by_name.get(norm(target))
+        if oid:
+            DEALERS_BY[oid]['live' if live else 'off'] += 1
+
 # ── territory map ─────────────────────────────────────────────────────────
 TERRITORY = collections.defaultdict(list)     # owner id -> [{city, zone}]
 _seen = set()
 for r in openpyxl.load_workbook(TERR, data_only=True).active.iter_rows(min_row=2, values_only=True):
     city, zone, owner = clean(r[0]), clean(r[1]), clean(r[2])
     if not city or not owner:
+        continue
+    city = fix_city(city)
+    if not city:
         continue
     key = (city.lower(), zone.lower(), owner.lower())
     if key in _seen:                          # the sheet repeats a few rows verbatim
@@ -282,8 +337,12 @@ def node(i):
     if i in PORTFOLIO_BY_ID:
         d['portfolio'] = PORTFOLIO_BY_ID[i]
     cs = channel_split(i)
-    if cs['chan'] or cs['field']:
+    if (cs['chan'] or cs['field']) and p['sub'] not in NO_CHANNEL:
         d['field'], d['chan'] = cs['field'], cs['chan']
+    if i in DEALERS_BY:
+        d['dealers'] = DEALERS_BY[i]['live']
+        if DEALERS_BY[i]['off']:
+            d['dealersOff'] = DEALERS_BY[i]['off']
     if i in TERRITORY:
         t = sorted(TERRITORY[i], key=lambda x: x['city'])
         z = collections.Counter(x['zone'] for x in t)
@@ -343,6 +402,12 @@ meta = {
                                       if v['chan'] == 'Channel Sales'))],
     'outlets': collections.Counter(v['cat'] for v in MASTER_ROWS.values()
                                    if v['cat']).most_common(),
+    'dealerModel': DEALER_META['model'].most_common(),
+    'dealerStatus': DEALER_META['status'].most_common(),
+    'dealerTier': DEALER_META['tier'].most_common(),
+    'dealersLive': sum(1 for k, v in DEALER_META['status'].items()
+                       if k != 'Offboarded' for _ in range(v)),
+    'dealersAll': sum(DEALER_META['status'].values()),
     'zones': collections.Counter(x['zone'] for v in TERRITORY.values()
                                  for x in v).most_common(),
     'excluded': EXCLUDE_LINES,
@@ -377,6 +442,8 @@ for nm, tsm, tse, emp in rmline(tree):
     print(f'   {nm:32s} {emp:4d} in line | {tsm:3d} TSM | {tse:3d} TSE')
 print('cities mapped         :', sum(len(v) for v in TERRITORY.values()),
       'across', len(TERRITORY), 'owners')
+print('dealerships           :', sum(DEALER_META['status'].values()),
+      '| live:', sum(v for k, v in DEALER_META['status'].items() if k != 'Offboarded'))
 print('masterfile rows       :', len(MASTER_ROWS),
       '| joined to roster:', sum(1 for c in MASTER_ROWS if c in byid))
 print('channel sellers       :', sum(1 for v in MASTER_ROWS.values()

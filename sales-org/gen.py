@@ -33,6 +33,7 @@ def visit(n, parent=None):
         'portfolio': n.get('portfolio', ''),
         'zones': n.get('zones', []), 'cities': n.get('cities', []),
         'chan': n.get('chan', 0), 'field': n.get('field', 0),
+        'dealers': n.get('dealers', 0), 'dealersOff': n.get('dealersOff', 0),
         'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
         'parent': parent,
         'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],
@@ -41,7 +42,7 @@ def visit(n, parent=None):
                   'branches': len(c.get('children', [])),
                   'direct': len(c.get('team', {}).get('members', [])),
                   'rm': c.get('rm', False), 'zones': c.get('zones', []),
-                  'chan': c.get('chan', 0),
+                  'chan': c.get('chan', 0), 'dealers': c.get('dealers', 0),
                   'tsm': c.get('tsm', 0), 'tse': c.get('tse', 0),
                   'vacant': c.get('vacant', False)} for c in kids],
         'team': team.get('members', []),
@@ -68,7 +69,7 @@ GRADE = {'A': 'Field &amp; executive', 'B': 'Managerial', 'C': 'Senior leadershi
 RM_COUNT = sum(1 for n in NODES.values() if n['rm'])
 STATS = [(meta['employees'], 'Employees'), (meta['interns'], 'Interns'),
          (meta['total'], 'People in all'), (RM_COUNT, 'Regional managers'),
-         (meta['cities'], 'Cities covered')]
+         (meta['cities'], 'Cities covered'), (meta['dealersLive'], 'Live dealerships')]
 
 tpl = open('template.html', encoding='utf-8').read()
 out = (tpl
@@ -83,6 +84,11 @@ out = (tpl
        .replace('<!--CHANBARS-->', bars(meta['channel'], e))
        .replace('<!--OUTBARS-->', bars(meta['outlets'], e))
        .replace('<!--CITYBARS-->', bars(meta['topCities'], e))
+       .replace('<!--DMODEL-->', bars(meta['dealerModel'], lambda k:
+           {'DODO': 'DODO — dealer owned', 'COCO': 'COCO — company owned'}.get(k, e(k))))
+       .replace('<!--DSTATUS-->', bars(meta['dealerStatus'], e))
+       .replace('<!--DTIER-->', bars(meta['dealerTier'], e))
+       .replace('__DEALERS__', str(meta['dealersAll']))
        .replace('__GRADED__', str(sum(v for _, v in meta['grades'])))
        .replace('/*NODES*/', json.dumps(NODES, separators=(',', ':')))
        .replace('/*INDEX*/', json.dumps(INDEX, separators=(',', ':')))
@@ -91,7 +97,7 @@ out = (tpl
 
 open('sales-org.html', 'w', encoding='utf-8').write(out)
 
-for token in ('/*FONTS*/', '/*NODES*/', '/*INDEX*/', '__ROOT__', '__TOTAL__', '__GRADED__',
+for token in ('/*FONTS*/', '/*NODES*/', '/*INDEX*/', '__ROOT__', '__TOTAL__', '__GRADED__', '__DEALERS__',
               '<!--LOGO-->', '<!--STATS-->', '<!--SUBBARS-->'):
     assert token not in out, token
 print('manager views :', len(NODES))

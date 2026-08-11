@@ -77,8 +77,8 @@ eighth RM position.
 Each RM shows the number of territory sales managers and territory sales
 executives anywhere in their line. TSM counts include Senior TSM.
 
-Note that Gaurav Bhardwaj is a Regional Manager but reports to the VP directly
-rather than through the AVP, so he appears one level up from the other seven.
+Gaurav Bhardwaj is a Regional Manager who reports to the VP directly rather than
+through the AVP. That line is correct and deliberate.
 
 ## Function heads
 
@@ -119,6 +119,7 @@ Chandigarh). Zones are shown as recorded rather than normalised.
 | `roster.xlsx` | Current roster — reporting lines, designation, state and city for all 393 Sales records |
 | `territory.xlsx` | 102 cities mapped to a zone and a Regional Manager |
 | `masterfile.xlsx` | 224 validated field-force records — channel vs field, outlet type |
+| `dealers.xlsx` | 131 dealerships — ownership model, status, city tier, ASM and RM |
 
 The current roster dropped the Grade column, so grades are carried over from the
 previous extract by employee code; the 26 people who joined since are ungraded,
@@ -154,6 +155,27 @@ Not applied to the tree, and worth resolving at source:
 - **Siddhartha Sharma never appears as an RSM in the masterfile** — his people are
   attributed to Ratanmani Mohit, and he is named as an ASM correction. That
   contradicts the RM list, so the RM list was kept.
+
+## Corrections applied
+
+Judgement calls made against the source data rather than passed through:
+
+- **Territory sits with the Regional Manager.** Faridabad and Sonipat were
+  recorded under Amit Vishwakarma, an AGM; they belong to Vikas Singh Bisht,
+  the GM above him. `TERRITORY_OWNER` maps him accordingly.
+- **`CITY_FIX`** folds one place recorded two ways into one, and empties two
+  values that are not places: `Kolkata(East)`→`Kolkata`, `Bengaluru`→`Bangalore`,
+  `New Agra`→`Agra`, `New Delhi`→`Delhi`, `COCO` (an ownership model) and
+  `Manager Strategic sourcing and procurement` (a job title) both dropped.
+- **`NO_CHANNEL`** suppresses the channel figure for Inside Sales, Sales Ops,
+  Expansion, Network Expansion, Brands and Sales & Marketing, where the concept
+  does not exist. It is a deny-list rather than an allow-list so that a Regional
+  Manager recorded under Sales Central still shows the channel split of the
+  retail region they actually run.
+- **Dealers are deduplicated by dealership name** — the master has 144 rows for
+  131 dealerships — and the 16 offboarded ones are counted separately so the
+  network figure stays live.
+- Rachit Jain is a Programme Manager and carries no functional portfolio.
 
 ## Display notes
 
