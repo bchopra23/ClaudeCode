@@ -81,6 +81,8 @@ out = (tpl
        .replace('<!--ZONEBARS-->', bars(meta['zones'], e))
        .replace('<!--CHANBARS-->', bars(meta['channel'], e))
        .replace('<!--OUTBARS-->', bars(meta['outlets'], e))
+       .replace('<!--CITYBARS-->', bars(meta['topCities'], e))
+       .replace('__GRADED__', str(sum(v for _, v in meta['grades'])))
        .replace('/*NODES*/', json.dumps(NODES, separators=(',', ':')))
        .replace('/*INDEX*/', json.dumps(INDEX, separators=(',', ':')))
        .replace('__ROOT__', json.dumps(tree['id']))
@@ -88,7 +90,7 @@ out = (tpl
 
 open('sales-org.html', 'w', encoding='utf-8').write(out)
 
-for token in ('/*FONTS*/', '/*NODES*/', '/*INDEX*/', '__ROOT__', '__TOTAL__',
+for token in ('/*FONTS*/', '/*NODES*/', '/*INDEX*/', '__ROOT__', '__TOTAL__', '__GRADED__',
               '<!--LOGO-->', '<!--STATS-->', '<!--SUBBARS-->'):
     assert token not in out, token
 print('manager views :', len(NODES))

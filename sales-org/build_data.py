@@ -7,7 +7,8 @@ throughout, so colleagues who share a name stay distinct.
 """
 import openpyxl, collections, re, json
 
-EMP = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
+EMP = 'roster.xlsx'              # current roster: adds Sub-Location for everyone
+GRADES_FROM = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
 INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
 TERR = 'territory.xlsx'          # city -> zone -> RM coverage map
 MASTER = 'masterfile.xlsx'       # validated field-force file: channel, city, outlet
@@ -60,14 +61,23 @@ def merge_sub(s):
 
 
 # ── read ──────────────────────────────────────────────────────────────────
+# the current roster dropped the Grade column; carry it over from the previous
+# extract where the employee code matches
+GRADE = {}
+for r in openpyxl.load_workbook(GRADES_FROM, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    if r[0] and clean(r[6]):
+        GRADE[clean(r[0])] = clean(r[6])
+
 emps = []
 for r in openpyxl.load_workbook(EMP, data_only=True).active.iter_rows(min_row=2, values_only=True):
     if not (r[2] and clean(r[2]) == 'Sales'):
         continue
-    emps.append({'id': clean(r[0]), 'name': clean(r[1]), 'sub': merge_sub(r[3]),
-                 'title': clean(r[4]), 'band': clean(r[5]), 'grade': clean(r[6]),
-                 'doj': r[7].strftime('%Y-%m-%d') if r[7] else '',
-                 'mgr': clean(r[8]), 'loc': clean(r[9]), 'intern': False})
+    code = clean(r[0])
+    emps.append({'id': code, 'name': clean(r[1]), 'sub': merge_sub(r[3]),
+                 'title': clean(r[4]), 'band': clean(r[5]),
+                 'grade': GRADE.get(code, ''), 'doj': '',
+                 'mgr': clean(r[6]), 'loc': clean(r[7]),
+                 'city': clean(r[8]), 'intern': False})
 
 interns = []
 for r in openpyxl.load_workbook(INT, data_only=True).active.iter_rows(min_row=2, values_only=True):
@@ -75,7 +85,7 @@ for r in openpyxl.load_workbook(INT, data_only=True).active.iter_rows(min_row=2,
         continue
     interns.append({'id': clean(r[0]), 'name': clean(r[1]), 'sub': merge_sub(r[3]),
                     'title': 'Intern', 'band': 'Intern', 'grade': '', 'doj': '',
-                    'mgr': clean(r[5]), 'loc': '', 'intern': True})
+                    'mgr': clean(r[5]), 'loc': '', 'city': '', 'intern': True})
 
 people = emps + interns
 by_name = {}
@@ -296,7 +306,7 @@ def node(i):
             'interns': sum(1 for m in mem if m['intern']),
             'titles': collections.Counter(abbr(m['title']) for m in mem).most_common(),
             'members': [dict({'name': m['name'], 'title': m['title'],
-                              'loc': MASTER_ROWS.get(m['id'], {}).get('city') or m.get('loc', ''),
+                              'loc': m.get('city') or m.get('loc', ''),
                               'intern': m['intern'], 'grade': m['grade']},
                              **({'chan': 'C'} if MASTER_ROWS.get(m['id'], {}).get('chan')
                                 == 'Channel Sales' else {}))
@@ -320,6 +330,7 @@ meta = {
                                     if not p['intern'] and not p.get('vacant')).most_common(),
     'grades': sorted(collections.Counter(p['grade'] for p in people if p['grade']).items()),
     'locations': collections.Counter(p['loc'] for p in people if p.get('loc')).most_common(),
+    'topCities': collections.Counter(p['city'] for p in people if p.get('city')).most_common(12),
     'cities': sum(len(v) for v in TERRITORY.values()),
     'channel': [('Field sales', sum(1 for v in MASTER_ROWS.values()
                                     if v['chan'] == 'Field Sales')),

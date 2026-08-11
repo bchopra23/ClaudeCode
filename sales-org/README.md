@@ -1,6 +1,6 @@
 # Sales Org Structure
 
-An interactive org chart for the Sales department: 343 employees and 54 interns.
+An interactive org chart for the Sales department: 361 employees and 54 interns.
 Every reporting line is rebuilt from the roster's Reporting Manager column.
 
 The page is **one continuous tree**. Selecting a manager opens their branch in
@@ -106,6 +106,18 @@ The sheet's Zone column mixes true zones (North, South, East, West) with state
 codes (UP, RJ, MP, CG, JK) and individual states (Punjab, Haryana,
 Chandigarh). Zones are shown as recorded rather than normalised.
 
+## Sources
+
+| File | What it carries |
+| --- | --- |
+| `roster.xlsx` | Current roster — reporting lines, designation, state and city for all 393 Sales records |
+| `territory.xlsx` | 102 cities mapped to a zone and a Regional Manager |
+| `masterfile.xlsx` | 224 validated field-force records — channel vs field, outlet type |
+
+The current roster dropped the Grade column, so grades are carried over from the
+previous extract by employee code; the 26 people who joined since are ungraded,
+and the panel says how many it covers.
+
 ## Field-force masterfile
 
 `masterfile.xlsx` holds 224 validated, active Retail Sales records at TSM /
@@ -129,7 +141,11 @@ Not applied to the tree, and worth resolving at source:
   Sharma).
 - **22 rows are flagged `Incorrect Mapping`** by the Sales PM, with the
   correction written in free text in the last column.
-- **Siddhartha Sharma never appears as an RSM in this file** — his people are
+- **Siddhartha Sharma is a Regional Manager.** The masterfile never lists him as
+  an RSM, but the current roster shows four Area Sales Managers reporting to him
+  (Naveen Gaur, Arpit Raj, Akhil Gupta, Hemant Kumar Dilliwar), which settles it
+  in favour of the RM list. The note below is kept for context.
+- **Siddhartha Sharma never appears as an RSM in the masterfile** — his people are
   attributed to Ratanmani Mohit, and he is named as an ASM correction. That
   contradicts the RM list, so the RM list was kept.
 

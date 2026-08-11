@@ -208,6 +208,7 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .split > p{margin:0 0 24px; color:var(--ink-3); font-size:.9rem; max-width:62ch}
 .panels{display:grid; gap:30px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
 .panels h3{font-size:1.05rem; margin-bottom:13px}
+.p-note{margin:-9px 0 12px; font-size:.78rem; color:var(--ink-3)}
 .bars{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px}
 .bars li{display:grid; grid-template-columns:1fr 58px 32px; gap:10px; align-items:center}
 .b-l{font-size:.88rem; color:var(--ink-2)}
@@ -268,11 +269,13 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
     <p>Retail counts as one function — the roster's 3W and 4W splits are folded together.</p>
     <div class="panels">
       <div><h3>By function</h3><ul class="bars"><!--SUBBARS--></ul></div>
-      <div><h3>By grade</h3><ul class="bars"><!--GBARS--></ul></div>
+      <div><h3>By grade</h3><p class="p-note">Recorded for __GRADED__ people</p>
+        <ul class="bars"><!--GBARS--></ul></div>
       <div><h3>By state</h3><ul class="bars"><!--LOCBARS--></ul></div>
       <div><h3>Cities by zone</h3><ul class="bars"><!--ZONEBARS--></ul></div>
       <div><h3>How the field sells</h3><ul class="bars"><!--CHANBARS--></ul></div>
       <div><h3>Where the field works</h3><ul class="bars"><!--OUTBARS--></ul></div>
+      <div><h3>Biggest cities</h3><ul class="bars"><!--CITYBARS--></ul></div>
     </div>
   </section>
 </main>
