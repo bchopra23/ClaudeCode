@@ -32,6 +32,7 @@ def visit(n, parent=None):
         'rm': n.get('rm', False), 'rosterTitle': n.get('rosterTitle', ''),
         'portfolio': n.get('portfolio', ''),
         'zones': n.get('zones', []), 'cities': n.get('cities', []),
+        'chan': n.get('chan', 0), 'field': n.get('field', 0),
         'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
         'parent': parent,
         'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],
@@ -40,6 +41,7 @@ def visit(n, parent=None):
                   'branches': len(c.get('children', [])),
                   'direct': len(c.get('team', {}).get('members', [])),
                   'rm': c.get('rm', False), 'zones': c.get('zones', []),
+                  'chan': c.get('chan', 0),
                   'tsm': c.get('tsm', 0), 'tse': c.get('tse', 0),
                   'vacant': c.get('vacant', False)} for c in kids],
         'team': team.get('members', []),
@@ -77,6 +79,8 @@ out = (tpl
        .replace('<!--GBARS-->', bars(meta['grades'], lambda k: GRADE.get(k, e(k))))
        .replace('<!--LOCBARS-->', bars(meta['locations'], e))
        .replace('<!--ZONEBARS-->', bars(meta['zones'], e))
+       .replace('<!--CHANBARS-->', bars(meta['channel'], e))
+       .replace('<!--OUTBARS-->', bars(meta['outlets'], e))
        .replace('/*NODES*/', json.dumps(NODES, separators=(',', ':')))
        .replace('/*INDEX*/', json.dumps(INDEX, separators=(',', ':')))
        .replace('__ROOT__', json.dumps(tree['id']))

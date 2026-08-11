@@ -106,6 +106,33 @@ The sheet's Zone column mixes true zones (North, South, East, West) with state
 codes (UP, RJ, MP, CG, JK) and individual states (Punjab, Haryana,
 Chandigarh). Zones are shown as recorded rather than normalised.
 
+## Field-force masterfile
+
+`masterfile.xlsx` holds 224 validated, active Retail Sales records at TSM /
+Sr TSM / TSE level — the bottom two layers. It carries three things the roster
+does not: whether someone sells **Field** or **Channel**, the **city** they
+work, and the **outlet** they work from. 218 of the 224 join to the roster by
+employee code.
+
+It also carries an explicit Regional Sales Manager column, which was used to
+check the tree rather than rebuild it. At ASM level **26 of 35 links match
+exactly**; of the 9 that differ, 5 are not real conflicts (the ASM cell holds
+an RM's own name for people who report to them directly, so the RSM column
+simply names that RM's own boss) and one is a spelling variant. That leaves
+three genuine gaps, listed below.
+
+Not applied to the tree, and worth resolving at source:
+
+- **Three ASMs have reports here but appear as individual contributors in the
+  roster** — Arpit Raj (4 people, under Vikas Singh Bisht), Swatantra Kumar
+  Mishra (3, under Subesh Mukherjee) and Pankaj Kumar Gautam (2, under Rachit
+  Sharma).
+- **22 rows are flagged `Incorrect Mapping`** by the Sales PM, with the
+  correction written in free text in the last column.
+- **Siddhartha Sharma never appears as an RSM in this file** — his people are
+  attributed to Ratanmani Mohit, and he is named as an ASM correction. That
+  contradicts the RM list, so the RM list was kept.
+
 ## Display notes
 
 The page renders light by default and only goes dark if the viewer explicitly

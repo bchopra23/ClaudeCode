@@ -10,6 +10,7 @@ import openpyxl, collections, re, json
 EMP = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
 INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
 TERR = 'territory.xlsx'          # city -> zone -> RM coverage map
+MASTER = 'masterfile.xlsx'       # validated field-force file: channel, city, outlet
 
 # lines that report outside Sales leadership and are out of scope for this chart
 EXCLUDE_LINES = ['Raman Pandey', 'Vijay Malik', 'Jashanjot Singh']
@@ -147,6 +148,18 @@ for i in RM_IDS:
     byid[i]['roster_title'] = byid[i]['title']
     byid[i]['title'] = 'Regional Manager'
 
+# ── field-force masterfile ────────────────────────────────────────────────
+# Adds what the roster does not carry: whether someone sells through the
+# channel or in the field, the city they work, and the kind of outlet.
+MASTER_ROWS = {}
+for r in openpyxl.load_workbook(MASTER, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    code = clean(r[0])
+    if not code:
+        continue
+    cat = clean(r[13]).replace('Shawroom', 'Showroom')       # sheet typo
+    MASTER_ROWS[code] = {'chan': clean(r[6]), 'city': clean(r[15]),
+                         'cat': cat, 'flagged': clean(r[16]) == 'Incorrect Mapping'}
+
 # ── territory map ─────────────────────────────────────────────────────────
 TERRITORY = collections.defaultdict(list)     # owner id -> [{city, zone}]
 _seen = set()
@@ -194,6 +207,15 @@ def field_roles(i, acc=None):
     elif IS_TSE(t): acc['tse'] += 1
     for c in kids[i]:
         field_roles(c, acc)
+    return acc
+
+def channel_split(i, acc=None):
+    acc = acc if acc is not None else {'field': 0, 'chan': 0}
+    m = MASTER_ROWS.get(i)
+    if m:
+        acc['chan' if m['chan'] == 'Channel Sales' else 'field'] += 1
+    for c in kids[i]:
+        channel_split(c, acc)
     return acc
 
 def locations(i, acc=None):
@@ -244,6 +266,9 @@ def node(i):
         d['note'] = p['note']
     if i in PORTFOLIO_BY_ID:
         d['portfolio'] = PORTFOLIO_BY_ID[i]
+    cs = channel_split(i)
+    if cs['chan'] or cs['field']:
+        d['field'], d['chan'] = cs['field'], cs['chan']
     if i in TERRITORY:
         t = sorted(TERRITORY[i], key=lambda x: x['city'])
         z = collections.Counter(x['zone'] for x in t)
@@ -270,8 +295,12 @@ def node(i):
             'emp': sum(0 if m['intern'] else 1 for m in mem),
             'interns': sum(1 for m in mem if m['intern']),
             'titles': collections.Counter(abbr(m['title']) for m in mem).most_common(),
-            'members': [{'name': m['name'], 'title': m['title'], 'loc': m.get('loc', ''),
-                         'intern': m['intern'], 'grade': m['grade']} for m in mem]}
+            'members': [dict({'name': m['name'], 'title': m['title'],
+                              'loc': MASTER_ROWS.get(m['id'], {}).get('city') or m.get('loc', ''),
+                              'intern': m['intern'], 'grade': m['grade']},
+                             **({'chan': 'C'} if MASTER_ROWS.get(m['id'], {}).get('chan')
+                                == 'Channel Sales' else {}))
+                        for m in mem]}
 
     if mgr_kids:
         ch = [node(c) for c in mgr_kids]
@@ -292,6 +321,12 @@ meta = {
     'grades': sorted(collections.Counter(p['grade'] for p in people if p['grade']).items()),
     'locations': collections.Counter(p['loc'] for p in people if p.get('loc')).most_common(),
     'cities': sum(len(v) for v in TERRITORY.values()),
+    'channel': [('Field sales', sum(1 for v in MASTER_ROWS.values()
+                                    if v['chan'] == 'Field Sales')),
+                ('Channel sales', sum(1 for v in MASTER_ROWS.values()
+                                      if v['chan'] == 'Channel Sales'))],
+    'outlets': collections.Counter(v['cat'] for v in MASTER_ROWS.values()
+                                   if v['cat']).most_common(),
     'zones': collections.Counter(x['zone'] for v in TERRITORY.values()
                                  for x in v).most_common(),
     'excluded': EXCLUDE_LINES,
@@ -326,4 +361,8 @@ for nm, tsm, tse, emp in rmline(tree):
     print(f'   {nm:32s} {emp:4d} in line | {tsm:3d} TSM | {tse:3d} TSE')
 print('cities mapped         :', sum(len(v) for v in TERRITORY.values()),
       'across', len(TERRITORY), 'owners')
+print('masterfile rows       :', len(MASTER_ROWS),
+      '| joined to roster:', sum(1 for c in MASTER_ROWS if c in byid))
+print('channel sellers       :', sum(1 for v in MASTER_ROWS.values()
+                                     if v['chan'] == 'Channel Sales'))
 print('sub-departments       :', meta['subDepts'])

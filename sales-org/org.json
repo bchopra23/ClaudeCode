@@ -11,6 +11,8 @@
   "emp": 343,
   "interns": 54,
   "direct": 8,
+  "field": 194,
+  "chan": 24,
   "tsm": 145,
   "tse": 80,
   "team": {
@@ -60,6 +62,8 @@
     "interns": 41,
     "direct": 18,
     "portfolio": "Retail Sales & Brands",
+    "field": 164,
+    "chan": 20,
     "tsm": 129,
     "tse": 62,
     "team": {
@@ -162,6 +166,8 @@
       "emp": 77,
       "interns": 8,
       "direct": 15,
+      "field": 65,
+      "chan": 2,
       "cities": [
        "Ahilyanagar",
        "Ahmedabad",
@@ -303,6 +309,8 @@
         "emp": 27,
         "interns": 0,
         "direct": 26,
+        "field": 25,
+        "chan": 0,
         "tsm": 17,
         "tse": 9,
         "locs": [
@@ -332,140 +340,140 @@
           {
            "name": "Aakash Balu Limbole",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Solapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Aasif Fakruddin Shaikh",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Solapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Aditya Shivaji Dhongade",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Ajay Pandurang Gunjal",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Ahilyanagar",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Ajit Vishwnath Lokhande",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Baramati",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Asim Nawab Baig",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Aurangabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Baliram Rajebhau Kale",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Aurangabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Hanmant Dagdu Salunke",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Solapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Juberahamad Khatib",
            "title": "Senior Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Kolhapur",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Manoj Madhukar Bargaje",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Naeem Shahajhan Mulani",
            "title": "Senior Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Omkar Nandkumar Karhe",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Prakash Dattatray Chate",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Solapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pramod Sampat Lohate",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pranit Prakash Sanade",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Prashant Subhash Patil",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Prathamesh Pramod Deshpande",
            "title": "Senior Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Rohit Ramesh Patil",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sanket Rajkumar Yadav",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Santosh Keshav Bhartal",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
@@ -479,35 +487,35 @@
           {
            "name": "Suvek Vivek Kulkarni",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Dhule",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Tukaram Vaijnath Ghaytidak",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Ahilyanagar",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Tushar Ravindra Nevse",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Baramati",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Vicky Lalu Gaware",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Vishnu Bhausaheb Thete",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           }
@@ -526,6 +534,8 @@
         "emp": 17,
         "interns": 0,
         "direct": 16,
+        "field": 14,
+        "chan": 1,
         "tsm": 13,
         "tse": 3,
         "locs": [
@@ -555,30 +565,31 @@
           {
            "name": "Alhad Anil Mayekar",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Amol Bharatsing Chavhan",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Yavatmal",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Ismail Habibkhan Pathan",
            "title": "Senior Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Nashik",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Kachave Prashant Shivajirao",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Parbhani",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Kundan Kumar",
@@ -590,77 +601,77 @@
           {
            "name": "Mohd Niyaz Shaikh",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pawan Narayan Jain",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rahul Ramashankar Dubey",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rahul Somnath Munde",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Parbhani",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rajendra Hemraj Meshram",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Nashik",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sandip Gangaram Gundaye",
            "title": "Senior Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Shubham Rajendra Tawde",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shyamu Tiwari",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Syed Asfhan Usman",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Uday Uttam Sharma",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Vaseem Akhtar Khan",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "B"
           }
@@ -679,6 +690,8 @@
         "emp": 16,
         "interns": 0,
         "direct": 15,
+        "field": 15,
+        "chan": 0,
         "tsm": 13,
         "tse": 2,
         "locs": [
@@ -704,105 +717,105 @@
           {
            "name": "Adarsh",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Akash Pandurang Rangari",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Nagpur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Aniket Sanjay Haldankar",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Anubhav Tiwari",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Arpit Ashokarao Arvikar",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Amravati",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Dhanaji Niwas Jadhav",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Satara",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Ganesh Sanjay Kapure",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Pune",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Kiran Dilip Ghorpade",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Satara",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mayur Sanjay Khaire",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mustkim Siddique Shaikh",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Mumbai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pravin Balaso Chandane",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Kolhapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sachin Shankar Jadhav",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Ahilyanagar",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sandeep Anandrao Bhole",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Kolhapur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sanket Prakash Patil",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Nashik",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Somanth Vilas Gaikwad",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Ahilyanagar",
            "intern": false,
            "grade": "A"
           }
@@ -821,6 +834,8 @@
         "emp": 7,
         "interns": 0,
         "direct": 6,
+        "field": 6,
+        "chan": 0,
         "tsm": 3,
         "tse": 3,
         "locs": [
@@ -850,42 +865,42 @@
           {
            "name": "Barot Nikunjkumar Harnishchandra",
            "title": "Territory Sales Manager",
-           "loc": "Gujarat",
+           "loc": "Ahmedabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Jitendrasinh Tomar",
            "title": "Territory Sales Manager",
-           "loc": "Gujarat",
+           "loc": "Ahmedabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Kedar Vijaykumar Ganpatbhai",
            "title": "Territory Sales Executive",
-           "loc": "Gujarat",
+           "loc": "Surat",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mukesh Indravadan Gohil",
            "title": "Territory Sales Executive",
-           "loc": "Gujarat",
+           "loc": "Surat",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Patel Kaushik Kumar",
            "title": "Senior Territory Sales Manager",
-           "loc": "Gujarat",
+           "loc": "Ahmedabad",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Saindane Bhatu Prabhakar",
            "title": "Territory Sales Executive",
-           "loc": "Gujarat",
+           "loc": "Surat",
            "intern": false,
            "grade": "A"
           }
@@ -904,6 +919,8 @@
         "emp": 7,
         "interns": 0,
         "direct": 6,
+        "field": 5,
+        "chan": 1,
         "tsm": 2,
         "tse": 4,
         "locs": [
@@ -929,42 +946,43 @@
           {
            "name": "Danish Arif Sheikh",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Yavatmal",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Fahim Hamid Sheikh",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Nagpur",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Sachin Rameshrao Andhare",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Akola",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sagar Ghanshyam Dhavangale",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Nagpur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sandeep Babarao Pawar",
            "title": "Territory Sales Manager",
-           "loc": "Maharashtra",
+           "loc": "Nagpur",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sushil Sheshrao Shirke",
            "title": "Territory Sales Executive",
-           "loc": "Maharashtra",
+           "loc": "Nagpur",
            "intern": false,
            "grade": "A"
           }
@@ -985,6 +1003,8 @@
       "emp": 42,
       "interns": 15,
       "direct": 11,
+      "field": 8,
+      "chan": 1,
       "cities": [
        "Agra",
        "Aligarh",
@@ -1113,7 +1133,7 @@
         {
          "name": "Sandeep Kumar",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
@@ -1432,6 +1452,8 @@
         "emp": 5,
         "interns": 4,
         "direct": 8,
+        "field": 4,
+        "chan": 0,
         "tsm": 3,
         "tse": 1,
         "locs": [
@@ -1533,6 +1555,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "field": 2,
+        "chan": 0,
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -1554,14 +1578,14 @@
           {
            "name": "Ishfaq Ahmad Mir",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Srinagar",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mushtaq Ahmad Rather",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Srinagar",
            "intern": false,
            "grade": "A"
           }
@@ -1580,6 +1604,8 @@
         "emp": 2,
         "interns": 0,
         "direct": 1,
+        "field": 0,
+        "chan": 1,
         "locs": [
          {
           "name": "Uttar Pradesh",
@@ -1599,9 +1625,10 @@
           {
            "name": "Saurabh",
            "title": "Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Aligarh",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           }
          ]
         }
@@ -1620,6 +1647,8 @@
       "emp": 32,
       "interns": 11,
       "direct": 12,
+      "field": 18,
+      "chan": 2,
       "cities": [
        "COCO",
        "Delhi",
@@ -1743,6 +1772,8 @@
         "emp": 19,
         "interns": 0,
         "direct": 18,
+        "field": 14,
+        "chan": 1,
         "tsm": 11,
         "tse": 7,
         "locs": [
@@ -1780,7 +1811,7 @@
           {
            "name": "Abhishek",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
@@ -1794,28 +1825,29 @@
           {
            "name": "Balram",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Chandan Mishra",
            "title": "Territory Sales Executive",
-           "loc": "Uttar Pradesh",
+           "loc": "Ghaziabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Deepak Sharma",
            "title": "Senior Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           },
           {
            "name": "Krishna",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
@@ -1829,14 +1861,14 @@
           {
            "name": "Narender Rawat",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Prince Vishwakarma",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
@@ -1850,56 +1882,56 @@
           {
            "name": "Ranjit Kumar Mishra",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Ravi Kumar",
            "title": "Senior Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Rohit Kumar",
            "title": "Senior Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Sorav Kumar",
            "title": "Senior Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Noida",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Sushil Kumar Pathak",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Swayamber Prasad",
            "title": "Territory Sales Executive",
-           "loc": "Haryana",
+           "loc": "Gurgaon",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Tufail Ansari",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Vishal Pathak",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           }
@@ -1918,6 +1950,8 @@
         "emp": 3,
         "interns": 6,
         "direct": 8,
+        "field": 2,
+        "chan": 0,
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -1943,14 +1977,14 @@
           {
            "name": "Adarsh Singh",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pankaj",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
@@ -2011,6 +2045,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "field": 2,
+        "chan": 0,
         "tsm": 1,
         "tse": 1,
         "locs": [
@@ -2036,14 +2072,14 @@
           {
            "name": "Ankit Mishra",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Nitin Pal",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
            "grade": "A"
           }
@@ -2062,6 +2098,8 @@
         "emp": 2,
         "interns": 0,
         "direct": 1,
+        "field": 0,
+        "chan": 1,
         "tsm": 1,
         "tse": 0,
         "locs": [
@@ -2083,9 +2121,10 @@
           {
            "name": "Sachin Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "New Delhi",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           }
          ]
         }
@@ -2144,6 +2183,8 @@
       "direct": 10,
       "vacant": true,
       "note": "Open following Amitabh Singh\u2019s resignation. The team reports to Ratanmani Mohit directly until a replacement joins.",
+      "field": 30,
+      "chan": 0,
       "cities": [
        "Bangalore",
        "Bengaluru",
@@ -2225,21 +2266,21 @@
         {
          "name": "K Shankar",
          "title": "Territory Sales Manager",
-         "loc": "Karnataka",
+         "loc": "Bangalore",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Muchanapalli Srikanth",
          "title": "Territory Sales Manager",
-         "loc": "Telangana",
+         "loc": "Hyderabad",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Sanjay B",
          "title": "Senior Territory Sales Manager",
-         "loc": "Karnataka",
+         "loc": "Bangalore",
          "intern": false,
          "grade": "B"
         },
@@ -2265,6 +2306,8 @@
         "emp": 10,
         "interns": 0,
         "direct": 9,
+        "field": 9,
+        "chan": 0,
         "tsm": 4,
         "tse": 5,
         "locs": [
@@ -2298,63 +2341,63 @@
           {
            "name": "Donthi Ashok Kumar",
            "title": "Senior Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Goda Sai Prasad",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Madanu Naveen Kumar",
            "title": "Territory Sales Executive",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mohammed Mohinuddin",
            "title": "Territory Sales Executive",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mohammed Nabeel Pasha",
            "title": "Territory Sales Executive",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pathangi Manikantan",
            "title": "Territory Sales Executive",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shaik Mujahed",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shaik Rasheed",
            "title": "Senior Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Vunyala Pranay Kumar",
            "title": "Territory Sales Executive",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           }
@@ -2373,6 +2416,8 @@
         "emp": 9,
         "interns": 0,
         "direct": 8,
+        "field": 8,
+        "chan": 0,
         "tsm": 7,
         "tse": 1,
         "locs": [
@@ -2398,56 +2443,56 @@
           {
            "name": "Chinta Adinarayana",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "G Anil Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Janagani Prashanth Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Kotta Venkatesham",
            "title": "Territory Sales Executive",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Krishna Chaitanya Vaddiparthi",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mirza Ghayaz Baig",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rajesh Rachamalla",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Vaddiparthi Kishore",
            "title": "Territory Sales Manager",
-           "loc": "Telangana",
+           "loc": "Hyderabad",
            "intern": false,
            "grade": "B"
           }
@@ -2466,6 +2511,8 @@
         "emp": 9,
         "interns": 0,
         "direct": 8,
+        "field": 8,
+        "chan": 0,
         "tsm": 7,
         "tse": 1,
         "locs": [
@@ -2495,56 +2542,56 @@
           {
            "name": "Aftab Ahmed Ulla Khan",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Karthik",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "M Almohin",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Madival Sandeep",
            "title": "Territory Sales Executive",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Mohammed Ahmed",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shaikh Abdul Raqib Pasha",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Somashekar B",
            "title": "Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Zabiulla Khan",
            "title": "Senior Territory Sales Manager",
-           "loc": "Karnataka",
+           "loc": "Bangalore",
            "intern": false,
            "grade": "B"
           }
@@ -2563,6 +2610,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "field": 2,
+        "chan": 0,
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -2588,14 +2637,14 @@
           {
            "name": "Riyasudheen M M",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Kochi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sajil V S",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Kochi",
            "intern": false,
            "grade": "A"
           }
@@ -2616,6 +2665,8 @@
       "emp": 32,
       "interns": 4,
       "direct": 10,
+      "field": 16,
+      "chan": 8,
       "cities": [
        "Chennai",
        "Dharbhanga",
@@ -2685,21 +2736,22 @@
         {
          "name": "Kalaivanan M",
          "title": "Territory Sales Manager",
-         "loc": "Tamil Nadu",
+         "loc": "Madurai",
          "intern": false,
-         "grade": "A"
+         "grade": "A",
+         "chan": "C"
         },
         {
          "name": "Pradip Kumar Dutta",
          "title": "Territory Sales Executive",
-         "loc": "West Bengal",
+         "loc": "Kolkata",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Ranjeet Kumar Singh",
          "title": "Territory Sales Manager",
-         "loc": "Bihar",
+         "loc": "Patna",
          "intern": false,
          "grade": "A"
         },
@@ -2713,7 +2765,7 @@
         {
          "name": "Subha Raha",
          "title": "Territory Sales Manager",
-         "loc": "West Bengal",
+         "loc": "Kolkata",
          "intern": false,
          "grade": "A"
         }
@@ -2732,6 +2784,8 @@
         "emp": 9,
         "interns": 2,
         "direct": 10,
+        "field": 8,
+        "chan": 0,
         "tsm": 2,
         "tse": 6,
         "locs": [
@@ -2761,56 +2815,56 @@
           {
            "name": "Akhileshwar Jha",
            "title": "Territory Sales Manager",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Amardeep Kumar Singh",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Deepak Kumar Singh",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Manish Tiwari",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Nitesh Kumar",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pankaj Kumar",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rohit Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Sunil Kumar",
            "title": "Territory Sales Executive",
-           "loc": "Bihar",
+           "loc": "Patna",
            "intern": false,
            "grade": "A"
           },
@@ -2843,6 +2897,8 @@
         "emp": 7,
         "interns": 1,
         "direct": 7,
+        "field": 1,
+        "chan": 5,
         "tsm": 5,
         "tse": 1,
         "locs": [
@@ -2876,44 +2932,49 @@
           {
            "name": "Anandhan A",
            "title": "Senior Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           },
           {
            "name": "D S Immanuel",
            "title": "Senior Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           },
           {
            "name": "M Karthick",
            "title": "Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Mohambari",
            "title": "Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Palanivel Ramakrishanan",
            "title": "Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Pradeep Immanuel",
            "title": "Territory Sales Executive",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Madhusudhan Madhukumar",
@@ -2937,6 +2998,8 @@
         "emp": 5,
         "interns": 1,
         "direct": 5,
+        "field": 4,
+        "chan": 0,
         "tsm": 2,
         "tse": 2,
         "locs": [
@@ -2970,28 +3033,28 @@
           {
            "name": "Abir Chakraborty",
            "title": "Territory Sales Manager",
-           "loc": "West Bengal",
+           "loc": "Kolkata",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Debarpito Mondal",
            "title": "Senior Territory Sales Manager",
-           "loc": "West Bengal",
+           "loc": "Kolkata",
            "intern": false,
            "grade": "B"
           },
           {
            "name": "Dibyendu Saha",
            "title": "Territory Sales Executive",
-           "loc": "West Bengal",
+           "loc": "Kolkata",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shubhrungsu Barui",
            "title": "Territory Sales Executive",
-           "loc": "West Bengal",
+           "loc": "Kolkata",
            "intern": false,
            "grade": "A"
           },
@@ -3017,6 +3080,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "field": 0,
+        "chan": 2,
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -3038,16 +3103,18 @@
           {
            "name": "R Ashokkumar",
            "title": "Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Samiullah Babulal",
            "title": "Territory Sales Manager",
-           "loc": "Tamil Nadu",
+           "loc": "Chennai",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           }
          ]
         }
@@ -3106,6 +3173,8 @@
       "emp": 27,
       "interns": 2,
       "direct": 10,
+      "field": 16,
+      "chan": 6,
       "cities": [
        "Bhubaneswar",
        "Dhubri",
@@ -3167,35 +3236,36 @@
         {
          "name": "Abhijeet Bhattacharjee",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "Agartala",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Harendar Kumar",
          "title": "Territory Sales Manager",
-         "loc": "Uttar Pradesh",
+         "loc": "Gorakhpur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Mohammad Ansar",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Varanasi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Rahul Kumar Trivedi",
          "title": "Territory Sales Manager",
-         "loc": "Uttar Pradesh",
+         "loc": "Prayagraj",
          "intern": false,
-         "grade": "A"
+         "grade": "A",
+         "chan": "C"
         },
         {
          "name": "Sandeep Patel",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Varanasi",
          "intern": false,
          "grade": "A"
         },
@@ -3209,7 +3279,7 @@
         {
          "name": "Vikash Singh",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Varanasi",
          "intern": false,
          "grade": "A"
         }
@@ -3228,6 +3298,8 @@
         "emp": 10,
         "interns": 2,
         "direct": 11,
+        "field": 8,
+        "chan": 1,
         "tsm": 5,
         "tse": 4,
         "locs": [
@@ -3261,63 +3333,64 @@
           {
            "name": "Ayush Yadav",
            "title": "Territory Sales Executive",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Dhannjay Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Dhruvendra Kumar Singh",
            "title": "Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Guruditta Singh",
            "title": "Territory Sales Executive",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Jitendra Pandey",
            "title": "Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Pramod Kumar Pandey",
            "title": "Territory Sales Executive",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Shobhit Singh",
            "title": "Senior Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           },
           {
            "name": "Uday Pratap Singh",
            "title": "Territory Sales Executive",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Vibhav Kumar",
            "title": "Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Lucknow",
            "intern": false,
            "grade": "A"
           },
@@ -3350,6 +3423,8 @@
         "emp": 6,
         "interns": 0,
         "direct": 5,
+        "field": 3,
+        "chan": 3,
         "tsm": 3,
         "tse": 3,
         "locs": [
@@ -3387,37 +3462,40 @@
           {
            "name": "Debansupritam Mishra",
            "title": "Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Bhubaneswar",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Dhananjoy Patgiri",
            "title": "Territory Sales Executive",
-           "loc": "Delhi",
+           "loc": "Dhubri",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Dilkash Alam",
            "title": "Territory Sales Executive",
-           "loc": "Jharkhand",
+           "loc": "Ranchi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Rupesh Kumar Singh",
            "title": "Territory Sales Executive",
-           "loc": "Jharkhand",
+           "loc": "Ranchi",
            "intern": false,
            "grade": "A"
           },
           {
            "name": "Subrata Kumar Sahu",
            "title": "Senior Territory Sales Manager",
-           "loc": "Delhi",
+           "loc": "Bhubaneswar",
            "intern": false,
-           "grade": "B"
+           "grade": "B",
+           "chan": "C"
           }
          ]
         }
@@ -3434,6 +3512,8 @@
         "emp": 3,
         "interns": 0,
         "direct": 2,
+        "field": 0,
+        "chan": 1,
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -3455,9 +3535,10 @@
           {
            "name": "Amir Ali",
            "title": "Territory Sales Manager",
-           "loc": "Uttar Pradesh",
+           "loc": "Kanpur",
            "intern": false,
-           "grade": "A"
+           "grade": "A",
+           "chan": "C"
           },
           {
            "name": "Deependra Singh",
@@ -3483,6 +3564,8 @@
       "emp": 18,
       "interns": 0,
       "direct": 17,
+      "field": 10,
+      "chan": 1,
       "cities": [
        "Ambikapur",
        "Banswara",
@@ -3586,21 +3669,21 @@
         {
          "name": "Ashish",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Dharmendra Kumar Chejara",
          "title": "Territory Sales Manager",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Ganesh Gehlot",
          "title": "Territory Sales Manager",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
@@ -3614,21 +3697,22 @@
         {
          "name": "Naveen Gaur",
          "title": "Area Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
-         "grade": "B"
+         "grade": "B",
+         "chan": "C"
         },
         {
          "name": "Parsun Jaliwal",
          "title": "Territory Sales Executive",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Prashant Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Noida",
          "intern": false,
          "grade": "A"
         },
@@ -3642,21 +3726,21 @@
         {
          "name": "Rajpal Singh Aswal",
          "title": "Territory Sales Executive",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Ravi Malviya",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "Indore",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Sandeep Patale",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "Bhopal",
          "intern": false,
          "grade": "A"
         },
@@ -3670,14 +3754,14 @@
         {
          "name": "Sudeep",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Syed Salauddin",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "Raipur",
          "intern": false,
          "grade": "A"
         }
@@ -3696,6 +3780,8 @@
       "emp": 2,
       "interns": 0,
       "direct": 1,
+      "field": 1,
+      "chan": 0,
       "cities": [
        "Faridabad",
        "Sonipat"
@@ -3727,7 +3813,7 @@
         {
          "name": "Sachin",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         }
@@ -3787,6 +3873,8 @@
     "interns": 8,
     "direct": 10,
     "portfolio": "Regional Management \u00b7 Sales Central \u00b7 Special Projects",
+    "field": 30,
+    "chan": 4,
     "rm": true,
     "rosterTitle": "General Manager",
     "tsm": 16,
@@ -3830,14 +3918,14 @@
       {
        "name": "Deepak",
        "title": "Territory Sales Executive",
-       "loc": "Delhi",
+       "loc": "New Delhi",
        "intern": false,
        "grade": "A"
       },
       {
        "name": "Mantu Kumar Singh",
        "title": "Territory Sales Executive",
-       "loc": "Delhi",
+       "loc": "New Delhi",
        "intern": false,
        "grade": "A"
       },
@@ -3905,6 +3993,8 @@
       "emp": 33,
       "interns": 4,
       "direct": 36,
+      "field": 28,
+      "chan": 4,
       "tsm": 16,
       "tse": 16,
       "locs": [
@@ -3946,224 +4036,228 @@
         {
          "name": "Akash",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Alok Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Amit Choudhary",
          "title": "Territory Sales Manager",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Ankit Mishra",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Lucknow",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Arun Gupta",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Arvind Kumar Singh",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Gaurav Pathak",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Harshdeep Singh",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Jagdamba Prasad",
          "title": "Senior Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "B"
         },
         {
          "name": "Kamal",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Krishan Kant Sharma",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Lalit Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Agra",
          "intern": false,
-         "grade": "A"
+         "grade": "A",
+         "chan": "C"
         },
         {
          "name": "Lokesh Kumar Jain",
          "title": "Territory Sales Executive",
-         "loc": "Rajasthan",
+         "loc": "Jaipur",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Luxmi Kant Panday",
          "title": "Territory Sales Manager",
-         "loc": "Uttar Pradesh",
+         "loc": "Lucknow",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Manjit Kumar",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Pintu Nagar",
          "title": "Senior Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
-         "grade": "B"
+         "grade": "B",
+         "chan": "C"
         },
         {
          "name": "Pradeep Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Prashant Pandey",
          "title": "Territory Sales Manager",
-         "loc": "Uttar Pradesh",
+         "loc": "Lucknow",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Rajeev Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Rajesh Kumar",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Sachin",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Sandip Kumar",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Saurabh Verma",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Meerut",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Shahanawaz Warsi",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Shivam Bajpai",
          "title": "Territory Sales Manager",
-         "loc": "Uttar Pradesh",
+         "loc": "Lucknow",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Shivam Tiwari",
          "title": "Territory Sales Executive",
-         "loc": "Uttar Pradesh",
+         "loc": "Lucknow",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Somnath Samanta",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Sonu Sharma",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
-         "grade": "A"
+         "grade": "A",
+         "chan": "C"
         },
         {
          "name": "Sunny Kumar",
          "title": "Territory Sales Executive",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Syed Saqib Ali",
          "title": "Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "A"
         },
         {
          "name": "Varun Sharma",
          "title": "Senior Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
-         "grade": "B"
+         "grade": "B",
+         "chan": "C"
         },
         {
          "name": "Vimal Barua",
          "title": "Senior Territory Sales Manager",
-         "loc": "Delhi",
+         "loc": "New Delhi",
          "intern": false,
          "grade": "B"
         },
@@ -4724,6 +4818,34 @@
    ]
   ],
   "cities": 102,
+  "channel": [
+   [
+    "Field sales",
+    200
+   ],
+   [
+    "Channel sales",
+    24
+   ]
+  ],
+  "outlets": [
+   [
+    "Showroom",
+    204
+   ],
+   [
+    "Corporate Office",
+    12
+   ],
+   [
+    "Sharing Office",
+    6
+   ],
+   [
+    "Service Station",
+    2
+   ]
+  ],
   "zones": [
    [
     "South",
