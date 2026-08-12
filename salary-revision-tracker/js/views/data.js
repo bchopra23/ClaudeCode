@@ -156,70 +156,79 @@
     card.appendChild(el('div', { class: 'card-head' },
       el('h2', { class: 'card-title', text: 'Export' })));
 
-    var years = store.fiscalYears();
-    var selected = {};
-    (book.fiscalYears.length ? book.fiscalYears : [store.ui().fy]).forEach(function (fy) { selected[fy] = true; });
-
     card.appendChild(el('p', { class: 'card-note', style: 'margin:0 0 10px' },
-      'The workbook holds a Read Me, the Employee Master, a flat Revision Ledger, ' +
-      'a sheet per year, a Consolidated view and a Summary — with filters and frozen headers already set.'));
+      'Three sheets: every revision, a line per employee, and department totals. ' +
+      'Filters and frozen headers are already set up.'));
 
-    card.appendChild(el('div', { class: 'field', style: 'margin-bottom:12px' }, [
-      el('label', { text: 'Years to include' }),
-      el('div', { class: 'checkbox-list' }, years.map(function (fy) {
-        return el('label', {}, [
-          el('input', { type: 'checkbox', checked: !!selected[fy],
-            onchange: function (ev) { selected[fy] = ev.target.checked; } }),
-          fy
-        ]);
-      }))
-    ]));
-
+    /* Read at click time, not when the card was built — otherwise an import
+     * that adds a new year leaves this list stale and quietly drops it. */
     function chosenYears() {
-      var out = years.filter(function (fy) { return selected[fy]; });
-      return out.length ? out : [store.ui().fy];
+      var present = store.book().fiscalYears;
+      return present.length ? present : [store.ui().fy];
+    }
+
+    /* Building a workbook is synchronous and takes a few seconds at full scale,
+     * so the button reports progress rather than appearing to hang. */
+    function exportWorkbook(btn, builder, filename, label) {
+      btn.disabled = true;
+      btn.textContent = 'Building…';
+      setTimeout(function () {
+        try {
+          var data = IO.writeWorkbook(builder(store.book(), { fiscalYears: chosenYears() }));
+          U.download(filename, new Blob([data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+          U.toast('Spreadsheet downloaded');
+        } catch (err) {
+          U.toast('Export failed: ' + err.message, true);
+        }
+        btn.disabled = false;
+        btn.textContent = label;
+      }, 30);
     }
 
     card.appendChild(el('div', { class: 'btn-row' }, [
       el('button', { class: 'btn btn-primary', onclick: function (ev) {
-        var btn = ev.target;
-        btn.disabled = true;
-        btn.textContent = 'Building…';
-        // Yield once so the button repaints before the (synchronous) build.
-        setTimeout(function () {
-          try {
-            var wb = IO.buildWorkbook(store.book(), { fiscalYears: chosenYears() });
-            var data = IO.writeWorkbook(wb);
-            U.download('Euler-Salary-Revision-Tracker-' + stamp() + '.xlsx',
-              new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
-            U.toast('Workbook exported');
-          } catch (err) {
-            U.toast('Export failed: ' + err.message, true);
-          }
-          btn.disabled = false;
-          btn.textContent = 'Export workbook (.xlsx)';
-        }, 30);
-      } }, 'Export workbook (.xlsx)'),
+        exportWorkbook(ev.target, IO.buildSimpleWorkbook,
+          'Salary Revisions ' + stamp() + '.xlsx', 'Download spreadsheet');
+      } }, 'Download spreadsheet'),
 
       el('button', { class: 'btn', onclick: function () {
-        U.download('revision-ledger-' + stamp() + '.csv', IO.ledgerCSV(store.book()), 'text/csv;charset=utf-8');
-        U.toast('Ledger exported');
-      } }, 'Revision ledger (.csv)'),
-
-      el('button', { class: 'btn', onclick: function () {
-        U.download('employee-master-' + stamp() + '.csv', IO.masterCSV(store.book()), 'text/csv;charset=utf-8');
-        U.toast('Master exported');
-      } }, 'Employee master (.csv)'),
-
-      el('button', { class: 'btn', onclick: function () {
-        U.download('srt-backup-' + stamp() + '.json', store.toJSON(), 'application/json');
-        U.toast('Backup saved');
-      } }, 'Full backup (.json)'),
-
-      el('button', { class: 'btn', onclick: function () {
-        U.download('revision-import-template.csv', IO.blankLedgerCSV(), 'text/csv;charset=utf-8');
-      } }, 'Blank import template')
+        U.download('Salary Revisions ' + stamp() + '.csv',
+          IO.ledgerCSV(store.book()), 'text/csv;charset=utf-8');
+        U.toast('CSV downloaded');
+      } }, 'As CSV instead')
     ]));
+
+    /* Everything else is real but rarely needed, so it stays folded away. */
+    var more = el('details', { style: 'margin-top:14px' });
+    more.appendChild(el('summary', { class: 'card-note', style: 'cursor:pointer' },
+      'Other formats'));
+    more.appendChild(el('div', { class: 'btn-row', style: 'margin-top:10px' }, [
+      el('button', { class: 'btn btn-sm', title:
+        'Adds a read-me, a sheet per year with each revision spread across columns, ' +
+        'a consolidated view and a summary. Use this when you need the full audit trail.',
+        onclick: function (ev) {
+          exportWorkbook(ev.target, IO.buildWorkbook,
+            'Salary Revisions - detailed ' + stamp() + '.xlsx', 'Detailed workbook');
+        } }, 'Detailed workbook'),
+
+      el('button', { class: 'btn btn-sm', onclick: function () {
+        U.download('Employees ' + stamp() + '.csv', IO.masterCSV(store.book()), 'text/csv;charset=utf-8');
+        U.toast('CSV downloaded');
+      } }, 'Employee list (.csv)'),
+
+      el('button', { class: 'btn btn-sm', title: 'An exact copy of everything, for archiving',
+        onclick: function () {
+          U.download('backup ' + stamp() + '.json', store.toJSON(), 'application/json');
+          U.toast('Backup saved');
+        } }, 'Backup (.json)'),
+
+      el('button', { class: 'btn btn-sm', title: 'An empty sheet for collecting revisions offline',
+        onclick: function () {
+          U.download('revision-import-template.csv', IO.blankLedgerCSV(), 'text/csv;charset=utf-8');
+        } }, 'Blank template')
+    ]));
+    card.appendChild(more);
 
     return card;
   }

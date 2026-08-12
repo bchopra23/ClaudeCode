@@ -11,7 +11,9 @@ goes out.
 
 ```
 salary-revision-tracker/
-  index.html          the app
+  Salary-Revision-Tracker.html   ← the built app: one file, download and open it
+  build.js            rebuilds that file from the sources below
+  index.html          the app, unbundled (for development)
   css/app.css         styling, light + dark
   js/model.js         vocabulary, fiscal years, date parsing, validation
   js/engine.js        the calculation engine (also runs under Node, for tests)
@@ -26,17 +28,20 @@ salary-revision-tracker/
 
 ## Running it
 
-Serve the folder with any static file server:
+**Download `Salary-Revision-Tracker.html` and double-click it.** That is the whole setup.
+
+It is one self-contained file — the app, its styling and its spreadsheet library are all
+inside it. Put it anywhere: Desktop, a shared drive, an email attachment. Nothing to
+install, no folder to keep together, and it makes no network requests at all.
+
+If you have edited the sources in this folder, rebuild that file with:
 
 ```sh
-npx serve salary-revision-tracker
-# or
-cd salary-revision-tracker && python3 -m http.server 8765
+node build.js
 ```
 
-Then open `http://localhost:8765`. Opening `index.html` straight from disk works too.
-
-To put it on an intranet share, copy the folder — there is nothing to install.
+Serving the folder works too, if you prefer it (`python3 -m http.server 8765`), but it
+buys you nothing — the data still lives in each person's own browser either way.
 
 ## Getting your data in
 
@@ -132,13 +137,22 @@ produces a file you can share, back up or open in Excel.
 Everything is exportable, and the workbook is built to be *used* in Excel — frozen headers,
 autofilters, Indian digit grouping (₹12,34,567), real date cells and column widths already set.
 
+**Download spreadsheet** gives you three plain sheets, and is what you want almost always:
+
+| Sheet | One row per | Columns |
+|---|---|---|
+| `Salary Revisions` | revision | code, name, department, grade, year, which revision of the year, effective date, reason, salary before, salary after, increase, increase %, status |
+| `Employees` | employee | code, name, department, designation, grade, starting salary, current salary, total increase, %, number of revisions, status |
+| `Summary` | department, per year | employees, how many revised, revisions, salary bill before and after, increase, %, average increase % |
+
+Under **Other formats**:
+
 | Export | Contents |
 |---|---|
-| **Workbook (.xlsx)** | `Read Me` (definitions), `Employee Master`, `Revision Ledger`, one sheet per year, `Consolidated`, `Summary`, `Lists` |
-| **Revision ledger (.csv)** | One row per revision, fully denormalised — drop a pivot on it as-is |
-| **Employee master (.csv)** | One row per employee |
-| **Full backup (.json)** | Everything exactly as stored, for archiving |
-| **Blank import template (.csv)** | Empty ledger with one example row, to collect revisions offline |
+| **Detailed workbook (.xlsx)** | Adds a `Read Me` with the definitions, a sheet per year spreading each revision across `R1`/`R2`/`R3` blocks, `Consolidated` and `Lists`. The full audit trail. |
+| **Employee list (.csv)** | One row per employee |
+| **Backup (.json)** | Everything exactly as stored, for archiving |
+| **Blank template (.csv)** | Empty sheet with one example row, to collect revisions offline |
 
 The per-year sheets keep the original workbook's column vocabulary and add `R1`/`R2`/`R3`
 blocks, so a year with three revisions stays on one row with each step visible. Only as many

@@ -371,6 +371,68 @@
     return wb;
   }
 
+  /* The plain spreadsheet: three sheets, everyday column names, no jargon.
+   * This is what most people want — the detailed workbook above is there for
+   * when someone needs the full audit trail. */
+  function buildSimpleWorkbook(book, options) {
+    options = options || {};
+    var wb = XLSX.utils.book_new();
+    var fys = options.fiscalYears && options.fiscalYears.length ? options.fiscalYears : book.fiscalYears;
+
+    // 1 — every revision, one per row.
+    var revHeaders = ['Employee Code', 'Employee Name', 'Department', 'Grade', 'Year',
+      'Revision in Year', 'Effective Date', 'Reason', 'Salary Before (₹)', 'Salary After (₹)',
+      'Increase (₹)', 'Increase %', 'Status'];
+    var revRows = E.ledgerRows(book).map(function (r) {
+      return [r.empCode, r.employeeName, r.department, r.grade, r.fy,
+        cell(r.revisionsInFY > 1 ? r.seqInFY + ' of ' + r.revisionsInFY : 1),
+        dateCell(r.effectiveDate), r.revisionType,
+        cell(r.previousCTC, FMT_RUPEE), cell(r.ctc, FMT_RUPEE),
+        cell(r.incrementAmount, FMT_RUPEE), cell(r.incrementPct, FMT_PCT),
+        r.approvalStatus];
+    });
+    XLSX.utils.book_append_sheet(wb, makeSheet(revHeaders, revRows,
+      [14, 24, 26, 8, 10, 14, 14, 20, 18, 18, 18, 12, 18]), 'Salary Revisions');
+
+    // 2 — one row per employee: where they started, where they are now.
+    var empHeaders = ['Employee Code', 'Employee Name', 'Department', 'Designation', 'Grade',
+      'Starting Salary (₹)', 'Current Salary (₹)', 'Total Increase (₹)', 'Total Increase %',
+      'Number of Revisions', 'Status'];
+    var empRows = book.list.map(function (c) {
+      var e = c.employee;
+      var total = (c.latestCTC === null || e.baselineCTC === null) ? null : c.latestCTC - e.baselineCTC;
+      return [e.code, e.name, e.department, e.subDesignation || e.designation, e.grade,
+        cell(e.baselineCTC, FMT_RUPEE), cell(c.latestCTC, FMT_RUPEE), cell(total, FMT_RUPEE),
+        cell(e.baselineCTC ? total / e.baselineCTC : null, FMT_PCT),
+        cell(c.revisions.length), e.status];
+    });
+    XLSX.utils.book_append_sheet(wb, makeSheet(empHeaders, empRows,
+      [14, 24, 26, 26, 8, 18, 18, 18, 16, 18, 14]), 'Employees');
+
+    // 3 — department totals for each year.
+    var sumHeaders = ['Year', 'Department', 'Employees', 'Employees Revised', 'Revisions',
+      'Salary Bill Before (₹)', 'Salary Bill After (₹)', 'Increase (₹)', 'Increase %',
+      'Average Increase %'];
+    var sumRows = [];
+    fys.forEach(function (fy) {
+      var overall = E.aggregate(book, fy);
+      sumRows.push([fy, 'ALL DEPARTMENTS', cell(overall.headcount), cell(overall.revisedCount),
+        cell(overall.revisionCount), cell(overall.openingTotal, FMT_RUPEE),
+        cell(overall.closingTotal, FMT_RUPEE), cell(overall.annualisedImpact, FMT_RUPEE),
+        cell(overall.annualisedPct, FMT_PCT), cell(overall.avgIncrementPct, FMT_PCT)]);
+      E.breakdown(book, fy, function (e) { return e.department; }).forEach(function (b) {
+        sumRows.push([fy, b.key, cell(b.headcount), cell(b.revisedCount), cell(b.revisionCount),
+          cell(b.openingTotal, FMT_RUPEE), cell(b.closingTotal, FMT_RUPEE),
+          cell(b.annualisedImpact, FMT_RUPEE), cell(b.annualisedPct, FMT_PCT),
+          cell(b.avgIncrementPct, FMT_PCT)]);
+      });
+    });
+    XLSX.utils.book_append_sheet(wb, makeSheet(sumHeaders, sumRows,
+      [10, 30, 12, 18, 12, 22, 22, 20, 12, 18]), 'Summary');
+
+    return wb;
+  }
+
   function addReadme(wb, book, fys) {
     var rows = [
       ['Euler — Salary Revision Tracker'],
@@ -625,6 +687,7 @@
   return {
     importWorkbook: importWorkbook,
     buildWorkbook: buildWorkbook,
+    buildSimpleWorkbook: buildSimpleWorkbook,
     writeWorkbook: writeWorkbook,
     ledgerCSV: ledgerCSV,
     masterCSV: masterCSV,
