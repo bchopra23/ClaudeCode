@@ -13,8 +13,14 @@
     employees: 'srt_employees_v1',
     revisions: 'srt_revisions_v1',
     settings: 'srt_settings_v1',
-    ui: 'srt_ui_v1'
+    ui: 'srt_ui_v1',
+    savedAt: 'srt_saved_at_v1'
   };
+
+  /* Every change is written to local storage immediately, so `dirty` is only
+   * ever true when a write actually failed — which is what the Save button in
+   * the header is for: it retries and says plainly whether it worked. */
+  var saveState = { lastSavedAt: null, dirty: false, error: null };
 
   var state = {
     employees: [],
@@ -44,6 +50,7 @@
     state.revisions = (read(KEYS.revisions, []) || []).map(M.makeRevision);
     state.settings = E.normaliseSettings(read(KEYS.settings, null));
     state.ui = Object.assign({ fy: null, theme: 'system' }, read(KEYS.ui, {}));
+    try { saveState.lastSavedAt = localStorage.getItem(KEYS.savedAt) || null; } catch (e) { /* ignore */ }
     recompute();
     applyTheme();
     return state;
@@ -57,14 +64,35 @@
       localStorage.setItem(KEYS.revisions, JSON.stringify(state.revisions));
       localStorage.setItem(KEYS.settings, JSON.stringify(state.settings));
       localStorage.setItem(KEYS.ui, JSON.stringify(state.ui));
-      return { ok: true };
+      saveState.lastSavedAt = new Date().toISOString();
+      saveState.dirty = false;
+      saveState.error = null;
+      localStorage.setItem(KEYS.savedAt, saveState.lastSavedAt);
+      return { ok: true, savedAt: saveState.lastSavedAt };
     } catch (e) {
-      return {
-        ok: false,
-        error: 'This device ran out of local storage, so the last change was not saved. ' +
-               'Export a workbook now to be safe, then remove some data.'
-      };
+      saveState.dirty = true;
+      saveState.error = 'This device ran out of local storage, so the last change was not saved. ' +
+        'Export a workbook now to be safe, then remove some data.';
+      return { ok: false, error: saveState.error };
     }
+  }
+
+  /* Explicit save. Nothing normally needs it — but after a failed write it is
+   * the retry, and it is the button people look for before closing a tab. */
+  function saveNow() {
+    var res = persist();
+    listeners.forEach(function (fn) { fn(state, 'saved'); });
+    return res;
+  }
+
+  function saveInfo() {
+    return {
+      lastSavedAt: saveState.lastSavedAt,
+      dirty: saveState.dirty,
+      error: saveState.error,
+      employees: state.employees.length,
+      revisions: state.revisions.length
+    };
   }
 
   function recompute() {
@@ -282,6 +310,8 @@
     load: load,
     subscribe: subscribe,
     commit: commit,
+    saveNow: saveNow,
+    saveInfo: saveInfo,
     employees: employees,
     revisions: revisions,
     book: book,

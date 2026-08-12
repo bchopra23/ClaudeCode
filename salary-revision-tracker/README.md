@@ -109,6 +109,24 @@ increment reads `—`, never 0% and never 100%. Fill in a baseline and the figur
   listed rather than guessed at.
 - **Import & export** — described above, plus policy settings and a full JSON backup.
 
+## Saving
+
+Every change is written to this device's local storage the moment you make it — adding a
+revision, editing one, running a bulk cycle, importing a file. There is no unsaved state to
+lose, and closing the tab is safe.
+
+The **Save** button in the header (or `Ctrl`/`Cmd`+`S`) forces a write and confirms it,
+showing when the last save actually landed — `saved just now`, `saved 12m ago`. It is there
+for two reasons: reassurance before closing a tab, and as the retry if a write ever fails.
+
+If a write does fail — the only realistic cause is local storage being full — the button
+turns red and reads **Retry save · not saved**, the app warns you before you close the tab,
+and the failure is explained rather than swallowed. Export a workbook at that point: an
+export is a real file and does not depend on this device.
+
+Saving and exporting are different things. Saving keeps your work on this machine; exporting
+produces a file you can share, back up or open in Excel.
+
 ## Getting your data out
 
 Everything is exportable, and the workbook is built to be *used* in Excel — frozen headers,

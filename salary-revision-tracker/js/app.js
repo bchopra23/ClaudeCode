@@ -35,6 +35,26 @@
       render();
     });
 
+    document.getElementById('save-btn').addEventListener('click', function () { save(); });
+
+    // Ctrl/Cmd+S is what people reach for; intercept it rather than letting the
+    // browser offer to save the page itself.
+    document.addEventListener('keydown', function (ev) {
+      if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
+        ev.preventDefault();
+        save();
+      }
+    });
+
+    // Only fires when a write actually failed — otherwise everything is already
+    // on disk and closing the tab is safe.
+    window.addEventListener('beforeunload', function (ev) {
+      if (store.saveInfo().dirty) { ev.preventDefault(); ev.returnValue = ''; }
+    });
+
+    store.subscribe(function () { updateSaveStatus(); });
+    setInterval(updateSaveStatus, 30000);
+
     document.getElementById('theme-toggle').addEventListener('click', function () {
       var order = ['system', 'light', 'dark'];
       var next = order[(order.indexOf(store.ui().theme || 'system') + 1) % order.length];
@@ -54,6 +74,7 @@
     current = routeFromHash();
 
     refreshChrome();
+    updateSaveStatus();
     render();
   }
 
@@ -81,6 +102,54 @@
     years.forEach(function (fy) {
       fySelect.appendChild(el('option', { value: fy, selected: fy === store.ui().fy }, fy));
     });
+  }
+
+  /* --------------------------------------------------------------- saving */
+
+  function save() {
+    var res = store.saveNow();
+    var info = store.saveInfo();
+    if (res.ok) {
+      U.toast('Saved to this device — ' + info.employees.toLocaleString('en-IN') +
+        ' employees, ' + info.revisions.toLocaleString('en-IN') + ' revisions');
+      var btn = document.getElementById('save-btn');
+      btn.classList.add('just-saved');
+      setTimeout(function () { btn.classList.remove('just-saved'); }, 2500);
+    } else {
+      U.toast(res.error, true);
+    }
+    updateSaveStatus();
+  }
+
+  function updateSaveStatus() {
+    var btn = document.getElementById('save-btn');
+    var status = document.getElementById('save-status');
+    var label = document.getElementById('save-label');
+    if (!btn) return;
+
+    var info = store.saveInfo();
+    btn.classList.toggle('is-dirty', info.dirty);
+
+    if (info.dirty) {
+      label.textContent = 'Retry save';
+      status.textContent = 'not saved';
+      btn.title = info.error;
+      return;
+    }
+    label.textContent = 'Save';
+    status.textContent = info.lastSavedAt ? relativeTime(info.lastSavedAt) : '';
+    btn.title = info.lastSavedAt
+      ? 'All changes are saved on this device. Last saved ' + new Date(info.lastSavedAt).toLocaleString() +
+        '. Use Export for a copy you can share.'
+      : 'Save to this device (Ctrl+S)';
+  }
+
+  function relativeTime(iso) {
+    var secs = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+    if (secs < 45) return 'saved just now';
+    if (secs < 5400) return 'saved ' + Math.round(secs / 60) + 'm ago';
+    if (secs < 86400) return 'saved ' + Math.round(secs / 3600) + 'h ago';
+    return 'saved ' + new Date(iso).toLocaleDateString();
   }
 
   function render() {
