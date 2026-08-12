@@ -197,6 +197,22 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
 .cities{margin:0; font-size:.87rem; color:var(--ink-2); line-height:1.75}
 .cities b{font-weight:400; color:var(--ink-3)}
 
+.deal{position:relative; margin-top:9px; padding:13px 16px; border-radius:12px;
+  background:var(--soft); border:1px solid var(--line)}
+.deal::before{content:""; position:absolute; left:-21px; top:24px;
+  width:21px; height:2px; background:var(--rail)}
+.dlist{list-style:none; margin:0; padding:0; display:grid; gap:2px 18px;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.dlist li{display:flex; align-items:baseline; gap:8px; font-size:.87rem;
+  padding:3px 0; color:var(--ink-2)}
+.dlist .dn{color:var(--ink)}
+.dlist .dc{margin-left:auto; font-family:"JetBrainsMono",monospace; font-size:.71rem;
+  color:var(--ink-3); white-space:nowrap}
+.dlist .dm{font-family:"JetBrainsMono",monospace; font-size:.6rem; letter-spacing:.06em;
+  padding:1px 5px; border-radius:4px; background:var(--gold-soft); color:var(--gold)}
+.dlist li.off{opacity:.5}
+.dlist li.off .dn{text-decoration:line-through}
+
 .hit{border-color:var(--gold-fill) !important;
   box-shadow:0 0 0 3px var(--gold-soft), var(--sh-2) !important}
 .people li.hit{background:var(--gold-soft) !important; box-shadow:inset 3px 0 0 var(--gold-fill) !important;
@@ -294,38 +310,6 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   </section>
 </main>
 
-<footer class="foot">
-  <div class="wrap">
-    <dl>
-      <div>
-        <dt>How to read this</dt>
-        <dd>One tree, top to bottom. Selecting a manager opens their branch in
-          place — everything above and around it stays where it was, so you keep
-          the whole line in view. Select again to close it.</dd>
-      </div>
-      <div>
-        <dt>What the numbers mean</dt>
-        <dd>A number on a card counts everyone in that line, including the person
-          named. Interns are counted separately and never fold into the
-          employee figure.</dd>
-      </div>
-      <div>
-        <dt>The open seat</dt>
-        <dd>South Regional Manager is vacant after Amitabh Singh's resignation.
-          The 37-person line is kept intact under the open role, which Ratanmani
-          Mohit covers directly until a replacement joins.</dd>
-      </div>
-      <div>
-        <dt>Source and scope</dt>
-        <dd>Roster extracts of 343 employees and 54 interns, with reporting lines
-          rebuilt from the Reporting Manager column. Euler Assured, Institutional
-          Sales, and one Retail Sales role are excluded — 24 people who report
-          outside Sales leadership.</dd>
-      </div>
-    </dl>
-  </div>
-</footer>
-
 <script>
 (function(){
   var NODES=/*NODES*/, INDEX=/*INDEX*/, ROOT=__ROOT__;
@@ -345,7 +329,7 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   /* ── build the whole tree once; opening a branch never removes another ── */
   function card(n,depth){
     var open=depth<1;                       // department head starts open
-    var has=n.kids.length||n.team.length||n.cities.length;
+    var has=n.kids.length||n.team.length||n.cities.length||n.dealerList.length;
 
     /* the portfolio already names the function, so don't repeat it below */
     var showSub = !n.portfolio && n.sub && n.sub!=='Leadership' && n.sub!=='Retail Sales';
@@ -391,6 +375,17 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
             return '<span>'+esc(z.name)+'<i>'+z.n+'</i></span>';
           }).join('')+'</div><p class="cities">'+
           n.cities.map(esc).join(' <b>·</b> ')+'</p></div>');
+      }
+      if(n.dealerList.length){
+        var live=n.dealerList.filter(function(d){return d.live;}).length,
+            off=n.dealerList.length-live;
+        h.push('<div class="deal"><p class="t-lab">Dealerships — '+live+' live'+
+          (off?', '+off+' offboarded':'')+'</p><ul class="dlist">'+
+          n.dealerList.map(function(d){
+            return '<li'+(d.live?'':' class="off"')+'><span class="dn">'+esc(d.name)+'</span>'+
+              (d.model==='COCO'?'<span class="dm">COCO</span>':'')+
+              (d.city?'<span class="dc">'+esc(d.city)+'</span>':'')+'</li>';
+          }).join('')+'</ul></div>');
       }
       if(n.kids.length){
         h.push('<ul>'+n.kids.map(function(k){ return card(NODES[k.id],depth+1); }).join('')+'</ul>');

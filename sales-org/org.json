@@ -177,6 +177,140 @@
       "chan": 2,
       "dealers": 19,
       "dealersOff": 3,
+      "dealerList": [
+       {
+        "name": "COCO Ahilyanagar",
+        "city": "Ahilyanagar",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "COCO_Ahmedabad",
+        "city": "Ahmedabad",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Deepintel Globle Ventures",
+        "city": "Akola",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Ashwamedh Motors",
+        "city": "Baramati",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "EcoWheels",
+        "city": "CSB Nagar",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "A.K.Sahni infracon Pvt. LTD",
+        "city": "Chandrapur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Varsha Motors",
+        "city": "Daund",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Sky Jump Solutions",
+        "city": "Dhule",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Rising Ladders",
+        "city": "Kachchh",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO Kolhapur",
+        "city": "Kolhapur",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "COCO_Mumbai",
+        "city": "Mumbai",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "A.K.Sahni Infracon Private Limited",
+        "city": "Nagpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Vatsalya Motors",
+        "city": "Parbhani",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Pune",
+        "city": "Pune",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "COCO_Sangli",
+        "city": "Sangli",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Modheshwary motors",
+        "city": "Somnath / Amareli",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Surat",
+        "city": "Surat",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Varma Enterprises",
+        "city": "Yavatmal",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO Solapur",
+        "city": "solapur",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "JBD Enterprises",
+        "city": "Ahmedabad",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Madhav Vehicles",
+        "city": "Bharuch",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Vaibhav Motors",
+        "city": "Satara",
+        "model": "DODO",
+        "live": false
+       }
+      ],
       "cities": [
        "Ahilyanagar",
        "Ahmedabad",
@@ -321,6 +455,32 @@
         "field": 25,
         "chan": 0,
         "dealers": 4,
+        "dealerList": [
+         {
+          "name": "EcoWheels",
+          "city": "CSB Nagar",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Sky Jump Solutions",
+          "city": "Dhule",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "COCO_Pune",
+          "city": "Pune",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "COCO_Sangli",
+          "city": "Sangli",
+          "model": "COCO",
+          "live": true
+         }
+        ],
         "tsm": 17,
         "tse": 9,
         "locs": [
@@ -726,6 +886,20 @@
         "field": 14,
         "chan": 1,
         "dealers": 2,
+        "dealerList": [
+         {
+          "name": "COCO_Mumbai",
+          "city": "Mumbai",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Vatsalya Motors",
+          "city": "Parbhani",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 13,
         "tse": 3,
         "locs": [
@@ -884,6 +1058,38 @@
         "chan": 0,
         "dealers": 3,
         "dealersOff": 2,
+        "dealerList": [
+         {
+          "name": "COCO_Ahmedabad",
+          "city": "Ahmedabad",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Rising Ladders",
+          "city": "Kachchh",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "COCO_Surat",
+          "city": "Surat",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "JBD Enterprises",
+          "city": "Ahmedabad",
+          "model": "DODO",
+          "live": false
+         },
+         {
+          "name": "Madhav Vehicles",
+          "city": "Bharuch",
+          "model": "DODO",
+          "live": false
+         }
+        ],
         "tsm": 3,
         "tse": 3,
         "locs": [
@@ -970,6 +1176,32 @@
         "field": 5,
         "chan": 1,
         "dealers": 4,
+        "dealerList": [
+         {
+          "name": "Deepintel Globle Ventures",
+          "city": "Akola",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "A.K.Sahni infracon Pvt. LTD",
+          "city": "Chandrapur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "A.K.Sahni Infracon Private Limited",
+          "city": "Nagpur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Varma Enterprises",
+          "city": "Yavatmal",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 2,
         "tse": 4,
         "locs": [
@@ -1055,6 +1287,92 @@
       "field": 8,
       "chan": 1,
       "dealers": 14,
+      "dealerList": [
+       {
+        "name": "Shree Balaji Automobiles",
+        "city": "Agra",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Vishal Agencies",
+        "city": "Agra",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Plan Bee",
+        "city": "Aligarh",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Aneja Transport",
+        "city": "Bareilly",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Chandigarh",
+        "city": "Chandigarh",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Doon Motors",
+        "city": "Dehradun",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Mishra Commercials",
+        "city": "Etawah",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shri Ji Motors",
+        "city": "Jammu",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "VPS Motors",
+        "city": "Kurukshetra",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "DC Energies",
+        "city": "Ludhiana",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shreya Enterprises",
+        "city": "Mathura",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Satinpod Global Service",
+        "city": "Meerut",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Rajpoot Automobiles",
+        "city": "Moradabad",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "A2 Wings Automobiles Pvt Ltd",
+        "city": "Srinagar",
+        "model": "DODO",
+        "live": true
+       }
+      ],
       "cities": [
        "Agra",
        "Aligarh",
@@ -1504,6 +1822,26 @@
         "field": 4,
         "chan": 0,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "COCO_Chandigarh",
+          "city": "Chandigarh",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "VPS Motors",
+          "city": "Kurukshetra",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "DC Energies",
+          "city": "Ludhiana",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 3,
         "tse": 1,
         "locs": [
@@ -1657,6 +1995,38 @@
         "field": 0,
         "chan": 1,
         "dealers": 5,
+        "dealerList": [
+         {
+          "name": "Shree Balaji Automobiles",
+          "city": "Agra",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Vishal Agencies",
+          "city": "Agra",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Plan Bee",
+          "city": "Aligarh",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Mishra Commercials",
+          "city": "Etawah",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Shreya Enterprises",
+          "city": "Mathura",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "locs": [
          {
           "name": "Uttar Pradesh",
@@ -1701,6 +2071,74 @@
       "field": 19,
       "chan": 2,
       "dealers": 11,
+      "dealerList": [
+       {
+        "name": "COCO_Delhi",
+        "city": "Delhi",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Ecoedge Enterprises",
+        "city": "Delhi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Green Stone",
+        "city": "Delhi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Sincere Marketing",
+        "city": "Delhi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Smart Solution",
+        "city": "Delhi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "HKS Automobiles",
+        "city": "Faridabad",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Bhutani Autocorp",
+        "city": "Greater Noida",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Gurgaon",
+        "city": "Gurgaon",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Techup Consulting",
+        "city": "Gurgaon",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Param Automobiles",
+        "city": "Jhajjar",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Retro Automobiles LLP",
+        "city": "Kosli (Rewari)",
+        "model": "DODO",
+        "live": true
+       }
+      ],
       "cities": [
        "Delhi",
        "E. Delhi",
@@ -1828,6 +2266,26 @@
         "field": 15,
         "chan": 1,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "COCO_Delhi",
+          "city": "Delhi",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Ecoedge Enterprises",
+          "city": "Delhi",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Smart Solution",
+          "city": "Delhi",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 12,
         "tse": 7,
         "locs": [
@@ -2109,6 +2567,14 @@
         "field": 2,
         "chan": 0,
         "dealers": 1,
+        "dealerList": [
+         {
+          "name": "Bhutani Autocorp",
+          "city": "Greater Noida",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 1,
         "tse": 1,
         "locs": [
@@ -2163,6 +2629,26 @@
         "field": 0,
         "chan": 1,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "Sincere Marketing",
+          "city": "Delhi",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Techup Consulting",
+          "city": "Gurgaon",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Retro Automobiles LLP",
+          "city": "Kosli (Rewari)",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 1,
         "tse": 0,
         "locs": [
@@ -2206,6 +2692,62 @@
         "direct": 1,
         "dealers": 6,
         "dealersOff": 3,
+        "dealerList": [
+         {
+          "name": "RND Electrik",
+          "city": "Bhopal",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Royal Automobile",
+          "city": "Indore",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Elite Motors",
+          "city": "Jabalpur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Manvik Enterprises",
+          "city": "Katni",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Anand Green Biotech Energy Pvt Ltd",
+          "city": "Rajgarh",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Swastik Enterprises",
+          "city": "Ujjain",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Art of Awadh",
+          "city": "Gwalior",
+          "model": "DODO",
+          "live": false
+         },
+         {
+          "name": "Shilaka Enterprises",
+          "city": "Indore",
+          "model": "DODO",
+          "live": false
+         },
+         {
+          "name": "Baba E Riders",
+          "city": "Shajapur",
+          "model": "DODO",
+          "live": false
+         }
+        ],
         "locs": [
          {
           "name": "Delhi",
@@ -2251,6 +2793,110 @@
       "chan": 0,
       "dealers": 13,
       "dealersOff": 4,
+      "dealerList": [
+       {
+        "name": "COCO_Bangalore",
+        "city": "Bangalore",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "KVR Constructions",
+        "city": "Bangalore",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Vijay Motors",
+        "city": "Bijapur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Hyderabad",
+        "city": "Hyderabad",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Pragati Commercials",
+        "city": "Hyderabad",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "EVM Automobiles",
+        "city": "Kochi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Anirudh Automobiles",
+        "city": "Kurnool",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "M/S S S M Enterprises",
+        "city": "Nizamabad",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shaktii Elite Power Solutions",
+        "city": "Ongole",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Garuda EV",
+        "city": "Tirupati",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "EVM",
+        "city": "Trivandrum",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shree Vrinda Autombiles",
+        "city": "Vijayawada",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Siva Sai PVR Motors",
+        "city": "Visakhapatnam",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "United Power",
+        "city": "Guntur",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Indhu India Motors",
+        "city": "Kalaburagi",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "KNR Automotives",
+        "city": "Karimnagar",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Loop Mobility",
+        "city": "Khammam",
+        "model": "DODO",
+        "live": false
+       }
+      ],
       "cities": [
        "Bangalore",
        "Bijapur",
@@ -2374,6 +3020,20 @@
         "field": 8,
         "chan": 0,
         "dealers": 2,
+        "dealerList": [
+         {
+          "name": "COCO_Bangalore",
+          "city": "Bangalore",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Vijay Motors",
+          "city": "Bijapur",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 9,
         "tse": 1,
         "locs": [
@@ -2488,6 +3148,14 @@
         "field": 9,
         "chan": 0,
         "dealers": 1,
+        "dealerList": [
+         {
+          "name": "M/S S S M Enterprises",
+          "city": "Nizamabad",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 4,
         "tse": 5,
         "locs": [
@@ -2599,6 +3267,26 @@
         "field": 8,
         "chan": 0,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "COCO_Hyderabad",
+          "city": "Hyderabad",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Shaktii Elite Power Solutions",
+          "city": "Ongole",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Shree Vrinda Autombiles",
+          "city": "Vijayawada",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 7,
         "tse": 1,
         "locs": [
@@ -2695,6 +3383,20 @@
         "field": 2,
         "chan": 0,
         "dealers": 2,
+        "dealerList": [
+         {
+          "name": "EVM Automobiles",
+          "city": "Kochi",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "EVM",
+          "city": "Trivandrum",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -2752,6 +3454,128 @@
       "chan": 8,
       "dealers": 18,
       "dealersOff": 2,
+      "dealerList": [
+       {
+        "name": "COCO_Chennai",
+        "city": "Chennai",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "MSJ Motors",
+        "city": "Chennai",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "The Empire",
+        "city": "Chennai",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Eco Electric",
+        "city": "Darbhanga",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Volt Wheels",
+        "city": "Durgapur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Zyra Motors",
+        "city": "Hosur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Kolkata",
+        "city": "Kolkata",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Gee Motors",
+        "city": "Madurai",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Saumya Motors",
+        "city": "Muzaffarpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "SS Ventures",
+        "city": "New Coimbatore",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Patna",
+        "city": "Patna",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Bharat Auto",
+        "city": "Purnia",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Bharani Motors",
+        "city": "Salem",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Srirs Vistaar Ventures",
+        "city": "Siliguri",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "AJ Electric Vehicles",
+        "city": "Tenkasi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Ultimate Vehicles",
+        "city": "Tiruppur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "AJ ELECTRIC VEHICLES",
+        "city": "Trichy",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Elektro Orbit",
+        "city": "Vellore",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shree Vihaan Automobiles",
+        "city": "Darbhanga",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "RNS Green",
+        "city": "Howrah",
+        "model": "DODO",
+        "live": false
+       }
+      ],
       "cities": [
        "Chennai",
        "Dharbhanga",
@@ -2880,6 +3704,38 @@
         "chan": 0,
         "dealers": 4,
         "dealersOff": 1,
+        "dealerList": [
+         {
+          "name": "Eco Electric",
+          "city": "Darbhanga",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Saumya Motors",
+          "city": "Muzaffarpur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "COCO_Patna",
+          "city": "Patna",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Bharat Auto",
+          "city": "Purnia",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Shree Vihaan Automobiles",
+          "city": "Darbhanga",
+          "model": "DODO",
+          "live": false
+         }
+        ],
         "tsm": 2,
         "tse": 6,
         "locs": [
@@ -2994,6 +3850,38 @@
         "field": 1,
         "chan": 5,
         "dealers": 5,
+        "dealerList": [
+         {
+          "name": "COCO_Chennai",
+          "city": "Chennai",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "MSJ Motors",
+          "city": "Chennai",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "The Empire",
+          "city": "Chennai",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "AJ ELECTRIC VEHICLES",
+          "city": "Trichy",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Elektro Orbit",
+          "city": "Vellore",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 5,
         "tse": 1,
         "locs": [
@@ -3097,6 +3985,32 @@
         "chan": 0,
         "dealers": 3,
         "dealersOff": 1,
+        "dealerList": [
+         {
+          "name": "Volt Wheels",
+          "city": "Durgapur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "COCO_Kolkata",
+          "city": "Kolkata",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Srirs Vistaar Ventures",
+          "city": "Siliguri",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "RNS Green",
+          "city": "Howrah",
+          "model": "DODO",
+          "live": false
+         }
+        ],
         "tsm": 2,
         "tse": 2,
         "locs": [
@@ -3180,6 +4094,26 @@
         "field": 0,
         "chan": 2,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "SS Ventures",
+          "city": "New Coimbatore",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Bharani Motors",
+          "city": "Salem",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Ultimate Vehicles",
+          "city": "Tiruppur",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 2,
         "tse": 0,
         "locs": [
@@ -3230,6 +4164,26 @@
         "interns": 0,
         "direct": 1,
         "dealers": 3,
+        "dealerList": [
+         {
+          "name": "Zyra Motors",
+          "city": "Hosur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Gee Motors",
+          "city": "Madurai",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "AJ Electric Vehicles",
+          "city": "Tenkasi",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 1,
         "tse": 0,
         "locs": [
@@ -3276,6 +4230,116 @@
       "chan": 6,
       "dealers": 15,
       "dealersOff": 3,
+      "dealerList": [
+       {
+        "name": "Nag Automobiles",
+        "city": "Agartala",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Multire Ventures",
+        "city": "Bhubaneswar",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "New SNT Motors",
+        "city": "Dhubri",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "TKG Automobiles",
+        "city": "Dumka",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Brave Riders Goalpara",
+        "city": "Goalpara",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Royal Wood Furniture",
+        "city": "Golaghat",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Hanumant Entprises",
+        "city": "Gorakhpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Adinath Carriers Private Limited",
+        "city": "Guwahati",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "SKRB Automobiles",
+        "city": "Kanpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Lucknow",
+        "city": "Lucknow",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "MG RoadLink",
+        "city": "Lucknow",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "SS Enterprises",
+        "city": "Prayagraj",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Ranchi",
+        "city": "Ranchi",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Evtria",
+        "city": "Ranchi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Krishna Auto Sales",
+        "city": "Varanasi",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Shubham Motors",
+        "city": "Balasore",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Utkal Auto",
+        "city": "Cuttack",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Hojai Autocorp",
+        "city": "Hojai",
+        "model": "DODO",
+        "live": false
+       }
+      ],
       "cities": [
        "Bhubaneswar",
        "Dhubri",
@@ -3402,6 +4466,14 @@
         "field": 8,
         "chan": 1,
         "dealers": 1,
+        "dealerList": [
+         {
+          "name": "COCO_Lucknow",
+          "city": "Lucknow",
+          "model": "COCO",
+          "live": true
+         }
+        ],
         "tsm": 5,
         "tse": 4,
         "locs": [
@@ -3528,6 +4600,50 @@
         "field": 3,
         "chan": 3,
         "dealers": 7,
+        "dealerList": [
+         {
+          "name": "Multire Ventures",
+          "city": "Bhubaneswar",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "New SNT Motors",
+          "city": "Dhubri",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Hanumant Entprises",
+          "city": "Gorakhpur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "Adinath Carriers Private Limited",
+          "city": "Guwahati",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "SKRB Automobiles",
+          "city": "Kanpur",
+          "model": "DODO",
+          "live": true
+         },
+         {
+          "name": "COCO_Ranchi",
+          "city": "Ranchi",
+          "model": "COCO",
+          "live": true
+         },
+         {
+          "name": "Krishna Auto Sales",
+          "city": "Varanasi",
+          "model": "DODO",
+          "live": true
+         }
+        ],
         "tsm": 3,
         "tse": 3,
         "locs": [
@@ -3671,6 +4787,146 @@
       "chan": 1,
       "dealers": 19,
       "dealersOff": 4,
+      "dealerList": [
+       {
+        "name": "Sulaxmi Automobiles",
+        "city": "Ambikapur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Taiyab Motors",
+        "city": "Banswara",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Arya Enterprsies",
+        "city": "Bharatpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "RND Electrik",
+        "city": "Bhopal",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Roshan Agency",
+        "city": "Bikaner",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Infrafield Services",
+        "city": "Bilaspur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Sisodia Automobiles",
+        "city": "Chittorgarh",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Royal Automobile",
+        "city": "Indore",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Elite Motors",
+        "city": "Jabalpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Akar FourWheels",
+        "city": "Jaipur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "COCO_Jaipur",
+        "city": "Jaipur",
+        "model": "COCO",
+        "live": true
+       },
+       {
+        "name": "Rahat Automotive",
+        "city": "Jaipur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Himmat Jai Automotive LLP",
+        "city": "Jodhpur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Manvik Enterprises",
+        "city": "Katni",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Maple Drive Pvt Ltd",
+        "city": "Raipur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Anand Green Biotech Energy Pvt Ltd",
+        "city": "Rajgarh",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "NRK Mortors",
+        "city": "Sikar",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Rudra Motors",
+        "city": "Udaipur",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Swastik Enterprises",
+        "city": "Ujjain",
+        "model": "DODO",
+        "live": true
+       },
+       {
+        "name": "Art of Awadh",
+        "city": "Gwalior",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Shilaka Enterprises",
+        "city": "Indore",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Saanjhi Motors",
+        "city": "Kota",
+        "model": "DODO",
+        "live": false
+       },
+       {
+        "name": "Baba E Riders",
+        "city": "Shajapur",
+        "model": "DODO",
+        "live": false
+       }
+      ],
       "cities": [
        "Ambikapur",
        "Banswara",

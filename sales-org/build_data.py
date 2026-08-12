@@ -203,6 +203,7 @@ for r in openpyxl.load_workbook(MASTER, data_only=True).active.iter_rows(min_row
 # A dealership belongs to an ASM, who belongs to an RM. Offboarded dealers are
 # counted separately so a live network figure stays live.
 DEALERS_BY = collections.defaultdict(lambda: {'live': 0, 'off': 0})
+DEALER_LIST = collections.defaultdict(list)   # owner id -> [{name, city, model, live}]
 DEALER_META = {'model': collections.Counter(), 'status': collections.Counter(),
                'tier': collections.Counter()}
 _dseen = set()
@@ -224,6 +225,8 @@ for r in openpyxl.load_workbook(DEALERS, data_only=True)['Sheet1'].iter_rows(min
         oid = by_name.get(norm(target))
         if oid:
             DEALERS_BY[oid]['live' if live else 'off'] += 1
+            DEALER_LIST[oid].append({'name': name, 'city': fix_city(r[7]) or clean(r[6]),
+                                     'model': model, 'live': live})
 
 # ── territory map ─────────────────────────────────────────────────────────
 TERRITORY = collections.defaultdict(list)     # owner id -> [{city, zone}]
@@ -343,6 +346,8 @@ def node(i):
         d['dealers'] = DEALERS_BY[i]['live']
         if DEALERS_BY[i]['off']:
             d['dealersOff'] = DEALERS_BY[i]['off']
+        d['dealerList'] = sorted(DEALER_LIST[i],
+                                 key=lambda x: (not x['live'], x['city'], x['name']))
     if i in TERRITORY:
         t = sorted(TERRITORY[i], key=lambda x: x['city'])
         z = collections.Counter(x['zone'] for x in t)

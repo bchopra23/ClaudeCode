@@ -34,6 +34,7 @@ def visit(n, parent=None):
         'zones': n.get('zones', []), 'cities': n.get('cities', []),
         'chan': n.get('chan', 0), 'field': n.get('field', 0),
         'dealers': n.get('dealers', 0), 'dealersOff': n.get('dealersOff', 0),
+        'dealerList': n.get('dealerList', []),
         'tsm': n.get('tsm', 0), 'tse': n.get('tse', 0),
         'parent': parent,
         'kids': [{'id': c['id'], 'name': c['name'], 'title': c['title'],
