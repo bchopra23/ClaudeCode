@@ -1479,6 +1479,102 @@ function drawRevisionBox(doc, y, revision) {
   return y + height + 6;
 }
 
+/* ---- Increment letter (draft, pending approval) --------------------- *
+ * Prototyped here so it can reuse the shared helpers while the wording is
+ * settled. It moves to its own generator once the sample is approved.        */
+
+/**
+ * The increment letter. States the revised CTC and when it takes effect, and
+ * records a promotion when one is given. The previous salary is deliberately
+ * not restated.
+ *
+ * @param increment { ctc, effectiveISO, designation } - designation optional
+ */
+function buildIncrementLetter(employee, increment, dateISO) {
+  const doc = startLetter();
+  let y = drawDateAndDetails(doc, CONTENT_TOP, employee, dateISO);
+  y = drawSalutation(doc, y, employee, "Revision in Compensation", "Congratulations!");
+
+  y = drawParagraph(doc, y,
+    "We are pleased to inform you that, in recognition of your performance and "
+    + "contribution, your annual compensation has been revised with effect from "
+    + `${formatDate(increment.effectiveISO)}.`);
+
+  y = drawIncrementBox(doc, y, increment);
+
+  if (increment.designation) {
+    y = drawParagraph(doc, y,
+      `Your designation has also been revised to ${increment.designation} with `
+      + "effect from the same date.");
+  }
+
+  y = drawParagraph(doc, y,
+    "All other terms and conditions of your employment remain unchanged.");
+
+  // Deliberately firmer than the variable pay letters: compensation details
+  // circulating between colleagues is what this paragraph exists to prevent.
+  y = drawParagraph(doc, y,
+    "The contents of this letter are strictly confidential and are intended solely "
+    + "for you. Disclosing your compensation details to any other person is a breach "
+    + "of company policy, and any such disclosure will attract action in accordance "
+    + "with the applicable policy.");
+
+  y = drawParagraph(doc, y,
+    "We look forward to your continued contribution as we build the future of "
+    + "commercial electric mobility.");
+
+  drawSignOff(doc, y);
+  return doc;
+}
+
+/** Revised CTC and the date it takes effect. Returns the cursor below. */
+function drawIncrementBox(doc, y, increment) {
+  const height = 25;
+  const radius = 2;
+
+  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
+  doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
+  doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
+
+  const columns = [
+    {
+      x: MARGIN.left + 8,
+      label: "REVISED ANNUAL CTC",
+      value: `INR ${formatINR(increment.ctc)}`,
+      color: [43, 127, 174],
+    },
+    {
+      x: MARGIN.left + 66,
+      label: "EFFECTIVE FROM",
+      value: formatDate(increment.effectiveISO),
+      color: COLORS.ink,
+    },
+  ];
+
+  for (const column of columns) {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+    doc.setCharSpace(0.4);
+    doc.text(column.label, column.x, y + 7);
+    doc.setCharSpace(0);
+
+    doc.setFont("Poppins", "bold");
+    doc.setFontSize(FIGURE_SIZE);
+    doc.setTextColor(column.color[0], column.color[1], column.color[2]);
+    doc.text(column.value, column.x, y + 15);
+  }
+
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.text(`Revised annual CTC in words: ${amountInWords(increment.ctc)}`,
+    MARGIN.left + 8, y + 21, { maxWidth: COLUMN - 16 });
+
+  return y + height + 6;
+}
+
 /**
  * Closing, signature and company seal.
  *
