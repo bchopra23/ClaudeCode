@@ -16,8 +16,13 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "src" / "index.html"
-OUT = ROOT / "dist" / "Variable_Pay_Letter_Generator.html"
+# Each app is its own page, but they share src/core.js so the letterhead
+# geometry, employee lookup and bulk grid exist once rather than per generator.
+APPS = [
+    ("index.html", "Variable_Pay_Letter_Generator.html"),
+    ("increment.html", "Increment_Letter_Generator.html"),
+]
+CORE = ROOT / "src" / "core.js"
 
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 
@@ -41,12 +46,15 @@ def require_asset(*names):
 def substitute(html, token, value):
     """Replace a token exactly once, loudly failing if the source drifted."""
     if html.count(token) != 1:
-        sys.exit(f"Expected exactly one {token} in {SRC.name}, found {html.count(token)}")
+        sys.exit(f"Expected exactly one {token}, found {html.count(token)}")
     return html.replace(token, value)
 
 
-def main():
+def build(src_name, out_name):
+    SRC = ROOT / "src" / src_name
+    OUT = ROOT / "dist" / out_name
     html = SRC.read_text(encoding="utf-8")
+    html = substitute(html, "/*__CORE__*/", CORE.read_text(encoding="utf-8"))
 
     employees = json.loads((ROOT / "data" / "employees.json").read_text(encoding="utf-8"))
     # Compact separators keep the payload small; the file is read by code, not people.
@@ -108,6 +116,11 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
     print(f"Wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024:.0f} KB, {len(employees)} employees)")
+
+
+def main():
+    for src_name, out_name in APPS:
+        build(src_name, out_name)
 
 
 if __name__ == "__main__":

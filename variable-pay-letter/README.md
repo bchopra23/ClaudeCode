@@ -1,14 +1,25 @@
-# Euler Variable Pay Letter Generator
+# Euler Letter Generators
 
-Generates variable pay letters on the Euler Motors letterhead from an Employee ID,
-the employee's eligible and awarded variable pay, and a date. Everything else —
-name, designation, date of joining, department, sub-department and location — is
-looked up from the HR master database, and the letter carries Priyanka Singh's
-signature and the company seal.
+Generates letters on the Euler Motors letterhead from an Employee ID and a few
+figures. Everything else — name, designation, date of joining, department,
+sub-department and location — is looked up from the HR master database, and every
+letter carries Priyanka Singh's signature and the company seal.
 
-Open **`dist/Variable_Pay_Letter_Generator.html`** in a browser. That is the whole
-application: one file, no install, no server, no network. Double-clicking it works.
-It has three modes.
+There are two applications in `dist/`:
+
+| File | Produces |
+| --- | --- |
+| `Variable_Pay_Letter_Generator.html` | Variable pay awards and revisions |
+| `Increment_Letter_Generator.html` | Salary increments, with or without a promotion |
+
+Each is one self-contained file: no install, no server, no network. Double-clicking
+it works. They share their letterhead geometry, employee lookup and bulk grid
+through `src/core.js`, which the build inlines into both, so the two can never
+drift apart on layout or roster.
+
+# Variable Pay Letter Generator
+
+Open **`dist/Variable_Pay_Letter_Generator.html`**. It has three modes.
 
 ## Individual
 
@@ -141,19 +152,75 @@ trailing zeros dropped, so a full payout reads `100%`, not `100.00%`.
 Any employee field that is blank in the database is dropped from the block rather
 than printed as an empty row.
 
+# Increment Letter Generator
+
+Open **`dist/Increment_Letter_Generator.html`**. It records a salary revision: the
+new annual CTC and the date it takes effect, and — when a revised designation is
+given — the promotion alongside it.
+
+The letter names the new figure only. It does not restate the previous salary, the
+increase or a percentage, so nothing about what someone used to earn is written
+down. The callout carries two columns:
+
+| REVISED ANNUAL CTC | EFFECTIVE FROM |
+| --- | --- |
+| INR 18,00,000 | 01 July 2026 |
+
+with the amount in words beneath, then *All other terms and conditions of your
+employment remain unchanged*, and a confidentiality paragraph firmer than the award
+letter's: disclosure is named as a breach of policy that will attract action.
+
+**The revised CTC is always typed or pasted.** The master workbook holds no salary
+data — all 52 columns were checked — so there is nothing to look it up from.
+
+Two modes, laid out like the variable pay app:
+
+- **Individual** — Employee ID, Revised CTC, Effective Date, Revised Designation
+  (leave blank for an increment with no promotion), and the letter date. Preview
+  and Download.
+- **Bulk** — one letter date for the batch, then a four-column paste of
+  Employee ID / Revised CTC / Effective Date / Revised Designation. Per-row Preview
+  and Download, and **Download all Increment Letters (Zip)**.
+
+The effective date is per employee and separate from the date on the letter, so the
+grid takes free text: `15/07/2026`, `2026-07-15` and `15 Jul 2026` all resolve to
+the same day. Dates are read **day-first** — `03/04/2026` is 3 April — and an
+impossible one such as `31/02/2026` is rejected rather than rolled forward.
+
+Files are `Increment_Letter_<EmployeeID>.pdf` and the batch
+`Increment_Letters_<date>.zip`, distinct from every variable pay filename, so the
+three letter types cannot overwrite one another for the same employee.
+
+The promotion is recorded in a sentence rather than a third column: the longest
+designation on file is 59 characters, which would not fit a column and would push
+the heading to three lines of 13pt bold.
+
+# Repository and rebuilding
+
 ## Repository layout
 
 ```
 assets/     Letterhead, signature, seal and logo (see "Assets" below)
-data/       employees.json — the seven fields the letter needs, nothing more
-src/        index.html — the application source, with placeholders for assets
+data/       employees.json — the seven fields the letters need, nothing more
+src/        core.js — the shared runtime inlined into both applications
+            index.html — the variable pay app
+            increment.html — the increment app
 tools/      The extraction and build scripts
 vendor/     jsPDF, PDF.js, JSZip and Poppins, all vendored for offline use
-dist/       The built single-file application. This is the deliverable.
+dist/       The two built single-file applications. These are the deliverables.
 ```
 
-`src/index.html` does not run on its own; it carries `"__EMPLOYEES__"`-style
-placeholders that the build fills in. Edit `src/`, run the build, ship `dist/`.
+Neither source HTML runs on its own; each carries `"__EMPLOYEES__"`-style
+placeholders that the build fills in, `/*__CORE__*/` among them. Edit `src/`, run
+the build, ship `dist/`.
+
+`core.js` holds everything both letters need — page geometry, the letterhead and
+safe-area constants, `startLetter`, `drawDateAndDetails`, `drawSalutation`,
+`drawConfidentiality`, `drawSignOff`, `formatINR`, `amountInWords`, `parseAmount`,
+`parseDateInput`, `findEmployee`, and the `createPreviewPane` / `createBulkPanel`
+UI factories. What is specific to one letter stays in its own file. Anything that
+changes how a letter sits on the page belongs in `core.js`, so that a change to the
+signature placement or the safe area reaches both applications in one build.
 
 ## Rebuilding
 
@@ -164,11 +231,14 @@ pip install openpyxl pillow pypdf
 python tools/build.py
 ```
 
-`tools/build.py` inlines the employee data, the fonts, the letterhead, the
-signature, the seal, the logo, jsPDF, PDF.js and JSZip into
-`dist/Variable_Pay_Letter_Generator.html`. It also measures the signature and seal
-and injects their proportions, so regenerating those assets at a different size
-cannot leave a stale aspect ratio behind in the source.
+`tools/build.py` inlines `src/core.js`, the employee data, the fonts, the
+letterhead, the signature, the seal, the logo, jsPDF, PDF.js and JSZip into **both**
+applications in one run. It also measures the signature and seal and injects their
+proportions, so regenerating those assets at a different size cannot leave a stale
+aspect ratio behind in the source.
+
+Adding a third generator means adding one line to the `APPS` list at the top of
+`build.py`.
 
 ### Refreshing the employee database
 
@@ -191,14 +261,22 @@ repository.
 
 ### Changing the period, signatory or wording
 
-All in `src/index.html`, near the top of the script block:
+The signatory is shared, near the top of `src/core.js`:
 
 ```js
 const SIGNATORY = { name: "Priyanka Singh", title: "Vice President – Human Resources" };
+```
+
+The award period is specific to the variable pay letters, near the top of the
+script block in `src/index.html`:
+
+```js
 const PERIOD = { start: "2025-04-01", end: "2026-06-30" };
 ```
 
-The body text is in `buildLetter()`. Re-run `python tools/build.py` after editing.
+Body text lives with its letter: `buildLetter()` and `buildRevisionLetter()` in
+`src/index.html`, `buildIncrementLetter()` in `src/increment.html`. Re-run
+`python tools/build.py` after editing.
 
 ## Assets
 
@@ -246,8 +324,8 @@ touching a pixel of the logo or the footer block. The result is full bleed on A4
 with the blue running to all four edges and no distortion anywhere.
 
 If you replace the letterhead, re-run the script: it prints the panel geometry in
-millimetres, which is what `SAFE`, `MARGIN` and `ART` in `src/index.html` are set
-from. It refuses to run if the middle of the new artwork is not uniform.
+millimetres, which is what `SAFE`, `MARGIN` and `ART` in `src/core.js` are set
+from, for both applications at once. It refuses to run if the middle of the new artwork is not uniform.
 
 ## Implementation notes
 

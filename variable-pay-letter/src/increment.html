@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Euler Increment Letter Generator</title>
+<style>
+  :root {
+    --euler-blue: #95d2f1;
+    --euler-blue-dark: #2b7fae;
+    --ink: #16202a;
+    --muted: #63798a;
+    --line: #dde5ec;
+    --panel: #ffffff;
+    --bg: #eef3f7;
+    --danger: #b3261e;
+    --danger-bg: #fdecea;
+    --ok: #1c7c46;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.5 "Segoe UI", Roboto, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    background: var(--panel);
+    border-bottom: 3px solid var(--euler-blue);
+    padding: 18px 28px 0;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  header .mark { height: 26px; width: auto; flex: none; }
+
+  header .divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--line);
+    margin: 0 4px;
+  }
+
+  header h1 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: .01em;
+  }
+
+  header p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+
+  /* Mode switch */
+  .modes {
+    max-width: 1240px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 4px;
+  }
+
+  .modes button {
+    appearance: none;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--muted);
+    padding: 10px 18px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .modes button:hover { color: var(--ink); background: #f4f8fb; }
+
+  .modes button[aria-selected="true"] {
+    color: var(--euler-blue-dark);
+    border-bottom-color: var(--euler-blue-dark);
+  }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 26px 28px 48px; }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(340px, 430px) 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+
+  /* Bulk puts the table first and the preview beside it: the grid needs the
+     width far more than the preview does. */
+  .split-bulk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+    gap: 26px;
+    align-items: start;
+  }
+
+  @media (max-width: 1100px) {
+    .split-bulk { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  .card + .card { margin-top: 20px; }
+
+  .card h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--muted);
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+
+  .field + .field { margin-top: 18px; }
+
+  .hint { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; }
+
+  input[type="text"], input[type="date"] {
+    width: 100%;
+    padding: 11px 13px;
+    font: inherit;
+    border: 1px solid #c6d2dc;
+    border-radius: 7px;
+    background: #fff;
+    color: inherit;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--euler-blue-dark);
+    box-shadow: 0 0 0 3px rgba(43, 127, 174, .16);
+  }
+
+  input.invalid { border-color: var(--danger); }
+
+  .error {
+    display: none;
+    margin-top: 8px;
+    padding: 9px 12px;
+    background: var(--danger-bg);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 5px 5px 0;
+    color: var(--danger);
+    font-size: 13px;
+  }
+
+  .error.show { display: block; }
+
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    row-gap: 9px;
+    column-gap: 12px;
+    font-size: 14px;
+  }
+
+  dt { color: var(--muted); }
+  dd { margin: 0; font-weight: 600; }
+
+  .amount-row {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .pay-split {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 6px 20px;
+    align-items: end;
+  }
+
+  .pay-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  /* One size for all three, matching how they are set on the letter itself. */
+  .amount-row .figure,
+  .pay-eligible,
+  .pay-percent { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+
+  .pay-percent { color: var(--euler-blue-dark); }
+  .amount-row .words { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  .placeholder { color: var(--muted); font-size: 14px; margin: 0; }
+
+  .note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .actions { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+
+  button.action {
+    width: 100%;
+    padding: 13px 18px;
+    font: inherit;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary { color: #fff; background: var(--euler-blue-dark); }
+  .btn-primary:hover:not(:disabled) { background: #24709b; }
+
+  .btn-secondary { color: var(--euler-blue-dark); background: #fff; border-color: #a9c7da; }
+  .btn-secondary:hover:not(:disabled) { background: #f2f9fd; border-color: var(--euler-blue-dark); }
+
+  button.action:disabled {
+    color: #8497a5;
+    background: #e7edf2;
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .preview-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .preview-head h2 { margin: 0; }
+
+  .preview-head .filename {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  .viewer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 210 / 297;
+    background: #dbe3ea;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .viewer canvas { display: block; background: #fff; box-shadow: 0 1px 6px rgba(22, 32, 42, .22); }
+
+  .viewer .empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* These two carry display rules that would otherwise beat the UA stylesheet's
+     [hidden] { display: none }, leaving the placeholder painted over the letter. */
+  .viewer canvas[hidden],
+  .viewer .empty[hidden] { display: none; }
+
+  /* ---- Bulk mode ---- */
+
+  .bulk-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .bulk-toolbar .field { margin: 0; min-width: 190px; }
+
+  .bulk-toolbar .spacer { flex: 1; }
+
+  button.minor {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--euler-blue-dark);
+    background: #fff;
+    border: 1px solid #c6d2dc;
+    border-radius: 7px;
+    padding: 9px 14px;
+    cursor: pointer;
+  }
+
+  button.minor:hover { background: #f2f9fd; border-color: var(--euler-blue-dark); }
+
+  .grid-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: auto;
+    max-height: 56vh;
+  }
+
+  table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 14px; }
+
+  table.grid th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f4f8fb;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  table.grid td { border-bottom: 1px solid #eef2f6; padding: 0; }
+
+  table.grid tr:last-child td { border-bottom: 0; }
+
+  table.grid .rownum {
+    width: 44px;
+    text-align: right;
+    padding: 0 10px;
+    color: #9bacba;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    background: #fafcfd;
+  }
+
+  table.grid input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 10px 12px;
+    font: inherit;
+    color: inherit;
+    border-radius: 0;
+  }
+
+  table.grid input:focus {
+    outline: 2px solid var(--euler-blue-dark);
+    outline-offset: -2px;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  table.grid td.status {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  td.status.ok { color: var(--ok); }
+  td.status.bad { color: var(--danger); }
+
+  tr.bad input { background: #fef7f6; }
+
+  .col-id { width: 18%; }
+  .col-amount { width: 18%; }
+
+  .peek { width: 168px; text-align: center; white-space: nowrap; }
+
+  .peek button {
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--euler-blue-dark);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 5px 9px;
+    cursor: pointer;
+  }
+
+  .peek button:hover:not(:disabled) { background: #eaf5fc; border-color: #a9c7da; }
+
+  .peek button:disabled { color: #c2cdd7; cursor: default; }
+
+  /* The row currently showing in the preview pane. */
+  tr.previewing td { background: #f2f9fd; }
+  tr.previewing .rownum { background: #e3f1fa; color: var(--euler-blue-dark); font-weight: 700; }
+
+  .drop {
+    width: 40px;
+    text-align: center;
+  }
+
+  .drop button {
+    border: 0;
+    background: none;
+    color: #b3becb;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 5px;
+  }
+
+  .drop button:hover { color: var(--danger); background: var(--danger-bg); }
+
+  .bulk-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .summary { font-size: 14px; color: var(--muted); }
+  .summary strong { color: var(--ink); }
+  .summary .bad { color: var(--danger); }
+
+  .bulk-footer button.action { width: auto; min-width: 230px; margin: 0; margin-left: auto; }
+
+  .help {
+    margin: 0 0 20px;
+    background: #f2f9fd;
+    border: 1px solid #d7e9f5;
+    border-radius: 7px;
+    color: #33566b;
+  }
+
+  .help > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #17384c;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    border-radius: 6px;
+  }
+
+  /* Safari draws its own triangle unless this is turned off explicitly. */
+  .help > summary::-webkit-details-marker { display: none; }
+
+  .help > summary:hover { background: #e8f4fc; }
+
+  .help > summary::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--euler-blue-dark);
+    border-bottom: 2px solid var(--euler-blue-dark);
+    transform: rotate(-45deg) translate(-1px, -1px);
+    transition: transform .15s ease;
+  }
+
+  .help[open] > summary::before { transform: rotate(45deg) translate(-2px, -2px); }
+
+  .steps {
+    margin: 0;
+    padding: 0 18px 15px 0;
+    font-size: 13px;
+    line-height: 1.55;
+    counter-reset: step;
+    list-style: none;
+  }
+
+  .steps li {
+    position: relative;
+    padding-left: 52px;
+    counter-increment: step;
+  }
+
+  .steps li + li { margin-top: 9px; }
+
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 18px;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--euler-blue-dark);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .steps strong { color: #17384c; }
+
+  .steps em { font-style: normal; font-weight: 600; color: var(--euler-blue-dark); }
+
+  footer { text-align: center; font-size: 12px; color: var(--muted); padding-bottom: 28px; }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <img class="mark" src="__LOGO__" alt="Euler">
+    <span class="divider"></span>
+    <div>
+      <h1>Increment Letter Generator</h1>
+      <p>Euler Motors Pvt. Ltd. &middot; Human Resources</p>
+    </div>
+  </div>
+  <div class="modes" role="tablist">
+    <button id="tabIndividual" role="tab" aria-selected="true">Individual</button>
+    <button id="tabBulk" role="tab" aria-selected="false">Bulk Letters</button>
+  </div>
+</header>
+
+<main>
+  <!-- ---------------- Individual ---------------- -->
+  <div class="split" id="panelIndividual" role="tabpanel">
+    <section>
+      <div class="card">
+        <h2>Letter inputs</h2>
+
+        <div class="field">
+          <label for="empId">Employee ID</label>
+          <input type="text" id="empId" placeholder="e.g. EUR1796" autocomplete="off" spellcheck="false">
+          <div class="error" id="empError"></div>
+        </div>
+
+        <div class="field">
+          <label for="ctc">Revised Annual CTC <span class="hint">in INR</span></label>
+          <input type="text" id="ctc" placeholder="e.g. 1800000" autocomplete="off" inputmode="decimal">
+          <div class="error" id="ctcError"></div>
+        </div>
+
+        <div class="field">
+          <label for="effective">Effective From <span class="hint">when the new CTC starts</span></label>
+          <input type="date" id="effective">
+          <div class="error" id="effectiveError"></div>
+        </div>
+
+        <div class="field">
+          <label for="newDesignation">Revised Designation <span class="hint">optional &mdash; leave blank if not a promotion</span></label>
+          <input type="text" id="newDesignation" placeholder="e.g. Senior Vice President" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="letterDate">Letter date</label>
+          <input type="date" id="letterDate">
+          <div class="error" id="dateError"></div>
+        </div>
+
+        <div class="actions">
+          <button id="preview" class="action btn-primary" disabled>Preview Letter</button>
+          <button id="download" class="action btn-secondary" disabled>Download Letter PDF</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Employee details</h2>
+        <p class="placeholder" id="detailsPlaceholder">Enter an Employee ID to pull details from the master database.</p>
+        <div id="details" hidden>
+          <dl>
+            <dt>Employee ID</dt><dd id="dCode"></dd>
+            <dt>Name</dt><dd id="dName"></dd>
+            <dt>Designation</dt><dd id="dDesignation"></dd>
+            <dt>Department</dt><dd id="dDepartment"></dd>
+            <dt>Sub-department</dt><dd id="dSubDepartment"></dd>
+            <dt>Date of Joining</dt><dd id="dDoj"></dd>
+            <dt>Location</dt><dd id="dLocation"></dd>
+          </dl>
+          <div class="amount-row" id="amountRow" hidden>
+            <div class="pay-split">
+              <div>
+                <div class="pay-label">Revised annual CTC</div>
+                <div class="pay-percent" id="dCtc"></div>
+              </div>
+              <div>
+                <div class="pay-label">Effective from</div>
+                <div class="figure" id="dEffective"></div>
+              </div>
+            </div>
+            <div class="words" id="dCtcWords"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="preview-head">
+        <h2>Letter preview</h2>
+        <span class="filename" id="filename"></span>
+      </div>
+      <div class="viewer" id="viewer">
+        <canvas id="pdfCanvas" aria-label="Increment letter preview" hidden></canvas>
+        <div class="empty" id="viewerEmpty">Enter an Employee ID, the revised CTC and an effective date, then choose Preview Letter.</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ---------------- Bulk ---------------- -->
+  <div class="split-bulk" id="panelBulk" role="tabpanel" hidden>
+    <section class="card">
+      <h2>Bulk increment letters</h2>
+
+      <details class="help">
+        <summary>How this works</summary>
+        <ol class="steps">
+          <li>
+            <strong>Set the letter date.</strong>
+            The date printed on every letter in the batch. The effective date is
+            separate and set per employee.
+          </li>
+          <li>
+            <strong>Paste your columns into the table.</strong>
+            Employee ID, Revised Annual CTC, Effective From, and Revised Designation
+            if it is a promotion. Rows are added as needed and a copied header row
+            is ignored.
+          </li>
+          <li>
+            <strong>Check the Status column.</strong>
+            Each row shows the revised CTC and the date it takes effect. Rows in red
+            need fixing &mdash; the zip stays locked until every row is clean.
+          </li>
+          <li>
+            <strong>Download.</strong>
+            <em>Preview</em> or <em>Download</em> on a row handles that one letter.
+            <em>Download all Increment Letters (Zip)</em> builds the whole batch.
+          </li>
+        </ol>
+      </details>
+
+      <div class="bulk-toolbar">
+        <div class="field">
+          <label for="bulkDate">Letter date <span class="hint">printed on every letter</span></label>
+          <input type="date" id="bulkDate">
+        </div>
+        <div class="spacer"></div>
+        <button class="minor" id="addRows">Add 10 rows</button>
+        <button class="minor" id="clearRows">Clear table</button>
+      </div>
+
+      <div class="grid-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th class="rownum"></th>
+              <th class="col-id">Employee ID</th>
+              <th class="col-amount">Revised Annual CTC</th>
+              <th class="col-amount">Effective From</th>
+              <th class="col-amount">Revised Designation</th>
+              <th>Status</th>
+              <th class="peek"></th>
+              <th class="drop"></th>
+            </tr>
+          </thead>
+          <tbody id="grid"></tbody>
+        </table>
+      </div>
+
+      <div class="bulk-footer">
+        <div class="summary" id="bulkSummary"></div>
+        <button id="downloadZip" class="action btn-primary" disabled>Download all Increment Letters (Zip)</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="preview-head">
+        <h2>Letter preview</h2>
+        <span class="filename" id="bulkFilename"></span>
+      </div>
+      <div class="viewer" id="bulkViewer">
+        <canvas id="bulkCanvas" aria-label="Increment letter preview" hidden></canvas>
+        <div class="empty" id="bulkViewerEmpty">Choose Preview on any row to see that letter.</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer id="footerNote"></footer>
+
+<!--BUILD:STRIP-->
+<p style="margin:0 0 24px;text-align:center;color:#b3261e;font-size:13px">
+  This is the build source and will not run on its own. Run <code>python tools/build.py</code>
+  and open <code>dist/Increment_Letter_Generator.html</code>.
+</p>
+<!--/BUILD:STRIP-->
+
+<script>/*__PDFJS_WORKER__*/</script>
+<script>/*__PDFJS__*/</script>
+<script>/*__JSPDF__*/</script>
+<script>/*__JSZIP__*/</script>
+
+<script>
+"use strict";
+
+/*__CORE__*/
+
+/**
+ * The increment letter. States the revised CTC and when it takes effect, and
+ * records a promotion when one is given. The previous salary is deliberately
+ * not restated.
+ *
+ * @param increment { ctc, effectiveISO, designation } - designation optional
+ */
+function buildIncrementLetter(employee, increment, dateISO) {
+  const doc = startLetter();
+  let y = drawDateAndDetails(doc, CONTENT_TOP, employee, dateISO);
+  y = drawSalutation(doc, y, employee, "Revision in Compensation", "Congratulations!");
+
+  y = drawParagraph(doc, y,
+    "We are pleased to inform you that, in recognition of your performance and "
+    + "contribution, your annual compensation has been revised with effect from "
+    + `${formatDate(increment.effectiveISO)}.`);
+
+  y = drawIncrementBox(doc, y, increment);
+
+  if (increment.designation) {
+    y = drawParagraph(doc, y,
+      `Your designation has also been revised to ${increment.designation} with `
+      + "effect from the same date.");
+  }
+
+  y = drawParagraph(doc, y,
+    "All other terms and conditions of your employment remain unchanged.");
+
+  // Deliberately firmer than the variable pay letters: compensation details
+  // circulating between colleagues is what this paragraph exists to prevent.
+  y = drawParagraph(doc, y,
+    "The contents of this letter are strictly confidential and are intended solely "
+    + "for you. Disclosing your compensation details to any other person is a breach "
+    + "of company policy, and any such disclosure will attract action in accordance "
+    + "with the applicable policy.");
+
+  y = drawParagraph(doc, y,
+    "We look forward to your continued contribution as we build the future of "
+    + "commercial electric mobility.");
+
+  drawSignOff(doc, y);
+  return doc;
+}
+
+/** Revised CTC and the date it takes effect. Returns the cursor below. */
+function drawIncrementBox(doc, y, increment) {
+  const height = 25;
+  const radius = 2;
+
+  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
+  doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
+  doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
+
+  const columns = [
+    {
+      x: MARGIN.left + 8,
+      label: "REVISED ANNUAL CTC",
+      value: `INR ${formatINR(increment.ctc)}`,
+      color: [43, 127, 174],
+    },
+    {
+      x: MARGIN.left + 66,
+      label: "EFFECTIVE FROM",
+      value: formatDate(increment.effectiveISO),
+      color: COLORS.ink,
+    },
+  ];
+
+  for (const column of columns) {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+    doc.setCharSpace(0.4);
+    doc.text(column.label, column.x, y + 7);
+    doc.setCharSpace(0);
+
+    doc.setFont("Poppins", "bold");
+    doc.setFontSize(FIGURE_SIZE);
+    doc.setTextColor(column.color[0], column.color[1], column.color[2]);
+    doc.text(column.value, column.x, y + 15);
+  }
+
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.text(`Revised annual CTC in words: ${amountInWords(increment.ctc)}`,
+    MARGIN.left + 8, y + 21, { maxWidth: COLUMN - 16 });
+
+  return y + height + 6;
+}
+
+
+function fileNameFor(employee) {
+  return `Increment_Letter_${employee.code}.pdf`;
+}
+
+/**
+ * Reads the three increment inputs. Returns { increment } or { error }.
+ * The revised designation is optional: blank means this is not a promotion.
+ */
+function parseIncrement(ctcText, effectiveText, designationText) {
+  const ctc = parseAmount(ctcText, "Revised annual CTC");
+  if (ctc.error) return { error: ctc.error };
+
+  const raw = String(effectiveText || "").trim();
+  if (!raw) return { error: "Effective date is missing." };
+  const effectiveISO = parseDateInput(raw);
+  if (!effectiveISO) return { error: `"${raw}" is not a date the app understands.` };
+
+  return {
+    increment: {
+      ctc: ctc.value,
+      effectiveISO,
+      designation: String(designationText || "").trim(),
+    },
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Individual mode                                                     *
+ * ------------------------------------------------------------------ */
+
+const empIdInput = el("empId");
+const ctcInput = el("ctc");
+const effectiveInput = el("effective");
+const designationInput = el("newDesignation");
+const dateInput = el("letterDate");
+const empError = el("empError");
+const ctcError = el("ctcError");
+const effectiveError = el("effectiveError");
+const dateError = el("dateError");
+const previewButton = el("preview");
+const downloadButton = el("download");
+const individualPane = createPreviewPane("viewer", "pdfCanvas", "viewerEmpty", "filename");
+
+let currentEmployee = null;
+let currentIncrement = null;
+let currentDate = null;
+
+function paintDetails(employee, increment) {
+  const box = el("details");
+  if (!employee) {
+    box.hidden = true;
+    el("detailsPlaceholder").hidden = false;
+    return;
+  }
+  box.hidden = false;
+  el("detailsPlaceholder").hidden = true;
+
+  el("dCode").textContent = employee.code;
+  el("dName").textContent = employee.name;
+  el("dDesignation").textContent = employee.designation || "—";
+  el("dDepartment").textContent = employee.department || "—";
+  el("dSubDepartment").textContent = employee.subDepartment || "—";
+  el("dDoj").textContent = formatDate(employee.doj) || "—";
+  el("dLocation").textContent = employee.location || "—";
+
+  el("amountRow").hidden = !increment;
+  if (increment) {
+    el("dCtc").textContent = `INR ${formatINR(increment.ctc)}`;
+    el("dEffective").textContent = formatDate(increment.effectiveISO);
+    el("dCtcWords").textContent = amountInWords(increment.ctc)
+      + (increment.designation ? ` · promoted to ${increment.designation}` : "");
+  }
+}
+
+const ready = () =>
+  Boolean(currentEmployee) && currentIncrement !== null && Boolean(currentDate);
+
+function refreshIndividual() {
+  const raw = empIdInput.value.trim();
+  currentEmployee = raw ? findEmployee(raw) : null;
+  setError(empError, empIdInput,
+    !raw || currentEmployee ? "" : `No employee found with ID "${raw}".`);
+
+  // Stay quiet until both figures are present; complaining about a half typed
+  // form is noise.
+  if (!ctcInput.value.trim() || !effectiveInput.value) {
+    currentIncrement = null;
+    setError(ctcError, ctcInput, "");
+    setError(effectiveError, effectiveInput, "");
+  } else {
+    const result = parseIncrement(ctcInput.value, effectiveInput.value, designationInput.value);
+    currentIncrement = result.error ? null : result.increment;
+    setError(ctcError, ctcInput, result.error || "");
+    setError(effectiveError, effectiveInput, "");
+  }
+
+  currentDate = dateInput.value || null;
+  setError(dateError, dateInput, currentDate ? "" : "Choose the date the letter should carry.");
+
+  paintDetails(currentEmployee, currentIncrement);
+  previewButton.disabled = !ready();
+  downloadButton.disabled = !ready();
+  individualPane.clear();
+}
+
+function tryBuild() {
+  try {
+    return buildIncrementLetter(currentEmployee, currentIncrement, currentDate);
+  } catch (error) {
+    console.error(error);
+    setError(empError, empIdInput, "Could not build the letter. See the browser console for details.");
+    return null;
+  }
+}
+
+for (const input of [empIdInput, ctcInput, effectiveInput, designationInput, dateInput]) {
+  input.addEventListener("input", refreshIndividual);
+}
+
+previewButton.addEventListener("click", () => {
+  if (!ready()) return;
+  const doc = tryBuild();
+  if (!doc) return individualPane.clear();
+  individualPane.show(doc, fileNameFor(currentEmployee), () => {
+    setError(empError, empIdInput, "Could not render the preview. See the browser console for details.");
+  });
+});
+
+downloadButton.addEventListener("click", () => {
+  if (!ready()) return;
+  const doc = tryBuild();
+  if (doc) doc.save(fileNameFor(currentEmployee));
+});
+
+/* ------------------------------------------------------------------ *
+ * Bulk mode                                                           *
+ * ------------------------------------------------------------------ */
+
+const bulk = createBulkPanel({
+  ids: { grid: "grid", date: "bulkDate", summary: "bulkSummary", zip: "downloadZip",
+    addRows: "addRows", clearRows: "clearRows" },
+  pane: { viewer: "bulkViewer", canvas: "bulkCanvas", empty: "bulkViewerEmpty", filename: "bulkFilename" },
+  columns: [{ decimal: false }, { decimal: true }, { decimal: false }, { decimal: false }],
+  validate(cells) {
+    const result = parseIncrement(cells[1], cells[2], cells[3]);
+    return result.error ? { error: result.error } : { job: { increment: result.increment } };
+  },
+  describe: (job) => `${job.employee.name} · INR ${formatINR(job.increment.ctc)} `
+    + `from ${formatDate(job.increment.effectiveISO)}`
+    + (job.increment.designation ? ` · promoted to ${job.increment.designation}` : ""),
+  buildDoc: (job) => buildIncrementLetter(job.employee, job.increment, job.dateISO),
+  fileName: (job) => fileNameFor(job.employee),
+  zipName: (dateISO) => `Increment_Letters_${dateISO}.zip`,
+  zipLabel: (count) => count
+    ? `Download all ${count} Increment ${count === 1 ? "Letter" : "Letters"} (Zip)`
+    : "Download all Increment Letters (Zip)",
+});
+
+/* ------------------------------------------------------------------ *
+ * Mode switching                                                      *
+ * ------------------------------------------------------------------ */
+
+const MODES = {
+  individual: { tab: "tabIndividual", panel: "panelIndividual", repaint: () => individualPane.repaint() },
+  bulk: { tab: "tabBulk", panel: "panelBulk", repaint: () => bulk.repaint() },
+};
+
+function setMode(active) {
+  for (const [name, mode] of Object.entries(MODES)) {
+    const on = name === active;
+    el(mode.tab).setAttribute("aria-selected", String(on));
+    el(mode.panel).hidden = !on;
+  }
+  // A preview is laid out against its viewer's measured size, which is zero
+  // while the panel is hidden, so redraw once the panel is back on screen.
+  MODES[active].repaint();
+}
+
+for (const [name, mode] of Object.entries(MODES)) {
+  el(mode.tab).addEventListener("click", () => setMode(name));
+}
+
+// Only the visible mode's pane has a non-zero size, and repaint() is a no-op on
+// an empty pane, so redrawing all of them costs nothing.
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    for (const mode of Object.values(MODES)) mode.repaint();
+  }, 150);
+});
+
+/* ------------------------------------------------------------------ *
+ * Start-up                                                            *
+ * ------------------------------------------------------------------ */
+
+dateInput.value = todayISO();
+refreshIndividual();
+bulk.start();
+
+el("footerNote").textContent =
+  `${EMPLOYEES.length.toLocaleString("en-IN")} active employees loaded · `
+  + "runs entirely offline · no data leaves this device";
+
+empIdInput.focus();
+</script>
+</body>
+</html>
