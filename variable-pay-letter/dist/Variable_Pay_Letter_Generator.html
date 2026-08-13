@@ -546,6 +546,7 @@
   <div class="modes" role="tablist">
     <button id="tabIndividual" role="tab" aria-selected="true">Individual</button>
     <button id="tabBulk" role="tab" aria-selected="false">Bulk Letters</button>
+    <button id="tabRevision" role="tab" aria-selected="false">Revision Letters</button>
   </div>
 </header>
 
@@ -714,6 +715,177 @@
       </div>
     </section>
   </div>
+
+  <!-- ---------------- Revision ---------------- -->
+  <div id="panelRevision" role="tabpanel" hidden>
+    <div class="split">
+      <section>
+        <div class="card">
+          <h2>Revision inputs</h2>
+
+          <p class="note" style="margin:0 0 16px">
+            For an award that has been re-decided after the letter went out. The
+            revision letter shows what was paid, what it has become, and the
+            differential now due.
+          </p>
+
+          <div class="field">
+            <label for="revEmpId">Employee ID</label>
+            <input type="text" id="revEmpId" placeholder="e.g. EUR1796" autocomplete="off" spellcheck="false">
+            <div class="error" id="revEmpError"></div>
+          </div>
+
+          <div class="field">
+            <label for="revEligible">Total Eligible Variable Pay <span class="hint">in INR</span></label>
+            <input type="text" id="revEligible" placeholder="e.g. 300000" autocomplete="off" inputmode="decimal">
+          </div>
+
+          <div class="field">
+            <label for="revPrevious">Previously Awarded <span class="hint">already paid</span></label>
+            <input type="text" id="revPrevious" placeholder="e.g. 240000" autocomplete="off" inputmode="decimal">
+          </div>
+
+          <div class="field">
+            <label for="revRevised">Revised Award <span class="hint">new total</span></label>
+            <input type="text" id="revRevised" placeholder="e.g. 300000" autocomplete="off" inputmode="decimal">
+            <div class="error" id="revAmountError"></div>
+          </div>
+
+          <div class="field">
+            <label for="revDate">Letter date</label>
+            <input type="date" id="revDate">
+            <div class="error" id="revDateError"></div>
+          </div>
+
+          <div class="actions">
+            <button id="revPreview" class="action btn-primary" disabled>Preview Revision Letter</button>
+            <button id="revDownload" class="action btn-secondary" disabled>Download Revision Letter PDF</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Employee details</h2>
+          <p class="placeholder" id="revDetailsPlaceholder">Enter an Employee ID to pull details from the master database.</p>
+          <div id="revDetails" hidden>
+            <dl>
+              <dt>Employee ID</dt><dd id="rdCode"></dd>
+              <dt>Name</dt><dd id="rdName"></dd>
+              <dt>Designation</dt><dd id="rdDesignation"></dd>
+              <dt>Department</dt><dd id="rdDepartment"></dd>
+              <dt>Sub-department</dt><dd id="rdSubDepartment"></dd>
+              <dt>Date of Joining</dt><dd id="rdDoj"></dd>
+              <dt>Location</dt><dd id="rdLocation"></dd>
+            </dl>
+            <div class="amount-row" id="revAmountRow" hidden>
+              <div class="pay-split">
+                <div>
+                  <div class="pay-label">Previously awarded</div>
+                  <div class="pay-eligible" id="rdPrevious"></div>
+                </div>
+                <div>
+                  <div class="pay-label">Revised award</div>
+                  <div class="figure" id="rdRevised"></div>
+                </div>
+                <div>
+                  <div class="pay-label">Differential</div>
+                  <div class="pay-percent" id="rdDifferential"></div>
+                </div>
+              </div>
+              <div class="words" id="rdWords"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="preview-head">
+          <h2>Revision letter preview</h2>
+          <span class="filename" id="revIndFilename"></span>
+        </div>
+        <div class="viewer" id="revIndViewer">
+          <canvas id="revIndCanvas" aria-label="Revision letter preview" hidden></canvas>
+          <div class="empty" id="revIndViewerEmpty">Fill in the three figures, then choose Preview Revision Letter.</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="split-bulk" style="margin-top:26px">
+      <section class="card">
+        <h2>Bulk revisions</h2>
+
+        <details class="help">
+          <summary>How this works</summary>
+          <ol class="steps">
+            <li>
+              <strong>Set the letter date.</strong>
+              Every revision letter in the batch carries this date.
+            </li>
+            <li>
+              <strong>Paste your four columns into the table.</strong>
+              Employee ID, Total Eligible, Previously Awarded and Revised Award.
+              Rows are added as needed and a copied header row is ignored.
+            </li>
+            <li>
+              <strong>Check the Status column.</strong>
+              Each row shows what was paid, what it becomes and the differential.
+              Only upward revisions are accepted &mdash; a revised award equal to or
+              below what was already paid is rejected rather than turned into a letter.
+            </li>
+            <li>
+              <strong>Download.</strong>
+              <em>Preview</em> or <em>Download</em> on a row handles that one letter.
+              <em>Download all Revision Letters (Zip)</em> builds the whole batch.
+            </li>
+          </ol>
+        </details>
+
+        <div class="bulk-toolbar">
+          <div class="field">
+            <label for="revBulkDate">Letter date <span class="hint">applies to every letter</span></label>
+            <input type="date" id="revBulkDate">
+          </div>
+          <div class="spacer"></div>
+          <button class="minor" id="revAddRows">Add 10 rows</button>
+          <button class="minor" id="revClearRows">Clear table</button>
+        </div>
+
+        <div class="grid-wrap">
+          <table class="grid">
+            <thead>
+              <tr>
+                <th class="rownum"></th>
+                <th class="col-id">Employee ID</th>
+                <th class="col-amount">Total Eligible</th>
+                <th class="col-amount">Previously Awarded</th>
+                <th class="col-amount">Revised Award</th>
+                <th>Status</th>
+                <th class="peek"></th>
+                <th class="drop"></th>
+              </tr>
+            </thead>
+            <tbody id="revGrid"></tbody>
+          </table>
+        </div>
+
+        <div class="bulk-footer">
+          <div class="summary" id="revSummary"></div>
+          <button id="revDownloadZip" class="action btn-primary" disabled>Download all Revision Letters (Zip)</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="preview-head">
+          <h2>Letter preview</h2>
+          <span class="filename" id="revFilename"></span>
+        </div>
+        <div class="viewer" id="revViewer">
+          <canvas id="revCanvas" aria-label="Revision letter preview" hidden></canvas>
+          <div class="empty" id="revViewerEmpty">Choose Preview on any row to see that letter.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
 </main>
 
 <footer id="footerNote"></footer>
@@ -1356,7 +1528,7 @@ const MAX_AMOUNT = 1e9; // A billion rupees; anything larger is a typo, not a bo
  * Reads a rupee figure written any of the ways a spreadsheet might hold it.
  * Returns { value } or { error }.
  */
-function parseAmount(text, label = "Variable pay") {
+function parseAmount(text, label = "Variable pay", { allowZero = false } = {}) {
   const raw = String(text || "").trim()
     .replace(/^(?:INR|RS\.?|₹)\s*/i, "")
     .replace(/[,\s]/g, "");
@@ -1364,7 +1536,9 @@ function parseAmount(text, label = "Variable pay") {
   if (!/^\d*\.?\d+$/.test(raw)) return { error: `${label} must be a number.` };
   const value = Number(raw);
   if (!Number.isFinite(value)) return { error: `${label} must be a number.` };
-  if (value <= 0) return { error: `${label} must be greater than zero.` };
+  if (allowZero ? value < 0 : value <= 0) {
+    return { error: `${label} must be ${allowZero ? "zero or more" : "greater than zero"}.` };
+  }
   if (value > MAX_AMOUNT) return { error: `${label} looks too large.` };
   return { value: Math.round(value * 100) / 100 };
 }
@@ -1379,6 +1553,39 @@ function parseAmount(text, label = "Variable pay") {
 function formatPercent(awarded, eligible) {
   if (!eligible) return "";
   return `${Number(((awarded / eligible) * 100).toFixed(2))}%`;
+}
+
+/** Rounded away from binary fractions, the way the two inputs already are. */
+function revisionDifferential(revision) {
+  return Math.round((revision.revised - revision.previous) * 100) / 100;
+}
+
+/**
+ * Reads the three figures of a revision. Returns { revision } or { error }.
+ *
+ * Upward only. Equal figures mean there is nothing to pay, and a reduction is a
+ * recovery — a different letter with different weight, which this tool should
+ * not quietly produce under a congratulatory heading.
+ */
+function parseRevision(eligibleText, previousText, revisedText) {
+  const eligible = parseAmount(eligibleText, "Total eligible variable pay");
+  if (eligible.error) return { error: eligible.error };
+
+  const previous = parseAmount(previousText, "Previously awarded", { allowZero: true });
+  if (previous.error) return { error: previous.error };
+
+  const revised = parseAmount(revisedText, "Revised award");
+  if (revised.error) return { error: revised.error };
+
+  if (revised.value <= previous.value) {
+    return {
+      error: revised.value === previous.value
+        ? "Revised award is the same as what was already paid, so there is no differential."
+        : "Revised award is lower than what was already paid; this tool only issues upward revisions.",
+    };
+  }
+
+  return { revision: { eligible: eligible.value, previous: previous.value, revised: revised.value } };
 }
 
 /* ------------------------------------------------------------------ *
@@ -1423,30 +1630,47 @@ function leading(points, factor = 1.42) {
   return points * factor * PT;
 }
 
-/**
- * Builds the letter.
- * @param employee record from the master database
- * @param pay      { eligible, awarded } in rupees, both already validated
- * @param dateISO  the letter date the user entered, as YYYY-MM-DD
- */
-function buildLetter(employee, pay, dateISO) {
+/* ------------------------------------------------------------------ *
+ * Letter assembly                                                     *
+ *                                                                     *
+ * Two letters are produced: the award letter, and the revision letter  *
+ * issued when an award is re-decided upward after it has gone out.     *
+ * They share everything but the subject, the opening paragraph and the *
+ * callout, so the common parts live in the helpers below rather than   *
+ * being written twice and drifting apart.                              *
+ * ------------------------------------------------------------------ */
+
+/** A new page with the letterhead laid down. */
+function startLetter() {
   const doc = newDocument();
   doc.addImage(LETTERHEAD, "JPEG", ART.x, ART.y, ART.w, ART.h, undefined, "FAST");
+  return doc;
+}
 
-  let y = CONTENT_TOP;
+/** Applies a font, size and colour in one call. */
+function useFont(doc, style, points, color = COLORS.ink) {
+  doc.setFont("Poppins", style);
+  doc.setFontSize(points);
+  doc.setTextColor(color[0], color[1], color[2]);
+}
 
-  const use = (style, points, color = COLORS.ink) => {
-    doc.setFont("Poppins", style);
-    doc.setFontSize(points);
-    doc.setTextColor(color[0], color[1], color[2]);
-  };
+/** Wraps and writes a body paragraph. Returns the cursor below it. */
+function drawParagraph(doc, y, text, gapAfter = 4.6) {
+  useFont(doc, "normal", 10);
+  const step = leading(10);
+  for (const line of doc.splitTextToSize(text, COLUMN)) {
+    doc.text(line, MARGIN.left, y);
+    y += step;
+  }
+  return y + gapAfter;
+}
 
-  // --- Date -----------------------------------------------------------
-  use("normal", 9.5, COLORS.muted);
+/** The date, the seven employee fields, and the rule beneath them. */
+function drawDateAndDetails(doc, y, employee, dateISO) {
+  useFont(doc, "normal", 9.5, COLORS.muted);
   doc.text(`Date: ${formatDate(dateISO)}`, MARGIN.left, y);
   y += 8;
 
-  // --- Employee detail block -----------------------------------------
   const rows = [
     ["Employee ID", employee.code],
     ["Name", employee.name],
@@ -1459,10 +1683,10 @@ function buildLetter(employee, pay, dateISO) {
 
   const rowStep = leading(9.5, 1.42);
   for (const [label, value] of rows) {
-    use("normal", 9.5, COLORS.muted);
+    useFont(doc, "normal", 9.5, COLORS.muted);
     doc.text(label, MARGIN.left, y);
     doc.text(":", MARGIN.left + LABEL_WIDTH - 3, y);
-    use("semibold", 9.5);
+    useFont(doc, "semibold", 9.5);
     // Wrap rather than overrun: the longest designation on file fits on one
     // line, but a longer one added later must not collide with the next row.
     for (const line of doc.splitTextToSize(value, COLUMN - LABEL_WIDTH)) {
@@ -1475,55 +1699,60 @@ function buildLetter(employee, pay, dateISO) {
   doc.setDrawColor(COLORS.rule[0], COLORS.rule[1], COLORS.rule[2]);
   doc.setLineWidth(0.3);
   doc.line(MARGIN.left, y, MARGIN.right, y);
-  y += 7.5;
+  return y + 7.5;
+}
 
-  // --- Salutation and subject ----------------------------------------
-  use("normal", 10.5);
+/** Salutation, subject line and the blue heading. */
+function drawSalutation(doc, y, employee, subject, heading) {
+  useFont(doc, "normal", 10.5);
   doc.text(`Dear ${employee.name},`, MARGIN.left, y);
   y += 8;
 
-  use("semibold", 10.5);
-  doc.text(`Subject: Variable Pay for the period ${schemePeriod()}`, MARGIN.left, y);
+  useFont(doc, "semibold", 10.5);
+  doc.text(`Subject: ${subject}`, MARGIN.left, y);
   y += 9;
 
-  use("bold", 13, [43, 127, 174]);
-  doc.text("Congratulations!", MARGIN.left, y);
-  y += 7.5;
+  useFont(doc, "bold", 13, [43, 127, 174]);
+  doc.text(heading, MARGIN.left, y);
+  return y + 7.5;
+}
 
-  // --- Body -----------------------------------------------------------
-  const paragraph = (text, gapAfter = 4.6) => {
-    use("normal", 10);
-    const step = leading(10);
-    for (const line of doc.splitTextToSize(text, COLUMN)) {
-      doc.text(line, MARGIN.left, y);
-      y += step;
-    }
-    y += gapAfter;
-  };
+/** The confidentiality paragraph both letters close with. */
+function drawConfidentiality(doc, y) {
+  return drawParagraph(doc, y,
+    "This letter and its contents are strictly confidential and are intended solely "
+    + "for you. You are requested not to disclose the same to any other person.");
+}
 
-  paragraph(
+/**
+ * The award letter.
+ * @param employee record from the master database
+ * @param pay      { eligible, awarded } in rupees, both already validated
+ * @param dateISO  the letter date the user entered, as YYYY-MM-DD
+ */
+function buildLetter(employee, pay, dateISO) {
+  const doc = startLetter();
+  let y = drawDateAndDetails(doc, CONTENT_TOP, employee, dateISO);
+  y = drawSalutation(doc, y, employee,
+    `Variable Pay for the period ${schemePeriod()}`, "Congratulations!");
+
+  y = drawParagraph(doc, y,
     "We are pleased to inform you that, in recognition of your performance and "
     + `contribution ${awardPeriodPhrase(employee)}, you have been `
-    + "awarded a variable pay as set out below."
-  );
+    + "awarded a variable pay as set out below.");
 
   y = drawAmountBox(doc, y, pay);
 
-  paragraph(
+  y = drawParagraph(doc, y,
     "Your ownership, consistency and commitment have contributed meaningfully to "
     + `${COMPANY_SHORT}' progress through the year. We look forward to your continued `
-    + "contribution as we build the future of commercial electric mobility."
-  );
+    + "contribution as we build the future of commercial electric mobility.");
 
-  paragraph(
-    "This letter and its contents are strictly confidential and are intended solely "
-    + "for you. You are requested not to disclose the same to any other person."
-  );
+  y = drawConfidentiality(doc, y);
 
-  paragraph(
+  y = drawParagraph(doc, y,
     "Once again, congratulations, and thank you for being an important part of the "
-    + `${COMPANY_SHORT} journey.`
-  );
+    + `${COMPANY_SHORT} journey.`);
 
   drawSignOff(doc, y);
   return doc;
@@ -1592,6 +1821,110 @@ function drawAmountBox(doc, y, pay) {
 }
 
 /**
+ * The revision letter, issued when an award is re-decided after the first letter
+ * has gone out. It names what was paid, what it has become, and the difference
+ * now due, so it stands on its own without the original to hand.
+ *
+ * @param revision { eligible, previous, revised } in rupees, already validated
+ */
+function buildRevisionLetter(employee, revision, dateISO) {
+  const doc = startLetter();
+  let y = drawDateAndDetails(doc, CONTENT_TOP, employee, dateISO);
+  y = drawSalutation(doc, y, employee,
+    `Revision of Variable Pay for the period ${schemePeriod()}`, "Congratulations!");
+
+  y = drawParagraph(doc, y,
+    "Following a review, we are pleased to inform you that your variable pay for "
+    + `the period ${awardPeriodPhrase(employee)} has been revised. Your total `
+    + `eligible variable pay for the period was INR ${formatINR(revision.eligible)}.`);
+
+  y = drawRevisionBox(doc, y, revision);
+
+  y = drawParagraph(doc, y,
+    "The differential amount shown above is payable to you in addition to the "
+    + "variable pay already released.");
+
+  y = drawConfidentiality(doc, y);
+
+  y = drawParagraph(doc, y,
+    "Once again, congratulations, and thank you for being an important part of the "
+    + `${COMPANY_SHORT} journey.`);
+
+  drawSignOff(doc, y);
+  return doc;
+}
+
+/** What was paid, what it became, and the difference. Returns the cursor below. */
+function drawRevisionBox(doc, y, revision) {
+  const height = 32;
+  const radius = 2;
+  const differential = revisionDifferential(revision);
+
+  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
+  doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
+  doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
+
+  // The differential is what this letter exists to convey, so it takes the accent
+  // colour the percentage carries on the award letter.
+  const columns = [
+    {
+      x: MARGIN.left + 8,
+      label: "PREVIOUSLY AWARDED",
+      value: `INR ${formatINR(revision.previous)}`,
+      note: `${formatPercent(revision.previous, revision.eligible)} of eligible`,
+      color: COLORS.ink,
+    },
+    {
+      x: MARGIN.left + 66,
+      label: "REVISED AWARD",
+      value: `INR ${formatINR(revision.revised)}`,
+      note: `${formatPercent(revision.revised, revision.eligible)} of eligible`,
+      color: COLORS.ink,
+    },
+    {
+      // Further left than the award letter's third column: this label is longer
+      // and at +124 its last letter sat on the edge of the box.
+      x: MARGIN.left + 116,
+      label: "DIFFERENTIAL PAYABLE",
+      value: `INR ${formatINR(differential)}`,
+      note: "",
+      color: [43, 127, 174],
+    },
+  ];
+
+  for (const column of columns) {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+    doc.setCharSpace(0.4);
+    doc.text(column.label, column.x, y + 7);
+    doc.setCharSpace(0);
+
+    doc.setFont("Poppins", "bold");
+    doc.setFontSize(FIGURE_SIZE);
+    doc.setTextColor(column.color[0], column.color[1], column.color[2]);
+    doc.text(column.value, column.x, y + 15);
+
+    if (column.note) {
+      doc.setFont("Poppins", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+      doc.text(column.note, column.x, y + 20);
+    }
+  }
+
+  // Spelled out so the figure actually being paid cannot be misread.
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.text(`Differential payable in words: ${amountInWords(differential)}`,
+    MARGIN.left + 8, y + 27, { maxWidth: COLUMN - 16 });
+
+  return y + height + 6;
+}
+
+/**
  * Closing, signature and company seal.
  *
  * The seal sits at the right of the same band as the signature, centred on it,
@@ -1649,6 +1982,10 @@ function drawSignOff(doc, y) {
 
 function fileNameFor(employee) {
   return `Variable_Pay_Letter_${employee.code}.pdf`;
+}
+
+function revisionFileNameFor(employee) {
+  return `Variable_Pay_Revision_Letter_${employee.code}.pdf`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -2135,342 +2472,518 @@ el("downloadDocx").addEventListener("click", async () => {
   }
 });
 
-// Keep the preview crisp and correctly sized when the window changes.
+// Keep the previews crisp and correctly sized when the window changes. Only the
+// visible mode's panes have a non-zero size, and repaint() is a no-op on an empty
+// pane, so redrawing all of them costs nothing.
 let resizeTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    individualPane.repaint();
-    bulkPane.repaint();
+    for (const mode of Object.values(MODES)) mode.repaint();
   }, 150);
 });
 
 /* ------------------------------------------------------------------ *
- * Bulk mode                                                           *
+ * Bulk panels                                                         *
+ *                                                                     *
+ * One factory drives both grids: the award run and the revision run.   *
+ * They differ only in their columns, their validation and which letter *
+ * they build, so everything else — spreadsheet paste, per-row preview, *
+ * duplicate detection, the zip — is written once here.                 *
  * ------------------------------------------------------------------ */
 
-const grid = el("grid");
-const bulkDate = el("bulkDate");
-const bulkSummary = el("bulkSummary");
-const downloadZipButton = el("downloadZip");
-const bulkPane = createPreviewPane("bulkViewer", "bulkCanvas", "bulkViewerEmpty", "bulkFilename");
-
-/* The row currently shown in the bulk preview, and what it said at the time. A
- * preview that no longer matches its row would be quietly misleading, so it is
- * dropped as soon as the row's values change. */
-let previewedRow = null;
-let previewedSignature = "";
-
 const STARTING_ROWS = 12;
-const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "eligible", "amount", "awarded", "date"];
-
-function makeRow() {
-  const tr = document.createElement("tr");
-  tr.innerHTML =
-    '<td class="rownum"></td>'
-    + '<td><input type="text" data-col="0" autocomplete="off" spellcheck="false"></td>'
-    + '<td><input type="text" data-col="1" autocomplete="off" inputmode="decimal"></td>'
-    + '<td><input type="text" data-col="2" autocomplete="off" inputmode="decimal"></td>'
-    + '<td class="status"></td>'
-    + '<td class="peek">'
-    +   '<button type="button" data-act="preview" disabled>Preview</button>'
-    +   '<button type="button" data-act="download" disabled>Download</button>'
-    + '</td>'
-    + '<td class="drop"><button type="button" title="Remove row" aria-label="Remove row">&times;</button></td>';
-  tr.querySelector(".drop button").addEventListener("click", () => {
-    if (previewedRow === tr) clearBulkPreview();
-    tr.remove();
-    ensureTrailingRow();
-    refreshBulk();
-  });
-  tr.querySelector('[data-act="preview"]').addEventListener("click", () => previewRow(tr));
-  tr.querySelector('[data-act="download"]').addEventListener("click", () => downloadRow(tr));
-  for (const input of tr.querySelectorAll("input")) {
-    input.addEventListener("input", refreshBulk);
-    input.addEventListener("paste", onGridPaste);
-  }
-  return tr;
-}
-
-function addRows(count) {
-  for (let i = 0; i < count; i += 1) grid.appendChild(makeRow());
-}
-
-function rowCells(tr) {
-  return Array.from(tr.querySelectorAll("input"));
-}
-
-function rowIsBlank(tr) {
-  return rowCells(tr).every((input) => !input.value.trim());
-}
-
-/** Always leave one empty row at the bottom to type into. */
-function ensureTrailingRow() {
-  const rows = Array.from(grid.rows);
-  if (!rows.length || !rowIsBlank(rows[rows.length - 1])) addRows(1);
-}
+const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "eligible",
+  "amount", "awarded", "revised", "previous", "date"];
 
 /**
- * Distributes a spreadsheet paste across the grid.
- *
- * Excel and Sheets put tab-separated rows on the clipboard as text/plain, so a
- * multi-cell paste arrives in a single cell unless it is split out by hand.
+ * @param config.ids        element ids for grid, date, summary, zip button
+ * @param config.pane       ids for the preview pane
+ * @param config.columns    [{ decimal }] one per editable cell
+ * @param config.validate   (cells, dateISO) -> { job } | { error }
+ * @param config.describe   job -> status cell text
+ * @param config.buildDoc   job -> jsPDF document
+ * @param config.fileName   job -> pdf filename
+ * @param config.zipName    dateISO -> zip filename
+ * @param config.zipLabel   count -> button text
  */
-function onGridPaste(event) {
-  const text = (event.clipboardData || window.clipboardData).getData("text");
-  if (!text || !/[\t\n\r]/.test(text)) return; // single value: let the browser handle it
-  event.preventDefault();
+function createBulkPanel(config) {
+  const grid = el(config.ids.grid);
+  const dateInput = el(config.ids.date);
+  const summary = el(config.ids.summary);
+  const zipButton = el(config.ids.zip);
+  const pane = createPreviewPane(config.pane.viewer, config.pane.canvas,
+    config.pane.empty, config.pane.filename);
 
-  let lines = text.replace(/\r\n?/g, "\n").split("\n");
-  while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
-  if (!lines.length) return;
+  /* The row currently shown in the preview, and what it said at the time. A
+   * preview that no longer matches its row would be quietly misleading, so it is
+   * dropped as soon as the row's values change. */
+  let previewedRow = null;
+  let previewedSignature = "";
+  let busy = false;
 
-  // Drop a pasted header row so "Employee ID" does not land in a cell.
-  const first = lines[0].toLowerCase();
-  if (HEADER_WORDS.some((word) => first.includes(word)) && !/\d/.test(first)) {
-    lines.shift();
-  }
-  if (!lines.length) return;
+  function makeRow() {
+    const cells = config.columns.map((column, index) =>
+      `<td><input type="text" data-col="${index}" autocomplete="off"`
+      + (column.decimal ? ' inputmode="decimal"' : ' spellcheck="false"')
+      + "></td>").join("");
 
-  const startCol = Number(event.target.dataset.col);
-  const startRow = Array.from(grid.rows).indexOf(event.target.closest("tr"));
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td class="rownum"></td>' + cells
+      + '<td class="status"></td>'
+      + '<td class="peek">'
+      +   '<button type="button" data-act="preview" disabled>Preview</button>'
+      +   '<button type="button" data-act="download" disabled>Download</button>'
+      + "</td>"
+      + '<td class="drop"><button type="button" title="Remove row" aria-label="Remove row">&times;</button></td>';
 
-  lines.forEach((line, rowOffset) => {
-    const index = startRow + rowOffset;
-    while (grid.rows.length <= index) addRows(1);
-    const cells = rowCells(grid.rows[index]);
-    line.split("\t").forEach((value, colOffset) => {
-      const target = cells[startCol + colOffset];
-      if (target) target.value = value.trim();
+    tr.querySelector(".drop button").addEventListener("click", () => {
+      if (previewedRow === tr) clearPreview();
+      tr.remove();
+      ensureTrailingRow();
+      refresh();
     });
+    tr.querySelector('[data-act="preview"]').addEventListener("click", () => previewRow(tr));
+    tr.querySelector('[data-act="download"]').addEventListener("click", () => downloadRow(tr));
+    for (const input of tr.querySelectorAll("input")) {
+      input.addEventListener("input", refresh);
+      input.addEventListener("paste", onPaste);
+    }
+    return tr;
+  }
+
+  const addRows = (count) => {
+    for (let i = 0; i < count; i += 1) grid.appendChild(makeRow());
+  };
+  const rowCells = (tr) => Array.from(tr.querySelectorAll("input"));
+  const rowIsBlank = (tr) => rowCells(tr).every((input) => !input.value.trim());
+
+  /** Always leave one empty row at the bottom to type into. */
+  function ensureTrailingRow() {
+    const rows = Array.from(grid.rows);
+    if (!rows.length || !rowIsBlank(rows[rows.length - 1])) addRows(1);
+  }
+
+  /**
+   * Distributes a spreadsheet paste across the grid.
+   *
+   * Excel and Sheets put tab-separated rows on the clipboard as text/plain, so a
+   * multi-cell paste arrives in a single cell unless it is split out by hand.
+   */
+  function onPaste(event) {
+    const text = (event.clipboardData || window.clipboardData).getData("text");
+    if (!text || !/[\t\n\r]/.test(text)) return; // single value: let the browser handle it
+    event.preventDefault();
+
+    let lines = text.replace(/\r\n?/g, "\n").split("\n");
+    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+    if (!lines.length) return;
+
+    // Drop a pasted header row so "Employee ID" does not land in a cell.
+    const first = lines[0].toLowerCase();
+    if (HEADER_WORDS.some((word) => first.includes(word)) && !/\d/.test(first)) {
+      lines.shift();
+    }
+    if (!lines.length) return;
+
+    const startCol = Number(event.target.dataset.col);
+    const startRow = Array.from(grid.rows).indexOf(event.target.closest("tr"));
+
+    lines.forEach((line, rowOffset) => {
+      const index = startRow + rowOffset;
+      while (grid.rows.length <= index) addRows(1);
+      const cells = rowCells(grid.rows[index]);
+      line.split("\t").forEach((value, colOffset) => {
+        const target = cells[startCol + colOffset];
+        if (target) target.value = value.trim();
+      });
+    });
+
+    ensureTrailingRow();
+    refresh();
+  }
+
+  /**
+   * Validates every non-blank row.
+   * Returns the rows that would produce a letter, plus how many are in error.
+   */
+  function readRows() {
+    const dateISO = dateInput.value;
+    const jobs = [];
+    const seen = new Map();
+    let errors = 0;
+
+    for (const tr of Array.from(grid.rows)) {
+      const status = tr.querySelector(".status");
+      tr.classList.remove("bad");
+      status.className = "status";
+      status.textContent = "";
+
+      if (rowIsBlank(tr)) continue;
+
+      const fail = (message) => {
+        status.textContent = message;
+        status.classList.add("bad");
+        tr.classList.add("bad");
+        errors += 1;
+      };
+
+      const cells = rowCells(tr).map((input) => input.value);
+      const employee = findEmployee(cells[0]);
+      if (!employee) {
+        fail(cells[0].trim() ? `No employee with ID "${cells[0].trim()}".` : "Employee ID is missing.");
+        continue;
+      }
+      if (!dateISO) {
+        fail("Set the letter date above.");
+        continue;
+      }
+
+      const result = config.validate(cells, dateISO);
+      if (result.error) {
+        fail(result.error);
+        continue;
+      }
+
+      // Two letters for one employee would collide inside the zip.
+      const previous = seen.get(employee.code);
+      if (previous !== undefined) {
+        fail(`${employee.code} is already on row ${previous}.`);
+        continue;
+      }
+      seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
+
+      const job = Object.assign({ employee, dateISO, row: tr }, result.job);
+      status.textContent = config.describe(job);
+      status.classList.add("ok");
+      jobs.push(job);
+    }
+
+    return { jobs, errors };
+  }
+
+  /** Identifies what a row would produce, so a stale preview can be spotted. */
+  const signatureOf = (job) =>
+    JSON.stringify([job.employee.code, job.dateISO, config.describe(job)]);
+
+  function clearPreview() {
+    if (previewedRow) previewedRow.classList.remove("previewing");
+    previewedRow = null;
+    previewedSignature = "";
+    pane.clear();
+  }
+
+  function previewRow(tr) {
+    const job = readRows().jobs.find((candidate) => candidate.row === tr);
+    if (!job) return; // the row is not valid, so there is nothing to draw
+
+    if (previewedRow) previewedRow.classList.remove("previewing");
+    previewedRow = tr;
+    previewedSignature = signatureOf(job);
+    tr.classList.add("previewing");
+
+    let doc;
+    try {
+      doc = config.buildDoc(job);
+    } catch (error) {
+      console.error(error);
+      clearPreview();
+      return;
+    }
+    pane.show(doc, config.fileName(job), clearPreview);
+  }
+
+  /** Saves just this row's letter, without touching the preview or the batch. */
+  function downloadRow(tr) {
+    const job = readRows().jobs.find((candidate) => candidate.row === tr);
+    if (!job) return;
+    try {
+      config.buildDoc(job).save(config.fileName(job));
+    } catch (error) {
+      console.error(error);
+      summary.innerHTML = '<span class="bad">Could not build that letter. See the browser console for details.</span>';
+    }
+  }
+
+  function refresh() {
+    Array.from(grid.rows).forEach((tr, index) => {
+      tr.querySelector(".rownum").textContent = index + 1;
+    });
+
+    const { jobs, errors } = readRows();
+
+    const byRow = new Map(jobs.map((job) => [job.row, job]));
+    let previewStillValid = false;
+    for (const tr of Array.from(grid.rows)) {
+      const job = byRow.get(tr);
+      for (const button of tr.querySelectorAll(".peek button")) button.disabled = !job;
+      if (tr === previewedRow && job && signatureOf(job) === previewedSignature) {
+        previewStillValid = true;
+      }
+    }
+    if (previewedRow && !previewStillValid) clearPreview();
+
+    if (!jobs.length && !errors) {
+      summary.textContent = "Paste or type rows above to get started.";
+    } else if (errors) {
+      summary.innerHTML = `<strong>${jobs.length}</strong> ready · `
+        + `<span class="bad"><strong>${errors}</strong> ${errors === 1 ? "row needs" : "rows need"} attention</span>`;
+    } else {
+      summary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`;
+    }
+
+    // Refuse to build a partial batch: silently skipping a row in a payroll run is
+    // worse than making someone fix the typo first.
+    zipButton.disabled = busy || errors > 0 || jobs.length === 0;
+    if (!busy) zipButton.textContent = config.zipLabel(errors ? 0 : jobs.length);
+  }
+
+  zipButton.addEventListener("click", async () => {
+    const { jobs, errors } = readRows();
+    if (errors || !jobs.length) return;
+
+    busy = true;
+    zipButton.disabled = true;
+
+    try {
+      const zip = new JSZip();
+      for (let i = 0; i < jobs.length; i += 1) {
+        zipButton.textContent = `Building ${i + 1} of ${jobs.length}…`;
+        zip.file(config.fileName(jobs[i]), config.buildDoc(jobs[i]).output("arraybuffer"));
+        // Hand the frame back so the label repaints instead of freezing the tab.
+        if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+
+      zipButton.textContent = "Packaging zip…";
+      // The PDFs are already deflated internally, so re-compressing them in the
+      // zip costs time and saves almost nothing.
+      const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
+      saveBlob(blob, config.zipName(dateInput.value || todayISO()));
+    } catch (error) {
+      console.error(error);
+      summary.innerHTML = '<span class="bad">Could not build the letters. See the browser console for details.</span>';
+    } finally {
+      busy = false;
+      refresh();
+    }
   });
 
-  ensureTrailingRow();
-  refreshBulk();
-}
-
-/**
- * Validates every non-blank row.
- * Returns the rows that would produce a letter, plus how many are in error.
- */
-function readBulkRows() {
-  const fallback = bulkDate.value;
-  const jobs = [];
-  const seen = new Map();
-  let errors = 0;
-
-  for (const tr of Array.from(grid.rows)) {
-    const [idCell, eligibleCell, awardedCell] = rowCells(tr);
-    const status = tr.querySelector(".status");
-    tr.classList.remove("bad");
-    status.className = "status";
-    status.textContent = "";
-
-    if (rowIsBlank(tr)) continue;
-
-    const fail = (message) => {
-      status.textContent = message;
-      status.classList.add("bad");
-      tr.classList.add("bad");
-      errors += 1;
-    };
-
-    const employee = findEmployee(idCell.value);
-    if (!employee) {
-      fail(idCell.value.trim() ? `No employee with ID "${idCell.value.trim()}".` : "Employee ID is missing.");
-      continue;
-    }
-
-    const eligible = parseAmount(eligibleCell.value, "Eligible variable pay");
-    if (eligible.error) {
-      fail(eligible.error);
-      continue;
-    }
-
-    const awarded = parseAmount(awardedCell.value, "Variable pay awarded");
-    if (awarded.error) {
-      fail(awarded.error);
-      continue;
-    }
-    const pay = { eligible: eligible.value, awarded: awarded.value };
-
-    if (!fallback) {
-      fail("Set the letter date above.");
-      continue;
-    }
-
-    // Two letters for one employee would collide inside the zip.
-    const previous = seen.get(employee.code);
-    if (previous !== undefined) {
-      fail(`${employee.code} is already on row ${previous}.`);
-      continue;
-    }
-    seen.set(employee.code, Array.from(grid.rows).indexOf(tr) + 1);
-
-    status.textContent = `${employee.name} · INR ${formatINR(pay.awarded)} `
-      + `of ${formatINR(pay.eligible)} · ${formatPercent(pay.awarded, pay.eligible)}`;
-    status.classList.add("ok");
-    jobs.push({ employee, pay, dateISO: fallback, row: tr });
-  }
-
-  return { jobs, errors };
-}
-
-let bulkBusy = false;
-
-/** Identifies what a row would produce, so a stale preview can be spotted. */
-function jobSignature(job) {
-  return `${job.employee.code}|${job.pay.eligible}|${job.pay.awarded}|${job.dateISO}`;
-}
-
-function clearBulkPreview() {
-  if (previewedRow) previewedRow.classList.remove("previewing");
-  previewedRow = null;
-  previewedSignature = "";
-  bulkPane.clear();
-}
-
-function previewRow(tr) {
-  const job = readBulkRows().jobs.find((candidate) => candidate.row === tr);
-  if (!job) return; // the row is not valid, so there is nothing to draw
-
-  if (previewedRow) previewedRow.classList.remove("previewing");
-  previewedRow = tr;
-  previewedSignature = jobSignature(job);
-  tr.classList.add("previewing");
-
-  let doc;
-  try {
-    doc = buildLetter(job.employee, job.pay, job.dateISO);
-  } catch (error) {
-    console.error(error);
-    clearBulkPreview();
-    return;
-  }
-  bulkPane.show(doc, fileNameFor(job.employee), clearBulkPreview);
-}
-
-/** Saves just this row's letter, without touching the preview or the batch. */
-function downloadRow(tr) {
-  const job = readBulkRows().jobs.find((candidate) => candidate.row === tr);
-  if (!job) return;
-  try {
-    buildLetter(job.employee, job.pay, job.dateISO).save(fileNameFor(job.employee));
-  } catch (error) {
-    console.error(error);
-    bulkSummary.innerHTML = '<span class="bad">Could not build that letter. See the browser console for details.</span>';
-  }
-}
-
-function refreshBulk() {
-  Array.from(grid.rows).forEach((tr, index) => {
-    tr.querySelector(".rownum").textContent = index + 1;
+  el(config.ids.addRows).addEventListener("click", () => { addRows(10); refresh(); });
+  el(config.ids.clearRows).addEventListener("click", () => {
+    clearPreview();
+    grid.textContent = "";
+    addRows(STARTING_ROWS);
+    refresh();
   });
+  dateInput.addEventListener("input", refresh);
 
-  const { jobs, errors } = readBulkRows();
-
-  const byRow = new Map(jobs.map((job) => [job.row, job]));
-  let previewStillValid = false;
-  for (const tr of Array.from(grid.rows)) {
-    const job = byRow.get(tr);
-    for (const button of tr.querySelectorAll(".peek button")) button.disabled = !job;
-    if (tr === previewedRow && job && jobSignature(job) === previewedSignature) {
-      previewStillValid = true;
-    }
-  }
-  if (previewedRow && !previewStillValid) clearBulkPreview();
-
-  if (!jobs.length && !errors) {
-    bulkSummary.textContent = "Paste or type rows above to get started.";
-  } else if (errors) {
-    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ready · `
-      + `<span class="bad"><strong>${errors}</strong> ${errors === 1 ? "row needs" : "rows need"} attention</span>`;
-  } else {
-    bulkSummary.innerHTML = `<strong>${jobs.length}</strong> ${jobs.length === 1 ? "letter" : "letters"} ready`;
-  }
-
-  // Refuse to build a partial batch: silently skipping a row in a payroll run is
-  // worse than making someone fix the typo first.
-  downloadZipButton.disabled = bulkBusy || errors > 0 || jobs.length === 0;
-  if (!bulkBusy) {
-    downloadZipButton.textContent = jobs.length && !errors
-      ? `Download all ${jobs.length} ${jobs.length === 1 ? "Letter" : "Letters"} (Zip)`
-      : "Download all Letters (Zip)";
-  }
+  return {
+    start() {
+      dateInput.value = todayISO();
+      addRows(STARTING_ROWS);
+      refresh();
+    },
+    repaint: () => pane.repaint(),
+  };
 }
 
-el("addRows").addEventListener("click", () => { addRows(10); refreshBulk(); });
-
-el("clearRows").addEventListener("click", () => {
-  clearBulkPreview();
-  grid.textContent = "";
-  addRows(STARTING_ROWS);
-  refreshBulk();
+const awardBulk = createBulkPanel({
+  ids: { grid: "grid", date: "bulkDate", summary: "bulkSummary", zip: "downloadZip",
+    addRows: "addRows", clearRows: "clearRows" },
+  pane: { viewer: "bulkViewer", canvas: "bulkCanvas", empty: "bulkViewerEmpty", filename: "bulkFilename" },
+  columns: [{ decimal: false }, { decimal: true }, { decimal: true }],
+  validate(cells) {
+    const eligible = parseAmount(cells[1], "Eligible variable pay");
+    if (eligible.error) return { error: eligible.error };
+    const awarded = parseAmount(cells[2], "Variable pay awarded");
+    if (awarded.error) return { error: awarded.error };
+    return { job: { pay: { eligible: eligible.value, awarded: awarded.value } } };
+  },
+  describe: (job) => `${job.employee.name} · INR ${formatINR(job.pay.awarded)} `
+    + `of ${formatINR(job.pay.eligible)} · ${formatPercent(job.pay.awarded, job.pay.eligible)}`,
+  buildDoc: (job) => buildLetter(job.employee, job.pay, job.dateISO),
+  fileName: (job) => fileNameFor(job.employee),
+  zipName: (dateISO) => `Variable_Pay_Letters_${dateISO}.zip`,
+  zipLabel: (count) => count
+    ? `Download all ${count} ${count === 1 ? "Letter" : "Letters"} (Zip)`
+    : "Download all Letters (Zip)",
 });
 
-bulkDate.addEventListener("input", refreshBulk);
+const revisionBulk = createBulkPanel({
+  ids: { grid: "revGrid", date: "revBulkDate", summary: "revSummary", zip: "revDownloadZip",
+    addRows: "revAddRows", clearRows: "revClearRows" },
+  pane: { viewer: "revViewer", canvas: "revCanvas", empty: "revViewerEmpty", filename: "revFilename" },
+  columns: [{ decimal: false }, { decimal: true }, { decimal: true }, { decimal: true }],
+  validate(cells) {
+    const result = parseRevision(cells[1], cells[2], cells[3]);
+    return result.error ? { error: result.error } : { job: { revision: result.revision } };
+  },
+  describe: (job) => `${job.employee.name} · ${formatINR(job.revision.previous)} `
+    + `(${formatPercent(job.revision.previous, job.revision.eligible)}) → `
+    + `${formatINR(job.revision.revised)} (${formatPercent(job.revision.revised, job.revision.eligible)}) `
+    + `· differential INR ${formatINR(revisionDifferential(job.revision))}`,
+  buildDoc: (job) => buildRevisionLetter(job.employee, job.revision, job.dateISO),
+  fileName: (job) => revisionFileNameFor(job.employee),
+  zipName: (dateISO) => `Variable_Pay_Revision_Letters_${dateISO}.zip`,
+  zipLabel: (count) => count
+    ? `Download all ${count} Revision ${count === 1 ? "Letter" : "Letters"} (Zip)`
+    : "Download all Revision Letters (Zip)",
+});
 
-downloadZipButton.addEventListener("click", async () => {
-  const { jobs, errors } = readBulkRows();
-  if (errors || !jobs.length) return;
+/* ------------------------------------------------------------------ *
+ * Individual revision                                                 *
+ * ------------------------------------------------------------------ */
 
-  bulkBusy = true;
-  downloadZipButton.disabled = true;
+const revEmpIdInput = el("revEmpId");
+const revEligibleInput = el("revEligible");
+const revPreviousInput = el("revPrevious");
+const revRevisedInput = el("revRevised");
+const revDateInput = el("revDate");
+const revEmpError = el("revEmpError");
+const revAmountError = el("revAmountError");
+const revDateError = el("revDateError");
+const revPreviewButton = el("revPreview");
+const revDownloadButton = el("revDownload");
+const revIndPane = createPreviewPane("revIndViewer", "revIndCanvas",
+  "revIndViewerEmpty", "revIndFilename");
 
+let revEmployee = null;
+let revValues = null;
+let revDate = null;
+
+function paintRevisionDetails(employee, revision) {
+  const box = el("revDetails");
+  if (!employee) {
+    box.hidden = true;
+    el("revDetailsPlaceholder").hidden = false;
+    return;
+  }
+  box.hidden = false;
+  el("revDetailsPlaceholder").hidden = true;
+
+  el("rdCode").textContent = employee.code;
+  el("rdName").textContent = employee.name;
+  el("rdDesignation").textContent = employee.designation || "—";
+  el("rdDepartment").textContent = employee.department || "—";
+  el("rdSubDepartment").textContent = employee.subDepartment || "—";
+  el("rdDoj").textContent = formatDate(employee.doj) || "—";
+  el("rdLocation").textContent = employee.location || "—";
+
+  el("revAmountRow").hidden = !revision;
+  if (revision) {
+    const differential = revisionDifferential(revision);
+    el("rdPrevious").textContent = `INR ${formatINR(revision.previous)}`
+      + ` (${formatPercent(revision.previous, revision.eligible)})`;
+    el("rdRevised").textContent = `INR ${formatINR(revision.revised)}`
+      + ` (${formatPercent(revision.revised, revision.eligible)})`;
+    el("rdDifferential").textContent = `INR ${formatINR(differential)}`;
+    el("rdWords").textContent = amountInWords(differential);
+  }
+}
+
+function revisionReady() {
+  return Boolean(revEmployee) && revValues !== null && Boolean(revDate);
+}
+
+function refreshRevision() {
+  const raw = revEmpIdInput.value.trim();
+  revEmployee = raw ? findEmployee(raw) : null;
+  setError(revEmpError, revEmpIdInput,
+    !raw || revEmployee ? "" : `No employee found with ID "${raw}".`);
+
+  // Stay quiet until all three figures are present; complaining about a half
+  // typed row is noise.
+  const typed = [revEligibleInput, revPreviousInput, revRevisedInput]
+    .filter((input) => input.value.trim()).length;
+  if (typed < 3) {
+    revValues = null;
+    setError(revAmountError, revRevisedInput, "");
+  } else {
+    const result = parseRevision(revEligibleInput.value, revPreviousInput.value, revRevisedInput.value);
+    revValues = result.error ? null : result.revision;
+    setError(revAmountError, revRevisedInput, result.error || "");
+  }
+
+  revDate = revDateInput.value || null;
+  setError(revDateError, revDateInput, revDate ? "" : "Choose the date the letter should carry.");
+
+  paintRevisionDetails(revEmployee, revValues);
+
+  const ready = revisionReady();
+  revPreviewButton.disabled = !ready;
+  revDownloadButton.disabled = !ready;
+  revIndPane.clear();
+}
+
+function buildRevisionDoc() {
   try {
-    const zip = new JSZip();
-    for (let i = 0; i < jobs.length; i += 1) {
-      const { employee, pay, dateISO } = jobs[i];
-      downloadZipButton.textContent = `Building ${i + 1} of ${jobs.length}…`;
-      zip.file(fileNameFor(employee), buildLetter(employee, pay, dateISO).output("arraybuffer"));
-      // Hand the frame back so the label repaints instead of freezing the tab.
-      if (i % 5 === 4) await new Promise((resolve) => setTimeout(resolve, 0));
-    }
-
-    downloadZipButton.textContent = "Packaging zip…";
-    // The PDFs are already deflated internally, so re-compressing them in the
-    // zip costs time and saves almost nothing.
-    const blob = await zip.generateAsync({ type: "blob", compression: "STORE" });
-    saveBlob(blob, `Variable_Pay_Letters_${bulkDate.value || todayISO()}.zip`);
+    return buildRevisionLetter(revEmployee, revValues, revDate);
   } catch (error) {
     console.error(error);
-    bulkSummary.innerHTML = '<span class="bad">Could not build the letters. See the browser console for details.</span>';
-  } finally {
-    bulkBusy = false;
-    refreshBulk();
+    setError(revEmpError, revEmpIdInput, "Could not build the letter. See the browser console for details.");
+    return null;
   }
+}
+
+for (const input of [revEmpIdInput, revEligibleInput, revPreviousInput, revRevisedInput, revDateInput]) {
+  input.addEventListener("input", refreshRevision);
+}
+
+revPreviewButton.addEventListener("click", () => {
+  if (!revisionReady()) return;
+  const doc = buildRevisionDoc();
+  if (!doc) return revIndPane.clear();
+  revIndPane.show(doc, revisionFileNameFor(revEmployee), () => {
+    setError(revEmpError, revEmpIdInput, "Could not render the preview. See the browser console for details.");
+  });
+});
+
+revDownloadButton.addEventListener("click", () => {
+  if (!revisionReady()) return;
+  const doc = buildRevisionDoc();
+  if (doc) doc.save(revisionFileNameFor(revEmployee));
 });
 
 /* ------------------------------------------------------------------ *
  * Mode switching                                                      *
  * ------------------------------------------------------------------ */
 
-const tabIndividual = el("tabIndividual");
-const tabBulk = el("tabBulk");
+const MODES = {
+  individual: { tab: "tabIndividual", panel: "panelIndividual", repaint: () => individualPane.repaint() },
+  bulk: { tab: "tabBulk", panel: "panelBulk", repaint: () => awardBulk.repaint() },
+  revision: {
+    tab: "tabRevision",
+    panel: "panelRevision",
+    // This mode carries two panes: the single-letter preview and the grid's.
+    repaint: () => { revIndPane.repaint(); revisionBulk.repaint(); },
+  },
+};
 
-function setMode(mode) {
-  const individual = mode === "individual";
-  tabIndividual.setAttribute("aria-selected", String(individual));
-  tabBulk.setAttribute("aria-selected", String(!individual));
-  el("panelIndividual").hidden = !individual;
-  el("panelBulk").hidden = individual;
-  // The preview is laid out against the viewer's measured size, which is zero
-  // while the panel is hidden, so redraw it once the panel is back on screen.
-  (individual ? individualPane : bulkPane).repaint();
+function setMode(active) {
+  for (const [name, mode] of Object.entries(MODES)) {
+    const on = name === active;
+    el(mode.tab).setAttribute("aria-selected", String(on));
+    el(mode.panel).hidden = !on;
+  }
+  // A preview is laid out against its viewer's measured size, which is zero
+  // while the panel is hidden, so redraw once the panel is back on screen.
+  MODES[active].repaint();
 }
 
-tabIndividual.addEventListener("click", () => setMode("individual"));
-tabBulk.addEventListener("click", () => setMode("bulk"));
+for (const [name, mode] of Object.entries(MODES)) {
+  el(mode.tab).addEventListener("click", () => setMode(name));
+}
 
 /* ------------------------------------------------------------------ *
  * Start-up                                                            *
  * ------------------------------------------------------------------ */
 
 dateInput.value = todayISO();
-bulkDate.value = todayISO();
-addRows(STARTING_ROWS);
+revDateInput.value = todayISO();
 refreshIndividual();
-refreshBulk();
+refreshRevision();
+awardBulk.start();
+revisionBulk.start();
 
 el("footerNote").textContent =
   `${EMPLOYEES.length.toLocaleString("en-IN")} active employees loaded · `

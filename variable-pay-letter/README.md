@@ -8,7 +8,7 @@ signature and the company seal.
 
 Open **`dist/Variable_Pay_Letter_Generator.html`** in a browser. That is the whole
 application: one file, no install, no server, no network. Double-clicking it works.
-It has two modes.
+It has three modes.
 
 ## Individual
 
@@ -57,8 +57,35 @@ Reckon on roughly a quarter of a megabyte per letter and about a tenth of a seco
 to build each one: 200 letters is a 50 MB zip that takes around 20 seconds. Very
 large runs are better split into a few batches.
 
-Nothing is uploaded anywhere, in either mode. The database, the fonts and the PDF
+Nothing is uploaded anywhere, in any mode. The database, the fonts and the PDF
 engine are all embedded in the file, and every letter is built in the browser.
+
+## Revision Letters
+
+For an award re-decided after the first letter has already gone out — someone paid
+80% whose manager then agrees 100%. The original letter stands; this one records
+the revision and names the differential now due, and reads on its own without the
+first letter to hand.
+
+Enter the Employee ID, the **Total Eligible**, what was **Previously Awarded** and
+the **Revised Award**. The differential is derived. The callout carries all three:
+
+| PREVIOUSLY AWARDED | REVISED AWARD | DIFFERENTIAL PAYABLE |
+| --- | --- | --- |
+| INR 2,40,000 | INR 3,00,000 | **INR 60,000** |
+| 80% of eligible | 100% of eligible | |
+
+The panel has a single-letter form at the top and a four-column bulk grid beneath,
+each with its own preview. Files are named
+`Variable_Pay_Revision_Letter_<EmployeeID>.pdf` and the batch
+`Variable_Pay_Revision_Letters_<date>.zip`, deliberately distinct from the award
+letter names so a revision can never overwrite the letter it supersedes.
+
+**Upward revisions only.** A revised award equal to what was already paid means
+there is no differential, and one lower than it is a recovery — a different letter
+with different weight. Both are rejected with a readable message rather than
+quietly produced under a congratulatory heading. `Previously Awarded` accepts zero,
+for someone paid nothing who is now awarded something.
 
 ## What the letter contains
 
