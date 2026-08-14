@@ -158,29 +158,45 @@ Open **`dist/Increment_Letter_Generator.html`**. It records a salary revision: t
 new annual CTC and the date it takes effect, and — when a revised designation is
 given — the promotion alongside it.
 
-The letter names the new figure only. It does not restate the previous salary, the
+The letter names the new figures only. It does not restate the previous salary, the
 increase or a percentage, so nothing about what someone used to earn is written
-down. The callout carries two columns:
+down.
+
+**Variable pay is optional, and the bifurcation follows it.** Given a variable
+component, the callout splits three ways:
+
+| FIXED CTC | VARIABLE PAY | REVISED ANNUAL CTC |
+| --- | --- | --- |
+| INR 15,00,000 | INR 3,00,000 | INR 18,00,000 |
+
+Left blank — or entered as zero — the package is fixed only and the callout states
+one figure against the date, as a letter with nothing to split should:
 
 | REVISED ANNUAL CTC | EFFECTIVE FROM |
 | --- | --- |
 | INR 18,00,000 | 01 July 2026 |
 
-with the amount in words beneath, then *All other terms and conditions of your
-employment remain unchanged*, and a confidentiality paragraph firmer than the award
-letter's: disclosure is named as a breach of policy that will attract action.
+Three columns is the most this page width holds at one figure size; it is the
+labels, not the figures, that run out of room. So the bifurcated callout carries
+the effective date on the line beneath instead of in a fourth column. The paragraph
+above the callout states that date either way.
 
-**The revised CTC is always typed or pasted.** The master workbook holds no salary
-data — all 52 columns were checked — so there is nothing to look it up from.
+**The revised CTC is derived, not entered:** it is fixed plus variable, so the
+total and its parts can never disagree on the letter. Amounts are always typed or
+pasted — the master workbook holds no salary data, all 52 columns checked.
+
+Beneath the callout, the amount in words, then *All other terms and conditions of
+your employment remain unchanged*, and a confidentiality paragraph firmer than the
+award letter's: disclosure is named as a breach of policy that will attract action.
 
 Two modes, laid out like the variable pay app:
 
-- **Individual** — Employee ID, Revised CTC, Effective Date, Revised Designation
-  (leave blank for an increment with no promotion), and the letter date. Preview
-  and Download.
-- **Bulk** — one letter date for the batch, then a four-column paste of
-  Employee ID / Revised CTC / Effective Date / Revised Designation. Per-row Preview
-  and Download, and **Download all Increment Letters (Zip)**.
+- **Individual** — Employee ID, Fixed CTC, Variable Pay (optional), Effective Date,
+  Revised Designation (leave blank for an increment with no promotion), and the
+  letter date. Preview and Download.
+- **Bulk** — one letter date for the batch, then a five-column paste of
+  Employee ID / Fixed CTC / Variable Pay / Effective Date / Revised Designation.
+  Per-row Preview and Download, and **Download all Increment Letters (Zip)**.
 
 The effective date is per employee and separate from the date on the letter, so the
 grid takes free text: `15/07/2026`, `2026-07-15` and `15 Jul 2026` all resolve to
