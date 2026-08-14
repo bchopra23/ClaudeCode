@@ -838,9 +838,19 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  */
 function drawIncrementBox(doc, y, increment) {
   const split = increment.variable > 0;
-  const height = split ? 32 : 25;
   const radius = 2;
   const accent = [43, 127, 174];
+
+  // The footer line carries the effective date only in the split box, where the
+  // columns have no room for it. Measured before the box is drawn, because a
+  // long amount in words wraps and the box has to be tall enough to hold it.
+  doc.setFont("Poppins", "normal");
+  doc.setFontSize(8.5);
+  const footer = doc.splitTextToSize(
+    `Revised annual CTC in words: ${amountInWords(increment.ctc)}`
+    + (split ? ` · with effect from ${formatDate(increment.effectiveISO)}` : ""),
+    COLUMN - 16);
+  const height = 25 + (footer.length - 1) * 5;
 
   doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
   doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
@@ -877,12 +887,7 @@ function drawIncrementBox(doc, y, increment) {
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.text(`Revised annual CTC in words: ${amountInWords(increment.ctc)}`,
-    MARGIN.left + 8, y + 21, { maxWidth: COLUMN - 16 });
-  if (split) {
-    doc.text(`Fixed and variable together, with effect from ${formatDate(increment.effectiveISO)}.`,
-      MARGIN.left + 8, y + 27, { maxWidth: COLUMN - 16 });
-  }
+  footer.forEach((line, index) => doc.text(line, MARGIN.left + 8, y + 21 + index * 5));
 
   return y + height + 6;
 }

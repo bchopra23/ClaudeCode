@@ -178,8 +178,10 @@ one figure against the date, as a letter with nothing to split should:
 
 Three columns is the most this page width holds at one figure size; it is the
 labels, not the figures, that run out of room. So the bifurcated callout carries
-the effective date on the line beneath instead of in a fourth column. The paragraph
-above the callout states that date either way.
+the effective date at the end of the line beneath instead of in a fourth column.
+The paragraph above the callout states that date either way. That line grows the
+box if it wraps, which it only does at crore-scale amounts, whose spelling out in
+words is what runs long.
 
 **The revised CTC is derived, not entered:** it is fixed plus variable, so the
 total and its parts can never disagree on the letter. Amounts are always typed or
