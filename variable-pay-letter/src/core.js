@@ -300,6 +300,56 @@ function drawParagraph(doc, y, text, gapAfter = 4.6) {
   return y + gapAfter;
 }
 
+/**
+ * A body paragraph that changes weight partway through, for the one or two
+ * phrases a letter needs to emphasise. Takes runs of `{ text, style }`.
+ *
+ * doc.splitTextToSize() measures against a single font, so it cannot wrap this;
+ * the words are measured one at a time in their own weight instead.
+ */
+function drawRichParagraph(doc, y, runs, gapAfter = 4.6) {
+  const points = 10;
+  const step = leading(points);
+
+  const words = [];
+  for (const run of runs) {
+    for (const word of String(run.text).split(/\s+/)) {
+      if (word) words.push({ text: word, style: run.style || "normal" });
+    }
+  }
+
+  const widthOf = (word) => {
+    useFont(doc, word.style, points);
+    return doc.getTextWidth(word.text);
+  };
+  useFont(doc, "normal", points);
+  const space = doc.getTextWidth(" ");
+
+  let line = [];
+  let width = 0;
+  const flush = () => {
+    let x = MARGIN.left;
+    for (const word of line) {
+      useFont(doc, word.style, points);
+      doc.text(word.text, x, y);
+      x += doc.getTextWidth(word.text) + space;
+    }
+    y += step;
+    line = [];
+    width = 0;
+  };
+
+  for (const word of words) {
+    const wordWidth = widthOf(word);
+    if (line.length && width + space + wordWidth > COLUMN) flush();
+    width += (line.length ? space : 0) + wordWidth;
+    line.push(word);
+  }
+  if (line.length) flush();
+
+  return y + gapAfter;
+}
+
 /** The date, the seven employee fields, and the rule beneath them. */
 function drawDateAndDetails(doc, y, employee, dateISO) {
   useFont(doc, "normal", 9.5, COLORS.muted);
@@ -413,6 +463,9 @@ function drawSignOff(doc, y) {
   if (lowest > SAFE.bottom) {
     console.warn(`Letter content ends at ${lowest.toFixed(1)}mm, past the safe area at ${SAFE.bottom}mm.`);
   }
+  // Returned so a caller can lay the letter out again more tightly rather than
+  // ship one that runs into the letterhead's footer.
+  return lowest;
 }
 
 /* ------------------------------------------------------------------ *
@@ -530,7 +583,9 @@ const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "eligible",
  * @param config.ids        element ids for grid, date, summary, zip button
  * @param config.pane       ids for the preview pane
  * @param config.columns    [{ decimal }] one per editable cell
- * @param config.validate   (cells, dateISO) -> { job } | { error }
+ * @param config.validate   (cells, dateISO, employee) -> { job } | { error }
+ *                          The employee is already resolved, for the checks that
+ *                          need to compare an entry against what is on record.
  * @param config.describe   job -> status cell text
  * @param config.buildDoc   job -> jsPDF document
  * @param config.fileName   job -> pdf filename
@@ -669,7 +724,7 @@ function createBulkPanel(config) {
         continue;
       }
 
-      const result = config.validate(cells, dateISO);
+      const result = config.validate(cells, dateISO, employee);
       if (result.error) {
         fail(result.error);
         continue;

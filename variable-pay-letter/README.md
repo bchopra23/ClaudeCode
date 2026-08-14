@@ -193,7 +193,22 @@ three letter types cannot overwrite one another for the same employee.
 
 The promotion is recorded in a sentence rather than a third column: the longest
 designation on file is 59 characters, which would not fit a column and would push
-the heading to three lines of 13pt bold.
+the heading to three lines of 13pt bold. The sentence is written as a replacement —
+the designation on record is named, then superseded by the new one **in bold** —
+so it reads as the promotion it is rather than as a note appended to a pay
+revision:
+
+> We are also delighted to confirm your promotion. Your designation stands revised
+> from Vice President to **Senior Vice President** with effect from the same date.
+
+A revised designation identical to the one already on record is rejected: the
+sentence would name the same title twice, and there is no promotion to state.
+Leaving it blank is how an increment with no promotion is issued.
+
+Naming two long titles in one sentence can run the body past the safe area, so the
+letter lays itself out again with tighter paragraph gaps if the first pass would
+overflow. Only the letters that need it pay for the second pass, and none of them
+lands in the footer.
 
 # Repository and rebuilding
 

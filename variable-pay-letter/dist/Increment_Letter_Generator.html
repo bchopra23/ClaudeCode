@@ -1476,6 +1476,56 @@ function drawParagraph(doc, y, text, gapAfter = 4.6) {
   return y + gapAfter;
 }
 
+/**
+ * A body paragraph that changes weight partway through, for the one or two
+ * phrases a letter needs to emphasise. Takes runs of `{ text, style }`.
+ *
+ * doc.splitTextToSize() measures against a single font, so it cannot wrap this;
+ * the words are measured one at a time in their own weight instead.
+ */
+function drawRichParagraph(doc, y, runs, gapAfter = 4.6) {
+  const points = 10;
+  const step = leading(points);
+
+  const words = [];
+  for (const run of runs) {
+    for (const word of String(run.text).split(/\s+/)) {
+      if (word) words.push({ text: word, style: run.style || "normal" });
+    }
+  }
+
+  const widthOf = (word) => {
+    useFont(doc, word.style, points);
+    return doc.getTextWidth(word.text);
+  };
+  useFont(doc, "normal", points);
+  const space = doc.getTextWidth(" ");
+
+  let line = [];
+  let width = 0;
+  const flush = () => {
+    let x = MARGIN.left;
+    for (const word of line) {
+      useFont(doc, word.style, points);
+      doc.text(word.text, x, y);
+      x += doc.getTextWidth(word.text) + space;
+    }
+    y += step;
+    line = [];
+    width = 0;
+  };
+
+  for (const word of words) {
+    const wordWidth = widthOf(word);
+    if (line.length && width + space + wordWidth > COLUMN) flush();
+    width += (line.length ? space : 0) + wordWidth;
+    line.push(word);
+  }
+  if (line.length) flush();
+
+  return y + gapAfter;
+}
+
 /** The date, the seven employee fields, and the rule beneath them. */
 function drawDateAndDetails(doc, y, employee, dateISO) {
   useFont(doc, "normal", 9.5, COLORS.muted);
@@ -1589,6 +1639,9 @@ function drawSignOff(doc, y) {
   if (lowest > SAFE.bottom) {
     console.warn(`Letter content ends at ${lowest.toFixed(1)}mm, past the safe area at ${SAFE.bottom}mm.`);
   }
+  // Returned so a caller can lay the letter out again more tightly rather than
+  // ship one that runs into the letterhead's footer.
+  return lowest;
 }
 
 /* ------------------------------------------------------------------ *
@@ -1706,7 +1759,9 @@ const HEADER_WORDS = ["employee", "emp id", "emp code", "variable", "eligible",
  * @param config.ids        element ids for grid, date, summary, zip button
  * @param config.pane       ids for the preview pane
  * @param config.columns    [{ decimal }] one per editable cell
- * @param config.validate   (cells, dateISO) -> { job } | { error }
+ * @param config.validate   (cells, dateISO, employee) -> { job } | { error }
+ *                          The employee is already resolved, for the checks that
+ *                          need to compare an entry against what is on record.
  * @param config.describe   job -> status cell text
  * @param config.buildDoc   job -> jsPDF document
  * @param config.fileName   job -> pdf filename
@@ -1845,7 +1900,7 @@ function createBulkPanel(config) {
         continue;
       }
 
-      const result = config.validate(cells, dateISO);
+      const result = config.validate(cells, dateISO, employee);
       if (result.error) {
         fail(result.error);
         continue;
@@ -2002,6 +2057,21 @@ function createBulkPanel(config) {
  * @param increment { ctc, effectiveISO, designation } - designation optional
  */
 function buildIncrementLetter(employee, increment, dateISO) {
+  // A promotion between two long titles names both, which can run the body past
+  // the letterhead's safe area. Lay the letter out, and if it overflows, lay it
+  // out again with the paragraph gaps drawn in. Only the letters that need it
+  // pay for the second pass, and none of them lands in the footer.
+  let doc = null;
+  for (const gap of [4.6, 3.4, 2.4]) {
+    const attempt = composeIncrementLetter(employee, increment, dateISO, gap);
+    doc = attempt.doc;
+    if (attempt.bottom <= SAFE.bottom) break;
+  }
+  return doc;
+}
+
+/** One layout pass. Returns the document and where its ink ends, in mm. */
+function composeIncrementLetter(employee, increment, dateISO, gap) {
   const doc = startLetter();
   let y = drawDateAndDetails(doc, CONTENT_TOP, employee, dateISO);
   y = drawSalutation(doc, y, employee, "Revision in Compensation", "Congratulations!");
@@ -2009,18 +2079,31 @@ function buildIncrementLetter(employee, increment, dateISO) {
   y = drawParagraph(doc, y,
     "We are pleased to inform you that, in recognition of your performance and "
     + "contribution, your annual compensation has been revised with effect from "
-    + `${formatDate(increment.effectiveISO)}.`);
+    + `${formatDate(increment.effectiveISO)}.`, gap);
 
   y = drawIncrementBox(doc, y, increment);
 
+  // Written as a replacement — the designation on record is named, then struck
+  // through by the new one in bold — so the letter reads as the promotion it is
+  // rather than as a note appended to a pay revision.
   if (increment.designation) {
-    y = drawParagraph(doc, y,
-      `Your designation has also been revised to ${increment.designation} with `
-      + "effect from the same date.");
+    y = drawRichParagraph(doc, y, employee.designation
+      ? [
+        { text: "We are also delighted to confirm your promotion. Your designation stands revised from " },
+        { text: employee.designation },
+        { text: " to " },
+        { text: increment.designation, style: "bold" },
+        { text: " with effect from the same date." },
+      ]
+      : [
+        { text: "We are also delighted to confirm your promotion to the role of " },
+        { text: increment.designation, style: "bold" },
+        { text: " with effect from the same date." },
+      ], gap);
   }
 
   y = drawParagraph(doc, y,
-    "All other terms and conditions of your employment remain unchanged.");
+    "All other terms and conditions of your employment remain unchanged.", gap);
 
   // Deliberately firmer than the variable pay letters: compensation details
   // circulating between colleagues is what this paragraph exists to prevent.
@@ -2028,14 +2111,13 @@ function buildIncrementLetter(employee, increment, dateISO) {
     "The contents of this letter are strictly confidential and are intended solely "
     + "for you. Disclosing your compensation details to any other person is a breach "
     + "of company policy, and any such disclosure will attract action in accordance "
-    + "with the applicable policy.");
+    + "with the applicable policy.", gap);
 
   y = drawParagraph(doc, y,
     "We look forward to your continued contribution as we build the future of "
-    + "commercial electric mobility.");
+    + "commercial electric mobility.", gap);
 
-  drawSignOff(doc, y);
-  return doc;
+  return { doc, bottom: drawSignOff(doc, y) };
 }
 
 /** Revised CTC and the date it takes effect. Returns the cursor below. */
@@ -2094,8 +2176,11 @@ function fileNameFor(employee) {
 /**
  * Reads the three increment inputs. Returns { increment } or { error }.
  * The revised designation is optional: blank means this is not a promotion.
+ *
+ * @param employee optional, to check the promotion against the designation on
+ *                 record — the letter names both, so they cannot be the same one.
  */
-function parseIncrement(ctcText, effectiveText, designationText) {
+function parseIncrement(ctcText, effectiveText, designationText, employee) {
   const ctc = parseAmount(ctcText, "Revised annual CTC");
   if (ctc.error) return { error: ctc.error };
 
@@ -2104,13 +2189,16 @@ function parseIncrement(ctcText, effectiveText, designationText) {
   const effectiveISO = parseDateInput(raw);
   if (!effectiveISO) return { error: `"${raw}" is not a date the app understands.` };
 
-  return {
-    increment: {
-      ctc: ctc.value,
-      effectiveISO,
-      designation: String(designationText || "").trim(),
-    },
-  };
+  const designation = String(designationText || "").trim();
+  if (designation && employee
+      && designation.toLowerCase() === (employee.designation || "").toLowerCase()) {
+    return {
+      error: "Revised designation is the one already on record, so there is no "
+        + "promotion to state. Leave it blank for an increment on its own.",
+    };
+  }
+
+  return { increment: { ctc: ctc.value, effectiveISO, designation } };
 }
 
 /* ------------------------------------------------------------------ *
@@ -2177,7 +2265,8 @@ function refreshIndividual() {
     setError(ctcError, ctcInput, "");
     setError(effectiveError, effectiveInput, "");
   } else {
-    const result = parseIncrement(ctcInput.value, effectiveInput.value, designationInput.value);
+    const result = parseIncrement(ctcInput.value, effectiveInput.value,
+      designationInput.value, currentEmployee);
     currentIncrement = result.error ? null : result.increment;
     setError(ctcError, ctcInput, result.error || "");
     setError(effectiveError, effectiveInput, "");
@@ -2230,8 +2319,8 @@ const bulk = createBulkPanel({
     addRows: "addRows", clearRows: "clearRows" },
   pane: { viewer: "bulkViewer", canvas: "bulkCanvas", empty: "bulkViewerEmpty", filename: "bulkFilename" },
   columns: [{ decimal: false }, { decimal: true }, { decimal: false }, { decimal: false }],
-  validate(cells) {
-    const result = parseIncrement(cells[1], cells[2], cells[3]);
+  validate(cells, dateISO, employee) {
+    const result = parseIncrement(cells[1], cells[2], cells[3], employee);
     return result.error ? { error: result.error } : { job: { increment: result.increment } };
   },
   describe: (job) => `${job.employee.name} · INR ${formatINR(job.increment.ctc)} `
