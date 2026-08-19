@@ -118,7 +118,7 @@ Chandigarh). Zones are shown as recorded rather than normalised.
 | --- | --- |
 | `roster.xlsx` | Current roster — reporting lines, designation, state and city for all 393 Sales records |
 | `territory.xlsx` | 102 cities mapped to a zone and a Regional Manager |
-| `masterfile.xlsx` | 224 validated field-force records — channel vs field, outlet type |
+| `masterfile.xlsx` | 224 validated manpower records — COCO/DODO selling model, outlet, corrected reporting |
 | `dealers.xlsx` | 131 dealerships — ownership model, status, city tier, ASM and RM |
 
 The current roster dropped the Grade column, so grades are carried over from the
@@ -133,28 +133,15 @@ does not: whether someone sells **Field** or **Channel**, the **city** they
 work, and the **outlet** they work from. 218 of the 224 join to the roster by
 employee code.
 
-It also carries an explicit Regional Sales Manager column, which was used to
-check the tree rather than rebuild it. At ASM level **26 of 35 links match
-exactly**; of the 9 that differ, 5 are not real conflicts (the ASM cell holds
-an RM's own name for people who report to them directly, so the RSM column
-simply names that RM's own boss) and one is a spelling variant. That leaves
-three genuine gaps, listed below.
+Its Direct Reporting Manager column is the validated mapping and takes
+precedence over the roster for the 224 people it covers. The Regional Sales
+Manager column now names Rohit Madhavan for the South, corroborating the seat
+transfer from a second source.
 
-Not applied to the tree, and worth resolving at source:
+Selling model: field sales works company-owned **COCO** outlets, channel sales
+works dealer-owned **DODO** ones, so the manpower split lines up with the dealer
+estate rather than sitting beside it.
 
-- **Three ASMs have reports here but appear as individual contributors in the
-  roster** — Arpit Raj (4 people, under Vikas Singh Bisht), Swatantra Kumar
-  Mishra (3, under Subesh Mukherjee) and Pankaj Kumar Gautam (2, under Rachit
-  Sharma).
-- **22 rows are flagged `Incorrect Mapping`** by the Sales PM, with the
-  correction written in free text in the last column.
-- **Siddhartha Sharma is a Regional Manager.** The masterfile never lists him as
-  an RSM, but the current roster shows four Area Sales Managers reporting to him
-  (Naveen Gaur, Arpit Raj, Akhil Gupta, Hemant Kumar Dilliwar), which settles it
-  in favour of the RM list. The note below is kept for context.
-- **Siddhartha Sharma never appears as an RSM in the masterfile** — his people are
-  attributed to Ratanmani Mohit, and he is named as an ASM correction. That
-  contradicts the RM list, so the RM list was kept.
 
 ## Corrections applied
 

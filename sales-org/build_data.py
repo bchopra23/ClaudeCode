@@ -11,7 +11,7 @@ EMP = 'roster.xlsx'              # current roster: adds Sub-Location for everyon
 GRADES_FROM = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/33237778-Sales_Employees_1.xlsx'
 INT = '/root/.claude/uploads/e357e2b7-101a-5852-81e0-5d4ad216b53a/c5856b3b-Sales_Interns.xlsx'
 TERR = 'territory.xlsx'          # city -> zone -> RM coverage map
-MASTER = 'masterfile.xlsx'       # validated field-force file: channel, city, outlet
+MASTER = 'masterfile.xlsx'       # validated manpower file: COCO/DODO, outlet, mapping
 DEALERS = 'dealers.xlsx'         # dealer master: dealership -> ASM -> RM -> zone
 
 # There is no channel concept in Inside Sales, Sales Ops, Expansion or Brands,
@@ -118,6 +118,23 @@ for r in openpyxl.load_workbook(INT, data_only=True).active.iter_rows(min_row=2,
                     'title': 'Intern', 'band': 'Intern', 'grade': '', 'doj': '',
                     'mgr': clean(r[5]), 'loc': '', 'city': '', 'intern': True})
 
+# ── field-force masterfile ────────────────────────────────────────────────
+# Adds what the roster does not carry: whether someone sells through the
+# channel or in the field, the city they work, and the kind of outlet.
+# Selling model: field sales happens at company-owned COCO outlets, channel
+# sales through dealer-owned DODO ones.
+MASTER_ROWS = {}
+MASTER_MGR = {}
+for r in openpyxl.load_workbook(MASTER, data_only=True).active.iter_rows(min_row=2, values_only=True):
+    code = clean(r[1])
+    if not code:
+        continue
+    cat = clean(r[9]).replace('Shawroom', 'Showroom')        # sheet typo
+    MASTER_ROWS[code] = {'chan': 'Channel Sales' if 'Channel' in clean(r[4]) else 'Field Sales',
+                         'city': fix_city(r[11]), 'cat': cat}
+    if clean(r[6]):
+        MASTER_MGR[code] = clean(r[6])
+
 people = emps + interns
 by_name = {}
 for p in emps:
@@ -139,7 +156,9 @@ def resolve(m):
     return c[0]['id'] if len(c) == 1 else None
 
 for p in people:
-    p['mgrId'] = resolve(p['mgr']) if p['mgr'] else None
+    src = MASTER_MGR.get(p['id']) or p['mgr']      # validated mapping wins
+    p['mgr'] = src
+    p['mgrId'] = resolve(src) if src else None
 
 south = by_name.get(norm(SOUTH_RM))
 for p in people:
@@ -186,18 +205,6 @@ for i in RM_IDS:
     byid[i]['rm'] = True
     byid[i]['roster_title'] = byid[i]['title']
     byid[i]['title'] = 'Regional Manager'
-
-# ── field-force masterfile ────────────────────────────────────────────────
-# Adds what the roster does not carry: whether someone sells through the
-# channel or in the field, the city they work, and the kind of outlet.
-MASTER_ROWS = {}
-for r in openpyxl.load_workbook(MASTER, data_only=True).active.iter_rows(min_row=2, values_only=True):
-    code = clean(r[0])
-    if not code:
-        continue
-    cat = clean(r[13]).replace('Shawroom', 'Showroom')       # sheet typo
-    MASTER_ROWS[code] = {'chan': clean(r[6]), 'city': clean(r[15]),
-                         'cat': cat, 'flagged': clean(r[16]) == 'Incorrect Mapping'}
 
 # ── dealer master ─────────────────────────────────────────────────────────
 # A dealership belongs to an ASM, who belongs to an RM. Offboarded dealers are
@@ -401,10 +408,10 @@ meta = {
     'locations': collections.Counter(p['loc'] for p in people if p.get('loc')).most_common(),
     'topCities': collections.Counter(p['city'] for p in people if p.get('city')).most_common(12),
     'cities': sum(len(v) for v in TERRITORY.values()),
-    'channel': [('Field sales', sum(1 for v in MASTER_ROWS.values()
-                                    if v['chan'] == 'Field Sales')),
-                ('Channel sales', sum(1 for v in MASTER_ROWS.values()
-                                      if v['chan'] == 'Channel Sales'))],
+    'channel': [('Field sales — company-owned (COCO)',
+                 sum(1 for v in MASTER_ROWS.values() if v['chan'] == 'Field Sales')),
+                ('Channel sales — dealer-owned (DODO)',
+                 sum(1 for v in MASTER_ROWS.values() if v['chan'] == 'Channel Sales'))],
     'outlets': collections.Counter(v['cat'] for v in MASTER_ROWS.values()
                                    if v['cat']).most_common(),
     'dealerModel': DEALER_META['model'].most_common(),
