@@ -195,11 +195,6 @@ for k in list(kids):
         kids[k] = [c for c in kids[k] if c not in dropped]
 
 # ── the South seat, now filled ────────────────────────────────────────────
-if south:
-    byid[south]['note'] = ('Joined to lead the South region. The seat was open '
-                           'after Amitabh Singh’s resignation, covered in the '
-                           'interim by Ratanmani Mohit.')
-
 RM_IDS = {by_name[norm(n)] for n in REGIONAL_MANAGERS if norm(n) in by_name}
 for i in RM_IDS:
     byid[i]['rm'] = True
@@ -353,8 +348,8 @@ def node(i):
         d['dealers'] = DEALERS_BY[i]['live']
         if DEALERS_BY[i]['off']:
             d['dealersOff'] = DEALERS_BY[i]['off']
-        d['dealerList'] = sorted(DEALER_LIST[i],
-                                 key=lambda x: (not x['live'], x['city'], x['name']))
+        d['dealerList'] = sorted((x for x in DEALER_LIST[i] if x['live']),
+                                 key=lambda x: (x['city'], x['name']))
     if i in TERRITORY:
         t = sorted(TERRITORY[i], key=lambda x: x['city'])
         z = collections.Counter(x['zone'] for x in t)

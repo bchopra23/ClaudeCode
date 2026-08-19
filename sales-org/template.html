@@ -210,8 +210,6 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
   color:var(--ink-3); white-space:nowrap}
 .dlist .dm{font-family:"JetBrainsMono",monospace; font-size:.6rem; letter-spacing:.06em;
   padding:1px 5px; border-radius:4px; background:var(--gold-soft); color:var(--gold)}
-.dlist li.off{opacity:.5}
-.dlist li.off .dn{text-decoration:line-through}
 
 .hit{border-color:var(--gold-fill) !important;
   box-shadow:0 0 0 3px var(--gold-soft), var(--sh-2) !important}
@@ -378,12 +376,10 @@ button{font:inherit; color:inherit; cursor:pointer; text-align:left}
           n.cities.map(esc).join(' <b>·</b> ')+'</p></div>');
       }
       if(n.dealerList.length){
-        var live=n.dealerList.filter(function(d){return d.live;}).length,
-            off=n.dealerList.length-live;
-        h.push('<div class="deal"><p class="t-lab">Dealerships — '+live+' live'+
-          (off?', '+off+' offboarded':'')+'</p><ul class="dlist">'+
+        h.push('<div class="deal"><p class="t-lab">Dealerships — '+
+          n.dealerList.length+'</p><ul class="dlist">'+
           n.dealerList.map(function(d){
-            return '<li'+(d.live?'':' class="off"')+'><span class="dn">'+esc(d.name)+'</span>'+
+            return '<li><span class="dn">'+esc(d.name)+'</span>'+
               (d.model==='COCO'?'<span class="dm">COCO</span>':'')+
               (d.city?'<span class="dc">'+esc(d.city)+'</span>':'')+'</li>';
           }).join('')+'</ul></div>');

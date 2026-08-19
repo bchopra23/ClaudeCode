@@ -291,24 +291,6 @@
         "city": "solapur",
         "model": "COCO",
         "live": true
-       },
-       {
-        "name": "JBD Enterprises",
-        "city": "Ahmedabad",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Madhav Vehicles",
-        "city": "Bharuch",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Vaibhav Motors",
-        "city": "Satara",
-        "model": "DODO",
-        "live": false
        }
       ],
       "cities": [
@@ -1199,18 +1181,6 @@
           "city": "Surat",
           "model": "COCO",
           "live": true
-         },
-         {
-          "name": "JBD Enterprises",
-          "city": "Ahmedabad",
-          "model": "DODO",
-          "live": false
-         },
-         {
-          "name": "Madhav Vehicles",
-          "city": "Bharuch",
-          "model": "DODO",
-          "live": false
          }
         ],
         "tsm": 3,
@@ -2831,24 +2801,6 @@
           "city": "Ujjain",
           "model": "DODO",
           "live": true
-         },
-         {
-          "name": "Art of Awadh",
-          "city": "Gwalior",
-          "model": "DODO",
-          "live": false
-         },
-         {
-          "name": "Shilaka Enterprises",
-          "city": "Indore",
-          "model": "DODO",
-          "live": false
-         },
-         {
-          "name": "Baba E Riders",
-          "city": "Shajapur",
-          "model": "DODO",
-          "live": false
          }
         ],
         "locs": [
@@ -2891,7 +2843,6 @@
       "emp": 40,
       "interns": 0,
       "direct": 7,
-      "note": "Joined to lead the South region. The seat was open after Amitabh Singh\u2019s resignation, covered in the interim by Ratanmani Mohit.",
       "field": 29,
       "chan": 1,
       "dealers": 13,
@@ -2974,30 +2925,6 @@
         "city": "Visakhapatnam",
         "model": "DODO",
         "live": true
-       },
-       {
-        "name": "United Power",
-        "city": "Guntur",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Indhu India Motors",
-        "city": "Kalaburagi",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "KNR Automotives",
-        "city": "Karimnagar",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Loop Mobility",
-        "city": "Khammam",
-        "model": "DODO",
-        "live": false
        }
       ],
       "cities": [
@@ -3617,18 +3544,6 @@
         "city": "Vellore",
         "model": "DODO",
         "live": true
-       },
-       {
-        "name": "Shree Vihaan Automobiles",
-        "city": "Darbhanga",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "RNS Green",
-        "city": "Howrah",
-        "model": "DODO",
-        "live": false
        }
       ],
       "cities": [
@@ -3750,12 +3665,6 @@
           "city": "Purnia",
           "model": "DODO",
           "live": true
-         },
-         {
-          "name": "Shree Vihaan Automobiles",
-          "city": "Darbhanga",
-          "model": "DODO",
-          "live": false
          }
         ],
         "tsm": 3,
@@ -4035,12 +3944,6 @@
           "city": "Siliguri",
           "model": "DODO",
           "live": true
-         },
-         {
-          "name": "RNS Green",
-          "city": "Howrah",
-          "model": "DODO",
-          "live": false
          }
         ],
         "tsm": 3,
@@ -4370,24 +4273,6 @@
         "city": "Varanasi",
         "model": "DODO",
         "live": true
-       },
-       {
-        "name": "Shubham Motors",
-        "city": "Balasore",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Utkal Auto",
-        "city": "Cuttack",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Hojai Autocorp",
-        "city": "Hojai",
-        "model": "DODO",
-        "live": false
        }
       ],
       "cities": [
@@ -5008,30 +4893,6 @@
         "city": "Ujjain",
         "model": "DODO",
         "live": true
-       },
-       {
-        "name": "Art of Awadh",
-        "city": "Gwalior",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Shilaka Enterprises",
-        "city": "Indore",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Saanjhi Motors",
-        "city": "Kota",
-        "model": "DODO",
-        "live": false
-       },
-       {
-        "name": "Baba E Riders",
-        "city": "Shajapur",
-        "model": "DODO",
-        "live": false
        }
       ],
       "cities": [
