@@ -44,6 +44,12 @@ LEGACY_SOUTH_RM = 'amitabhsingh'
 # and this Senior ASM, parked under the AVP while the seat was open, moves back
 MOVED_TO_SOUTH_RM = ['Ravi Prakash']
 
+# Moves confirmed since the files were extracted, keyed by employee code so a
+# shared first name cannot catch the wrong person.
+TRANSFERS = {
+    'EUR1906': 'Ankit Kumar Jain',   # Krishna, TSM Delhi, from Gaurav Wadhwa
+}
+
 # The roster records these people by grade (General Manager and such); the org
 # role they actually hold is Regional Manager. Confirmed against the RM list.
 REGIONAL_MANAGERS = ['Vinay Binu', 'Rachit Sharma', 'Vikas Singh Bisht',
@@ -164,6 +170,9 @@ south = by_name.get(norm(SOUTH_RM))
 for p in people:
     if p['name'] in MOVED_TO_SOUTH_RM and south:
         p['mgrId'] = south
+    if p['id'] in TRANSFERS:
+        p['mgr'] = TRANSFERS[p['id']]
+        p['mgrId'] = resolve(p['mgr'])
 
 byid = {p['id']: p for p in people}
 kids = collections.defaultdict(list)

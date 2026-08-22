@@ -58,13 +58,13 @@
     "grade": "C",
     "doj": "",
     "loc": "",
-    "emp": 302,
+    "emp": 301,
     "interns": 41,
     "direct": 19,
     "portfolio": "Retail Sales & Brands",
-    "field": 166,
+    "field": 165,
     "chan": 32,
-    "tsm": 143,
+    "tsm": 142,
     "tse": 69,
     "team": {
      "emp": 10,
@@ -2146,10 +2146,10 @@
       "grade": "C",
       "doj": "",
       "loc": "Delhi",
-      "emp": 33,
+      "emp": 32,
       "interns": 11,
       "direct": 12,
-      "field": 19,
+      "field": 18,
       "chan": 2,
       "dealers": 11,
       "dealerList": [
@@ -2242,12 +2242,12 @@
       ],
       "rm": true,
       "rosterTitle": "General Manager",
-      "tsm": 16,
+      "tsm": 15,
       "tse": 8,
       "locs": [
        {
         "name": "Delhi",
-        "n": 30
+        "n": 29
        },
        {
         "name": "Uttar Pradesh",
@@ -2341,10 +2341,10 @@
         "grade": "B",
         "doj": "",
         "loc": "Delhi",
-        "emp": 21,
+        "emp": 20,
         "interns": 0,
-        "direct": 20,
-        "field": 17,
+        "direct": 19,
+        "field": 16,
         "chan": 0,
         "dealers": 3,
         "dealerList": [
@@ -2367,12 +2367,12 @@
           "live": true
          }
         ],
-        "tsm": 13,
+        "tsm": 12,
         "tse": 7,
         "locs": [
          {
           "name": "Delhi",
-          "n": 18
+          "n": 17
          },
          {
           "name": "Uttar Pradesh",
@@ -2384,12 +2384,12 @@
          }
         ],
         "team": {
-         "emp": 20,
+         "emp": 19,
          "interns": 0,
          "titles": [
           [
            "TSM",
-           10
+           9
           ],
           [
            "TSE",
@@ -2440,13 +2440,6 @@
            "name": "Chandan Mishra",
            "title": "Territory Sales Executive",
            "loc": "Ghaziabad",
-           "intern": false,
-           "grade": "A"
-          },
-          {
-           "name": "Krishna",
-           "title": "Territory Sales Manager",
-           "loc": "Delhi",
            "intern": false,
            "grade": "A"
           },
@@ -5323,20 +5316,20 @@
     "grade": "C",
     "doj": "",
     "loc": "Delhi",
-    "emp": 32,
+    "emp": 33,
     "interns": 8,
     "direct": 9,
     "portfolio": "Regional Management \u00b7 Sales Central \u00b7 Special Projects",
-    "field": 26,
+    "field": 27,
     "chan": 0,
     "rm": true,
     "rosterTitle": "General Manager",
-    "tsm": 14,
+    "tsm": 15,
     "tse": 12,
     "locs": [
      {
       "name": "Delhi",
-      "n": 32
+      "n": 33
      }
     ],
     "team": {
@@ -5429,21 +5422,21 @@
       "grade": "B",
       "doj": "",
       "loc": "Delhi",
-      "emp": 27,
+      "emp": 28,
       "interns": 4,
-      "direct": 30,
-      "field": 26,
+      "direct": 31,
+      "field": 27,
       "chan": 0,
-      "tsm": 14,
+      "tsm": 15,
       "tse": 12,
       "locs": [
        {
         "name": "Delhi",
-        "n": 27
+        "n": 28
        }
       ],
       "team": {
-       "emp": 26,
+       "emp": 27,
        "interns": 4,
        "titles": [
         [
@@ -5452,7 +5445,7 @@
         ],
         [
          "TSM",
-         10
+         11
         ],
         [
          "Sr TSM",
@@ -5543,6 +5536,13 @@
         },
         {
          "name": "Krishan Kant Sharma",
+         "title": "Territory Sales Manager",
+         "loc": "Delhi",
+         "intern": false,
+         "grade": "A"
+        },
+        {
+         "name": "Krishna",
          "title": "Territory Sales Manager",
          "loc": "Delhi",
          "intern": false,
