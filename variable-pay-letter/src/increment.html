@@ -925,20 +925,24 @@ function drawIncrementBox(doc, y, increment, gap) {
   doc.rect(edge[0], y, COLUMN, headH, "F");
   doc.rect(edge[0], y + headH + rowH * 2, COLUMN, rowH, "F");
 
-  // Light grid first, so the heavy lines drawn over it win where they meet.
+  // Light grid first, so the heavy lines drawn over it win where they meet. Only
+  // the divide between the two data rows is drawn light: they are one block of
+  // comparable figures, and a heavy line there would read as a separation.
   doc.setDrawColor(GRID[0], GRID[1], GRID[2]);
   doc.setLineWidth(0.2);
   doc.line(edge[0], y + headH + rowH, MARGIN.right, y + headH + rowH);
-  // Verticals stop at the totals row, whose first three cells are merged.
-  for (const at of edge.slice(1, 4)) {
-    doc.line(at, y, at, y + headH + rowH * 2);
-  }
 
   doc.setDrawColor(FRAME[0], FRAME[1], FRAME[2]);
   doc.setLineWidth(0.5);
   doc.rect(edge[0], y, COLUMN, tableH, "S");
   doc.line(edge[0], y + headH, MARGIN.right, y + headH);
   doc.line(edge[0], y + headH + rowH * 2, MARGIN.right, y + headH + rowH * 2);
+  // Every column divider carries the same weight, top to bottom, so the one
+  // beside the percentage is not the only heavy vertical in the table. They stop
+  // at the totals row, whose first three cells are merged.
+  for (const at of edge.slice(1, 4)) {
+    doc.line(at, y, at, y + headH + rowH * 2);
+  }
   doc.line(edge[3], y + headH + rowH * 2, edge[3], y + tableH);
 
   // --- text ------------------------------------------------------------
