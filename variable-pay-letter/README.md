@@ -185,7 +185,11 @@ Both rows carry the same figures in the same columns, so telling them apart cann
 rest on position: **the revised row sits on a white band and the current row is
 muted behind it**, which separates them without the rules and extra leading that
 would cost page height this letter does not have. The revised total takes the
-accent colour, as the award letter's payout does.
+accent colour, as the award letter's payout does. A hairline under the column
+headings sits in whitespace that was already there, costing no height and stopping
+the four rows reading as a list. The summary label sits against its figure rather
+than out at the row-name column: that row has one value, and stretching a caption
+away from it across the whole table leaves a gap that reads as something missing.
 
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals
