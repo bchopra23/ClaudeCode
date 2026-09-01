@@ -187,12 +187,10 @@ no rules — the box keeps the award letter's fill and accent bar and nothing el
 which is what lets it sit on the page with everything around it rather than reading
 as a panel dropped into the letter.
 
-The increment is set two points over the table figures, in the accent colour. It is
-the one number in the box that is not a CTC and it is what the letter is written
-about, so it takes the weight the award letter gives its payout percentage. Its
-label sits against it rather than out at the row-name column: that row has one
-value, and stretching a caption away from it across the whole table leaves a gap
-that reads as something missing.
+The increment is a third row of the same table, not a caption under it: its name
+sits in the row-name column with CURRENT and REVISED and takes their treatment, and
+its figure sits in the total column it is derived from, set like the other figures.
+The accent colour alone marks it out.
 
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals

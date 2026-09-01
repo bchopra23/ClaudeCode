@@ -785,9 +785,10 @@ function buildIncrementLetter(employee, increment, dateISO) {
   // out again with the paragraph gaps drawn in. Only the letters that need it
   // pay for the second pass, and none of them lands in the footer.
   let doc = null;
-  // The floor is where the prose still breathes. Below about 2.2mm the
-  // paragraphs run together and the letter looks worse than it reads.
-  for (const gap of [4.6, 4.0, 3.4, 2.8, 2.2]) {
+  // 2.2mm is where the prose still breathes; the step below it exists only for
+  // the handful of letters that are long on every axis at once — a bifurcated
+  // increment that also promotes between two of the longest titles on file.
+  for (const gap of [4.6, 4.0, 3.4, 2.8, 2.2, 1.8]) {
     const attempt = composeIncrementLetter(employee, increment, dateISO, gap);
     doc = attempt.doc;
     if (attempt.bottom <= SAFE.bottom) break;
@@ -852,7 +853,7 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  *              FIXED CTC | VARIABLE PAY | TOTAL CTC
  *   CURRENT      (muted, it is the figure being left behind)
  *   REVISED      (set in ink, its total in accent)
- *   TOTAL INCREMENT                       28.57%
+ *   TOTAL INCREMENT                        28.57%   (accent)
  *
  * The two rows carry the same figures in the same columns, so telling them apart
  * rests on weight: the current row is muted, the revised row is set in ink. No
@@ -885,14 +886,14 @@ function drawIncrementBox(doc, y, increment, gap) {
   // The table compacts with the prose. A letter that has to tighten its
   // paragraphs should not keep a roomy table above them, and the band and the
   // muting carry the distinction between the rows at either pitch.
-  const squeeze = Math.min(1.6, Math.max(0, (4.6 - gap) * 0.5));
+  const squeeze = Math.min(2.2, Math.max(0, (4.6 - gap) * 0.7));
   const rowY = {
     head: 6.8,
     current: 15.4 - squeeze * 0.5,
     revised: 24.2 - squeeze,
     increase: 33 - squeeze * 1.5,
   };
-  const footerY = 39.2 - squeeze * 2;
+  const footerY = 41.4 - squeeze * 2.4;
   const height = footerY + 3.2 + (footer.length - 1) * 5;
 
   doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
@@ -963,25 +964,13 @@ function drawIncrementBox(doc, y, increment, gap) {
   // The label sits against its figure rather than out at the row name column:
   // this row has one value, and stretching a caption away from it across the
   // whole table leaves a gap that reads as something missing.
-  const summary = "TOTAL INCREMENT";
-  doc.setFont("Poppins", "semibold");
-  doc.setFontSize(7.5);
-  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  doc.setCharSpace(0.4);
-  // Placed by its computed start rather than with align:"right", which measures
-  // the string without the letterspacing and so overruns the figure by exactly
-  // the space it added. Clamped so it never hangs left of the row names above:
-  // with a single narrow column the right edge alone would put it outside the
-  // text column.
-  const summaryWidth = doc.getTextWidth(summary) + 0.4 * (summary.length - 1);
-  doc.text(summary, Math.max(x.label, x.total - 6.5 - summaryWidth),
-    y + rowY.increase - 0.8);
-  doc.setCharSpace(0);
-  // Two points over the table figures. It is the one number here that is not a
-  // CTC, and it is what the letter is written about, so it takes the weight the
-  // award letter gives its payout percentage rather than sharing the column's.
+  // A third row of the same table, not a caption under it: the name sits in the
+  // row-name column with CURRENT and REVISED and takes their treatment, and the
+  // figure sits in the total column it is derived from, at the size the other
+  // figures are set in. The accent alone marks it out.
+  rowName("TOTAL INCREMENT", y + rowY.increase, COLORS.ink);
   figure(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
-    x.total, y + rowY.increase, accent, TABLE_FIGURE + 2);
+    x.total, y + rowY.increase, accent);
 
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
