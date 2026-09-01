@@ -183,11 +183,16 @@ variable component being introduced or withdrawn.
 
 **It is a ruled table, not a tinted callout.** This is reference matter someone
 will be asked to check against a payslip, so it is set as a table: a tinted header
-row, a hairline grid, and figures **right-aligned in their columns**, which is what
-makes them comparable down a column and is how money is set in any ledger. The
-current row is muted and the revised row is set in ink, so the two are told apart
-by weight as well as position. The last row merges its first three cells the way a
-totals row does, which is also what gives `TOTAL INCREMENT` the width it needs.
+row, a ruled grid, and figures **right-aligned in their columns**, which is what
+makes them comparable down a column and is how money is set in any ledger. The last
+row merges its first three cells the way a totals row does, which is also what gives
+`TOTAL INCREMENT` the width it needs.
+
+The rules carry two weights, as a ruled table does: a heavy frame, with the header
+and totals rules at that same weight, and a lighter grid inside dividing the cells.
+One weight throughout reads as a wireframe rather than a table. The current row is
+set a shade back from the revised row so the two are told apart by tone as well as
+position — a shade, not a fade: a row of the table is not secondary matter.
 
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals

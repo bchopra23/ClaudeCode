@@ -894,8 +894,9 @@ function drawIncrementBox(doc, y, increment, gap) {
   const edge = [MARGIN.left, MARGIN.left + 35, MARGIN.left + 77,
     MARGIN.left + 119, MARGIN.right];
 
+  const PRIOR = [78, 100, 118];
   const rows = [
-    ["CURRENT", COLORS.muted, COLORS.muted, {
+    ["CURRENT", PRIOR, PRIOR, {
       fixed: `INR ${formatINR(increment.currentFixed)}`,
       variable: increment.currentVariable > 0 ? `INR ${formatINR(increment.currentVariable)}` : NONE,
       total: `INR ${formatINR(increment.currentTotal)}`,
@@ -910,20 +911,33 @@ function drawIncrementBox(doc, y, increment, gap) {
   const headings = ["FIXED CTC", "VARIABLE PAY", "TOTAL CTC"];
 
   // --- rules and fills -------------------------------------------------
-  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  // Two weights, as a ruled table has: a heavy frame with the header and totals
+  // rules at the same weight, and a lighter grid inside dividing the cells. One
+  // weight throughout reads as a wireframe rather than a table.
+  const FRAME = [104, 136, 160];
+  const GRID = [188, 207, 221];
+  const HEAD_FILL = [221, 236, 246];
+  const TOTAL_FILL = [237, 246, 251];
+
+  doc.setFillColor(HEAD_FILL[0], HEAD_FILL[1], HEAD_FILL[2]);
   doc.rect(edge[0], y, COLUMN, headH, "F");
+  doc.setFillColor(TOTAL_FILL[0], TOTAL_FILL[1], TOTAL_FILL[2]);
   doc.rect(edge[0], y + headH + rowH * 2, COLUMN, rowH, "F");
 
-  doc.setDrawColor(COLORS.rule[0], COLORS.rule[1], COLORS.rule[2]);
-  doc.setLineWidth(0.25);
-  doc.rect(edge[0], y, COLUMN, tableH, "S");
-  for (const offset of [headH, headH + rowH, headH + rowH * 2]) {
-    doc.line(edge[0], y + offset, MARGIN.right, y + offset);
-  }
+  // Light grid first, so the heavy lines drawn over it win where they meet.
+  doc.setDrawColor(GRID[0], GRID[1], GRID[2]);
+  doc.setLineWidth(0.2);
+  doc.line(edge[0], y + headH + rowH, MARGIN.right, y + headH + rowH);
   // Verticals stop at the totals row, whose first three cells are merged.
   for (const at of edge.slice(1, 4)) {
     doc.line(at, y, at, y + headH + rowH * 2);
   }
+
+  doc.setDrawColor(FRAME[0], FRAME[1], FRAME[2]);
+  doc.setLineWidth(0.5);
+  doc.rect(edge[0], y, COLUMN, tableH, "S");
+  doc.line(edge[0], y + headH, MARGIN.right, y + headH);
+  doc.line(edge[0], y + headH + rowH * 2, MARGIN.right, y + headH + rowH * 2);
   doc.line(edge[3], y + headH + rowH * 2, edge[3], y + tableH);
 
   // --- text ------------------------------------------------------------
@@ -942,7 +956,7 @@ function drawIncrementBox(doc, y, increment, gap) {
 
   doc.setFont("Poppins", "semibold");
   doc.setFontSize(7.5);
-  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
   doc.setCharSpace(0.4);
   headings.forEach((text, index) =>
     rightAlign(text, edge[index + 2] - PAD, y + headH / 2 + 1, 0.4));
