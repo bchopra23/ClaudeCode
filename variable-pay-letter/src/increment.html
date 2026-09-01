@@ -850,140 +850,132 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  * The pay table: what the package is now, what it becomes, and the increase
  * between them.
  *
- *              FIXED CTC | VARIABLE PAY | TOTAL CTC
- *   CURRENT      (muted, it is the figure being left behind)
- *   REVISED      (set in ink, its total in accent)
- *   TOTAL INCREMENT                        28.57%   (accent)
+ *                 |  FIXED CTC  |  VARIABLE PAY  |  TOTAL CTC     header, tinted
+ *   CURRENT       |             |                |                muted
+ *   REVISED       |             |                |                ink, total accent
+ *   TOTAL INCREMENT                              |  28.57%        totals row, merged
  *
- * The two rows carry the same figures in the same columns, so telling them apart
- * rests on weight: the current row is muted, the revised row is set in ink. No
- * band, no rules — the box keeps the award letter's fill and accent bar and
- * nothing else, which is what lets it sit on the page with everything around it.
+ * A ruled grid rather than a tinted callout: this is reference matter someone
+ * will be asked to check against a payslip, and it should read as a table. The
+ * figures are right-aligned in their columns, which is what makes them
+ * comparable down a column and is how money is set in any ledger.
  *
- * Four columns is what this width holds at one figure size, which is why the
- * increase is a row beneath the totals it comes from rather than a fifth column.
+ * Variable pay is optional on either side; the column stays and the side without
+ * one reads as a dash, since an INR 0 states a component that does not exist.
  *
- * Returns the cursor below the box.
+ * The last row merges the first three cells, as a totals row does, which is also
+ * what gives "TOTAL INCREMENT" the width it needs.
+ *
+ * Returns the cursor below the table.
  */
 function drawIncrementBox(doc, y, increment, gap) {
   const accent = [43, 127, 174];
-  // Variable pay is optional on either side. The column stays either way and the
-  // side without one reads as a dash: dropping the column would leave two letters
-  // with different tables, and an INR 0 states a component that does not exist.
   const NONE = "—";
+  const PAD = 4;
 
-  // Measured before the box is drawn: a long amount in words wraps, and the box
-  // has to be tall enough to hold what it wrapped to.
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
-  // Kept short enough to hold one line at every amount the roster can produce,
-  // including crore-scale packages: a second line here is height the letter
-  // spends before its paragraphs get any.
-  const footer = doc.splitTextToSize(
+  const caption = doc.splitTextToSize(
     `Revised CTC in words: ${amountInWords(increment.ctc)}`
     + ` · effective ${formatDate(increment.effectiveISO)}`,
-    COLUMN - 16);
+    COLUMN);
 
-  // The table compacts with the prose. A letter that has to tighten its
-  // paragraphs should not keep a roomy table above them, and the band and the
-  // muting carry the distinction between the rows at either pitch.
+  // Rows shrink with the paragraph gaps, so a letter running long does not keep
+  // a roomy table above tightening prose.
   const squeeze = Math.min(2.2, Math.max(0, (4.6 - gap) * 0.7));
-  const rowY = {
-    head: 6.8,
-    current: 15.4 - squeeze * 0.5,
-    revised: 24.2 - squeeze,
-    increase: 33 - squeeze * 1.5,
-  };
-  const footerY = 41.4 - squeeze * 2.4;
-  const height = footerY + 3.2 + (footer.length - 1) * 5;
+  const headH = 8.4 - squeeze * 0.4;
+  const rowH = 9.6 - squeeze * 0.6;
+  const tableH = headH + rowH * 3;
+  const captionTop = tableH + 5.2 - squeeze * 0.8;
 
-  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
-  doc.roundedRect(MARGIN.left, y, COLUMN, height, 2, 2, "F");
-  doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
-  doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
-
-  // Offsets leave the widest figure a crore-scale package produces clear of the
-  // right margin: INR 1,35,00,000 at 12pt runs about 33mm.
-  const x = {
-    label: MARGIN.left + 8,
-    fixed: MARGIN.left + 34,
-    variable: MARGIN.left + 78,
-    total: MARGIN.left + 120,
-  };
-
-  const money = (value) => `INR ${formatINR(value)}`;
-  const columns = [["FIXED CTC", x.fixed, "fixed"],
-    ["VARIABLE PAY", x.variable, "variable"], ["TOTAL CTC", x.total, "total"]];
-
-  // Column headings are letterspaced, row names are not. Without that they read
-  // as the same kind of label and the table loses its shape.
-  const heading = (text, atX, atY) => {
-    doc.setFont("Poppins", "semibold");
-    doc.setFontSize(7.5);
-    doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-    doc.setCharSpace(0.4);
-    doc.text(text, atX, atY);
-    doc.setCharSpace(0);
-  };
-  const rowName = (text, atY, color) => {
-    doc.setFont("Poppins", "semibold");
-    doc.setFontSize(8);
-    doc.setTextColor(color[0], color[1], color[2]);
-    doc.text(text, x.label, atY);
-  };
-  const figure = (text, atX, atY, color, points = TABLE_FIGURE) => {
-    doc.setFont("Poppins", "bold");
-    doc.setFontSize(points);
-    doc.setTextColor(color[0], color[1], color[2]);
-    doc.text(text, atX, atY);
-  };
-
-  for (const [text, atX] of columns) heading(text, atX, y + rowY.head);
-
+  // Column edges. The three money columns are equal, and the widest figure the
+  // roster can produce — INR 1,35,00,000 at 12pt, about 32mm — clears the 34mm
+  // each one leaves inside its padding.
+  const edge = [MARGIN.left, MARGIN.left + 35, MARGIN.left + 77,
+    MARGIN.left + 119, MARGIN.right];
 
   const rows = [
-    // Muted: this is the figure being left behind, and holding it back is what
-    // lets the revised row read as the answer at a glance.
-    ["CURRENT", rowY.current, COLORS.muted, COLORS.muted, {
-      fixed: money(increment.currentFixed),
-      variable: increment.currentVariable > 0 ? money(increment.currentVariable) : NONE,
-      total: money(increment.currentTotal),
+    ["CURRENT", COLORS.muted, COLORS.muted, {
+      fixed: `INR ${formatINR(increment.currentFixed)}`,
+      variable: increment.currentVariable > 0 ? `INR ${formatINR(increment.currentVariable)}` : NONE,
+      total: `INR ${formatINR(increment.currentTotal)}`,
     }],
-    ["REVISED", rowY.revised, COLORS.ink, accent, {
-      fixed: money(increment.fixed),
-      variable: increment.variable > 0 ? money(increment.variable) : NONE,
-      total: money(increment.ctc),
+    ["REVISED", COLORS.ink, accent, {
+      fixed: `INR ${formatINR(increment.fixed)}`,
+      variable: increment.variable > 0 ? `INR ${formatINR(increment.variable)}` : NONE,
+      total: `INR ${formatINR(increment.ctc)}`,
     }],
   ];
 
-  for (const [name, offset, color, totalColor, values] of rows) {
-    rowName(name, y + offset - 0.6, color);
-    for (const [, atX, key] of columns) {
-      figure(values[key], atX, y + offset, key === "total" ? totalColor : color);
-    }
-  }
+  const headings = ["FIXED CTC", "VARIABLE PAY", "TOTAL CTC"];
 
-  // The label sits against its figure rather than out at the row name column:
-  // this row has one value, and stretching a caption away from it across the
-  // whole table leaves a gap that reads as something missing.
-  // A third row of the same table, not a caption under it: the name sits in the
-  // row-name column with CURRENT and REVISED and takes their treatment, and the
-  // figure sits in the total column it is derived from, at the size the other
-  // figures are set in. The accent alone marks it out.
-  rowName("TOTAL INCREMENT", y + rowY.increase, COLORS.ink);
-  figure(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
-    x.total, y + rowY.increase, accent);
+  // --- rules and fills -------------------------------------------------
+  doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
+  doc.rect(edge[0], y, COLUMN, headH, "F");
+  doc.rect(edge[0], y + headH + rowH * 2, COLUMN, rowH, "F");
+
+  doc.setDrawColor(COLORS.rule[0], COLORS.rule[1], COLORS.rule[2]);
+  doc.setLineWidth(0.25);
+  doc.rect(edge[0], y, COLUMN, tableH, "S");
+  for (const offset of [headH, headH + rowH, headH + rowH * 2]) {
+    doc.line(edge[0], y + offset, MARGIN.right, y + offset);
+  }
+  // Verticals stop at the totals row, whose first three cells are merged.
+  for (const at of edge.slice(1, 4)) {
+    doc.line(at, y, at, y + headH + rowH * 2);
+  }
+  doc.line(edge[3], y + headH + rowH * 2, edge[3], y + tableH);
+
+  // --- text ------------------------------------------------------------
+  // Right-aligned by measured width: jsPDF's align option measures the string
+  // without the letterspacing headings carry, and would hang them out of the cell.
+  const rightAlign = (text, rightX, atY, spacing = 0) => {
+    const width = doc.getTextWidth(text) + spacing * Math.max(0, text.length - 1);
+    doc.text(text, rightX - width, atY);
+  };
+  const rowName = (text, atY) => {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
+    doc.text(text, edge[0] + PAD, atY);
+  };
+
+  doc.setFont("Poppins", "semibold");
+  doc.setFontSize(7.5);
+  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
+  doc.setCharSpace(0.4);
+  headings.forEach((text, index) =>
+    rightAlign(text, edge[index + 2] - PAD, y + headH / 2 + 1, 0.4));
+  doc.setCharSpace(0);
+
+  rows.forEach(([name, color, totalColor, values], index) => {
+    const mid = y + headH + rowH * index + rowH / 2 + 1.5;
+    rowName(name, mid);
+    ["fixed", "variable", "total"].forEach((key, column) => {
+      doc.setFont("Poppins", "bold");
+      doc.setFontSize(TABLE_FIGURE);
+      const tone = key === "total" ? totalColor : color;
+      doc.setTextColor(tone[0], tone[1], tone[2]);
+      rightAlign(values[key], edge[column + 2] - PAD, mid);
+    });
+  });
+
+  const totalsMid = y + headH + rowH * 2 + rowH / 2 + 1.5;
+  rowName("TOTAL INCREMENT", totalsMid);
+  doc.setFont("Poppins", "bold");
+  doc.setFontSize(TABLE_FIGURE);
+  doc.setTextColor(accent[0], accent[1], accent[2]);
+  rightAlign(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
+    edge[4] - PAD, totalsMid);
 
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  footer.forEach((line, index) => doc.text(line, x.label, y + footerY + index * 5));
+  caption.forEach((line, index) => doc.text(line, edge[0], y + captionTop + index * 5));
 
-  // The space below the table compacts with the paragraph gaps, so a letter that
-  // is running long does not keep a generous margin here while the prose tightens.
-  // A shade wider than a paragraph gap: the box is a heavier object than a line
-  // of text, and reads as glued to the paragraph below it at the same spacing.
-  return y + height + gap + 4;
+  // captionTop is a baseline, so the caption's own depth has to be cleared before
+  // the paragraph below starts; without it the note sits against the next line.
+  return y + captionTop + (caption.length - 1) * 5 + gap + 5.4;
 }
 
 

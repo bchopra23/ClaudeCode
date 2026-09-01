@@ -181,16 +181,13 @@ exist.
 Filled on one side only, the dash sits on the other, which is the point: it shows a
 variable component being introduced or withdrawn.
 
-Both rows carry the same figures in the same columns, so telling them apart rests
-on weight: **the current row is muted and the revised row is set in ink**. No band,
-no rules — the box keeps the award letter's fill and accent bar and nothing else,
-which is what lets it sit on the page with everything around it rather than reading
-as a panel dropped into the letter.
-
-The increment is a third row of the same table, not a caption under it: its name
-sits in the row-name column with CURRENT and REVISED and takes their treatment, and
-its figure sits in the total column it is derived from, set like the other figures.
-The accent colour alone marks it out.
+**It is a ruled table, not a tinted callout.** This is reference matter someone
+will be asked to check against a payslip, so it is set as a table: a tinted header
+row, a hairline grid, and figures **right-aligned in their columns**, which is what
+makes them comparable down a column and is how money is set in any ledger. The
+current row is muted and the revised row is set in ink, so the two are told apart
+by weight as well as position. The last row merges its first three cells the way a
+totals row does, which is also what gives `TOTAL INCREMENT` the width it needs.
 
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals
