@@ -2169,13 +2169,13 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  *
  *              FIXED CTC | VARIABLE PAY | TOTAL CTC
  *   CURRENT      (muted, it is the figure being left behind)
- *   REVISED      (on a white band, its total in accent)
+ *   REVISED      (set in ink, its total in accent)
  *   TOTAL INCREMENT                       28.57%
  *
  * The two rows carry the same figures in the same columns, so telling them apart
- * cannot rest on position alone: the revised row sits on a white band with the
- * current row muted behind it, which separates them without the horizontal rules
- * and extra leading that would cost the page height this letter does not have.
+ * rests on weight: the current row is muted, the revised row is set in ink. No
+ * band, no rules — the box keeps the award letter's fill and accent bar and
+ * nothing else, which is what lets it sit on the page with everything around it.
  *
  * The variable column is dropped when neither side has one — fixed would equal
  * the total, and a column of repeated figures says nothing. Four columns is what
@@ -2187,7 +2187,6 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
 function drawIncrementBox(doc, y, increment, gap) {
   const split = increment.variable > 0 || increment.currentVariable > 0;
   const accent = [43, 127, 174];
-  const white = [255, 255, 255];
 
   // Measured before the box is drawn: a long amount in words wraps, and the box
   // has to be tall enough to hold what it wrapped to.
@@ -2211,8 +2210,6 @@ function drawIncrementBox(doc, y, increment, gap) {
     revised: 24.2 - squeeze,
     increase: 33 - squeeze * 1.5,
   };
-  const rule = 9.6;
-  const band = { top: 18.9 - squeeze * 0.75, height: 9.6 - squeeze * 0.5 };
   const footerY = 39.2 - squeeze * 2;
   const height = footerY + 3.2 + (footer.length - 1) * 5;
 
@@ -2220,11 +2217,6 @@ function drawIncrementBox(doc, y, increment, gap) {
   doc.roundedRect(MARGIN.left, y, COLUMN, height, 2, 2, "F");
   doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
   doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
-
-  // Inset from the accent bar and the box edge, so the band reads as a row
-  // lifted out of the table rather than a second box.
-  doc.setFillColor(white[0], white[1], white[2]);
-  doc.roundedRect(MARGIN.left + 4, y + band.top, COLUMN - 8, band.height, 1.5, 1.5, "F");
 
   // Offsets leave the widest figure a crore-scale package produces clear of the
   // right margin: INR 1,35,00,000 at 12pt runs about 33mm.
@@ -2266,11 +2258,6 @@ function drawIncrementBox(doc, y, increment, gap) {
 
   for (const [text, atX] of columns) heading(text, atX, y + rowY.head);
 
-  // A hairline under the headings, in the whitespace that was already there. It
-  // costs no height and it is what stops the four rows reading as a list.
-  doc.setDrawColor(COLORS.rule[0], COLORS.rule[1], COLORS.rule[2]);
-  doc.setLineWidth(0.2);
-  doc.line(x.label, y + rule, MARGIN.left + COLUMN - 8, y + rule);
 
   const rows = [
     // Muted: this is the figure being left behind, and holding it back is what
@@ -2308,10 +2295,11 @@ function drawIncrementBox(doc, y, increment, gap) {
   doc.text(summary, Math.max(x.label, x.total - 6.5 - summaryWidth),
     y + rowY.increase - 0.8);
   doc.setCharSpace(0);
-  // A point larger than the table: it is the one figure here that is not a CTC,
-  // so it anchors the row rather than competing with the column above it.
+  // Two points over the table figures. It is the one number here that is not a
+  // CTC, and it is what the letter is written about, so it takes the weight the
+  // award letter gives its payout percentage rather than sharing the column's.
   figure(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
-    x.total, y + rowY.increase, accent, TABLE_FIGURE + 1);
+    x.total, y + rowY.increase, accent, TABLE_FIGURE + 2);
 
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);

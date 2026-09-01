@@ -181,15 +181,18 @@ repeated figures:
 Filled on one side only, the column stays and the empty side reads `INR 0`, which
 is the point: it shows a variable component being introduced or withdrawn.
 
-Both rows carry the same figures in the same columns, so telling them apart cannot
-rest on position: **the revised row sits on a white band and the current row is
-muted behind it**, which separates them without the rules and extra leading that
-would cost page height this letter does not have. The revised total takes the
-accent colour, as the award letter's payout does. A hairline under the column
-headings sits in whitespace that was already there, costing no height and stopping
-the four rows reading as a list. The summary label sits against its figure rather
-than out at the row-name column: that row has one value, and stretching a caption
-away from it across the whole table leaves a gap that reads as something missing.
+Both rows carry the same figures in the same columns, so telling them apart rests
+on weight: **the current row is muted and the revised row is set in ink**. No band,
+no rules — the box keeps the award letter's fill and accent bar and nothing else,
+which is what lets it sit on the page with everything around it rather than reading
+as a panel dropped into the letter.
+
+The increment is set two points over the table figures, in the accent colour. It is
+the one number in the box that is not a CTC and it is what the letter is written
+about, so it takes the weight the award letter gives its payout percentage. Its
+label sits against it rather than out at the row-name column: that row has one
+value, and stretching a caption away from it across the whole table leaves a gap
+that reads as something missing.
 
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals
