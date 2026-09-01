@@ -186,7 +186,9 @@ will be asked to check against a payslip, so it is set as a table: a tinted head
 row, a ruled grid, and figures **right-aligned in their columns**, which is what
 makes them comparable down a column and is how money is set in any ledger. The last
 row merges its first three cells the way a totals row does, which is also what gives
-`TOTAL INCREMENT` the width it needs.
+`TOTAL INCREMENT` the width it needs. Headings are bold and centred in their cells:
+a heading names its column, while the figures under it are what have to line up
+with each other.
 
 The rules carry two weights, as a ruled table does: a heavy frame, with the header
 and totals rules at that same weight, and a lighter grid inside dividing the cells.
