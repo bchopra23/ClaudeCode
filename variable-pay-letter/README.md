@@ -181,12 +181,19 @@ repeated figures:
 Filled on one side only, the column stays and the empty side reads `INR 0`, which
 is the point: it shows a variable component being introduced or withdrawn.
 
+Both rows carry the same figures in the same columns, so telling them apart cannot
+rest on position: **the revised row sits on a white band and the current row is
+muted behind it**, which separates them without the rules and extra leading that
+would cost page height this letter does not have. The revised total takes the
+accent colour, as the award letter's payout does.
+
 Four columns is what this page width holds at one figure size; it is the labels,
 not the figures, that run out of room. So the increase is a row beneath the totals
 it comes from rather than a fifth column, and the effective date sits at the end of
 the line under the table. The paragraph above the table states that date too. That
-line grows the box if it wraps, which it only does at crore-scale amounts, whose
-spelling out in words is what runs long.
+line is kept short enough to hold one line at every amount the roster can produce,
+crore-scale packages included — a second line there is height spent before the
+paragraphs get any.
 
 **Each total is derived, not entered:** fixed plus variable, on each side, so a
 total and its parts can never disagree on the letter. The increment percentage is
@@ -238,10 +245,13 @@ Leaving it blank is how an increment with no promotion is issued.
 
 The table costs the page height that a single-figure callout did not, and naming
 two long titles in one sentence costs more, so the letter lays itself out again
-with tighter paragraph gaps whenever a pass would run past the safe area, down a
-ladder of five settings. Only the letters that need it pay for the extra passes.
-The worst case on file — a bifurcated increment promoting between the two longest
-designations — ends at 269.9mm against a 270.4mm safe line.
+whenever a pass would run past the safe area, down a ladder of five settings from
+4.6mm paragraph gaps to 2.2mm. The table tightens with the prose rather than
+keeping a roomy callout above squeezed paragraphs. The floor is 2.2mm because
+below that the paragraphs run together and the letter looks worse than it reads;
+the worst case on file — a bifurcated increment promoting between the two longest
+designations — needs exactly that step and clears the safe line on it. Only the
+letters that need it pay for the extra passes.
 
 # Repository and rebuilding
 

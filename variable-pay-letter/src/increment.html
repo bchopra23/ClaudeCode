@@ -775,13 +775,19 @@
  *                  ctc, effectiveISO, designation } — each total is its own fixed
  *                  plus variable; either variable, and designation, may be zero
  */
+// Six figures sit in the table where the award letter has three, so they are set
+// a shade smaller than that letter's headline figures. All six share one size.
+const TABLE_FIGURE = 12;
+
 function buildIncrementLetter(employee, increment, dateISO) {
   // A promotion between two long titles names both, which can run the body past
   // the letterhead's safe area. Lay the letter out, and if it overflows, lay it
   // out again with the paragraph gaps drawn in. Only the letters that need it
   // pay for the second pass, and none of them lands in the footer.
   let doc = null;
-  for (const gap of [4.6, 3.8, 3.0, 2.2, 1.5]) {
+  // The floor is where the prose still breathes. Below about 2.2mm the
+  // paragraphs run together and the letter looks worse than it reads.
+  for (const gap of [4.6, 4.0, 3.4, 2.8, 2.2]) {
     const attempt = composeIncrementLetter(employee, increment, dateISO, gap);
     doc = attempt.doc;
     if (attempt.bottom <= SAFE.bottom) break;
@@ -800,7 +806,7 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
     + "contribution, your annual compensation has been revised with effect from "
     + `${formatDate(increment.effectiveISO)}.`, gap);
 
-  y = drawIncrementBox(doc, y, increment);
+  y = drawIncrementBox(doc, y, increment, gap);
 
   // Written as a replacement — the designation on record is named, then struck
   // through by the new one in bold — so the letter reads as the promotion it is
@@ -843,10 +849,15 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  * The pay table: what the package is now, what it becomes, and the increase
  * between them.
  *
- *            FIXED CTC | VARIABLE PAY | TOTAL CTC
- *   CURRENT
- *   REVISED
- *   TOTAL INCREMENT                     28.57%
+ *              FIXED CTC | VARIABLE PAY | TOTAL CTC
+ *   CURRENT      (muted, it is the figure being left behind)
+ *   REVISED      (on a white band, its total in accent)
+ *   TOTAL INCREMENT                       28.57%
+ *
+ * The two rows carry the same figures in the same columns, so telling them apart
+ * cannot rest on position alone: the revised row sits on a white band with the
+ * current row muted behind it, which separates them without the horizontal rules
+ * and extra leading that would cost the page height this letter does not have.
  *
  * The variable column is dropped when neither side has one — fixed would equal
  * the total, and a column of repeated figures says nothing. Four columns is what
@@ -855,31 +866,49 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  *
  * Returns the cursor below the box.
  */
-function drawIncrementBox(doc, y, increment) {
+function drawIncrementBox(doc, y, increment, gap) {
   const split = increment.variable > 0 || increment.currentVariable > 0;
-  const radius = 2;
   const accent = [43, 127, 174];
+  const white = [255, 255, 255];
 
   // Measured before the box is drawn: a long amount in words wraps, and the box
   // has to be tall enough to hold what it wrapped to.
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
+  // Kept short enough to hold one line at every amount the roster can produce,
+  // including crore-scale packages: a second line here is height the letter
+  // spends before its paragraphs get any.
   const footer = doc.splitTextToSize(
-    `Revised annual CTC in words: ${amountInWords(increment.ctc)}`
-    + ` · with effect from ${formatDate(increment.effectiveISO)}`,
+    `Revised CTC in words: ${amountInWords(increment.ctc)}`
+    + ` · effective ${formatDate(increment.effectiveISO)}`,
     COLUMN - 16);
 
-  const rowY = { head: 5.5, current: 12.5, revised: 20, increase: 27.5 };
-  const footerY = 33.5;
-  const height = footerY + 3.5 + (footer.length - 1) * 5;
+  // The table compacts with the prose. A letter that has to tighten its
+  // paragraphs should not keep a roomy table above them, and the band and the
+  // muting carry the distinction between the rows at either pitch.
+  const squeeze = Math.min(1.6, Math.max(0, (4.6 - gap) * 0.5));
+  const rowY = {
+    head: 6,
+    current: 14 - squeeze * 0.5,
+    revised: 23 - squeeze,
+    increase: 32 - squeeze * 1.5,
+  };
+  const band = { top: 17.4 - squeeze * 0.75, height: 9.4 - squeeze * 0.5 };
+  const footerY = 38.5 - squeeze * 2;
+  const height = footerY + 2.5 + (footer.length - 1) * 5;
 
   doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
-  doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
+  doc.roundedRect(MARGIN.left, y, COLUMN, height, 2, 2, "F");
   doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
   doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
 
+  // Inset from the accent bar and the box edge, so the band reads as a row
+  // lifted out of the table rather than a second box.
+  doc.setFillColor(white[0], white[1], white[2]);
+  doc.roundedRect(MARGIN.left + 4, y + band.top, COLUMN - 8, band.height, 1.5, 1.5, "F");
+
   // Offsets leave the widest figure a crore-scale package produces clear of the
-  // right margin: INR 1,35,00,000 at 13pt runs about 35mm.
+  // right margin: INR 1,35,00,000 at 12pt runs about 33mm.
   const x = {
     label: MARGIN.left + 8,
     fixed: MARGIN.left + 34,
@@ -893,7 +922,9 @@ function drawIncrementBox(doc, y, increment) {
       ["TOTAL CTC", x.total, "total"]]
     : [["TOTAL CTC", x.total, "total"]];
 
-  const label = (text, atX, atY) => {
+  // Column headings are letterspaced, row names are not. Without that they read
+  // as the same kind of label and the table loses its shape.
+  const heading = (text, atX, atY) => {
     doc.setFont("Poppins", "semibold");
     doc.setFontSize(7.5);
     doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
@@ -901,36 +932,41 @@ function drawIncrementBox(doc, y, increment) {
     doc.text(text, atX, atY);
     doc.setCharSpace(0);
   };
+  const rowName = (text, atY, color) => {
+    doc.setFont("Poppins", "semibold");
+    doc.setFontSize(8);
+    doc.setTextColor(color[0], color[1], color[2]);
+    doc.text(text, x.label, atY);
+  };
   const figure = (text, atX, atY, color) => {
     doc.setFont("Poppins", "bold");
-    doc.setFontSize(FIGURE_SIZE);
+    doc.setFontSize(TABLE_FIGURE);
     doc.setTextColor(color[0], color[1], color[2]);
     doc.text(text, atX, atY);
   };
 
-  for (const [text, atX] of columns) label(text, atX, y + rowY.head);
+  for (const [text, atX] of columns) heading(text, atX, y + rowY.head);
 
   const rows = [
-    ["CURRENT", rowY.current, {
+    // Muted: this is the figure being left behind, and holding it back is what
+    // lets the revised row read as the answer at a glance.
+    ["CURRENT", rowY.current, COLORS.muted, COLORS.muted, {
       fixed: increment.currentFixed, variable: increment.currentVariable,
       total: increment.currentTotal,
-    }, COLORS.ink],
-    // The revised total is the figure the letter is about, so it carries the
-    // accent the way the award letter's payout does.
-    ["REVISED", rowY.revised, {
+    }],
+    ["REVISED", rowY.revised, COLORS.ink, accent, {
       fixed: increment.fixed, variable: increment.variable, total: increment.ctc,
-    }, COLORS.ink],
+    }],
   ];
 
-  for (const [name, offset, values, color] of rows) {
-    label(name, x.label, y + offset - 1);
+  for (const [name, offset, color, totalColor, values] of rows) {
+    rowName(name, y + offset - 0.6, color);
     for (const [, atX, key] of columns) {
-      figure(money(values[key]), atX, y + offset,
-        key === "total" && name === "REVISED" ? accent : color);
+      figure(money(values[key]), atX, y + offset, key === "total" ? totalColor : color);
     }
   }
 
-  label("TOTAL INCREMENT", x.label, y + rowY.increase - 1);
+  heading("TOTAL INCREMENT", x.label, y + rowY.increase - 0.6);
   figure(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
     x.total, y + rowY.increase, accent);
 
@@ -939,7 +975,11 @@ function drawIncrementBox(doc, y, increment) {
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
   footer.forEach((line, index) => doc.text(line, x.label, y + footerY + index * 5));
 
-  return y + height + 6;
+  // The space below the table compacts with the paragraph gaps, so a letter that
+  // is running long does not keep a generous margin here while the prose tightens.
+  // A shade wider than a paragraph gap: the box is a heavier object than a line
+  // of text, and reads as glued to the paragraph below it at the same spacing.
+  return y + height + gap + 2.4;
 }
 
 
