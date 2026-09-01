@@ -167,19 +167,19 @@ The callout is a comparison table:
 | **REVISED** | INR 15,00,000 | INR 3,00,000 | INR 18,00,000 |
 | **TOTAL INCREMENT** | | | **28.57%** |
 
-**Variable pay is optional on both sides.** Left blank — or entered as zero — on
-*both* the current and the revised side, the package is fixed only, fixed would
-equal the total, and the variable column is dropped rather than filled with
-repeated figures:
+**Variable pay is optional on both sides.** Left blank — or entered as zero — that
+side reads as a dash. The column stays either way: dropping it would leave two
+letters with different tables, and an `INR 0` states a component that does not
+exist.
 
-|  | TOTAL CTC |
-| --- | --- |
-| **CURRENT** | INR 14,00,000 |
-| **REVISED** | INR 18,00,000 |
-| **TOTAL INCREMENT** | **28.57%** |
+|  | FIXED CTC | VARIABLE PAY | TOTAL CTC |
+| --- | --- | --- | --- |
+| **CURRENT** | INR 14,00,000 | — | INR 14,00,000 |
+| **REVISED** | INR 18,00,000 | — | INR 18,00,000 |
+| **TOTAL INCREMENT** | | | **28.57%** |
 
-Filled on one side only, the column stays and the empty side reads `INR 0`, which
-is the point: it shows a variable component being introduced or withdrawn.
+Filled on one side only, the dash sits on the other, which is the point: it shows a
+variable component being introduced or withdrawn.
 
 Both rows carry the same figures in the same columns, so telling them apart rests
 on weight: **the current row is muted and the revised row is set in ink**. No band,

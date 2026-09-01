@@ -2178,16 +2178,17 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
  * band, no rules — the box keeps the award letter's fill and accent bar and
  * nothing else, which is what lets it sit on the page with everything around it.
  *
- * The variable column is dropped when neither side has one — fixed would equal
- * the total, and a column of repeated figures says nothing. Four columns is what
- * this width holds at one figure size, which is why the increase is a row
- * beneath the totals it comes from rather than a fifth column.
+ * Four columns is what this width holds at one figure size, which is why the
+ * increase is a row beneath the totals it comes from rather than a fifth column.
  *
  * Returns the cursor below the box.
  */
 function drawIncrementBox(doc, y, increment, gap) {
-  const split = increment.variable > 0 || increment.currentVariable > 0;
   const accent = [43, 127, 174];
+  // Variable pay is optional on either side. The column stays either way and the
+  // side without one reads as a dash: dropping the column would leave two letters
+  // with different tables, and an INR 0 states a component that does not exist.
+  const NONE = "—";
 
   // Measured before the box is drawn: a long amount in words wraps, and the box
   // has to be tall enough to hold what it wrapped to.
@@ -2225,14 +2226,12 @@ function drawIncrementBox(doc, y, increment, gap) {
     label: MARGIN.left + 8,
     fixed: MARGIN.left + 34,
     variable: MARGIN.left + 78,
-    total: MARGIN.left + (split ? 120 : 40),
+    total: MARGIN.left + 120,
   };
 
   const money = (value) => `INR ${formatINR(value)}`;
-  const columns = split
-    ? [["FIXED CTC", x.fixed, "fixed"], ["VARIABLE PAY", x.variable, "variable"],
-      ["TOTAL CTC", x.total, "total"]]
-    : [["TOTAL CTC", x.total, "total"]];
+  const columns = [["FIXED CTC", x.fixed, "fixed"],
+    ["VARIABLE PAY", x.variable, "variable"], ["TOTAL CTC", x.total, "total"]];
 
   // Column headings are letterspaced, row names are not. Without that they read
   // as the same kind of label and the table loses its shape.
@@ -2264,18 +2263,21 @@ function drawIncrementBox(doc, y, increment, gap) {
     // Muted: this is the figure being left behind, and holding it back is what
     // lets the revised row read as the answer at a glance.
     ["CURRENT", rowY.current, COLORS.muted, COLORS.muted, {
-      fixed: increment.currentFixed, variable: increment.currentVariable,
-      total: increment.currentTotal,
+      fixed: money(increment.currentFixed),
+      variable: increment.currentVariable > 0 ? money(increment.currentVariable) : NONE,
+      total: money(increment.currentTotal),
     }],
     ["REVISED", rowY.revised, COLORS.ink, accent, {
-      fixed: increment.fixed, variable: increment.variable, total: increment.ctc,
+      fixed: money(increment.fixed),
+      variable: increment.variable > 0 ? money(increment.variable) : NONE,
+      total: money(increment.ctc),
     }],
   ];
 
   for (const [name, offset, color, totalColor, values] of rows) {
     rowName(name, y + offset - 0.6, color);
     for (const [, atX, key] of columns) {
-      figure(money(values[key]), atX, y + offset, key === "total" ? totalColor : color);
+      figure(values[key], atX, y + offset, key === "total" ? totalColor : color);
     }
   }
 
@@ -2299,7 +2301,7 @@ function drawIncrementBox(doc, y, increment, gap) {
   // is running long does not keep a generous margin here while the prose tightens.
   // A shade wider than a paragraph gap: the box is a heavier object than a line
   // of text, and reads as glued to the paragraph below it at the same spacing.
-  return y + height + gap + 2.4;
+  return y + height + gap + 4;
 }
 
 
