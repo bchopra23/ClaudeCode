@@ -565,13 +565,25 @@
         </div>
 
         <div class="field">
-          <label for="fixed">Fixed CTC <span class="hint">in INR</span></label>
+          <label for="currentFixed">Current Fixed CTC <span class="hint">in INR</span></label>
+          <input type="text" id="currentFixed" placeholder="e.g. 1200000" autocomplete="off" inputmode="decimal">
+          <div class="error" id="currentFixedError"></div>
+        </div>
+
+        <div class="field">
+          <label for="currentVariable">Current Variable Pay <span class="hint">optional &mdash; leave blank if fixed only</span></label>
+          <input type="text" id="currentVariable" placeholder="e.g. 200000" autocomplete="off" inputmode="decimal">
+          <div class="error" id="currentVariableError"></div>
+        </div>
+
+        <div class="field">
+          <label for="fixed">Revised Fixed CTC <span class="hint">in INR</span></label>
           <input type="text" id="fixed" placeholder="e.g. 1500000" autocomplete="off" inputmode="decimal">
           <div class="error" id="fixedError"></div>
         </div>
 
         <div class="field">
-          <label for="variable">Variable Pay <span class="hint">optional &mdash; leave blank if the package is fixed only</span></label>
+          <label for="variable">Revised Variable Pay <span class="hint">optional &mdash; leave blank if fixed only</span></label>
           <input type="text" id="variable" placeholder="e.g. 300000" autocomplete="off" inputmode="decimal">
           <div class="error" id="variableError"></div>
         </div>
@@ -614,24 +626,24 @@
           </dl>
           <div class="amount-row" id="amountRow" hidden>
             <div class="pay-split">
-              <div id="dFixedBlock">
-                <div class="pay-label">Fixed CTC</div>
-                <div class="figure" id="dFixed"></div>
-              </div>
-              <div id="dVariableBlock">
-                <div class="pay-label">Variable pay</div>
-                <div class="figure" id="dVariable"></div>
+              <div id="dCurrentBlock">
+                <div class="pay-label">Current total CTC</div>
+                <div class="figure" id="dCurrentTotal"></div>
               </div>
               <div>
-                <div class="pay-label">Revised annual CTC</div>
-                <div class="pay-percent" id="dCtc"></div>
+                <div class="pay-label">Revised total CTC</div>
+                <div class="figure" id="dCtc"></div>
+              </div>
+              <div>
+                <div class="pay-label">Total increment</div>
+                <div class="pay-percent" id="dPercent"></div>
               </div>
               <div>
                 <div class="pay-label">Effective from</div>
                 <div class="figure" id="dEffective"></div>
               </div>
             </div>
-            <div class="words" id="dCtcWords"></div>
+            <div class="words" id="dSplit"></div>
           </div>
         </div>
       </div>
@@ -644,7 +656,7 @@
       </div>
       <div class="viewer" id="viewer">
         <canvas id="pdfCanvas" aria-label="Increment letter preview" hidden></canvas>
-        <div class="empty" id="viewerEmpty">Enter an Employee ID, the fixed CTC and an effective date, then choose Preview Letter.</div>
+        <div class="empty" id="viewerEmpty">Enter an Employee ID, the current and revised fixed CTC and an effective date, then choose Preview Letter.</div>
       </div>
     </section>
   </div>
@@ -664,17 +676,18 @@
           </li>
           <li>
             <strong>Paste your columns into the table.</strong>
-            Employee ID, Fixed CTC, Variable Pay, Effective From, and Revised
-            Designation if it is a promotion. Rows are added as needed and a copied
-            header row is ignored. Leave Variable Pay blank, or zero, for anyone on
-            a fixed-only package &mdash; their letter states one figure instead of a
-            bifurcation.
+            Employee ID, Current Fixed, Current Variable, Revised Fixed, Revised
+            Variable, Effective From, and Revised Designation if it is a promotion.
+            Rows are added as needed and a copied header row is ignored. Leave
+            either Variable column blank, or zero, for anyone on a fixed-only
+            package &mdash; their letter drops the variable column rather than
+            printing zeroes.
           </li>
           <li>
             <strong>Check the Status column.</strong>
-            Each row shows the revised CTC, its split where there is one, and the
-            date it takes effect. Rows in red need fixing &mdash; the zip stays
-            locked until every row is clean.
+            Each row shows the current total, the revised total, the increment
+            between them and the date it takes effect. Rows in red need fixing
+            &mdash; the zip stays locked until every row is clean.
           </li>
           <li>
             <strong>Download.</strong>
@@ -700,8 +713,10 @@
             <tr>
               <th class="rownum"></th>
               <th class="col-id">Employee ID</th>
-              <th class="col-amount">Fixed CTC</th>
-              <th class="col-amount">Variable Pay</th>
+              <th class="col-amount">Current Fixed</th>
+              <th class="col-amount">Current Variable</th>
+              <th class="col-amount">Revised Fixed</th>
+              <th class="col-amount">Revised Variable</th>
               <th class="col-amount">Effective From</th>
               <th class="col-amount">Revised Designation</th>
               <th>Status</th>
@@ -752,12 +767,13 @@
 /*__CORE__*/
 
 /**
- * The increment letter. States the revised CTC and when it takes effect, and
- * records a promotion when one is given. The previous salary is deliberately
- * not restated.
+ * The increment letter. Sets the current package against the revised one, names
+ * the increase between them and when it takes effect, and records a promotion
+ * when one is given.
  *
- * @param increment { fixed, variable, ctc, effectiveISO, designation }, where ctc
- *                  is fixed + variable, and variable and designation may be absent
+ * @param increment { currentFixed, currentVariable, currentTotal, fixed, variable,
+ *                  ctc, effectiveISO, designation } — each total is its own fixed
+ *                  plus variable; either variable, and designation, may be zero
  */
 function buildIncrementLetter(employee, increment, dateISO) {
   // A promotion between two long titles names both, which can run the body past
@@ -765,7 +781,7 @@ function buildIncrementLetter(employee, increment, dateISO) {
   // out again with the paragraph gaps drawn in. Only the letters that need it
   // pay for the second pass, and none of them lands in the footer.
   let doc = null;
-  for (const gap of [4.6, 3.4, 2.4]) {
+  for (const gap of [4.6, 3.8, 3.0, 2.2, 1.5]) {
     const attempt = composeIncrementLetter(employee, increment, dateISO, gap);
     doc = attempt.doc;
     if (attempt.bottom <= SAFE.bottom) break;
@@ -824,70 +840,104 @@ function composeIncrementLetter(employee, increment, dateISO, gap) {
 }
 
 /**
- * The revised pay. Two shapes, decided by whether there is a variable component:
+ * The pay table: what the package is now, what it becomes, and the increase
+ * between them.
  *
- *   fixed only    REVISED ANNUAL CTC | EFFECTIVE FROM
- *   bifurcated    FIXED CTC | VARIABLE PAY | REVISED ANNUAL CTC
+ *            FIXED CTC | VARIABLE PAY | TOTAL CTC
+ *   CURRENT
+ *   REVISED
+ *   TOTAL INCREMENT                     28.57%
  *
- * Three columns is the most this width holds at one figure size — the labels,
- * not the figures, are what run out of room — so the bifurcated box moves the
- * effective date to the line beneath rather than shrinking anything. The
- * paragraph above states that date either way.
+ * The variable column is dropped when neither side has one — fixed would equal
+ * the total, and a column of repeated figures says nothing. Four columns is what
+ * this width holds at one figure size, which is why the increase is a row
+ * beneath the totals it comes from rather than a fifth column.
  *
  * Returns the cursor below the box.
  */
 function drawIncrementBox(doc, y, increment) {
-  const split = increment.variable > 0;
+  const split = increment.variable > 0 || increment.currentVariable > 0;
   const radius = 2;
   const accent = [43, 127, 174];
 
-  // The footer line carries the effective date only in the split box, where the
-  // columns have no room for it. Measured before the box is drawn, because a
-  // long amount in words wraps and the box has to be tall enough to hold it.
+  // Measured before the box is drawn: a long amount in words wraps, and the box
+  // has to be tall enough to hold what it wrapped to.
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
   const footer = doc.splitTextToSize(
     `Revised annual CTC in words: ${amountInWords(increment.ctc)}`
-    + (split ? ` · with effect from ${formatDate(increment.effectiveISO)}` : ""),
+    + ` · with effect from ${formatDate(increment.effectiveISO)}`,
     COLUMN - 16);
-  const height = 25 + (footer.length - 1) * 5;
+
+  const rowY = { head: 5.5, current: 12.5, revised: 20, increase: 27.5 };
+  const footerY = 33.5;
+  const height = footerY + 3.5 + (footer.length - 1) * 5;
 
   doc.setFillColor(COLORS.boxFill[0], COLORS.boxFill[1], COLORS.boxFill[2]);
   doc.roundedRect(MARGIN.left, y, COLUMN, height, radius, radius, "F");
   doc.setFillColor(COLORS.accent[0], COLORS.accent[1], COLORS.accent[2]);
   doc.roundedRect(MARGIN.left, y, 1.8, height, 0.9, 0.9, "F");
 
-  // The three-column offsets are the revision letter's, where a 20-character
-  // label at +116 was measured to clear the right edge.
-  const columns = split
-    ? [
-      { x: MARGIN.left + 8, label: "FIXED CTC", value: `INR ${formatINR(increment.fixed)}`, color: COLORS.ink },
-      { x: MARGIN.left + 62, label: "VARIABLE PAY", value: `INR ${formatINR(increment.variable)}`, color: COLORS.ink },
-      { x: MARGIN.left + 116, label: "REVISED ANNUAL CTC", value: `INR ${formatINR(increment.ctc)}`, color: accent },
-    ]
-    : [
-      { x: MARGIN.left + 8, label: "REVISED ANNUAL CTC", value: `INR ${formatINR(increment.ctc)}`, color: accent },
-      { x: MARGIN.left + 66, label: "EFFECTIVE FROM", value: formatDate(increment.effectiveISO), color: COLORS.ink },
-    ];
+  // Offsets leave the widest figure a crore-scale package produces clear of the
+  // right margin: INR 1,35,00,000 at 13pt runs about 35mm.
+  const x = {
+    label: MARGIN.left + 8,
+    fixed: MARGIN.left + 34,
+    variable: MARGIN.left + 78,
+    total: MARGIN.left + (split ? 120 : 40),
+  };
 
-  for (const column of columns) {
+  const money = (value) => `INR ${formatINR(value)}`;
+  const columns = split
+    ? [["FIXED CTC", x.fixed, "fixed"], ["VARIABLE PAY", x.variable, "variable"],
+      ["TOTAL CTC", x.total, "total"]]
+    : [["TOTAL CTC", x.total, "total"]];
+
+  const label = (text, atX, atY) => {
     doc.setFont("Poppins", "semibold");
     doc.setFontSize(7.5);
     doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
     doc.setCharSpace(0.4);
-    doc.text(column.label, column.x, y + 7);
+    doc.text(text, atX, atY);
     doc.setCharSpace(0);
-
+  };
+  const figure = (text, atX, atY, color) => {
     doc.setFont("Poppins", "bold");
     doc.setFontSize(FIGURE_SIZE);
-    doc.setTextColor(column.color[0], column.color[1], column.color[2]);
-    doc.text(column.value, column.x, y + 15);
+    doc.setTextColor(color[0], color[1], color[2]);
+    doc.text(text, atX, atY);
+  };
+
+  for (const [text, atX] of columns) label(text, atX, y + rowY.head);
+
+  const rows = [
+    ["CURRENT", rowY.current, {
+      fixed: increment.currentFixed, variable: increment.currentVariable,
+      total: increment.currentTotal,
+    }, COLORS.ink],
+    // The revised total is the figure the letter is about, so it carries the
+    // accent the way the award letter's payout does.
+    ["REVISED", rowY.revised, {
+      fixed: increment.fixed, variable: increment.variable, total: increment.ctc,
+    }, COLORS.ink],
+  ];
+
+  for (const [name, offset, values, color] of rows) {
+    label(name, x.label, y + offset - 1);
+    for (const [, atX, key] of columns) {
+      figure(money(values[key]), atX, y + offset,
+        key === "total" && name === "REVISED" ? accent : color);
+    }
   }
+
+  label("TOTAL INCREMENT", x.label, y + rowY.increase - 1);
+  figure(formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal),
+    x.total, y + rowY.increase, accent);
 
   doc.setFont("Poppins", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  footer.forEach((line, index) => doc.text(line, MARGIN.left + 8, y + 21 + index * 5));
+  footer.forEach((line, index) => doc.text(line, x.label, y + footerY + index * 5));
 
   return y + height + 6;
 }
@@ -900,33 +950,51 @@ function fileNameFor(employee) {
 /**
  * Reads the increment inputs. Returns { increment } or { error }.
  *
- * Two of the four are optional. **Variable pay** blank or zero means the package
- * is fixed only, and the letter states one figure rather than a bifurcation —
- * so the revised CTC is derived as fixed + variable rather than entered, and the
- * two can never disagree on the letter. **Revised designation** blank means this
- * is not a promotion.
+ * Variable pay is optional on both sides: blank or zero means that side of the
+ * package is fixed only, and the letter drops the variable column rather than
+ * printing zeroes. Each total is derived as fixed + variable rather than entered,
+ * so a total and its parts can never disagree on the letter. Revised designation
+ * blank means this is not a promotion.
  *
  * @param employee optional, to check the promotion against the designation on
  *                 record — the letter names both, so they cannot be the same one.
  */
-function parseIncrement(fixedText, variableText, effectiveText, designationText, employee) {
-  const fixed = parseAmount(fixedText, "Fixed CTC");
-  if (fixed.error) return { error: fixed.error };
-
-  // Blank is the ordinary case, not an omission, so it is not an error.
-  let variable = 0;
-  if (String(variableText || "").trim()) {
-    const parsed = parseAmount(variableText, "Variable pay", { allowZero: true });
+function parseIncrement(cells, employee) {
+  const amounts = {};
+  for (const [key, label, optional] of [
+    ["currentFixed", "Current fixed CTC", false],
+    ["currentVariable", "Current variable pay", true],
+    ["fixed", "Revised fixed CTC", false],
+    ["variable", "Revised variable pay", true],
+  ]) {
+    const text = String(cells[key] || "").trim();
+    if (!text && optional) {
+      amounts[key] = 0;
+      continue;
+    }
+    const parsed = parseAmount(text, label, { allowZero: optional });
     if (parsed.error) return { error: parsed.error };
-    variable = parsed.value;
+    amounts[key] = parsed.value;
   }
 
-  const raw = String(effectiveText || "").trim();
+  const currentTotal = amounts.currentFixed + amounts.currentVariable;
+  const ctc = amounts.fixed + amounts.variable;
+  // An increment letter records an increase. Anything else is a different letter
+  // with different weight, and this one is headed "Congratulations".
+  if (ctc <= currentTotal) {
+    return {
+      error: ctc === currentTotal
+        ? "Revised total CTC is the same as the current total, so there is no increment to state."
+        : "Revised total CTC is lower than the current total; this tool only issues increments.",
+    };
+  }
+
+  const raw = String(cells.effective || "").trim();
   if (!raw) return { error: "Effective date is missing." };
   const effectiveISO = parseDateInput(raw);
   if (!effectiveISO) return { error: `"${raw}" is not a date the app understands.` };
 
-  const designation = String(designationText || "").trim();
+  const designation = String(cells.designation || "").trim();
   if (designation && employee
       && designation.toLowerCase() === (employee.designation || "").toLowerCase()) {
     return {
@@ -937,9 +1005,12 @@ function parseIncrement(fixedText, variableText, effectiveText, designationText,
 
   return {
     increment: {
-      fixed: fixed.value,
-      variable,
-      ctc: fixed.value + variable,
+      currentFixed: amounts.currentFixed,
+      currentVariable: amounts.currentVariable,
+      currentTotal,
+      fixed: amounts.fixed,
+      variable: amounts.variable,
+      ctc,
       effectiveISO,
       designation,
     },
@@ -951,15 +1022,20 @@ function parseIncrement(fixedText, variableText, effectiveText, designationText,
  * ------------------------------------------------------------------ */
 
 const empIdInput = el("empId");
-const fixedInput = el("fixed");
-const variableInput = el("variable");
+const dateInput = el("letterDate");
 const effectiveInput = el("effective");
 const designationInput = el("newDesignation");
-const dateInput = el("letterDate");
 const empError = el("empError");
-const fixedError = el("fixedError");
-const variableError = el("variableError");
 const effectiveError = el("effectiveError");
+
+// The four amount inputs. `label` is the name parseIncrement puts at the front
+// of a message about that field, which is how a message finds its slot.
+const AMOUNTS = [
+  { key: "currentFixed", label: "Current fixed CTC", input: el("currentFixed"), error: el("currentFixedError") },
+  { key: "currentVariable", label: "Current variable pay", input: el("currentVariable"), error: el("currentVariableError") },
+  { key: "fixed", label: "Revised fixed CTC", input: el("fixed"), error: el("fixedError") },
+  { key: "variable", label: "Revised variable pay", input: el("variable"), error: el("variableError") },
+];
 const dateError = el("dateError");
 const previewButton = el("preview");
 const downloadButton = el("download");
@@ -989,16 +1065,19 @@ function paintDetails(employee, increment) {
 
   el("amountRow").hidden = !increment;
   if (increment) {
-    // With no variable component the split would repeat the total twice over,
-    // so the card shows what the letter shows.
-    const split = increment.variable > 0;
-    el("dFixedBlock").hidden = !split;
-    el("dVariableBlock").hidden = !split;
-    el("dFixed").textContent = `INR ${formatINR(increment.fixed)}`;
-    el("dVariable").textContent = `INR ${formatINR(increment.variable)}`;
-    el("dCtc").textContent = `INR ${formatINR(increment.ctc)}`;
+    const money = (value) => `INR ${formatINR(value)}`;
+    el("dCurrentTotal").textContent = money(increment.currentTotal);
+    el("dCtc").textContent = money(increment.ctc);
+    el("dPercent").textContent =
+      formatPercent(increment.ctc - increment.currentTotal, increment.currentTotal);
     el("dEffective").textContent = formatDate(increment.effectiveISO);
-    el("dCtcWords").textContent = amountInWords(increment.ctc)
+    // The card shows the split only where the letter does.
+    const split = increment.variable > 0 || increment.currentVariable > 0;
+    el("dSplit").textContent = (split
+      ? `Current ${money(increment.currentFixed)} + ${money(increment.currentVariable)}`
+        + ` · revised ${money(increment.fixed)} + ${money(increment.variable)} · `
+      : "")
+      + amountInWords(increment.ctc)
       + (increment.designation ? ` · promoted to ${increment.designation}` : "");
   }
 }
@@ -1012,23 +1091,30 @@ function refreshIndividual() {
   setError(empError, empIdInput,
     !raw || currentEmployee ? "" : `No employee found with ID "${raw}".`);
 
-  // Stay quiet until the two required figures are present; complaining about a
-  // half typed form is noise. Variable pay is not one of them — blank is how a
+  // Stay quiet until the required figures are present; complaining about a half
+  // typed form is noise. Neither variable field is required — blank is how a
   // fixed-only package is entered.
-  if (!fixedInput.value.trim() || !effectiveInput.value) {
+  const clearAmountErrors = () => AMOUNTS.forEach((a) => setError(a.error, a.input, ""));
+  const required = [AMOUNTS[0], AMOUNTS[2]];
+  if (required.some((a) => !a.input.value.trim()) || !effectiveInput.value) {
     currentIncrement = null;
-    setError(fixedError, fixedInput, "");
-    setError(variableError, variableInput, "");
+    clearAmountErrors();
     setError(effectiveError, effectiveInput, "");
   } else {
-    const result = parseIncrement(fixedInput.value, variableInput.value,
-      effectiveInput.value, designationInput.value, currentEmployee);
+    const cells = { effective: effectiveInput.value, designation: designationInput.value };
+    for (const amount of AMOUNTS) cells[amount.key] = amount.input.value;
+    const result = parseIncrement(cells, currentEmployee);
     currentIncrement = result.error ? null : result.increment;
-    // The message names the field it is about, so it goes under whichever of
-    // the two amount inputs it concerns.
-    const onVariable = Boolean(result.error) && result.error.startsWith("Variable pay");
-    setError(fixedError, fixedInput, onVariable ? "" : result.error || "");
-    setError(variableError, variableInput, onVariable ? result.error : "");
+    clearAmountErrors();
+    if (result.error) {
+      // Each message names the field it is about, so it lands under that input;
+      // one about the totals belongs under the revised side that decides them.
+      // A message about the totals rather than one field goes under the revised
+      // fixed input, the field most likely to be the one to change.
+      const target = AMOUNTS.find((a) => result.error.startsWith(a.label))
+        || AMOUNTS[2];
+      setError(target.error, target.input, result.error);
+    }
     setError(effectiveError, effectiveInput, "");
   }
 
@@ -1051,8 +1137,8 @@ function tryBuild() {
   }
 }
 
-for (const input of [empIdInput, fixedInput, variableInput, effectiveInput,
-  designationInput, dateInput]) {
+for (const input of [empIdInput, effectiveInput, designationInput, dateInput,
+  ...AMOUNTS.map((amount) => amount.input)]) {
   input.addEventListener("input", refreshIndividual);
 }
 
@@ -1079,16 +1165,19 @@ const bulk = createBulkPanel({
   ids: { grid: "grid", date: "bulkDate", summary: "bulkSummary", zip: "downloadZip",
     addRows: "addRows", clearRows: "clearRows" },
   pane: { viewer: "bulkViewer", canvas: "bulkCanvas", empty: "bulkViewerEmpty", filename: "bulkFilename" },
-  columns: [{ decimal: false }, { decimal: true }, { decimal: true },
-    { decimal: false }, { decimal: false }],
+  columns: [{ decimal: false }, { decimal: true }, { decimal: true }, { decimal: true },
+    { decimal: true }, { decimal: false }, { decimal: false }],
   validate(cells, dateISO, employee) {
-    const result = parseIncrement(cells[1], cells[2], cells[3], cells[4], employee);
+    const result = parseIncrement({
+      currentFixed: cells[1], currentVariable: cells[2],
+      fixed: cells[3], variable: cells[4],
+      effective: cells[5], designation: cells[6],
+    }, employee);
     return result.error ? { error: result.error } : { job: { increment: result.increment } };
   },
-  describe: (job) => `${job.employee.name} · INR ${formatINR(job.increment.ctc)} `
-    + (job.increment.variable > 0
-      ? `(fixed ${formatINR(job.increment.fixed)} + variable ${formatINR(job.increment.variable)}) `
-      : "")
+  describe: (job) => `${job.employee.name} · INR ${formatINR(job.increment.currentTotal)} `
+    + `→ ${formatINR(job.increment.ctc)} `
+    + `(+${formatPercent(job.increment.ctc - job.increment.currentTotal, job.increment.currentTotal)}) `
     + `from ${formatDate(job.increment.effectiveISO)}`
     + (job.increment.designation ? ` · promoted to ${job.increment.designation}` : ""),
   buildDoc: (job) => buildIncrementLetter(job.employee, job.increment, job.dateISO),

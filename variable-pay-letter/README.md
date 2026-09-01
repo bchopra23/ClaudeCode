@@ -155,50 +155,63 @@ than printed as an empty row.
 # Increment Letter Generator
 
 Open **`dist/Increment_Letter_Generator.html`**. It records a salary revision: the
-new annual CTC and the date it takes effect, and — when a revised designation is
-given — the promotion alongside it.
+current package set against the revised one, the increase between them, the date it
+takes effect, and — when a revised designation is given — the promotion alongside
+it.
 
-The letter names the new figures only. It does not restate the previous salary, the
-increase or a percentage, so nothing about what someone used to earn is written
-down.
+The callout is a comparison table:
 
-**Variable pay is optional, and the bifurcation follows it.** Given a variable
-component, the callout splits three ways:
+|  | FIXED CTC | VARIABLE PAY | TOTAL CTC |
+| --- | --- | --- | --- |
+| **CURRENT** | INR 12,00,000 | INR 2,00,000 | INR 14,00,000 |
+| **REVISED** | INR 15,00,000 | INR 3,00,000 | INR 18,00,000 |
+| **TOTAL INCREMENT** | | | **28.57%** |
 
-| FIXED CTC | VARIABLE PAY | REVISED ANNUAL CTC |
-| --- | --- | --- |
-| INR 15,00,000 | INR 3,00,000 | INR 18,00,000 |
+**Variable pay is optional on both sides.** Left blank — or entered as zero — on
+*both* the current and the revised side, the package is fixed only, fixed would
+equal the total, and the variable column is dropped rather than filled with
+repeated figures:
 
-Left blank — or entered as zero — the package is fixed only and the callout states
-one figure against the date, as a letter with nothing to split should:
-
-| REVISED ANNUAL CTC | EFFECTIVE FROM |
+|  | TOTAL CTC |
 | --- | --- |
-| INR 18,00,000 | 01 July 2026 |
+| **CURRENT** | INR 14,00,000 |
+| **REVISED** | INR 18,00,000 |
+| **TOTAL INCREMENT** | **28.57%** |
 
-Three columns is the most this page width holds at one figure size; it is the
-labels, not the figures, that run out of room. So the bifurcated callout carries
-the effective date at the end of the line beneath instead of in a fourth column.
-The paragraph above the callout states that date either way. That line grows the
-box if it wraps, which it only does at crore-scale amounts, whose spelling out in
-words is what runs long.
+Filled on one side only, the column stays and the empty side reads `INR 0`, which
+is the point: it shows a variable component being introduced or withdrawn.
 
-**The revised CTC is derived, not entered:** it is fixed plus variable, so the
-total and its parts can never disagree on the letter. Amounts are always typed or
-pasted — the master workbook holds no salary data, all 52 columns checked.
+Four columns is what this page width holds at one figure size; it is the labels,
+not the figures, that run out of room. So the increase is a row beneath the totals
+it comes from rather than a fifth column, and the effective date sits at the end of
+the line under the table. The paragraph above the table states that date too. That
+line grows the box if it wraps, which it only does at crore-scale amounts, whose
+spelling out in words is what runs long.
 
-Beneath the callout, the amount in words, then *All other terms and conditions of
+**Each total is derived, not entered:** fixed plus variable, on each side, so a
+total and its parts can never disagree on the letter. The increment percentage is
+derived in turn, from the two totals. Amounts are always typed or pasted — the
+master workbook holds no salary data, all 52 columns checked.
+
+**Increases only.** A revised total equal to the current one means there is nothing
+to state, and one below it is a reduction — a different letter with different
+weight. Both are rejected with a readable message rather than issued under a
+heading that says *Congratulations*.
+
+Beneath the table, the amount in words, then *All other terms and conditions of
 your employment remain unchanged*, and a confidentiality paragraph firmer than the
 award letter's: disclosure is named as a breach of policy that will attract action.
 
 Two modes, laid out like the variable pay app:
 
-- **Individual** — Employee ID, Fixed CTC, Variable Pay (optional), Effective Date,
-  Revised Designation (leave blank for an increment with no promotion), and the
-  letter date. Preview and Download.
-- **Bulk** — one letter date for the batch, then a five-column paste of
-  Employee ID / Fixed CTC / Variable Pay / Effective Date / Revised Designation.
-  Per-row Preview and Download, and **Download all Increment Letters (Zip)**.
+- **Individual** — Employee ID, Current Fixed CTC, Current Variable Pay (optional),
+  Revised Fixed CTC, Revised Variable Pay (optional), Effective Date, Revised
+  Designation (leave blank for an increment with no promotion), and the letter
+  date. Preview and Download.
+- **Bulk** — one letter date for the batch, then a seven-column paste of
+  Employee ID / Current Fixed / Current Variable / Revised Fixed / Revised Variable
+  / Effective From / Revised Designation. Per-row Preview and Download, and
+  **Download all Increment Letters (Zip)**.
 
 The effective date is per employee and separate from the date on the letter, so the
 grid takes free text: `15/07/2026`, `2026-07-15` and `15 Jul 2026` all resolve to
@@ -209,7 +222,7 @@ Files are `Increment_Letter_<EmployeeID>.pdf` and the batch
 `Increment_Letters_<date>.zip`, distinct from every variable pay filename, so the
 three letter types cannot overwrite one another for the same employee.
 
-The promotion is recorded in a sentence rather than a third column: the longest
+The promotion is recorded in a sentence rather than a table column: the longest
 designation on file is 59 characters, which would not fit a column and would push
 the heading to three lines of 13pt bold. The sentence is written as a replacement —
 the designation on record is named, then superseded by the new one **in bold** —
@@ -223,10 +236,12 @@ A revised designation identical to the one already on record is rejected: the
 sentence would name the same title twice, and there is no promotion to state.
 Leaving it blank is how an increment with no promotion is issued.
 
-Naming two long titles in one sentence can run the body past the safe area, so the
-letter lays itself out again with tighter paragraph gaps if the first pass would
-overflow. Only the letters that need it pay for the second pass, and none of them
-lands in the footer.
+The table costs the page height that a single-figure callout did not, and naming
+two long titles in one sentence costs more, so the letter lays itself out again
+with tighter paragraph gaps whenever a pass would run past the safe area, down a
+ladder of five settings. Only the letters that need it pay for the extra passes.
+The worst case on file — a bifurcated increment promoting between the two longest
+designations — ends at 269.9mm against a 270.4mm safe line.
 
 # Repository and rebuilding
 
