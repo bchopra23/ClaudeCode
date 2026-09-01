@@ -916,12 +916,13 @@ function drawIncrementBox(doc, y, increment, gap) {
   // weight throughout reads as a wireframe rather than a table.
   const FRAME = [104, 136, 160];
   const GRID = [188, 207, 221];
-  const HEAD_FILL = [221, 236, 246];
-  const TOTAL_FILL = [237, 246, 251];
+  // One shade, on the header and the totals row alike: they are the two rows
+  // that frame the data rather than carry it, and a second lighter tint just
+  // read as a third colour in a table that only has two kinds of row.
+  const SHADE = [221, 236, 246];
 
-  doc.setFillColor(HEAD_FILL[0], HEAD_FILL[1], HEAD_FILL[2]);
+  doc.setFillColor(SHADE[0], SHADE[1], SHADE[2]);
   doc.rect(edge[0], y, COLUMN, headH, "F");
-  doc.setFillColor(TOTAL_FILL[0], TOTAL_FILL[1], TOTAL_FILL[2]);
   doc.rect(edge[0], y + headH + rowH * 2, COLUMN, rowH, "F");
 
   // Light grid first, so the heavy lines drawn over it win where they meet.
