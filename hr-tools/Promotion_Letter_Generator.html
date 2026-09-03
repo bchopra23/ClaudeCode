@@ -577,30 +577,6 @@
         </div>
 
         <div class="field">
-          <label for="currentFixed">Current Fixed CTC <span class="hint">in INR &mdash; optional, only if pay is also revised</span></label>
-          <input type="text" id="currentFixed" placeholder="e.g. 1200000" autocomplete="off" inputmode="decimal">
-          <div class="error" id="currentFixedError"></div>
-        </div>
-
-        <div class="field">
-          <label for="currentVariable">Current Variable Pay <span class="hint">optional &mdash; leave blank if fixed only</span></label>
-          <input type="text" id="currentVariable" placeholder="e.g. 200000" autocomplete="off" inputmode="decimal">
-          <div class="error" id="currentVariableError"></div>
-        </div>
-
-        <div class="field">
-          <label for="fixed">Revised Fixed CTC <span class="hint">in INR &mdash; optional, leave blank if pay is unchanged</span></label>
-          <input type="text" id="fixed" placeholder="e.g. 1500000" autocomplete="off" inputmode="decimal">
-          <div class="error" id="fixedError"></div>
-        </div>
-
-        <div class="field">
-          <label for="variable">Revised Variable Pay <span class="hint">optional &mdash; leave blank if fixed only</span></label>
-          <input type="text" id="variable" placeholder="e.g. 300000" autocomplete="off" inputmode="decimal">
-          <div class="error" id="variableError"></div>
-        </div>
-
-        <div class="field">
           <label for="letterDate">Letter date</label>
           <input type="date" id="letterDate">
           <div class="error" id="dateError"></div>
@@ -635,20 +611,7 @@
                 <div class="pay-label">Effective from</div>
                 <div class="figure" id="dEffective"></div>
               </div>
-              <div id="dCompBlockCurrent" hidden>
-                <div class="pay-label">Current total CTC</div>
-                <div class="figure" id="dCurrentTotal"></div>
-              </div>
-              <div id="dCompBlockRevised" hidden>
-                <div class="pay-label">Revised total CTC</div>
-                <div class="figure" id="dCtc"></div>
-              </div>
-              <div id="dCompBlockPercent" hidden>
-                <div class="pay-label">Total increase</div>
-                <div class="pay-percent" id="dPercent"></div>
-              </div>
             </div>
-            <div class="words" id="dSplit"></div>
           </div>
         </div>
       </div>
@@ -681,20 +644,15 @@
           </li>
           <li>
             <strong>Paste your columns into the table.</strong>
-            Employee ID, Current Fixed, Current Variable, Revised Fixed, Revised
-            Variable, Effective From, and Revised Designation. Revised Designation
-            and Effective From are required on every row. The four compensation
-            columns are optional as a group &mdash; leave them all blank for a
-            promotion with no pay change, or leave either Variable column blank,
-            or zero, for anyone on a fixed-only package. Rows are added as needed
-            and a copied header row is ignored.
+            Employee ID, Effective From, and Revised Designation &mdash; all
+            three are required on every row. Rows are added as needed and a
+            copied header row is ignored.
           </li>
           <li>
             <strong>Check the Status column.</strong>
-            Each row shows the new designation and, where compensation is also
-            revised, the current total, the revised total, the increase between
-            them and the date it takes effect. Rows in red need fixing &mdash;
-            the zip stays locked until every row is clean.
+            Each row shows the new designation and the date it takes effect.
+            Rows in red need fixing &mdash; the zip stays locked until every
+            row is clean.
           </li>
           <li>
             <strong>Download.</strong>
@@ -703,8 +661,6 @@
           </li>
         </ol>
       </details>
-
-      <p class="note">* Effective From and Revised Designation are required on every row. The four compensation columns are optional together.</p>
 
       <div class="bulk-toolbar">
         <div class="field">
@@ -722,12 +678,8 @@
             <tr>
               <th class="rownum"></th>
               <th class="col-id">Employee ID</th>
-              <th class="col-amount">Current Fixed</th>
-              <th class="col-amount">Current Variable</th>
-              <th class="col-amount">Revised Fixed</th>
-              <th class="col-amount">Revised Variable</th>
-              <th class="col-amount">Effective From*</th>
-              <th class="col-amount">Revised Designation*</th>
+              <th class="col-amount">Effective From</th>
+              <th class="col-amount">Revised Designation</th>
               <th>Status</th>
               <th class="peek"></th>
               <th class="drop"></th>
@@ -2094,31 +2046,16 @@ function createBulkPanel(config) {
 
 
 /**
- * The promotion letter. Names the new designation against the one on record,
- * and when compensation figures are also given, sets the current package
- * against the revised one and states the increase between them.
+ * The promotion letter. Names the new designation against the one on record.
  *
- * @param promotion { designation, effectiveISO, hasComp, currentFixed,
- *                  currentVariable, currentTotal, fixed, variable, ctc } —
- *                  the compensation fields are all zero and hasComp is false
- *                  when the promotion carries no pay change; each total,
- *                  when present, is its own fixed plus variable, and either
- *                  variable may be zero
+ * @param promotion { designation, effectiveISO }
  */
-// Six figures sit in the table where the award letter has three, so they are set
-// a shade smaller than that letter's headline figures. All six share one size.
-const TABLE_FIGURE = 12;
-
 function buildPromotionLetter(employee, promotion, dateISO) {
-  // A promotion between two long titles, with a compensation table on top, can
-  // run the body past the letterhead's safe area. Lay the letter out, and if it
-  // overflows, lay it out again with the paragraph gaps drawn in. Only the
-  // letters that need it pay for the second pass, and none of them lands in
-  // the footer.
+  // A promotion between two long titles can run the body past the letterhead's
+  // safe area. Lay the letter out, and if it overflows, lay it out again with
+  // the paragraph gaps drawn in. Only the letters that need it pay for the
+  // second pass, and none of them lands in the footer.
   let doc = null;
-  // 2.2mm is where the prose still breathes; the step below it exists only for
-  // the handful of letters that are long on every axis at once — a promotion
-  // between two of the longest titles on file that also revises pay.
   for (const gap of [4.6, 4.0, 3.4, 2.8, 2.2, 1.8]) {
     const attempt = composePromotionLetter(employee, promotion, dateISO, gap);
     doc = attempt.doc;
@@ -2134,8 +2071,7 @@ function composePromotionLetter(employee, promotion, dateISO, gap) {
   y = drawSalutation(doc, y, employee, "Promotion", "Congratulations!");
 
   // Written as a replacement — the designation on record is named, then struck
-  // through by the new one in bold — so the letter reads as the promotion it is
-  // rather than as a note appended to a pay revision.
+  // through by the new one in bold — so the letter reads as the promotion it is.
   y = drawRichParagraph(doc, y, employee.designation
     ? [
       { text: "We are pleased to inform you that, in recognition of your performance and "
@@ -2152,27 +2088,13 @@ function composePromotionLetter(employee, promotion, dateISO, gap) {
       { text: ` with effect from ${formatDate(promotion.effectiveISO)}.` },
     ], gap);
 
-  if (promotion.hasComp) {
-    y = drawParagraph(doc, y,
-      "Your annual compensation has also been revised with effect from the "
-      + "same date, as follows.", gap);
-    y = drawCompensationBox(doc, y, promotion, gap);
-  }
-
   y = drawParagraph(doc, y,
     "All other terms and conditions of your employment remain unchanged.", gap);
 
-  // Deliberately firmer than a designation-only letter: compensation details
-  // circulating between colleagues is what this paragraph exists to prevent.
-  y = drawParagraph(doc, y, promotion.hasComp
-    ? "The contents of this letter are strictly confidential and are intended solely "
-      + "for you. Disclosing your compensation details to any other person is a breach "
-      + "of company policy, and any such disclosure will attract action in accordance "
-      + "with the applicable policy."
-    : "This letter and its contents are strictly confidential and are intended "
-      + "solely for you. You are requested not to disclose the same to any other "
-      + "person.",
-    gap);
+  y = drawParagraph(doc, y,
+    "This letter and its contents are strictly confidential and are intended "
+    + "solely for you. You are requested not to disclose the same to any other "
+    + "person.", gap);
 
   y = drawParagraph(doc, y,
     "We look forward to your continued contribution as we build the future of "
@@ -2181,180 +2103,12 @@ function composePromotionLetter(employee, promotion, dateISO, gap) {
   return { doc, bottom: drawSignOff(doc, y) };
 }
 
-/**
- * The pay table: what the package is now, what it becomes, and the increase
- * between them.
- *
- *                 |  FIXED CTC  |  VARIABLE PAY  |  TOTAL CTC     header, tinted
- *   CURRENT       |             |                |                muted
- *   REVISED       |             |                |                ink, total accent
- *   TOTAL INCREMENT                              |  28.57%        totals row, merged
- *
- * A ruled grid rather than a tinted callout: this is reference matter someone
- * will be asked to check against a payslip, and it should read as a table. The
- * figures are right-aligned in their columns, which is what makes them
- * comparable down a column and is how money is set in any ledger.
- *
- * Variable pay is optional on either side; the column stays and the side without
- * one reads as a dash, since an INR 0 states a component that does not exist.
- *
- * The last row merges the first three cells, as a totals row does, which is also
- * what gives "TOTAL INCREMENT" the width it needs.
- *
- * Returns the cursor below the table.
- */
-function drawCompensationBox(doc, y, promotion, gap) {
-  const accent = [43, 127, 174];
-  const NONE = "—";
-  const PAD = 4;
-
-  doc.setFont("Poppins", "normal");
-  doc.setFontSize(8.5);
-  const caption = doc.splitTextToSize(
-    `Revised CTC in words: ${amountInWords(promotion.ctc)}`
-    + ` · effective ${formatDate(promotion.effectiveISO)}`,
-    COLUMN);
-
-  // Rows shrink with the paragraph gaps, so a letter running long does not keep
-  // a roomy table above tightening prose.
-  const squeeze = Math.min(2.2, Math.max(0, (4.6 - gap) * 0.7));
-  const headH = 9.4 - squeeze * 0.8;
-  const rowH = 9.6 - squeeze * 0.6;
-  const tableH = headH + rowH * 3;
-  const captionTop = tableH + 7.6 - squeeze * 1.6;
-
-  // Column edges. The three money columns are equal, and the widest figure the
-  // roster can produce — INR 1,35,00,000 at 12pt, about 32mm — clears the 34mm
-  // each one leaves inside its padding.
-  const edge = [MARGIN.left, MARGIN.left + 35, MARGIN.left + 77,
-    MARGIN.left + 119, MARGIN.right];
-
-  const PRIOR = [78, 100, 118];
-  const rows = [
-    ["CURRENT", PRIOR, PRIOR, {
-      fixed: `INR ${formatINR(promotion.currentFixed)}`,
-      variable: promotion.currentVariable > 0 ? `INR ${formatINR(promotion.currentVariable)}` : NONE,
-      total: `INR ${formatINR(promotion.currentTotal)}`,
-    }],
-    ["REVISED", COLORS.ink, accent, {
-      fixed: `INR ${formatINR(promotion.fixed)}`,
-      variable: promotion.variable > 0 ? `INR ${formatINR(promotion.variable)}` : NONE,
-      total: `INR ${formatINR(promotion.ctc)}`,
-    }],
-  ];
-
-  const headings = ["FIXED CTC", "VARIABLE PAY", "TOTAL CTC"];
-
-  // --- rules and fills -------------------------------------------------
-  // Two weights, as a ruled table has: a heavy frame with the header and totals
-  // rules at the same weight, and a lighter grid inside dividing the cells. One
-  // weight throughout reads as a wireframe rather than a table.
-  const FRAME = [104, 136, 160];
-  const GRID = [188, 207, 221];
-  // One shade, on the header and the totals row alike: they are the two rows
-  // that frame the data rather than carry it, and a second lighter tint just
-  // read as a third colour in a table that only has two kinds of row.
-  const SHADE = [221, 236, 246];
-
-  doc.setFillColor(SHADE[0], SHADE[1], SHADE[2]);
-  doc.rect(edge[0], y, COLUMN, headH, "F");
-  doc.rect(edge[0], y + headH + rowH * 2, COLUMN, rowH, "F");
-
-  // Light grid first, so the heavy lines drawn over it win where they meet. Only
-  // the divide between the two data rows is drawn light: they are one block of
-  // comparable figures, and a heavy line there would read as a separation.
-  doc.setDrawColor(GRID[0], GRID[1], GRID[2]);
-  doc.setLineWidth(0.2);
-  doc.line(edge[0], y + headH + rowH, MARGIN.right, y + headH + rowH);
-
-  doc.setDrawColor(FRAME[0], FRAME[1], FRAME[2]);
-  doc.setLineWidth(0.5);
-  doc.rect(edge[0], y, COLUMN, tableH, "S");
-  doc.line(edge[0], y + headH, MARGIN.right, y + headH);
-  doc.line(edge[0], y + headH + rowH * 2, MARGIN.right, y + headH + rowH * 2);
-  // Every column divider carries the same weight, top to bottom, so the one
-  // beside the percentage is not the only heavy vertical in the table. They stop
-  // at the totals row, whose first three cells are merged.
-  for (const at of edge.slice(1, 4)) {
-    doc.line(at, y, at, y + headH + rowH * 2);
-  }
-  doc.line(edge[3], y + headH + rowH * 2, edge[3], y + tableH);
-
-  // --- text ------------------------------------------------------------
-  // Right-aligned by measured width: jsPDF's align option measures the string
-  // without the letterspacing headings carry, and would hang them out of the cell.
-  const measure = (text, spacing) =>
-    doc.getTextWidth(text) + spacing * Math.max(0, text.length - 1);
-  const rightAlign = (text, rightX, atY, spacing = 0) => {
-    doc.text(text, rightX - measure(text, spacing), atY);
-  };
-  const centreIn = (text, leftX, rightX, atY, spacing = 0) => {
-    doc.text(text, (leftX + rightX - measure(text, spacing)) / 2, atY);
-  };
-  const rowName = (text, atY) => {
-    doc.setFont("Poppins", "semibold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
-    doc.text(text, edge[0] + PAD, atY);
-  };
-
-  // Centred in their cells rather than aligned with the figures: a heading names
-  // the column, the figures below it are what have to line up with each other.
-  doc.setFont("Poppins", "bold");
-  doc.setFontSize(8.5);
-  doc.setTextColor(COLORS.ink[0], COLORS.ink[1], COLORS.ink[2]);
-  doc.setCharSpace(0.4);
-  headings.forEach((text, index) =>
-    centreIn(text, edge[index + 1], edge[index + 2], y + headH / 2 + 1.2, 0.4));
-  doc.setCharSpace(0);
-
-  rows.forEach(([name, color, totalColor, values], index) => {
-    const mid = y + headH + rowH * index + rowH / 2 + 1.5;
-    rowName(name, mid);
-    ["fixed", "variable", "total"].forEach((key, column) => {
-      doc.setFont("Poppins", "bold");
-      doc.setFontSize(TABLE_FIGURE);
-      const tone = key === "total" ? totalColor : color;
-      doc.setTextColor(tone[0], tone[1], tone[2]);
-      rightAlign(values[key], edge[column + 2] - PAD, mid);
-    });
-  });
-
-  const totalsMid = y + headH + rowH * 2 + rowH / 2 + 1.5;
-  rowName("TOTAL INCREASE", totalsMid);
-  doc.setFont("Poppins", "bold");
-  doc.setFontSize(TABLE_FIGURE);
-  doc.setTextColor(accent[0], accent[1], accent[2]);
-  rightAlign(formatPercent(promotion.ctc - promotion.currentTotal, promotion.currentTotal),
-    edge[4] - PAD, totalsMid);
-
-  doc.setFont("Poppins", "normal");
-  doc.setFontSize(8.5);
-  doc.setTextColor(COLORS.muted[0], COLORS.muted[1], COLORS.muted[2]);
-  caption.forEach((line, index) => doc.text(line, edge[0], y + captionTop + index * 5));
-
-  // captionTop is a baseline, so the caption's own depth has to be cleared before
-  // the paragraph below starts; without it the note sits against the next line.
-  return y + captionTop + (caption.length - 1) * 5 + gap + 5.4;
-}
-
-
 function fileNameFor(employee) {
   return `Promotion_Letter_${employee.code}.pdf`;
 }
 
 /**
  * Reads the promotion inputs. Returns { promotion } or { error }.
- *
- * Revised designation is required — this is a promotion letter, and every
- * letter states one. The four compensation fields are optional as a group:
- * leave Current Fixed and Revised Fixed both blank for a promotion with no
- * pay change, and the letter drops the pay table entirely. Provide either
- * one and both current and revised fixed CTC become required, so a total and
- * its parts can never disagree and the table is never left half filled in.
- * Either variable pay stays optional even then — blank or zero means that
- * side of the package is fixed only, and the letter drops the variable
- * column rather than printing zeroes.
  *
  * @param employee optional, to check the promotion against the designation on
  *                 record — the letter names both, so they cannot be the same one.
@@ -2374,63 +2128,7 @@ function parsePromotion(cells, employee) {
   const effectiveISO = parseDateInput(raw);
   if (!effectiveISO) return { error: `"${raw}" is not a date the app understands.` };
 
-  const currentFixedText = String(cells.currentFixed || "").trim();
-  const fixedText = String(cells.fixed || "").trim();
-  const hasComp = Boolean(currentFixedText || fixedText);
-
-  if (!hasComp) {
-    return {
-      promotion: {
-        designation, effectiveISO, hasComp: false,
-        currentFixed: 0, currentVariable: 0, currentTotal: 0,
-        fixed: 0, variable: 0, ctc: 0,
-      },
-    };
-  }
-
-  const amounts = {};
-  for (const [key, label, optional] of [
-    ["currentFixed", "Current fixed CTC", false],
-    ["currentVariable", "Current variable pay", true],
-    ["fixed", "Revised fixed CTC", false],
-    ["variable", "Revised variable pay", true],
-  ]) {
-    const text = String(cells[key] || "").trim();
-    if (!text && optional) {
-      amounts[key] = 0;
-      continue;
-    }
-    const parsed = parseAmount(text, label, { allowZero: optional });
-    if (parsed.error) return { error: parsed.error };
-    amounts[key] = parsed.value;
-  }
-
-  const currentTotal = amounts.currentFixed + amounts.currentVariable;
-  const ctc = amounts.fixed + amounts.variable;
-  // A promotion letter with compensation figures records an increase. Anything
-  // else is a different letter with different weight.
-  if (ctc <= currentTotal) {
-    return {
-      error: ctc === currentTotal
-        ? "Revised total CTC is the same as the current total, so there is no "
-          + "compensation change to state. Leave the compensation fields blank "
-          + "for a promotion with no pay change."
-        : "Revised total CTC is lower than the current total; this tool only "
-          + "issues compensation increases.",
-    };
-  }
-
-  return {
-    promotion: {
-      designation, effectiveISO, hasComp: true,
-      currentFixed: amounts.currentFixed,
-      currentVariable: amounts.currentVariable,
-      currentTotal,
-      fixed: amounts.fixed,
-      variable: amounts.variable,
-      ctc,
-    },
-  };
+  return { promotion: { designation, effectiveISO } };
 }
 
 /* ------------------------------------------------------------------ *
@@ -2444,16 +2142,6 @@ const designationInput = el("newDesignation");
 const empError = el("empError");
 const designationError = el("designationError");
 const effectiveError = el("effectiveError");
-
-// The four compensation inputs, all optional together. `label` is the name
-// parsePromotion puts at the front of a message about that field, which is
-// how a message finds its slot.
-const AMOUNTS = [
-  { key: "currentFixed", label: "Current fixed CTC", input: el("currentFixed"), error: el("currentFixedError") },
-  { key: "currentVariable", label: "Current variable pay", input: el("currentVariable"), error: el("currentVariableError") },
-  { key: "fixed", label: "Revised fixed CTC", input: el("fixed"), error: el("fixedError") },
-  { key: "variable", label: "Revised variable pay", input: el("variable"), error: el("variableError") },
-];
 const dateError = el("dateError");
 const previewButton = el("preview");
 const downloadButton = el("download");
@@ -2483,30 +2171,8 @@ function paintDetails(employee, promotion) {
 
   el("amountRow").hidden = !promotion;
   if (promotion) {
-    const money = (value) => `INR ${formatINR(value)}`;
     el("dNewDesignation").textContent = promotion.designation;
     el("dEffective").textContent = formatDate(promotion.effectiveISO);
-
-    // The pay figures only show where the letter's compensation table does.
-    for (const id of ["dCompBlockCurrent", "dCompBlockRevised", "dCompBlockPercent"]) {
-      el(id).hidden = !promotion.hasComp;
-    }
-
-    if (promotion.hasComp) {
-      el("dCurrentTotal").textContent = money(promotion.currentTotal);
-      el("dCtc").textContent = money(promotion.ctc);
-      el("dPercent").textContent =
-        formatPercent(promotion.ctc - promotion.currentTotal, promotion.currentTotal);
-      // The card shows the split only where the letter does.
-      const split = promotion.variable > 0 || promotion.currentVariable > 0;
-      el("dSplit").textContent = (split
-        ? `Current ${money(promotion.currentFixed)} + ${money(promotion.currentVariable)}`
-          + ` · revised ${money(promotion.fixed)} + ${money(promotion.variable)} · `
-        : "")
-        + amountInWords(promotion.ctc);
-    } else {
-      el("dSplit").textContent = "";
-    }
   }
 }
 
@@ -2520,32 +2186,20 @@ function refreshIndividual() {
     !raw || currentEmployee ? "" : `No employee found with ID "${raw}".`);
 
   // Stay quiet until the required fields are present; complaining about a half
-  // typed form is noise. The four compensation inputs are all optional — blank
-  // is how a promotion with no pay change is entered.
-  const clearAmountErrors = () => AMOUNTS.forEach((a) => setError(a.error, a.input, ""));
+  // typed form is noise.
   if (!designationInput.value.trim() || !effectiveInput.value) {
     currentPromotion = null;
-    clearAmountErrors();
     setError(designationError, designationInput, "");
     setError(effectiveError, effectiveInput, "");
   } else {
     const cells = { effective: effectiveInput.value, designation: designationInput.value };
-    for (const amount of AMOUNTS) cells[amount.key] = amount.input.value;
     const result = parsePromotion(cells, currentEmployee);
     currentPromotion = result.error ? null : result.promotion;
-    clearAmountErrors();
     setError(designationError, designationInput, "");
     setError(effectiveError, effectiveInput, "");
     if (result.error) {
-      // Each message names the field it is about, so it lands under that
-      // input; the designation and effective-date messages land under those
-      // two fields, and a message about the compensation totals lands under
-      // the revised fixed input, the field most likely to be the one to
-      // change.
-      const target = AMOUNTS.find((a) => result.error.startsWith(a.label));
-      if (target) {
-        setError(target.error, target.input, result.error);
-      } else if (result.error.startsWith("Revised designation")) {
+      // Each message names the field it is about, so it lands under that input.
+      if (result.error.startsWith("Revised designation")) {
         setError(designationError, designationInput, result.error);
       } else {
         setError(effectiveError, effectiveInput, result.error);
@@ -2572,8 +2226,7 @@ function tryBuild() {
   }
 }
 
-for (const input of [empIdInput, effectiveInput, designationInput, dateInput,
-  ...AMOUNTS.map((amount) => amount.input)]) {
+for (const input of [empIdInput, effectiveInput, designationInput, dateInput]) {
   input.addEventListener("input", refreshIndividual);
 }
 
@@ -2600,23 +2253,13 @@ const bulk = createBulkPanel({
   ids: { grid: "grid", date: "bulkDate", summary: "bulkSummary", zip: "downloadZip",
     addRows: "addRows", clearRows: "clearRows" },
   pane: { viewer: "bulkViewer", canvas: "bulkCanvas", empty: "bulkViewerEmpty", filename: "bulkFilename" },
-  columns: [{ decimal: false }, { decimal: true }, { decimal: true }, { decimal: true },
-    { decimal: true }, { decimal: false }, { decimal: false }],
+  columns: [{ decimal: false }, { decimal: false }, { decimal: false }],
   validate(cells, dateISO, employee) {
-    const result = parsePromotion({
-      currentFixed: cells[1], currentVariable: cells[2],
-      fixed: cells[3], variable: cells[4],
-      effective: cells[5], designation: cells[6],
-    }, employee);
+    const result = parsePromotion({ effective: cells[1], designation: cells[2] }, employee);
     return result.error ? { error: result.error } : { job: { promotion: result.promotion } };
   },
-  describe: (job) => job.promotion.hasComp
-    ? `${job.employee.name} · promoted to ${job.promotion.designation} · `
-      + `INR ${formatINR(job.promotion.currentTotal)} → ${formatINR(job.promotion.ctc)} `
-      + `(+${formatPercent(job.promotion.ctc - job.promotion.currentTotal, job.promotion.currentTotal)}) `
-      + `from ${formatDate(job.promotion.effectiveISO)}`
-    : `${job.employee.name} · promoted to ${job.promotion.designation} `
-      + `from ${formatDate(job.promotion.effectiveISO)}`,
+  describe: (job) => `${job.employee.name} · promoted to ${job.promotion.designation} `
+    + `from ${formatDate(job.promotion.effectiveISO)}`,
   buildDoc: (job) => buildPromotionLetter(job.employee, job.promotion, job.dateISO),
   fileName: (job) => fileNameFor(job.employee),
   zipName: (dateISO) => `Promotion_Letters_${dateISO}.zip`,
